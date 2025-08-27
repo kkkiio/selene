@@ -16,22 +16,25 @@
 let element_cache : Map[String, @dom.HTMLImageElement] = Map::new()
 
 ///|
-fn get_image_element(png : String) -> @dom.HTMLImageElement {
+fn get_image_element(
+  png : String,
+  cross_origin : String?,
+) -> @dom.HTMLImageElement {
   if element_cache.get(png) is Some(element) {
     return element
   }
   let element = @dom.HTMLImageElement::new()
   element.set_src(png)
+  if cross_origin is Some(cross_origin) {
+    element.set_cross_origin(cross_origin)
+  }
   element_cache.set(png, element)
   return element
 }
 
 ///|
-pub impl @system.Backend for CanvasBackend with preload_img(
-  _self,
-  path : String,
-) -> Unit {
-  get_image_element(path) |> ignore
+pub impl @system.Backend for CanvasBackend with preload_img(self, path : String) -> Unit {
+  get_image_element(path, self.cross_origin) |> ignore
 }
 
 ///|
@@ -45,7 +48,7 @@ pub impl @system.Backend for CanvasBackend with draw_picture(
   transform~,
   repeat~,
 ) {
-  let element = get_image_element(png)
+  let element = get_image_element(png, self.cross_origin)
   let repeat_mode = match repeat {
     NoRepeat => "no-repeat"
     RepeatY => "repeat-y"
@@ -93,7 +96,7 @@ pub impl @system.Backend for CanvasBackend with draw_sprite(
     transform.tx,
     transform.ty,
   )
-  let element = get_image_element(sprite_path)
+  let element = get_image_element(sprite_path, self.cross_origin)
   self.context.draw_image_with_src_and_dst_size(
     element |> @js.Value::cast_from |> @js.Value::cast,
     offset_x,
