@@ -22,6 +22,8 @@ struct CanvasBackend {
   mut zoom : Double
   execution_time : Map[String, Double]
   mouse_movement : Ref[@system.MouseMovement?]
+  /// https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Attributes/crossorigin
+  cross_origin : String?
 }
 
 ///|
@@ -41,7 +43,16 @@ pub fn CanvasBackend::new() -> CanvasBackend {
     execution_time: {},
     mouse_movement: Ref::new(None),
     zoom: 1.0,
+    cross_origin: None,
   }
+}
+
+///|
+pub fn CanvasBackend::with_cross_origin(
+  self : CanvasBackend,
+  cross_origin : String?,
+) -> CanvasBackend {
+  { ..self, cross_origin, }
 }
 
 ///|
