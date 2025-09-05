@@ -306,6 +306,7 @@ pub fn play_animation(
         zindex,
         visible,
         offset,
+        alpha,
       }
     )
   let loop_ = loop_.unwrap_or(animation.loop_)
@@ -328,6 +329,7 @@ pub fn play_animation(
     zindex,
     visible,
     offset,
+    alpha,
   })
 }
 
@@ -348,9 +350,11 @@ fn render_animation(
   current_frame : Double,
   pos : @math.Vec2D,
   visible : Bool,
+  alpha : Double,
 ) -> Double {
   let frame = animation.frames[current_frame.to_int()]
   if visible {
+    let a = if alpha < 0.0 { 0.0 } else if alpha > 1.0 { 1.0 } else { alpha }
     backend.draw_sprite(
       frame.sprite_path,
       x=pos[X],
@@ -360,6 +364,7 @@ fn render_animation(
       width=frame.size[X],
       height=frame.size[Y],
       transform=animation.transform,
+      alpha=a,
     )
   }
   let mut new_frame = current_frame + animation.rate

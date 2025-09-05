@@ -44,3 +44,9 @@ pub extern "js" fn set_image_smoothing_enabled(
   ctx : @dom.CanvasRenderingContext2D,
   value : Bool,
 ) -> Unit = "(ctx, value) => ctx.imageSmoothingEnabled = value;"
+
+///|
+pub extern "js" fn set_global_alpha(
+  ctx : @dom.CanvasRenderingContext2D,
+  alpha : Double,
+) -> Unit = "(ctx, a) => { ctx.globalAlpha = a; }"

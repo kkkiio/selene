@@ -77,6 +77,7 @@ pub(open) trait Backend {
     width~ : Double,
     height~ : Double,
     transform~ : @math.Transform,
+    alpha~ : Double,
   ) -> Unit
   register_key_events(Self, pressed_keys : Set[Code]) -> Unit
   register_mouse_events(Self, mouse : Mouse, mouse_movement : MouseMovement) -> Unit

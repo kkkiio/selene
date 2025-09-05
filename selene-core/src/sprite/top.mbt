@@ -49,6 +49,7 @@ pub(all) struct Sprite {
   zindex : Int
   mut visible : Bool
   offset : @math.Vec2D
+  mut alpha : Double
 }
 
 ///|
@@ -68,12 +69,14 @@ pub fn Sprite::from_animation(
   animation : Animation,
   zindex : Int,
   offset? : @math.Vec2D = @math.Vec2D::zero(),
+  alpha? : Double = 1.0,
 ) -> Sprite {
   {
     sprite_type: SpriteType::Animation(animation, frame=0),
     zindex,
     offset,
     visible: true,
+    alpha,
   }
 }
 
@@ -82,8 +85,15 @@ pub fn Sprite::from_picture(
   picture : Picture,
   zindex : Int,
   offset? : @math.Vec2D = @math.Vec2D::zero(),
+  alpha? : Double = 1.0,
 ) -> Sprite {
-  { sprite_type: SpriteType::Picture(picture), zindex, offset, visible: true }
+  {
+    sprite_type: SpriteType::Picture(picture),
+    zindex,
+    offset,
+    visible: true,
+    alpha,
+  }
 }
 
 ///|
@@ -91,8 +101,9 @@ pub fn Sprite::from_text(
   text : Text,
   zindex : Int,
   offset? : @math.Vec2D = @math.Vec2D::zero(),
+  alpha? : Double = 1.0,
 ) -> Sprite {
-  { sprite_type: SpriteType::Text(text), zindex, offset, visible: true }
+  { sprite_type: SpriteType::Text(text), zindex, offset, visible: true, alpha }
 }
 
 ///|
@@ -100,12 +111,14 @@ pub fn Sprite::from_color_rect(
   color_rect : ColorRect,
   zindex : Int,
   offset? : @math.Vec2D = @math.Vec2D::zero(),
+  alpha? : Double = 1.0,
 ) -> Sprite {
   {
     sprite_type: SpriteType::ColorRect(color_rect),
     zindex,
     offset,
     visible: true,
+    alpha,
   }
 }
 
@@ -141,6 +154,7 @@ pub fn render_sprite_system(backend : &@system.Backend) -> Unit {
           frame,
           pos + sprite.offset,
           sprite.visible,
+          sprite.alpha,
         )
         animation_sprite.frame = new_frame
       }
