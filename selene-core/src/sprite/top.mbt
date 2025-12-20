@@ -57,7 +57,7 @@ pub let sprites : Map[@entity.Entity, Sprite] = Map::new()
 ///|
 pub enum SpriteType {
   Picture(Picture)
-  Animation(Animation, mut frame~ : Double)
+  Animation(Animation, mut frame~ : Int, mut elapsed~ : Double)
   Text(Text)
   ColorRect(ColorRect)
   ColorCircle(ColorCircle)
@@ -71,7 +71,7 @@ pub fn Sprite::from_animation(
   offset? : @math.Vec2D = @math.Vec2D::zero(),
 ) -> Sprite {
   {
-    sprite_type: SpriteType::Animation(animation, frame=0),
+    sprite_type: SpriteType::Animation(animation, frame=0, elapsed=0.0),
     zindex,
     offset,
     visible: true,
@@ -244,15 +244,17 @@ pub fn render_sprite_system(delta : Double) -> Unit {
     match sprite.sprite_type {
       SpriteType::Picture(picture) if sprite.visible =>
         render_picture(picture, pos + sprite.offset)
-      SpriteType::Animation(anime, frame~) as animation_sprite => {
-        let new_frame = render_animation(
+      SpriteType::Animation(anime, frame~, elapsed~) as animation_sprite => {
+        let (new_frame, new_elapsed) = render_animation(
           anime,
           frame,
+          elapsed,
           pos + sprite.offset,
           sprite.visible,
           delta,
         )
         animation_sprite.frame = new_frame
+        animation_sprite.elapsed = new_elapsed
       }
       SpriteType::Text(text) if sprite.visible =>
         render_text(text, pos + sprite.offset)

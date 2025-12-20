@@ -52,7 +52,6 @@ pub struct Animation {
   frames : Array[AnimationFrame]
   transform : @math.Transform
   loop_ : Bool
-  fps : Double
   id : Int
 }
 
@@ -69,21 +68,26 @@ pub struct Animation {
 ///
 /// Example:
 ///
-/// ```moonbit
-/// let frame = @sprite.AnimationFrame::{
-///   sprite_path: "characters/player.png",
-///   size: @math.Vec2D(32.0, 32.0),
-///   offset: @math.Vec2D(64.0, 0.0)
+/// ```mbt check
+/// test {
+///   let frame = @sprite.AnimationFrame::{
+///     sprite_path: "characters/player.png",
+///     size: @math.Vec2D(32.0, 32.0),
+///     offset: @math.Vec2D(64.0, 0.0),
+///     duration: 1.0,
+///   }
+///   inspect(frame.sprite_path, content="characters/player.png")
+///   inspect(frame.size[X], content="32")
+///   inspect(frame.offset[X], content="64")
+///   inspect(frame.duration, content="1")
 /// }
-/// inspect(frame.sprite_path, content="characters/player.png")
-/// inspect(frame.size[X], content="32")
-/// inspect(frame.offset[X], content="64")
 /// ```
 ///
 pub(all) struct AnimationFrame {
   sprite_path : String
   size : @math.Vec2D
   offset : @math.Vec2D
+  duration : Double
 }
 
 ///|
@@ -95,8 +99,9 @@ pub(all) struct AnimationFrame {
 ///   Each frame contains sprite sheet coordinates and dimensions.
 /// * `loop_` : Whether the animation should loop continuously when it reaches
 ///   the end (default: `false`).
-/// * `fps` : The playback speed in frames per second, controlling how fast the
-///   animation advances (default: `1.0`).
+/// * `fps` : Optional playback speed in frames per second. If provided, it
+///   overrides the duration of all frames. If omitted, existing frame durations
+///   are used.
 /// * `transform` : The transformation matrix for position, rotation, and scale
 ///   applied to the entire animation (default: identity transform).
 ///
@@ -128,14 +133,27 @@ pub(all) struct AnimationFrame {
 pub fn Animation::new(
   frames : Array[AnimationFrame],
   loop_? : Bool = false,
-  fps? : Double = 1.0,
+  fps? : Double,
   transform? : @math.Transform = @math.Transform::new(),
 ) -> Animation {
   let max_frame = frames.length().reinterpret_as_uint()
   if max_frame == 0 {
     abort("Animation must have at least one frame")
   }
-  { frames, transform, loop_, fps, id: generate_animation() }
+  if fps is Some(rate) {
+    let duration = if rate > 0.0 { 1.0 / rate } else { 1.0 }
+    for i in 0..<frames.length() {
+      frames[i] = { ..frames[i], duration, }
+    }
+  } else {
+    // Ensure all frames have valid duration
+    for i in 0..<frames.length() {
+      if frames[i].duration <= 0.0 {
+        frames[i] = { ..frames[i], duration: 1.0 }
+      }
+    }
+  }
+  { frames, transform, loop_, id: generate_animation() }
 }
 
 ///|
@@ -159,6 +177,7 @@ fn generate_animation() -> Int {
 ///   applied to the sprite (default: identity transform).
 /// * `offset` : The pixel offset within the sprite image where the frame is
 ///   located (default: `@math.Vec2D(0, 0)`).
+/// * `duration` : The duration of the animation in seconds (default: `1.0`).
 ///
 /// Returns a new `Animation` instance configured as a static sprite with no
 /// frame advancement.
@@ -188,12 +207,12 @@ pub fn Animation::single_frame(
   size : @math.Vec2D,
   transform? : @math.Transform = @math.Transform::new(),
   offset? : @math.Vec2D = @math.Vec2D(0, 0),
+  duration? : Double = 1.0,
 ) -> Animation {
   Animation::new(
-    [{ sprite_path, size, offset }],
+    [{ sprite_path, size, offset, duration }],
     transform~,
     loop_=false,
-    fps=0.0,
   )
 }
 
@@ -213,6 +232,7 @@ pub fn Animation::single_frame(
 ///   extraction begins (default: `@math.Vec2D(0, 0)`).
 /// * `space_x` : The horizontal spacing between frames in pixels, useful for
 ///   sprite sheets with padding between frames (default: `0.0`).
+/// * `duration` : The duration of each frame in seconds (default: `1.0`).
 ///
 /// Returns an array of `AnimationFrame` objects, each containing the sprite
 /// path, frame dimensions, and calculated offset position within the sprite
@@ -249,6 +269,7 @@ pub fn frames_from_atlas(
   height~ : Double,
   offset? : @math.Vec2D = @math.Vec2D(0, 0),
   space_x? : Double = 0.0,
+  duration? : Double = 1.0,
 ) -> Array[AnimationFrame] {
   let frames = []
   for i in 0..<frame_count {
@@ -257,6 +278,7 @@ pub fn frames_from_atlas(
       sprite_path,
       size: @math.Vec2D(width, height),
       offset: offset.update(X, x),
+      duration,
     })
   }
   frames
@@ -325,30 +347,33 @@ pub fn play_animation(
 ) -> Unit {
   guard sprites.get(entity)
     is Some(
-      {
-        sprite_type: Animation(current_anime, frame=current_frame),
-        zindex,
-        visible,
-        offset,
-      }
+      { sprite_type: Animation(current_anime, ..), zindex, visible, offset }
     )
   let loop_ = loop_.unwrap_or(animation.loop_)
-  let rate = rate.unwrap_or(animation.fps)
   let transform = transform.unwrap_or(animation.transform)
-  let frame = if !from_start && animation.id == current_anime.id {
-    current_frame
+
+  // Reuse state if same animation and not restarting
+  let (frame, elapsed) = if !from_start && animation.id == current_anime.id {
+    if sprites.get(entity)
+      is Some({ sprite_type: Animation(_, frame~, elapsed~), .. }) {
+      (frame, elapsed)
+    } else {
+      (0, 0.0)
+    }
   } else {
-    0.0
+    (0, 0.0)
+  }
+  if rate is Some(_rate) {
+    // TODO: create new frames with new durations
   }
   let new_anime = {
     frames: animation.frames,
     transform,
     loop_,
-    fps: rate,
     id: animation.id,
   }
   sprites.set(entity, {
-    sprite_type: SpriteType::Animation(new_anime, frame~),
+    sprite_type: SpriteType::Animation(new_anime, frame~, elapsed~),
     zindex,
     visible,
     offset,
@@ -361,19 +386,33 @@ pub fn play_animation(
 ///
 /// Parameters:
 ///
-/// * `backend` : The rendering backend used to draw the sprite frame.
 /// * `animation` : The animation configuration containing sprite sheet
-///   information, current frame state, and playback settings.
+///   information and playback settings.
+/// * `current_frame` : The current frame index.
+/// * `elapsed` : The accumulated time for the current frame.
 /// * `pos` : The screen position where the animation should be rendered.
+/// * `visible` : Whether the sprite should be rendered.
+/// * `delta` : The time elapsed since the last frame.
 ///
 fn render_animation(
   animation : Animation,
-  current_frame : Double,
+  current_frame : Int,
+  elapsed : Double,
   pos : @math.Vec2D,
   visible : Bool,
   delta : Double,
-) -> Double {
-  let frame = animation.frames[current_frame.to_int()]
+) -> (Int, Double) {
+  // Safety check
+  if animation.frames.length() == 0 {
+    return (0, 0.0)
+  }
+  let current_frame = if current_frame < 0 ||
+    current_frame >= animation.frames.length() {
+    0
+  } else {
+    current_frame
+  }
+  let frame = animation.frames[current_frame]
   if visible {
     @backend.draw_sprite(
       sprite_path=frame.sprite_path,
@@ -386,15 +425,30 @@ fn render_animation(
       transform=animation.transform,
     )
   }
-  let mut new_frame = current_frame + animation.fps * delta
-  if new_frame.to_int() >= animation.frames.length() {
-    if animation.loop_ {
-      new_frame = 0
-    } else {
-      new_frame = animation.frames.length().to_double() - 0.01
+
+  // Time update logic
+  let mut new_elapsed = elapsed + delta
+  let mut new_frame = current_frame
+  let mut current_duration = animation.frames[new_frame].duration
+
+  // Advance frames
+  while new_elapsed >= current_duration && current_duration > 0.0 {
+    new_elapsed -= current_duration
+    new_frame += 1
+
+    // Handle end of animation
+    if new_frame >= animation.frames.length() {
+      if animation.loop_ {
+        new_frame = 0
+      } else {
+        new_frame = animation.frames.length() - 1
+        new_elapsed = animation.frames[new_frame].duration // Clamp to end
+        break // Exit loop to prevent infinite iteration
+      }
     }
+    current_duration = animation.frames[new_frame].duration
   }
-  new_frame
+  (new_frame, new_elapsed)
 }
 
 ///|
@@ -435,11 +489,12 @@ fn render_animation(
 ///
 pub fn is_animation_finished(entity : @entity.Entity) -> Bool {
   guard sprites.get(entity)
-    is Some({ sprite_type: Animation(anime, frame~), .. }) else {
+    is Some({ sprite_type: Animation(anime, frame~, elapsed~), .. }) else {
     true
   }
   if anime.loop_ {
     return false
   }
-  frame >= anime.frames.length().to_double() - 0.01
+  let last_frame_idx = anime.frames.length() - 1
+  frame >= last_frame_idx && elapsed >= anime.frames[last_frame_idx].duration
 }
