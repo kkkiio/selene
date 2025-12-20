@@ -61,12 +61,6 @@ class $PanicError extends Error {}
 function $panic() {
   throw new $PanicError();
 }
-const $64$moonbitlang$47$core$47$list$46$List$Empty$2$ = { $tag: 0 };
-function $64$moonbitlang$47$core$47$list$46$List$More$2$(param0, param1) {
-  this._0 = param0;
-  this._1 = param1;
-}
-$64$moonbitlang$47$core$47$list$46$List$More$2$.prototype.$tag = 1;
 function $bound_check(arr, index) {
   if (index < 0 || index >= arr.length) throw new Error("Index out of bounds");
 }
@@ -75,10 +69,19 @@ function $make_array_len_and_init(a, b) {
   arr.fill(b);
   return arr;
 }
-const $bytes_literal$0 = new Uint8Array([65,66,67,68,69,70,71,72,73,74,75,76,77,78,79,80,81,82,83,84,85,86,87,88,89,90,49,50,51,52,53,54]);
-const $4294967295L = { hi: 0, lo: -1 };
-const $0L = { hi: 0, lo: 0 };
-const $1L = { hi: 0, lo: 1 };
+function $64$moonbitlang$47$core$47$builtin$46$SourceLocRepr$Legacy(param0) {
+  this._0 = param0;
+}
+$64$moonbitlang$47$core$47$builtin$46$SourceLocRepr$Legacy.prototype.$tag = 0;
+function $64$moonbitlang$47$core$47$builtin$46$SourceLocRepr$New(param0, param1, param2, param3, param4, param5) {
+  this._0 = param0;
+  this._1 = param1;
+  this._2 = param2;
+  this._3 = param3;
+  this._4 = param4;
+  this._5 = param5;
+}
+$64$moonbitlang$47$core$47$builtin$46$SourceLocRepr$New.prototype.$tag = 1;
 const moonbitlang$core$builtin$$random_seed = () => {
   if (globalThis.crypto?.getRandomValues) {
     const array = new Uint32Array(1);
@@ -88,30 +91,30 @@ const moonbitlang$core$builtin$$random_seed = () => {
     return Math.floor(Math.random() * 0x100000000) | 0; // Fallback to Math.random
   }
 };
-function Result$Err$3$(param0) {
+function Result$Err$2$(param0) {
   this._0 = param0;
 }
-Result$Err$3$.prototype.$tag = 0;
-function Result$Ok$3$(param0) {
+Result$Err$2$.prototype.$tag = 0;
+function Result$Ok$2$(param0) {
   this._0 = param0;
 }
-Result$Ok$3$.prototype.$tag = 1;
+Result$Ok$2$.prototype.$tag = 1;
 const Error$moonbitlang$47$core$47$builtin$46$CreatingViewError$46$IndexOutOfBounds = { $tag: 1 };
 const Error$moonbitlang$47$core$47$builtin$46$CreatingViewError$46$InvalidIndex = { $tag: 0 };
 const moonbitlang$core$builtin$$int_to_string_js = (x, radix) => {
   return x.toString(radix);
 };
 const moonbitlang$core$builtin$$JSArray$push = (arr, val) => { arr.push(val); };
+const Option$None$3$ = { $tag: 0 };
+function Option$Some$3$(param0) {
+  this._0 = param0;
+}
+Option$Some$3$.prototype.$tag = 1;
 const Option$None$4$ = { $tag: 0 };
 function Option$Some$4$(param0) {
   this._0 = param0;
 }
 Option$Some$4$.prototype.$tag = 1;
-const Option$None$5$ = { $tag: 0 };
-function Option$Some$5$(param0) {
-  this._0 = param0;
-}
-Option$Some$5$.prototype.$tag = 1;
 const moonbitlang$core$builtin$$try_init_wasm_helper = function() {
   try {
     return new WebAssembly.Instance(new WebAssembly.Module(new Uint8Array([0, 97, 115, 109, 1, 0, 0, 0, 1, 13, 2, 96, 0, 1, 127, 96, 4, 127, 127, 127, 127, 1, 127, 3, 7, 6, 0, 1, 1, 1, 1, 1, 6, 6, 1, 127, 1, 65, 0, 11, 7, 50, 6, 3, 109, 117, 108, 0, 1, 5, 100, 105, 118, 95, 115, 0, 2, 5, 100, 105, 118, 95, 117, 0, 3, 5, 114, 101, 109, 95, 115, 0, 4, 5, 114, 101, 109, 95, 117, 0, 5, 8, 103, 101, 116, 95, 104, 105, 103, 104, 0, 0, 10, 191, 1, 6, 4, 0, 35, 0, 11, 36, 1, 1, 126, 32, 0, 173, 32, 1, 173, 66, 32, 134, 132, 32, 2, 173, 32, 3, 173, 66, 32, 134, 132, 126, 34, 4, 66, 32, 135, 167, 36, 0, 32, 4, 167, 11, 36, 1, 1, 126, 32, 0, 173, 32, 1, 173, 66, 32, 134, 132, 32, 2, 173, 32, 3, 173, 66, 32, 134, 132, 127, 34, 4, 66, 32, 135, 167, 36, 0, 32, 4, 167, 11, 36, 1, 1, 126, 32, 0, 173, 32, 1, 173, 66, 32, 134, 132, 32, 2, 173, 32, 3, 173, 66, 32, 134, 132, 128, 34, 4, 66, 32, 135, 167, 36, 0, 32, 4, 167, 11, 36, 1, 1, 126, 32, 0, 173, 32, 1, 173, 66, 32, 134, 132, 32, 2, 173, 32, 3, 173, 66, 32, 134, 132, 129, 34, 4, 66, 32, 135, 167, 36, 0, 32, 4, 167, 11, 36, 1, 1, 126, 32, 0, 173, 32, 1, 173, 66, 32, 134, 132, 32, 2, 173, 32, 3, 173, 66, 32, 134, 132, 130, 34, 4, 66, 32, 135, 167, 36, 0, 32, 4, 167, 11])), {}).exports;
@@ -151,6 +154,16 @@ const moonbitlang$core$builtin$$JSArray$pop = (arr) => arr.pop();
 function $compare_int(a, b) {
   return (a >= b) - (a <= b);
 }
+const $64$moonbitlang$47$core$47$list$46$List$Empty$5$ = { $tag: 0 };
+function $64$moonbitlang$47$core$47$list$46$List$More$5$(param0, param1) {
+  this._0 = param0;
+  this._1 = param1;
+}
+$64$moonbitlang$47$core$47$list$46$List$More$5$.prototype.$tag = 1;
+const $bytes_literal$0 = new Uint8Array([65,66,67,68,69,70,71,72,73,74,75,76,77,78,79,80,81,82,83,84,85,86,87,88,89,90,49,50,51,52,53,54]);
+const $4294967295L = { hi: 0, lo: -1 };
+const $0L = { hi: 0, lo: 0 };
+const $1L = { hi: 0, lo: 1 };
 const rami3l$js$45$ffi$js$$Value$undefined = () => undefined;
 const rami3l$js$45$ffi$js$$Value$is_null = (n) => Object.is(n, null);
 const Option$None$6$ = { $tag: 0 };
@@ -272,89 +285,98 @@ function $64$Milky2018$47$selene$47$collision$46$CollisionShape$Rect(param0, par
   this._1 = param1;
 }
 $64$Milky2018$47$selene$47$collision$46$CollisionShape$Rect.prototype.$tag = 0;
+const moonbitlang$core$builtin$$parse$46$42$bind$124$5475 = ":";
+const moonbitlang$core$builtin$$parse$46$42$bind$124$5514 = ":";
+const moonbitlang$core$builtin$$parse$46$42$bind$124$5508 = "-";
+const moonbitlang$core$builtin$$parse$46$42$bind$124$5495 = ":";
+const moonbitlang$core$builtin$$parse$46$42$bind$124$5489 = ":";
 const moonbitlang$core$builtin$$wasm_helper_cache = { tried: false, exports: undefined };
+const moonbitlang$core$builtin$$output$46$42$bind$124$8405 = "/";
+const moonbitlang$core$builtin$$output$46$42$bind$124$8399 = "/";
+const moonbitlang$core$builtin$$boyer_moore_horspool_find$46$constr$47$74 = 0;
+const moonbitlang$core$builtin$$brute_force_find$46$constr$47$88 = 0;
 const Milky2018$selene$inputs$$mouse = { pos: { _0: 0, _1: 0 }, left_button: false, right_button: false, middle_button: false };
 const Milky2018$selene$inputs$$mouse_movement = { movement: { _0: 0, _1: 0 } };
 const Milky2018$selene$inputs$$last_mouse = { pos: { _0: 0, _1: 0 }, left_button: false, right_button: false, middle_button: false };
 const Milky2018$selene$inputs$$just_pressed_mouse = { pos: { _0: 0, _1: 0 }, left_button: false, right_button: false, middle_button: false };
 const Milky2018$selene$inputs$$just_release_mouse = { pos: { _0: 0, _1: 0 }, left_button: false, right_button: false, middle_button: false };
-const Milky2018$selene$inputs$$all_codes$46$42$bind$47$2358 = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32];
-const Milky2018$selene$inputs$$from_string$46$constr$47$2368 = 0;
-const Milky2018$selene$inputs$$from_string$46$constr$47$2369 = 1;
-const Milky2018$selene$inputs$$from_string$46$constr$47$2370 = 2;
-const Milky2018$selene$inputs$$from_string$46$constr$47$2371 = 3;
-const Milky2018$selene$inputs$$from_string$46$constr$47$2372 = 4;
-const Milky2018$selene$inputs$$from_string$46$constr$47$2373 = 5;
-const Milky2018$selene$inputs$$from_string$46$constr$47$2374 = 6;
-const Milky2018$selene$inputs$$from_string$46$constr$47$2375 = 7;
-const Milky2018$selene$inputs$$from_string$46$constr$47$2376 = 8;
-const Milky2018$selene$inputs$$from_string$46$constr$47$2377 = 9;
-const Milky2018$selene$inputs$$from_string$46$constr$47$2378 = 10;
-const Milky2018$selene$inputs$$from_string$46$constr$47$2379 = 11;
-const Milky2018$selene$inputs$$from_string$46$constr$47$2380 = 12;
-const Milky2018$selene$inputs$$from_string$46$constr$47$2381 = 13;
-const Milky2018$selene$inputs$$from_string$46$constr$47$2382 = 14;
-const Milky2018$selene$inputs$$from_string$46$constr$47$2383 = 15;
-const Milky2018$selene$inputs$$from_string$46$constr$47$2384 = 16;
-const Milky2018$selene$inputs$$from_string$46$constr$47$2385 = 17;
-const Milky2018$selene$inputs$$from_string$46$constr$47$2386 = 18;
-const Milky2018$selene$inputs$$from_string$46$constr$47$2387 = 19;
-const Milky2018$selene$inputs$$from_string$46$constr$47$2388 = 20;
-const Milky2018$selene$inputs$$from_string$46$constr$47$2389 = 21;
-const Milky2018$selene$inputs$$from_string$46$constr$47$2390 = 22;
-const Milky2018$selene$inputs$$from_string$46$constr$47$2391 = 23;
-const Milky2018$selene$inputs$$from_string$46$constr$47$2392 = 24;
-const Milky2018$selene$inputs$$from_string$46$constr$47$2393 = 26;
-const Milky2018$selene$inputs$$from_string$46$constr$47$2394 = 27;
-const Milky2018$selene$inputs$$from_string$46$constr$47$2395 = 28;
-const Milky2018$selene$inputs$$from_string$46$constr$47$2396 = 29;
-const Milky2018$selene$inputs$$from_string$46$constr$47$2397 = 30;
-const Milky2018$selene$inputs$$from_string$46$constr$47$2398 = 31;
-const Milky2018$selene$inputs$$from_string$46$constr$47$2399 = 32;
+const Milky2018$selene$inputs$$all_codes$46$42$bind$47$2541 = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32];
+const Milky2018$selene$inputs$$from_string$46$constr$47$2551 = 0;
+const Milky2018$selene$inputs$$from_string$46$constr$47$2552 = 1;
+const Milky2018$selene$inputs$$from_string$46$constr$47$2553 = 2;
+const Milky2018$selene$inputs$$from_string$46$constr$47$2554 = 3;
+const Milky2018$selene$inputs$$from_string$46$constr$47$2555 = 4;
+const Milky2018$selene$inputs$$from_string$46$constr$47$2556 = 5;
+const Milky2018$selene$inputs$$from_string$46$constr$47$2557 = 6;
+const Milky2018$selene$inputs$$from_string$46$constr$47$2558 = 7;
+const Milky2018$selene$inputs$$from_string$46$constr$47$2559 = 8;
+const Milky2018$selene$inputs$$from_string$46$constr$47$2560 = 9;
+const Milky2018$selene$inputs$$from_string$46$constr$47$2561 = 10;
+const Milky2018$selene$inputs$$from_string$46$constr$47$2562 = 11;
+const Milky2018$selene$inputs$$from_string$46$constr$47$2563 = 12;
+const Milky2018$selene$inputs$$from_string$46$constr$47$2564 = 13;
+const Milky2018$selene$inputs$$from_string$46$constr$47$2565 = 14;
+const Milky2018$selene$inputs$$from_string$46$constr$47$2566 = 15;
+const Milky2018$selene$inputs$$from_string$46$constr$47$2567 = 16;
+const Milky2018$selene$inputs$$from_string$46$constr$47$2568 = 17;
+const Milky2018$selene$inputs$$from_string$46$constr$47$2569 = 18;
+const Milky2018$selene$inputs$$from_string$46$constr$47$2570 = 19;
+const Milky2018$selene$inputs$$from_string$46$constr$47$2571 = 20;
+const Milky2018$selene$inputs$$from_string$46$constr$47$2572 = 21;
+const Milky2018$selene$inputs$$from_string$46$constr$47$2573 = 22;
+const Milky2018$selene$inputs$$from_string$46$constr$47$2574 = 23;
+const Milky2018$selene$inputs$$from_string$46$constr$47$2575 = 24;
+const Milky2018$selene$inputs$$from_string$46$constr$47$2576 = 26;
+const Milky2018$selene$inputs$$from_string$46$constr$47$2577 = 27;
+const Milky2018$selene$inputs$$from_string$46$constr$47$2578 = 28;
+const Milky2018$selene$inputs$$from_string$46$constr$47$2579 = 29;
+const Milky2018$selene$inputs$$from_string$46$constr$47$2580 = 30;
+const Milky2018$selene$inputs$$from_string$46$constr$47$2581 = 31;
+const Milky2018$selene$inputs$$from_string$46$constr$47$2582 = 32;
 const Milky2018$selene$entity$$entity_generator = { val: 0 };
-const Milky2018$selene$plugins$$default_plugin$46$constr$47$3255 = new $64$Milky2018$47$selene$47$system$46$Schedule$Render(0);
-const Milky2018$selene$examples$cards$$game_state$46$constr$47$3258 = "gold";
-const Milky2018$selene$examples$cards$$game_state$46$constr$47$3259 = "20px ThaleahFat";
-const Milky2018$selene$examples$cards$$game_state$46$constr$47$3260 = "lightgreen";
-const Milky2018$selene$examples$cards$$game_state$46$constr$47$3261 = "18px ThaleahFat";
-const Milky2018$selene$examples$cards$$game_state$46$constr$47$3262 = "white";
-const Milky2018$selene$examples$cards$$game_state$46$constr$47$3263 = "18px ThaleahFat";
-const Milky2018$selene$examples$cards$$game_state$46$constr$47$3264 = "white";
-const Milky2018$selene$examples$cards$$game_state$46$constr$47$3265 = "16px ThaleahFat";
-const Milky2018$selene$examples$cards$$game_state$46$constr$47$3266 = "white";
-const Milky2018$selene$examples$cards$$game_state$46$constr$47$3267 = "18px ThaleahFat";
-const Milky2018$selene$examples$cards$$game_state$46$constr$47$3268 = "yellow";
-const Milky2018$selene$examples$cards$$game_state$46$constr$47$3269 = "16px ThaleahFat";
-const Milky2018$selene$examples$cards$$game_state$46$constr$47$3270 = "cyan";
-const Milky2018$selene$examples$cards$$game_state$46$constr$47$3271 = "16px ThaleahFat";
-const Milky2018$selene$examples$cards$$is_straight$46$constr$47$3327 = 14;
-const Milky2018$selene$examples$cards$$find_best_hand$46$constr$47$3392 = new HandRank$HighCard(0);
-const Milky2018$selene$examples$cards$$create_action_buttons$46$constr$47$3455 = new Option$Some$0$(120);
-const Milky2018$selene$examples$cards$$create_action_buttons$46$constr$47$3456 = new Option$Some$0$(285);
-const Milky2018$selene$examples$cards$$create_action_buttons$46$constr$47$3457 = "white";
-const Milky2018$selene$examples$cards$$create_action_buttons$46$constr$47$3458 = "16px ThaleahFat";
-const Milky2018$selene$examples$cards$$create_action_buttons$46$constr$47$3459 = new Option$Some$0$(20);
-const Milky2018$selene$examples$cards$$create_action_buttons$46$constr$47$3460 = new Option$Some$0$(4.5);
-const Milky2018$selene$examples$cards$$create_action_buttons$46$constr$47$3461 = new Option$Some$0$(205);
-const Milky2018$selene$examples$cards$$create_action_buttons$46$constr$47$3462 = new Option$Some$0$(285);
-const Milky2018$selene$examples$cards$$create_action_buttons$46$constr$47$3463 = new Option$Some$0$(20);
-const Milky2018$selene$examples$cards$$create_action_buttons$46$constr$47$3464 = new Option$Some$0$(4.5);
-const Milky2018$selene$examples$cards$$create_action_buttons$46$constr$47$3465 = new Option$Some$0$(290);
-const Milky2018$selene$examples$cards$$create_action_buttons$46$constr$47$3466 = new Option$Some$0$(285);
-const Milky2018$selene$examples$cards$$create_action_buttons$46$constr$47$3467 = "white";
-const Milky2018$selene$examples$cards$$create_action_buttons$46$constr$47$3468 = "16px ThaleahFat";
-const Milky2018$selene$examples$cards$$create_action_buttons$46$constr$47$3469 = new Option$Some$0$(17);
-const Milky2018$selene$examples$cards$$create_action_buttons$46$constr$47$3470 = new Option$Some$0$(4.5);
-const Milky2018$selene$examples$cards$$setup_ui$46$constr$47$3483 = new Option$Some$0$(200);
-const Milky2018$selene$examples$cards$$setup_ui$46$constr$47$3484 = new Option$Some$0$(20);
-const Milky2018$selene$examples$cards$$setup_ui$46$constr$47$3485 = new Option$Some$0$(200);
-const Milky2018$selene$examples$cards$$setup_ui$46$constr$47$3486 = new Option$Some$0$(40);
-const Milky2018$selene$examples$cards$$setup_ui$46$constr$47$3487 = new Option$Some$0$(20);
-const Milky2018$selene$examples$cards$$setup_ui$46$constr$47$3488 = new Option$Some$0$(20);
-const Milky2018$selene$examples$cards$$setup_ui$46$constr$47$3489 = new Option$Some$0$(390);
-const Milky2018$selene$examples$cards$$setup_ui$46$constr$47$3490 = new Option$Some$0$(20);
-const Milky2018$selene$examples$cards$$setup_ui$46$constr$47$3491 = new Option$Some$0$(180);
-const Milky2018$selene$examples$cards$$setup_ui$46$constr$47$3492 = new Option$Some$0$(80);
+const Milky2018$selene$plugins$$default_plugin$46$constr$47$3438 = new $64$Milky2018$47$selene$47$system$46$Schedule$Render(0);
+const Milky2018$selene$examples$cards$$game_state$46$constr$47$3441 = "gold";
+const Milky2018$selene$examples$cards$$game_state$46$constr$47$3442 = "20px ThaleahFat";
+const Milky2018$selene$examples$cards$$game_state$46$constr$47$3443 = "lightgreen";
+const Milky2018$selene$examples$cards$$game_state$46$constr$47$3444 = "18px ThaleahFat";
+const Milky2018$selene$examples$cards$$game_state$46$constr$47$3445 = "white";
+const Milky2018$selene$examples$cards$$game_state$46$constr$47$3446 = "18px ThaleahFat";
+const Milky2018$selene$examples$cards$$game_state$46$constr$47$3447 = "white";
+const Milky2018$selene$examples$cards$$game_state$46$constr$47$3448 = "16px ThaleahFat";
+const Milky2018$selene$examples$cards$$game_state$46$constr$47$3449 = "white";
+const Milky2018$selene$examples$cards$$game_state$46$constr$47$3450 = "18px ThaleahFat";
+const Milky2018$selene$examples$cards$$game_state$46$constr$47$3451 = "yellow";
+const Milky2018$selene$examples$cards$$game_state$46$constr$47$3452 = "16px ThaleahFat";
+const Milky2018$selene$examples$cards$$game_state$46$constr$47$3453 = "cyan";
+const Milky2018$selene$examples$cards$$game_state$46$constr$47$3454 = "16px ThaleahFat";
+const Milky2018$selene$examples$cards$$is_straight$46$constr$47$3510 = 14;
+const Milky2018$selene$examples$cards$$find_best_hand$46$constr$47$3575 = new HandRank$HighCard(0);
+const Milky2018$selene$examples$cards$$create_action_buttons$46$constr$47$3638 = new Option$Some$0$(120);
+const Milky2018$selene$examples$cards$$create_action_buttons$46$constr$47$3639 = new Option$Some$0$(285);
+const Milky2018$selene$examples$cards$$create_action_buttons$46$constr$47$3640 = "white";
+const Milky2018$selene$examples$cards$$create_action_buttons$46$constr$47$3641 = "16px ThaleahFat";
+const Milky2018$selene$examples$cards$$create_action_buttons$46$constr$47$3642 = new Option$Some$0$(20);
+const Milky2018$selene$examples$cards$$create_action_buttons$46$constr$47$3643 = new Option$Some$0$(4.5);
+const Milky2018$selene$examples$cards$$create_action_buttons$46$constr$47$3644 = new Option$Some$0$(205);
+const Milky2018$selene$examples$cards$$create_action_buttons$46$constr$47$3645 = new Option$Some$0$(285);
+const Milky2018$selene$examples$cards$$create_action_buttons$46$constr$47$3646 = new Option$Some$0$(20);
+const Milky2018$selene$examples$cards$$create_action_buttons$46$constr$47$3647 = new Option$Some$0$(4.5);
+const Milky2018$selene$examples$cards$$create_action_buttons$46$constr$47$3648 = new Option$Some$0$(290);
+const Milky2018$selene$examples$cards$$create_action_buttons$46$constr$47$3649 = new Option$Some$0$(285);
+const Milky2018$selene$examples$cards$$create_action_buttons$46$constr$47$3650 = "white";
+const Milky2018$selene$examples$cards$$create_action_buttons$46$constr$47$3651 = "16px ThaleahFat";
+const Milky2018$selene$examples$cards$$create_action_buttons$46$constr$47$3652 = new Option$Some$0$(17);
+const Milky2018$selene$examples$cards$$create_action_buttons$46$constr$47$3653 = new Option$Some$0$(4.5);
+const Milky2018$selene$examples$cards$$setup_ui$46$constr$47$3666 = new Option$Some$0$(200);
+const Milky2018$selene$examples$cards$$setup_ui$46$constr$47$3667 = new Option$Some$0$(20);
+const Milky2018$selene$examples$cards$$setup_ui$46$constr$47$3668 = new Option$Some$0$(200);
+const Milky2018$selene$examples$cards$$setup_ui$46$constr$47$3669 = new Option$Some$0$(40);
+const Milky2018$selene$examples$cards$$setup_ui$46$constr$47$3670 = new Option$Some$0$(20);
+const Milky2018$selene$examples$cards$$setup_ui$46$constr$47$3671 = new Option$Some$0$(20);
+const Milky2018$selene$examples$cards$$setup_ui$46$constr$47$3672 = new Option$Some$0$(390);
+const Milky2018$selene$examples$cards$$setup_ui$46$constr$47$3673 = new Option$Some$0$(20);
+const Milky2018$selene$examples$cards$$setup_ui$46$constr$47$3674 = new Option$Some$0$(180);
+const Milky2018$selene$examples$cards$$setup_ui$46$constr$47$3675 = new Option$Some$0$(80);
 const Milky2018$selene$position$$positions = moonbitlang$core$builtin$$Map$new$46$inner$0$(8);
 const moonbitlang$core$builtin$$seed = moonbitlang$core$builtin$$random_seed();
 const Milky2018$selene$backend$$canvas_backend = Milky2018$selene$backend$$CanvasBackend$new();
@@ -372,7 +394,7 @@ const Milky2018$selene$sprite$$sprites = moonbitlang$core$builtin$$Map$new$46$in
 const Milky2018$selene$collision$$pickables = moonbitlang$core$builtin$$Map$new$46$inner$6$(8);
 const Milky2018$selene$entity$$children = moonbitlang$core$builtin$$Map$new$46$inner$7$(8);
 const Milky2018$selene$entity$$parents = moonbitlang$core$builtin$$Map$new$46$inner$8$(8);
-const Milky2018$selene$examples$cards$$game_state = { rand: moonbitlang$core$random$$Rand$new(Option$None$1$), deck: [], player: { chips: 1000, hole_cards: [], current_bet: 0, has_folded: false, position: { _0: 240, _1: 240 } }, phase: 0, current_bet: 0, community_cards: [], hand_number: 0, small_blind: 10, big_blind: 20, turns_remaining: 10, starting_chips: 1000, magnification: 1, blind_text: Milky2018$selene$sprite$$Text$new("Blind: $20", Milky2018$selene$examples$cards$$game_state$46$constr$47$3258, Milky2018$selene$examples$cards$$game_state$46$constr$47$3259, undefined, undefined), chips_text: Milky2018$selene$sprite$$Text$new("Chips: $1000", Milky2018$selene$examples$cards$$game_state$46$constr$47$3260, Milky2018$selene$examples$cards$$game_state$46$constr$47$3261, undefined, undefined), phase_text: Milky2018$selene$sprite$$Text$new("Pre-Flop", Milky2018$selene$examples$cards$$game_state$46$constr$47$3262, Milky2018$selene$examples$cards$$game_state$46$constr$47$3263, undefined, undefined), call_button_text: Milky2018$selene$sprite$$Text$new("Call", Milky2018$selene$examples$cards$$game_state$46$constr$47$3264, Milky2018$selene$examples$cards$$game_state$46$constr$47$3265, undefined, undefined), turns_text: Milky2018$selene$sprite$$Text$new("Turns: 10/10", Milky2018$selene$examples$cards$$game_state$46$constr$47$3266, Milky2018$selene$examples$cards$$game_state$46$constr$47$3267, undefined, undefined), action_text: Milky2018$selene$sprite$$Text$new("", Milky2018$selene$examples$cards$$game_state$46$constr$47$3268, Milky2018$selene$examples$cards$$game_state$46$constr$47$3269, undefined, undefined), hand_strength_text: Milky2018$selene$sprite$$Text$new("", Milky2018$selene$examples$cards$$game_state$46$constr$47$3270, Milky2018$selene$examples$cards$$game_state$46$constr$47$3271, undefined, undefined), fold_button: Milky2018$selene$entity$$Entity$new(), call_button: Milky2018$selene$entity$$Entity$new(), raise_button: Milky2018$selene$entity$$Entity$new(), waiting_for_player: false, hole_card_entities: [], community_card_entities: [] };
+const Milky2018$selene$examples$cards$$game_state = { rand: moonbitlang$core$random$$Rand$new(Option$None$1$), deck: [], player: { chips: 1000, hole_cards: [], current_bet: 0, has_folded: false, position: { _0: 240, _1: 240 } }, phase: 0, current_bet: 0, community_cards: [], hand_number: 0, small_blind: 10, big_blind: 20, turns_remaining: 10, starting_chips: 1000, magnification: 1, blind_text: Milky2018$selene$sprite$$Text$new("Blind: $20", Milky2018$selene$examples$cards$$game_state$46$constr$47$3441, Milky2018$selene$examples$cards$$game_state$46$constr$47$3442, undefined, undefined), chips_text: Milky2018$selene$sprite$$Text$new("Chips: $1000", Milky2018$selene$examples$cards$$game_state$46$constr$47$3443, Milky2018$selene$examples$cards$$game_state$46$constr$47$3444, undefined, undefined), phase_text: Milky2018$selene$sprite$$Text$new("Pre-Flop", Milky2018$selene$examples$cards$$game_state$46$constr$47$3445, Milky2018$selene$examples$cards$$game_state$46$constr$47$3446, undefined, undefined), call_button_text: Milky2018$selene$sprite$$Text$new("Call", Milky2018$selene$examples$cards$$game_state$46$constr$47$3447, Milky2018$selene$examples$cards$$game_state$46$constr$47$3448, undefined, undefined), turns_text: Milky2018$selene$sprite$$Text$new("Turns: 10/10", Milky2018$selene$examples$cards$$game_state$46$constr$47$3449, Milky2018$selene$examples$cards$$game_state$46$constr$47$3450, undefined, undefined), action_text: Milky2018$selene$sprite$$Text$new("", Milky2018$selene$examples$cards$$game_state$46$constr$47$3451, Milky2018$selene$examples$cards$$game_state$46$constr$47$3452, undefined, undefined), hand_strength_text: Milky2018$selene$sprite$$Text$new("", Milky2018$selene$examples$cards$$game_state$46$constr$47$3453, Milky2018$selene$examples$cards$$game_state$46$constr$47$3454, undefined, undefined), fold_button: Milky2018$selene$entity$$Entity$new(), call_button: Milky2018$selene$entity$$Entity$new(), raise_button: Milky2018$selene$entity$$Entity$new(), waiting_for_player: false, hole_card_entities: [], community_card_entities: [] };
 const Milky2018$selene$system$$deferred_events = moonbitlang$core$array$$Array$new$46$inner$9$(0);
 const Milky2018$selene$sprite$$animation_generator = moonbitlang$core$ref$$Ref$new$10$(0);
 const _bind = { _0: 0, _1: 0 };
@@ -392,7 +414,7 @@ const Milky2018$selene$velocity$$velocities = moonbitlang$core$builtin$$Map$new$
 const Milky2018$selene$collision$$areas = moonbitlang$core$builtin$$Map$new$46$inner$16$(8);
 const Milky2018$selene$inputs$$pressed_keys = moonbitlang$core$set$$Set$new$46$inner$17$(8);
 const Milky2018$selene$inputs$$last_pressed_keys = moonbitlang$core$set$$Set$new$46$inner$17$(8);
-const Milky2018$selene$inputs$$all_codes = moonbitlang$core$set$$Set$from_array$17$({ buf: Milky2018$selene$inputs$$all_codes$46$42$bind$47$2358, start: 0, end: 33 });
+const Milky2018$selene$inputs$$all_codes = moonbitlang$core$set$$Set$from_array$17$({ buf: Milky2018$selene$inputs$$all_codes$46$42$bind$47$2541, start: 0, end: 33 });
 const Milky2018$selene$inputs$$just_pressed_keys = moonbitlang$core$set$$Set$new$46$inner$17$(8);
 const Milky2018$selene$inputs$$just_release_keys = moonbitlang$core$set$$Set$new$46$inner$17$(8);
 const Milky2018$selene$backend$$element_cache = moonbitlang$core$builtin$$Map$new$46$inner$18$(8);
@@ -426,1324 +448,50 @@ function moonbitlang$core$abort$$abort$27$(msg) {
 function moonbitlang$core$abort$$abort$28$(msg) {
   return $panic();
 }
+function moonbitlang$core$abort$$abort$29$(msg) {
+  return $panic();
+}
 function moonbitlang$core$abort$$abort$10$(msg) {
   return $panic();
 }
-function moonbitlang$core$list$$List$from_array$11$(arr) {
-  let _tmp = (arr.end - arr.start | 0) - 1 | 0;
-  let _tmp$2 = $64$moonbitlang$47$core$47$list$46$List$Empty$2$;
-  while (true) {
-    const i = _tmp;
-    const list = _tmp$2;
-    if (i >= 0) {
-      _tmp = i - 1 | 0;
-      _tmp$2 = new $64$moonbitlang$47$core$47$list$46$List$More$2$(moonbitlang$core$array$$ArrayView$at$11$(arr, i), list);
-      continue;
-    } else {
-      return list;
-    }
-  }
+function moonbitlang$core$abort$$abort$30$(msg) {
+  return $panic();
 }
-function moonbitlang$core$bytes$$Bytes$sub$46$inner(self, start, end) {
-  const len = self.length;
-  let end$2;
-  if (end === undefined) {
-    end$2 = len;
-  } else {
-    const _Some = end;
-    const _end = _Some;
-    end$2 = _end < 0 ? len + _end | 0 : _end;
-  }
-  const start$2 = start < 0 ? len + start | 0 : start;
-  return start$2 >= 0 && (start$2 <= end$2 && end$2 <= len) ? { bytes: self, start: start$2, end: end$2 } : moonbitlang$core$abort$$abort$27$("Invalid index for View");
+function moonbitlang$core$builtin$$abort$21$(string, loc) {
+  return moonbitlang$core$abort$$abort$21$(`${string}\n  at${moonbitlang$core$builtin$$Show$to_string$31$(loc)}\n`);
 }
-function moonbitlang$core$bytes$$BytesView$unsafe_extract_byte(bs, offset, len) {
-  const byte_index = offset >> 3;
-  if ((offset & 7) === 0) {
-    const _tmp = bs.bytes;
-    const _tmp$2 = bs.start + byte_index | 0;
-    $bound_check(_tmp, _tmp$2);
-    const byte = _tmp[_tmp$2];
-    const _p = moonbitlang$core$builtin$$Shr$shr$29$(byte, 8 - len | 0);
-    return _p;
-  } else {
-    if (((offset & 7) + len | 0) <= 8) {
-      const _tmp = bs.bytes;
-      const _tmp$2 = bs.start + byte_index | 0;
-      $bound_check(_tmp, _tmp$2);
-      const _p = _tmp[_tmp$2];
-      const byte = _p;
-      const shift = 8 - ((offset & 7) + len | 0) | 0;
-      const mask = (1 << len >>> 0) - (1 >>> 0) | 0;
-      return byte >>> shift & mask;
-    } else {
-      const _tmp = bs.bytes;
-      const _tmp$2 = bs.start + byte_index | 0;
-      $bound_check(_tmp, _tmp$2);
-      const _p = _tmp[_tmp$2];
-      const b0 = _p;
-      const _p$2 = byte_index + 1 | 0;
-      const _tmp$3 = bs.bytes;
-      const _tmp$4 = bs.start + _p$2 | 0;
-      $bound_check(_tmp$3, _tmp$4);
-      const _p$3 = _tmp$3[_tmp$4];
-      const b1 = _p$3;
-      const data = b0 << 8 | b1;
-      const bit_mask = (1 << (16 - (offset & 7) | 0) >>> 0) - (1 >>> 0) | 0;
-      const data$2 = data & bit_mask;
-      const shift = 16 - ((offset & 7) + len | 0) | 0;
-      return data$2 >>> shift | 0;
-    }
-  }
+function moonbitlang$core$builtin$$abort$22$(string, loc) {
+  moonbitlang$core$abort$$abort$22$(`${string}\n  at${moonbitlang$core$builtin$$Show$to_string$31$(loc)}\n`);
 }
-function moonbitlang$core$bytes$$BytesView$unsafe_extract_uint_le(bs, offset, len) {
-  const bytes_needed = (len + 7 | 0) / 8 | 0;
-  const b0 = moonbitlang$core$bytes$$BytesView$unsafe_extract_byte(bs, offset, 8);
-  switch (bytes_needed) {
-    case 2: {
-      const b1 = moonbitlang$core$bytes$$BytesView$unsafe_extract_byte(bs, offset + 8 | 0, len - 8 | 0);
-      return b1 << 8 | b0;
-    }
-    case 3: {
-      const b1$2 = moonbitlang$core$bytes$$BytesView$unsafe_extract_byte(bs, offset + 8 | 0, 8);
-      const b2 = moonbitlang$core$bytes$$BytesView$unsafe_extract_byte(bs, offset + 16 | 0, len - 16 | 0);
-      return b2 << 16 | b1$2 << 8 | b0;
-    }
-    case 4: {
-      const b1$3 = moonbitlang$core$bytes$$BytesView$unsafe_extract_byte(bs, offset + 8 | 0, 8);
-      const b2$2 = moonbitlang$core$bytes$$BytesView$unsafe_extract_byte(bs, offset + 16 | 0, 8);
-      const b3 = moonbitlang$core$bytes$$BytesView$unsafe_extract_byte(bs, offset + 24 | 0, len - 24 | 0);
-      return b3 << 24 | b2$2 << 16 | b1$3 << 8 | b0;
-    }
-    default: {
-      return moonbitlang$core$abort$$abort$25$("Invalid byte count for int32 extraction");
-    }
-  }
+function moonbitlang$core$builtin$$abort$23$(string, loc) {
+  return moonbitlang$core$abort$$abort$23$(`${string}\n  at${moonbitlang$core$builtin$$Show$to_string$31$(loc)}\n`);
 }
-function moonbitlang$core$set$$Set$new$46$inner$17$(capacity) {
-  const capacity$2 = moonbitlang$core$int$$Int$next_power_of_two(capacity);
-  const _bind$8 = capacity$2 - 1 | 0;
-  const _bind$9 = (Math.imul(capacity$2, 13) | 0) / 16 | 0;
-  const _bind$10 = $make_array_len_and_init(capacity$2, undefined);
-  const _bind$11 = undefined;
-  return { entries: _bind$10, size: 0, capacity: capacity$2, capacity_mask: _bind$8, grow_at: _bind$9, head: _bind$11, tail: -1 };
+function moonbitlang$core$builtin$$abort$24$(string, loc) {
+  return moonbitlang$core$abort$$abort$24$(`${string}\n  at${moonbitlang$core$builtin$$Show$to_string$31$(loc)}\n`);
 }
-function moonbitlang$core$set$$Set$new$46$inner$3$(capacity) {
-  const capacity$2 = moonbitlang$core$int$$Int$next_power_of_two(capacity);
-  const _bind$8 = capacity$2 - 1 | 0;
-  const _bind$9 = (Math.imul(capacity$2, 13) | 0) / 16 | 0;
-  const _bind$10 = $make_array_len_and_init(capacity$2, undefined);
-  const _bind$11 = undefined;
-  return { entries: _bind$10, size: 0, capacity: capacity$2, capacity_mask: _bind$8, grow_at: _bind$9, head: _bind$11, tail: -1 };
+function moonbitlang$core$builtin$$abort$11$(string, loc) {
+  return moonbitlang$core$abort$$abort$11$(`${string}\n  at${moonbitlang$core$builtin$$Show$to_string$31$(loc)}\n`);
 }
-function moonbitlang$core$set$$Set$add_entry_to_tail$3$(self, idx, entry) {
-  const _bind$8 = self.tail;
-  if (_bind$8 === -1) {
-    self.head = entry;
-  } else {
-    const _tmp = self.entries;
-    $bound_check(_tmp, _bind$8);
-    const _p = _tmp[_bind$8];
-    let _tmp$2;
-    if (_p === undefined) {
-      _tmp$2 = $panic();
-    } else {
-      const _p$2 = _p;
-      _tmp$2 = _p$2;
-    }
-    _tmp$2.next = entry;
-  }
-  self.tail = idx;
-  const _tmp = self.entries;
-  $bound_check(_tmp, idx);
-  _tmp[idx] = entry;
-  self.size = self.size + 1 | 0;
+function moonbitlang$core$builtin$$abort$25$(string, loc) {
+  return moonbitlang$core$abort$$abort$25$(`${string}\n  at${moonbitlang$core$builtin$$Show$to_string$31$(loc)}\n`);
 }
-function moonbitlang$core$set$$Set$add_entry_to_tail$17$(self, idx, entry) {
-  const _bind$8 = self.tail;
-  if (_bind$8 === -1) {
-    self.head = entry;
-  } else {
-    const _tmp = self.entries;
-    $bound_check(_tmp, _bind$8);
-    const _p = _tmp[_bind$8];
-    let _tmp$2;
-    if (_p === undefined) {
-      _tmp$2 = $panic();
-    } else {
-      const _p$2 = _p;
-      _tmp$2 = _p$2;
-    }
-    _tmp$2.next = entry;
-  }
-  self.tail = idx;
-  const _tmp = self.entries;
-  $bound_check(_tmp, idx);
-  _tmp[idx] = entry;
-  self.size = self.size + 1 | 0;
+function moonbitlang$core$builtin$$abort$26$(string, loc) {
+  return moonbitlang$core$abort$$abort$26$(`${string}\n  at${moonbitlang$core$builtin$$Show$to_string$31$(loc)}\n`);
 }
-function moonbitlang$core$set$$Set$set_entry$17$(self, entry, new_idx) {
-  const _tmp = self.entries;
-  $bound_check(_tmp, new_idx);
-  _tmp[new_idx] = entry;
-  const _bind$8 = entry.next;
-  if (_bind$8 === undefined) {
-    self.tail = new_idx;
-    return;
-  } else {
-    const _Some = _bind$8;
-    const _next = _Some;
-    _next.prev = new_idx;
-    return;
-  }
+function moonbitlang$core$builtin$$abort$27$(string, loc) {
+  return moonbitlang$core$abort$$abort$27$(`${string}\n  at${moonbitlang$core$builtin$$Show$to_string$31$(loc)}\n`);
 }
-function moonbitlang$core$set$$Set$set_entry$3$(self, entry, new_idx) {
-  const _tmp = self.entries;
-  $bound_check(_tmp, new_idx);
-  _tmp[new_idx] = entry;
-  const _bind$8 = entry.next;
-  if (_bind$8 === undefined) {
-    self.tail = new_idx;
-    return;
-  } else {
-    const _Some = _bind$8;
-    const _next = _Some;
-    _next.prev = new_idx;
-    return;
-  }
+function moonbitlang$core$builtin$$abort$28$(string, loc) {
+  return moonbitlang$core$abort$$abort$28$(`${string}\n  at${moonbitlang$core$builtin$$Show$to_string$31$(loc)}\n`);
 }
-function moonbitlang$core$set$$Set$push_away$3$(self, idx, entry) {
-  let _tmp = entry.psl + 1 | 0;
-  let _tmp$2 = idx + 1 & self.capacity_mask;
-  let _tmp$3 = entry;
-  while (true) {
-    const psl = _tmp;
-    const idx$2 = _tmp$2;
-    const entry$2 = _tmp$3;
-    const _tmp$4 = self.entries;
-    $bound_check(_tmp$4, idx$2);
-    const _bind$8 = _tmp$4[idx$2];
-    if (_bind$8 === undefined) {
-      entry$2.psl = psl;
-      moonbitlang$core$set$$Set$set_entry$3$(self, entry$2, idx$2);
-      break;
-    } else {
-      const _Some = _bind$8;
-      const _curr_entry = _Some;
-      if (psl > _curr_entry.psl) {
-        entry$2.psl = psl;
-        moonbitlang$core$set$$Set$set_entry$3$(self, entry$2, idx$2);
-        _tmp = _curr_entry.psl + 1 | 0;
-        _tmp$2 = idx$2 + 1 & self.capacity_mask;
-        _tmp$3 = _curr_entry;
-        continue;
-      } else {
-        _tmp = psl + 1 | 0;
-        _tmp$2 = idx$2 + 1 & self.capacity_mask;
-        continue;
-      }
-    }
-  }
+function moonbitlang$core$builtin$$abort$29$(string, loc) {
+  return moonbitlang$core$abort$$abort$29$(`${string}\n  at${moonbitlang$core$builtin$$Show$to_string$31$(loc)}\n`);
 }
-function moonbitlang$core$set$$Set$push_away$17$(self, idx, entry) {
-  let _tmp = entry.psl + 1 | 0;
-  let _tmp$2 = idx + 1 & self.capacity_mask;
-  let _tmp$3 = entry;
-  while (true) {
-    const psl = _tmp;
-    const idx$2 = _tmp$2;
-    const entry$2 = _tmp$3;
-    const _tmp$4 = self.entries;
-    $bound_check(_tmp$4, idx$2);
-    const _bind$8 = _tmp$4[idx$2];
-    if (_bind$8 === undefined) {
-      entry$2.psl = psl;
-      moonbitlang$core$set$$Set$set_entry$17$(self, entry$2, idx$2);
-      break;
-    } else {
-      const _Some = _bind$8;
-      const _curr_entry = _Some;
-      if (psl > _curr_entry.psl) {
-        entry$2.psl = psl;
-        moonbitlang$core$set$$Set$set_entry$17$(self, entry$2, idx$2);
-        _tmp = _curr_entry.psl + 1 | 0;
-        _tmp$2 = idx$2 + 1 & self.capacity_mask;
-        _tmp$3 = _curr_entry;
-        continue;
-      } else {
-        _tmp = psl + 1 | 0;
-        _tmp$2 = idx$2 + 1 & self.capacity_mask;
-        continue;
-      }
-    }
-  }
+function moonbitlang$core$builtin$$abort$10$(string, loc) {
+  return moonbitlang$core$abort$$abort$10$(`${string}\n  at${moonbitlang$core$builtin$$Show$to_string$31$(loc)}\n`);
 }
-function moonbitlang$core$set$$Set$add_with_hash$3$(self, key, hash) {
-  if (self.size >= self.grow_at) {
-    moonbitlang$core$set$$Set$grow$3$(self);
-  }
-  let _bind$8;
-  let _tmp = 0;
-  let _tmp$2 = hash & self.capacity_mask;
-  while (true) {
-    const psl = _tmp;
-    const idx = _tmp$2;
-    const _tmp$3 = self.entries;
-    $bound_check(_tmp$3, idx);
-    const _bind$9 = _tmp$3[idx];
-    if (_bind$9 === undefined) {
-      _bind$8 = { _0: idx, _1: psl };
-      break;
-    } else {
-      const _Some = _bind$9;
-      const _curr_entry = _Some;
-      let _tmp$4;
-      if (_curr_entry.hash === hash) {
-        const _p = _curr_entry.key;
-        _tmp$4 = _p === key;
-      } else {
-        _tmp$4 = false;
-      }
-      if (_tmp$4) {
-        return undefined;
-      }
-      if (psl > _curr_entry.psl) {
-        moonbitlang$core$set$$Set$push_away$3$(self, idx, _curr_entry);
-        _bind$8 = { _0: idx, _1: psl };
-        break;
-      }
-      _tmp = psl + 1 | 0;
-      _tmp$2 = idx + 1 & self.capacity_mask;
-      continue;
-    }
-  }
-  const _idx = _bind$8._0;
-  const _psl = _bind$8._1;
-  const _bind$9 = self.tail;
-  const _bind$10 = undefined;
-  const entry = { prev: _bind$9, next: _bind$10, psl: _psl, hash: hash, key: key };
-  moonbitlang$core$set$$Set$add_entry_to_tail$3$(self, _idx, entry);
-}
-function moonbitlang$core$set$$Set$add_with_hash$17$(self, key, hash) {
-  if (self.size >= self.grow_at) {
-    moonbitlang$core$set$$Set$grow$17$(self);
-  }
-  let _bind$8;
-  let _tmp = 0;
-  let _tmp$2 = hash & self.capacity_mask;
-  while (true) {
-    const psl = _tmp;
-    const idx = _tmp$2;
-    const _tmp$3 = self.entries;
-    $bound_check(_tmp$3, idx);
-    const _bind$9 = _tmp$3[idx];
-    if (_bind$9 === undefined) {
-      _bind$8 = { _0: idx, _1: psl };
-      break;
-    } else {
-      const _Some = _bind$9;
-      const _curr_entry = _Some;
-      if (_curr_entry.hash === hash && moonbitlang$core$builtin$$Eq$equal$17$(_curr_entry.key, key)) {
-        return undefined;
-      }
-      if (psl > _curr_entry.psl) {
-        moonbitlang$core$set$$Set$push_away$17$(self, idx, _curr_entry);
-        _bind$8 = { _0: idx, _1: psl };
-        break;
-      }
-      _tmp = psl + 1 | 0;
-      _tmp$2 = idx + 1 & self.capacity_mask;
-      continue;
-    }
-  }
-  const _idx = _bind$8._0;
-  const _psl = _bind$8._1;
-  const _bind$9 = self.tail;
-  const _bind$10 = undefined;
-  const entry = { prev: _bind$9, next: _bind$10, psl: _psl, hash: hash, key: key };
-  moonbitlang$core$set$$Set$add_entry_to_tail$17$(self, _idx, entry);
-}
-function moonbitlang$core$set$$Set$grow$3$(self) {
-  const old_head = self.head;
-  const new_capacity = self.capacity << 1;
-  self.entries = $make_array_len_and_init(new_capacity, undefined);
-  self.capacity = new_capacity;
-  self.capacity_mask = new_capacity - 1 | 0;
-  const _p = self.capacity;
-  self.grow_at = (Math.imul(_p, 13) | 0) / 16 | 0;
-  self.size = 0;
-  self.head = undefined;
-  self.tail = -1;
-  let _tmp = old_head;
-  while (true) {
-    const _param = _tmp;
-    if (_param === undefined) {
-      return;
-    } else {
-      const _Some = _param;
-      const _x = _Some;
-      const _next = _x.next;
-      const _key = _x.key;
-      const _hash = _x.hash;
-      moonbitlang$core$set$$Set$add_with_hash$3$(self, _key, _hash);
-      _tmp = _next;
-      continue;
-    }
-  }
-}
-function moonbitlang$core$set$$Set$grow$17$(self) {
-  const old_head = self.head;
-  const new_capacity = self.capacity << 1;
-  self.entries = $make_array_len_and_init(new_capacity, undefined);
-  self.capacity = new_capacity;
-  self.capacity_mask = new_capacity - 1 | 0;
-  const _p = self.capacity;
-  self.grow_at = (Math.imul(_p, 13) | 0) / 16 | 0;
-  self.size = 0;
-  self.head = undefined;
-  self.tail = -1;
-  let _tmp = old_head;
-  while (true) {
-    const _param = _tmp;
-    if (_param === undefined) {
-      return;
-    } else {
-      const _Some = _param;
-      const _x = _Some;
-      const _next = _x.next;
-      const _key = _x.key;
-      const _hash = _x.hash;
-      moonbitlang$core$set$$Set$add_with_hash$17$(self, _key, _hash);
-      _tmp = _next;
-      continue;
-    }
-  }
-}
-function moonbitlang$core$set$$Set$add$3$(self, key) {
-  moonbitlang$core$set$$Set$add_with_hash$3$(self, key, moonbitlang$core$builtin$$Hash$hash$30$(key));
-}
-function moonbitlang$core$set$$Set$add$17$(self, key) {
-  moonbitlang$core$set$$Set$add_with_hash$17$(self, key, moonbitlang$core$builtin$$Hash$hash$31$(key));
-}
-function moonbitlang$core$set$$Set$from_array$17$(arr) {
-  const length = arr.end - arr.start | 0;
-  let capacity = moonbitlang$core$int$$Int$next_power_of_two(length);
-  const _p = capacity;
-  if (length > ((Math.imul(_p, 13) | 0) / 16 | 0)) {
-    capacity = Math.imul(capacity, 2) | 0;
-  }
-  const m = moonbitlang$core$set$$Set$new$46$inner$17$(capacity);
-  const _len = arr.end - arr.start | 0;
-  let _tmp = 0;
-  while (true) {
-    const _i = _tmp;
-    if (_i < _len) {
-      const e = arr.buf[arr.start + _i | 0];
-      moonbitlang$core$set$$Set$add$17$(m, e);
-      _tmp = _i + 1 | 0;
-      continue;
-    } else {
-      break;
-    }
-  }
-  return m;
-}
-function moonbitlang$core$set$$Set$contains$3$(self, key) {
-  const hash = moonbitlang$core$builtin$$Hash$hash$30$(key);
-  let _tmp = 0;
-  let _tmp$2 = hash & self.capacity_mask;
-  while (true) {
-    const i = _tmp;
-    const idx = _tmp$2;
-    const _tmp$3 = self.entries;
-    $bound_check(_tmp$3, idx);
-    const _bind$8 = _tmp$3[idx];
-    if (_bind$8 === undefined) {
-      return false;
-    } else {
-      const _Some = _bind$8;
-      const _entry = _Some;
-      let _tmp$4;
-      if (_entry.hash === hash) {
-        const _p = _entry.key;
-        _tmp$4 = _p === key;
-      } else {
-        _tmp$4 = false;
-      }
-      if (_tmp$4) {
-        return true;
-      }
-      if (i > _entry.psl) {
-        return false;
-      }
-      _tmp = i + 1 | 0;
-      _tmp$2 = idx + 1 & self.capacity_mask;
-      continue;
-    }
-  }
-}
-function moonbitlang$core$set$$Set$contains$17$(self, key) {
-  const hash = moonbitlang$core$builtin$$Hash$hash$31$(key);
-  let _tmp = 0;
-  let _tmp$2 = hash & self.capacity_mask;
-  while (true) {
-    const i = _tmp;
-    const idx = _tmp$2;
-    const _tmp$3 = self.entries;
-    $bound_check(_tmp$3, idx);
-    const _bind$8 = _tmp$3[idx];
-    if (_bind$8 === undefined) {
-      return false;
-    } else {
-      const _Some = _bind$8;
-      const _entry = _Some;
-      if (_entry.hash === hash && moonbitlang$core$builtin$$Eq$equal$17$(_entry.key, key)) {
-        return true;
-      }
-      if (i > _entry.psl) {
-        return false;
-      }
-      _tmp = i + 1 | 0;
-      _tmp$2 = idx + 1 & self.capacity_mask;
-      continue;
-    }
-  }
-}
-function moonbitlang$core$set$$Set$remove_entry$17$(self, entry) {
-  const _bind$8 = entry.prev;
-  if (_bind$8 === -1) {
-    self.head = entry.next;
-  } else {
-    const _tmp = self.entries;
-    $bound_check(_tmp, _bind$8);
-    const _p = _tmp[_bind$8];
-    let _tmp$2;
-    if (_p === undefined) {
-      _tmp$2 = $panic();
-    } else {
-      const _p$2 = _p;
-      _tmp$2 = _p$2;
-    }
-    const _tmp$3 = _tmp$2;
-    _tmp$3.next = entry.next;
-  }
-  const _bind$9 = entry.next;
-  if (_bind$9 === undefined) {
-    self.tail = entry.prev;
-    return;
-  } else {
-    const _Some = _bind$9;
-    const _next = _Some;
-    _next.prev = entry.prev;
-    return;
-  }
-}
-function moonbitlang$core$set$$Set$remove_entry$3$(self, entry) {
-  const _bind$8 = entry.prev;
-  if (_bind$8 === -1) {
-    self.head = entry.next;
-  } else {
-    const _tmp = self.entries;
-    $bound_check(_tmp, _bind$8);
-    const _p = _tmp[_bind$8];
-    let _tmp$2;
-    if (_p === undefined) {
-      _tmp$2 = $panic();
-    } else {
-      const _p$2 = _p;
-      _tmp$2 = _p$2;
-    }
-    const _tmp$3 = _tmp$2;
-    _tmp$3.next = entry.next;
-  }
-  const _bind$9 = entry.next;
-  if (_bind$9 === undefined) {
-    self.tail = entry.prev;
-    return;
-  } else {
-    const _Some = _bind$9;
-    const _next = _Some;
-    _next.prev = entry.prev;
-    return;
-  }
-}
-function moonbitlang$core$set$$Set$shift_back$17$(self, idx) {
-  let _tmp = idx;
-  while (true) {
-    const idx$2 = _tmp;
-    const next = idx$2 + 1 & self.capacity_mask;
-    _L: {
-      const _tmp$2 = self.entries;
-      $bound_check(_tmp$2, next);
-      const _bind$8 = _tmp$2[next];
-      if (_bind$8 === undefined) {
-        break _L;
-      } else {
-        const _Some = _bind$8;
-        const _x = _Some;
-        const _x$2 = _x.psl;
-        if (_x$2 === 0) {
-          break _L;
-        } else {
-          _x.psl = _x.psl - 1 | 0;
-          moonbitlang$core$set$$Set$set_entry$17$(self, _x, idx$2);
-          _tmp = next;
-          continue;
-        }
-      }
-    }
-    const _tmp$2 = self.entries;
-    $bound_check(_tmp$2, idx$2);
-    _tmp$2[idx$2] = undefined;
-    return;
-  }
-}
-function moonbitlang$core$set$$Set$shift_back$3$(self, idx) {
-  let _tmp = idx;
-  while (true) {
-    const idx$2 = _tmp;
-    const next = idx$2 + 1 & self.capacity_mask;
-    _L: {
-      const _tmp$2 = self.entries;
-      $bound_check(_tmp$2, next);
-      const _bind$8 = _tmp$2[next];
-      if (_bind$8 === undefined) {
-        break _L;
-      } else {
-        const _Some = _bind$8;
-        const _x = _Some;
-        const _x$2 = _x.psl;
-        if (_x$2 === 0) {
-          break _L;
-        } else {
-          _x.psl = _x.psl - 1 | 0;
-          moonbitlang$core$set$$Set$set_entry$3$(self, _x, idx$2);
-          _tmp = next;
-          continue;
-        }
-      }
-    }
-    const _tmp$2 = self.entries;
-    $bound_check(_tmp$2, idx$2);
-    _tmp$2[idx$2] = undefined;
-    return;
-  }
-}
-function moonbitlang$core$set$$Set$remove$17$(self, key) {
-  const hash = moonbitlang$core$builtin$$Hash$hash$31$(key);
-  let _tmp = 0;
-  let _tmp$2 = hash & self.capacity_mask;
-  while (true) {
-    const i = _tmp;
-    const idx = _tmp$2;
-    const _tmp$3 = self.entries;
-    $bound_check(_tmp$3, idx);
-    const _bind$8 = _tmp$3[idx];
-    if (_bind$8 === undefined) {
-      break;
-    } else {
-      const _Some = _bind$8;
-      const _entry = _Some;
-      if (_entry.hash === hash && moonbitlang$core$builtin$$Eq$equal$17$(_entry.key, key)) {
-        moonbitlang$core$set$$Set$remove_entry$17$(self, _entry);
-        moonbitlang$core$set$$Set$shift_back$17$(self, idx);
-        self.size = self.size - 1 | 0;
-        break;
-      }
-      if (i > _entry.psl) {
-        break;
-      }
-      _tmp = i + 1 | 0;
-      _tmp$2 = idx + 1 & self.capacity_mask;
-      continue;
-    }
-  }
-}
-function moonbitlang$core$set$$Set$remove$3$(self, key) {
-  const hash = moonbitlang$core$builtin$$Hash$hash$30$(key);
-  let _tmp = 0;
-  let _tmp$2 = hash & self.capacity_mask;
-  while (true) {
-    const i = _tmp;
-    const idx = _tmp$2;
-    const _tmp$3 = self.entries;
-    $bound_check(_tmp$3, idx);
-    const _bind$8 = _tmp$3[idx];
-    if (_bind$8 === undefined) {
-      break;
-    } else {
-      const _Some = _bind$8;
-      const _entry = _Some;
-      let _tmp$4;
-      if (_entry.hash === hash) {
-        const _p = _entry.key;
-        _tmp$4 = _p === key;
-      } else {
-        _tmp$4 = false;
-      }
-      if (_tmp$4) {
-        moonbitlang$core$set$$Set$remove_entry$3$(self, _entry);
-        moonbitlang$core$set$$Set$shift_back$3$(self, idx);
-        self.size = self.size - 1 | 0;
-        break;
-      }
-      if (i > _entry.psl) {
-        break;
-      }
-      _tmp = i + 1 | 0;
-      _tmp$2 = idx + 1 & self.capacity_mask;
-      continue;
-    }
-  }
-}
-function moonbitlang$core$set$$Set$clear$17$(self) {
-  moonbitlang$core$array$$FixedArray$fill$46$inner$32$(self.entries, undefined, 0, undefined);
-  self.size = 0;
-  self.head = undefined;
-  self.tail = -1;
-}
-function moonbitlang$core$set$$Set$iter$3$(self) {
-  const _p = (yield_) => {
-    let _tmp = self.head;
-    while (true) {
-      const _param = _tmp;
-      if (_param === undefined) {
-        return 1;
-      } else {
-        const _Some = _param;
-        const _x = _Some;
-        const _key = _x.key;
-        const _next = _x.next;
-        const _bind$8 = yield_(_key);
-        if (_bind$8 === 1) {
-          _tmp = _next;
-          continue;
-        } else {
-          return 0;
-        }
-      }
-    }
-  };
-  return _p;
-}
-function moonbitlang$core$set$$Set$iterator$17$(self) {
-  const curr_entry = { val: self.head };
-  const _p = () => {
-    const _bind$8 = curr_entry.val;
-    if (_bind$8 === undefined) {
-      return undefined;
-    } else {
-      const _Some = _bind$8;
-      const _x = _Some;
-      const _key = _x.key;
-      const _next = _x.next;
-      curr_entry.val = _next;
-      return _key;
-    }
-  };
-  return _p;
-}
-function moonbitlang$core$set$$Set$iterator$3$(self) {
-  const curr_entry = { val: self.head };
-  const _p = () => {
-    const _bind$8 = curr_entry.val;
-    if (_bind$8 === undefined) {
-      return undefined;
-    } else {
-      const _Some = _bind$8;
-      const _x = _Some;
-      const _key = _x.key;
-      const _next = _x.next;
-      curr_entry.val = _next;
-      return _key;
-    }
-  };
-  return _p;
-}
-function moonbitlang$core$set$$Set$difference$17$(self, other) {
-  const m = moonbitlang$core$set$$Set$new$46$inner$17$(8);
-  let _tmp = self.head;
-  while (true) {
-    const _p = _tmp;
-    if (_p === undefined) {
-      break;
-    } else {
-      const _p$2 = _p;
-      const _p$3 = _p$2;
-      const _p$4 = _p$3.key;
-      const _p$5 = _p$3.next;
-      if (!moonbitlang$core$set$$Set$contains$17$(other, _p$4)) {
-        moonbitlang$core$set$$Set$add$17$(m, _p$4);
-      }
-      _tmp = _p$5;
-      continue;
-    }
-  }
-  return m;
-}
-function moonbitlang$core$set$$Set$union$17$(self, other) {
-  const m = moonbitlang$core$set$$Set$new$46$inner$17$(8);
-  let _tmp = self.head;
-  while (true) {
-    const _p = _tmp;
-    if (_p === undefined) {
-      break;
-    } else {
-      const _p$2 = _p;
-      const _p$3 = _p$2;
-      const _p$4 = _p$3.key;
-      const _p$5 = _p$3.next;
-      moonbitlang$core$set$$Set$add$17$(m, _p$4);
-      _tmp = _p$5;
-      continue;
-    }
-  }
-  let _tmp$2 = other.head;
-  while (true) {
-    const _p = _tmp$2;
-    if (_p === undefined) {
-      break;
-    } else {
-      const _p$2 = _p;
-      const _p$3 = _p$2;
-      const _p$4 = _p$3.key;
-      const _p$5 = _p$3.next;
-      moonbitlang$core$set$$Set$add$17$(m, _p$4);
-      _tmp$2 = _p$5;
-      continue;
-    }
-  }
-  return m;
-}
-function moonbitlang$core$set$$Set$union$3$(self, other) {
-  const m = moonbitlang$core$set$$Set$new$46$inner$3$(8);
-  let _tmp = self.head;
-  while (true) {
-    const _p = _tmp;
-    if (_p === undefined) {
-      break;
-    } else {
-      const _p$2 = _p;
-      const _p$3 = _p$2;
-      const _p$4 = _p$3.key;
-      const _p$5 = _p$3.next;
-      moonbitlang$core$set$$Set$add$3$(m, _p$4);
-      _tmp = _p$5;
-      continue;
-    }
-  }
-  let _tmp$2 = other.head;
-  while (true) {
-    const _p = _tmp$2;
-    if (_p === undefined) {
-      break;
-    } else {
-      const _p$2 = _p;
-      const _p$3 = _p$2;
-      const _p$4 = _p$3.key;
-      const _p$5 = _p$3.next;
-      moonbitlang$core$set$$Set$add$3$(m, _p$4);
-      _tmp$2 = _p$5;
-      continue;
-    }
-  }
-  return m;
-}
-function moonbitlang$core$random$$Source$next$33$(self) {
-  while (true) {
-    const _bind$8 = moonbitlang$core$random$internal$random_source$$ChaCha8$next(self);
-    if (_bind$8 === undefined) {
-    } else {
-      const _Some = _bind$8;
-      const _x = _Some;
-      return _x;
-    }
-    moonbitlang$core$random$internal$random_source$$ChaCha8$refill(self);
-    continue;
-  }
-}
-function moonbitlang$core$random$$Rand$chacha8$46$inner(seed) {
-  if (seed.length !== 32) {
-    moonbitlang$core$abort$$abort$22$("seed must be 32 bytes long");
-  }
-  return { self: moonbitlang$core$random$internal$random_source$$ChaCha8$new(seed), method_0: moonbitlang$core$random$$Source$next$33$ };
-}
-function moonbitlang$core$random$$Rand$new(generator) {
-  if (generator.$tag === 0) {
-    return moonbitlang$core$random$$Rand$chacha8$46$inner($bytes_literal$0);
-  } else {
-    const _Some = generator;
-    const _gen = _Some._0;
-    return _gen;
-  }
-}
-function moonbitlang$core$random$$umul128(a, b) {
-  const aLo = moonbitlang$core$builtin$$BitAnd$land$34$(a, $4294967295L);
-  const aHi = moonbitlang$core$builtin$$Shr$shr$34$(a, 32);
-  const bLo = moonbitlang$core$builtin$$BitAnd$land$34$(b, $4294967295L);
-  const bHi = moonbitlang$core$builtin$$Shr$shr$34$(b, 32);
-  const x = moonbitlang$core$builtin$$Mul$mul$34$(aLo, bLo);
-  const y = moonbitlang$core$builtin$$Add$add$34$(moonbitlang$core$builtin$$Mul$mul$34$(aHi, bLo), moonbitlang$core$builtin$$Shr$shr$34$(x, 32));
-  const z = moonbitlang$core$builtin$$Add$add$34$(moonbitlang$core$builtin$$Mul$mul$34$(aLo, bHi), moonbitlang$core$builtin$$BitAnd$land$34$(y, $4294967295L));
-  const w = moonbitlang$core$builtin$$Add$add$34$(moonbitlang$core$builtin$$Add$add$34$(moonbitlang$core$builtin$$Mul$mul$34$(aHi, bHi), moonbitlang$core$builtin$$Shr$shr$34$(y, 32)), moonbitlang$core$builtin$$Shr$shr$34$(z, 32));
-  return { hi: w, lo: moonbitlang$core$builtin$$Mul$mul$34$(a, b) };
-}
-function moonbitlang$core$random$$Rand$uint64$46$inner(self, limit) {
-  if (moonbitlang$core$builtin$$Eq$equal$34$(limit, $0L)) {
-    const _p = self;
-    return _p.method_0(_p.self);
-  } else {
-    if (moonbitlang$core$builtin$$Eq$equal$34$(moonbitlang$core$builtin$$BitAnd$land$34$(limit, moonbitlang$core$builtin$$Sub$sub$34$(limit, $1L)), $0L)) {
-      const _p = self;
-      return moonbitlang$core$builtin$$BitAnd$land$34$(_p.method_0(_p.self), moonbitlang$core$builtin$$Sub$sub$34$(limit, $1L));
-    }
-  }
-  const _p = self;
-  let r = moonbitlang$core$random$$umul128(_p.method_0(_p.self), limit);
-  if (moonbitlang$core$builtin$$Compare$op_lt$35$(r.lo, limit)) {
-    const thresh = moonbitlang$core$builtin$$Mod$mod$34$(moonbitlang$core$uint64$$UInt64$lnot(limit), limit);
-    while (true) {
-      if (moonbitlang$core$builtin$$Compare$op_lt$35$(r.lo, thresh)) {
-        const _p$2 = self;
-        r = moonbitlang$core$random$$umul128(_p$2.method_0(_p$2.self), limit);
-        continue;
-      } else {
-        break;
-      }
-    }
-  }
-  return r.hi;
-}
-function moonbitlang$core$random$$Rand$uint$46$inner(self, limit) {
-  if (limit === 0) {
-    const _p = self;
-    return moonbitlang$core$uint64$$UInt64$to_uint(_p.method_0(_p.self));
-  }
-  return moonbitlang$core$uint64$$UInt64$to_uint(moonbitlang$core$random$$Rand$uint64$46$inner(self, moonbitlang$core$uint$$UInt$to_uint64(limit)));
-}
-function moonbitlang$core$random$internal$random_source$$setup(seed, b32, counter) {
-  $bound_check(b32, 0);
-  b32[0] = 1634760805;
-  $bound_check(b32, 1);
-  b32[1] = 1634760805;
-  $bound_check(b32, 2);
-  b32[2] = 1634760805;
-  $bound_check(b32, 3);
-  b32[3] = 1634760805;
-  $bound_check(b32, 4);
-  b32[4] = 857760878;
-  $bound_check(b32, 5);
-  b32[5] = 857760878;
-  $bound_check(b32, 6);
-  b32[6] = 857760878;
-  $bound_check(b32, 7);
-  b32[7] = 857760878;
-  $bound_check(b32, 8);
-  b32[8] = 2036477234;
-  $bound_check(b32, 9);
-  b32[9] = 2036477234;
-  $bound_check(b32, 10);
-  b32[10] = 2036477234;
-  $bound_check(b32, 11);
-  b32[11] = 2036477234;
-  $bound_check(b32, 12);
-  b32[12] = 1797285236;
-  $bound_check(b32, 13);
-  b32[13] = 1797285236;
-  $bound_check(b32, 14);
-  b32[14] = 1797285236;
-  $bound_check(b32, 15);
-  b32[15] = 1797285236;
-  $bound_check(seed, 0);
-  $bound_check(b32, 16);
-  b32[16] = seed[0];
-  $bound_check(seed, 0);
-  $bound_check(b32, 17);
-  b32[17] = seed[0];
-  $bound_check(seed, 0);
-  $bound_check(b32, 18);
-  b32[18] = seed[0];
-  $bound_check(seed, 0);
-  $bound_check(b32, 19);
-  b32[19] = seed[0];
-  $bound_check(seed, 1);
-  $bound_check(b32, 20);
-  b32[20] = seed[1];
-  $bound_check(seed, 1);
-  $bound_check(b32, 21);
-  b32[21] = seed[1];
-  $bound_check(seed, 1);
-  $bound_check(b32, 22);
-  b32[22] = seed[1];
-  $bound_check(seed, 1);
-  $bound_check(b32, 23);
-  b32[23] = seed[1];
-  $bound_check(seed, 2);
-  $bound_check(b32, 24);
-  b32[24] = seed[2];
-  $bound_check(seed, 2);
-  $bound_check(b32, 25);
-  b32[25] = seed[2];
-  $bound_check(seed, 2);
-  $bound_check(b32, 26);
-  b32[26] = seed[2];
-  $bound_check(seed, 2);
-  $bound_check(b32, 27);
-  b32[27] = seed[2];
-  $bound_check(seed, 3);
-  $bound_check(b32, 28);
-  b32[28] = seed[3];
-  $bound_check(seed, 3);
-  $bound_check(b32, 29);
-  b32[29] = seed[3];
-  $bound_check(seed, 3);
-  $bound_check(b32, 30);
-  b32[30] = seed[3];
-  $bound_check(seed, 3);
-  $bound_check(b32, 31);
-  b32[31] = seed[3];
-  $bound_check(seed, 4);
-  $bound_check(b32, 32);
-  b32[32] = seed[4];
-  $bound_check(seed, 4);
-  $bound_check(b32, 33);
-  b32[33] = seed[4];
-  $bound_check(seed, 4);
-  $bound_check(b32, 34);
-  b32[34] = seed[4];
-  $bound_check(seed, 4);
-  $bound_check(b32, 35);
-  b32[35] = seed[4];
-  $bound_check(seed, 5);
-  $bound_check(b32, 36);
-  b32[36] = seed[5];
-  $bound_check(seed, 5);
-  $bound_check(b32, 37);
-  b32[37] = seed[5];
-  $bound_check(seed, 5);
-  $bound_check(b32, 38);
-  b32[38] = seed[5];
-  $bound_check(seed, 5);
-  $bound_check(b32, 39);
-  b32[39] = seed[5];
-  $bound_check(seed, 6);
-  $bound_check(b32, 40);
-  b32[40] = seed[6];
-  $bound_check(seed, 6);
-  $bound_check(b32, 41);
-  b32[41] = seed[6];
-  $bound_check(seed, 6);
-  $bound_check(b32, 42);
-  b32[42] = seed[6];
-  $bound_check(seed, 6);
-  $bound_check(b32, 43);
-  b32[43] = seed[6];
-  $bound_check(seed, 7);
-  $bound_check(b32, 44);
-  b32[44] = seed[7];
-  $bound_check(seed, 7);
-  $bound_check(b32, 45);
-  b32[45] = seed[7];
-  $bound_check(seed, 7);
-  $bound_check(b32, 46);
-  b32[46] = seed[7];
-  $bound_check(seed, 7);
-  $bound_check(b32, 47);
-  b32[47] = seed[7];
-  $bound_check(b32, 48);
-  b32[48] = counter;
-  $bound_check(b32, 49);
-  b32[49] = (counter >>> 0) + (1 >>> 0) | 0;
-  $bound_check(b32, 50);
-  b32[50] = (counter >>> 0) + (2 >>> 0) | 0;
-  $bound_check(b32, 51);
-  b32[51] = (counter >>> 0) + (3 >>> 0) | 0;
-  $bound_check(b32, 52);
-  b32[52] = 0;
-  $bound_check(b32, 53);
-  b32[53] = 0;
-  $bound_check(b32, 54);
-  b32[54] = 0;
-  $bound_check(b32, 55);
-  b32[55] = 0;
-  $bound_check(b32, 56);
-  b32[56] = 0;
-  $bound_check(b32, 57);
-  b32[57] = 0;
-  $bound_check(b32, 58);
-  b32[58] = 0;
-  $bound_check(b32, 59);
-  b32[59] = 0;
-  $bound_check(b32, 60);
-  b32[60] = 0;
-  $bound_check(b32, 61);
-  b32[61] = 0;
-  $bound_check(b32, 62);
-  b32[62] = 0;
-  $bound_check(b32, 63);
-  b32[63] = 0;
-}
-function moonbitlang$core$random$internal$random_source$$chacha_block$46$qr$124$35(t) {
-  const _a = t._0;
-  const _b = t._1;
-  const _c = t._2;
-  const _d = t._3;
-  const a = (_a >>> 0) + (_b >>> 0) | 0;
-  const d = _d ^ a;
-  const d$2 = d << 16 | (d >>> 16 | 0);
-  const c = (_c >>> 0) + (d$2 >>> 0) | 0;
-  const b = _b ^ c;
-  const b$2 = b << 12 | (b >>> 20 | 0);
-  const a$2 = (a >>> 0) + (b$2 >>> 0) | 0;
-  const d$3 = d$2 ^ a$2;
-  const d$4 = d$3 << 8 | (d$3 >>> 24 | 0);
-  const c$2 = (c >>> 0) + (d$4 >>> 0) | 0;
-  const b$3 = b$2 ^ c$2;
-  const b$4 = b$3 << 7 | (b$3 >>> 25 | 0);
-  return { _0: a$2, _1: b$4, _2: c$2, _3: d$4 };
-}
-function moonbitlang$core$random$internal$random_source$$chacha_block(seed, buf, counter) {
-  moonbitlang$core$random$internal$random_source$$setup(seed, buf, counter);
-  let _tmp = 0;
-  while (true) {
-    const i = _tmp;
-    if (i < 4) {
-      $bound_check(buf, i);
-      let b0 = buf[i];
-      const _tmp$2 = 4 + i | 0;
-      $bound_check(buf, _tmp$2);
-      let b1 = buf[_tmp$2];
-      const _tmp$3 = 8 + i | 0;
-      $bound_check(buf, _tmp$3);
-      let b2 = buf[_tmp$3];
-      const _tmp$4 = 12 + i | 0;
-      $bound_check(buf, _tmp$4);
-      let b3 = buf[_tmp$4];
-      const _tmp$5 = 16 + i | 0;
-      $bound_check(buf, _tmp$5);
-      let b4 = buf[_tmp$5];
-      const _tmp$6 = 20 + i | 0;
-      $bound_check(buf, _tmp$6);
-      let b5 = buf[_tmp$6];
-      const _tmp$7 = 24 + i | 0;
-      $bound_check(buf, _tmp$7);
-      let b6 = buf[_tmp$7];
-      const _tmp$8 = 28 + i | 0;
-      $bound_check(buf, _tmp$8);
-      let b7 = buf[_tmp$8];
-      const _tmp$9 = 32 + i | 0;
-      $bound_check(buf, _tmp$9);
-      let b8 = buf[_tmp$9];
-      const _tmp$10 = 36 + i | 0;
-      $bound_check(buf, _tmp$10);
-      let b9 = buf[_tmp$10];
-      const _tmp$11 = 40 + i | 0;
-      $bound_check(buf, _tmp$11);
-      let b10 = buf[_tmp$11];
-      const _tmp$12 = 44 + i | 0;
-      $bound_check(buf, _tmp$12);
-      let b11 = buf[_tmp$12];
-      const _tmp$13 = 48 + i | 0;
-      $bound_check(buf, _tmp$13);
-      let b12 = buf[_tmp$13];
-      const _tmp$14 = 52 + i | 0;
-      $bound_check(buf, _tmp$14);
-      let b13 = buf[_tmp$14];
-      const _tmp$15 = 56 + i | 0;
-      $bound_check(buf, _tmp$15);
-      let b14 = buf[_tmp$15];
-      const _tmp$16 = 60 + i | 0;
-      $bound_check(buf, _tmp$16);
-      let b15 = buf[_tmp$16];
-      let _tmp$17 = 0;
-      while (true) {
-        const round = _tmp$17;
-        if (round < 4) {
-          const _bind$8 = moonbitlang$core$random$internal$random_source$$chacha_block$46$qr$124$35({ _0: b0, _1: b4, _2: b8, _3: b12 });
-          const _tb1_0 = _bind$8._0;
-          const _tb1_1 = _bind$8._1;
-          const _tb1_2 = _bind$8._2;
-          const _tb1_3 = _bind$8._3;
-          b0 = _tb1_0;
-          b4 = _tb1_1;
-          b8 = _tb1_2;
-          b12 = _tb1_3;
-          const _bind$9 = moonbitlang$core$random$internal$random_source$$chacha_block$46$qr$124$35({ _0: b1, _1: b5, _2: b9, _3: b13 });
-          const _tb2_0 = _bind$9._0;
-          const _tb2_1 = _bind$9._1;
-          const _tb2_2 = _bind$9._2;
-          const _tb2_3 = _bind$9._3;
-          b1 = _tb2_0;
-          b5 = _tb2_1;
-          b9 = _tb2_2;
-          b13 = _tb2_3;
-          const _bind$10 = moonbitlang$core$random$internal$random_source$$chacha_block$46$qr$124$35({ _0: b2, _1: b6, _2: b10, _3: b14 });
-          const _tb3_0 = _bind$10._0;
-          const _tb3_1 = _bind$10._1;
-          const _tb3_2 = _bind$10._2;
-          const _tb3_3 = _bind$10._3;
-          b2 = _tb3_0;
-          b6 = _tb3_1;
-          b10 = _tb3_2;
-          b14 = _tb3_3;
-          const _bind$11 = moonbitlang$core$random$internal$random_source$$chacha_block$46$qr$124$35({ _0: b3, _1: b7, _2: b11, _3: b15 });
-          const _tb4_0 = _bind$11._0;
-          const _tb4_1 = _bind$11._1;
-          const _tb4_2 = _bind$11._2;
-          const _tb4_3 = _bind$11._3;
-          b3 = _tb4_0;
-          b7 = _tb4_1;
-          b11 = _tb4_2;
-          b15 = _tb4_3;
-          const _bind$12 = moonbitlang$core$random$internal$random_source$$chacha_block$46$qr$124$35({ _0: b0, _1: b5, _2: b10, _3: b15 });
-          const _tb5_0 = _bind$12._0;
-          const _tb5_1 = _bind$12._1;
-          const _tb5_2 = _bind$12._2;
-          const _tb5_3 = _bind$12._3;
-          b0 = _tb5_0;
-          b5 = _tb5_1;
-          b10 = _tb5_2;
-          b15 = _tb5_3;
-          const _bind$13 = moonbitlang$core$random$internal$random_source$$chacha_block$46$qr$124$35({ _0: b1, _1: b6, _2: b11, _3: b12 });
-          const _tb6_0 = _bind$13._0;
-          const _tb6_1 = _bind$13._1;
-          const _tb6_2 = _bind$13._2;
-          const _tb6_3 = _bind$13._3;
-          b1 = _tb6_0;
-          b6 = _tb6_1;
-          b11 = _tb6_2;
-          b12 = _tb6_3;
-          const _bind$14 = moonbitlang$core$random$internal$random_source$$chacha_block$46$qr$124$35({ _0: b2, _1: b7, _2: b8, _3: b13 });
-          const _tb7_0 = _bind$14._0;
-          const _tb7_1 = _bind$14._1;
-          const _tb7_2 = _bind$14._2;
-          const _tb7_3 = _bind$14._3;
-          b2 = _tb7_0;
-          b7 = _tb7_1;
-          b8 = _tb7_2;
-          b13 = _tb7_3;
-          const _bind$15 = moonbitlang$core$random$internal$random_source$$chacha_block$46$qr$124$35({ _0: b3, _1: b4, _2: b9, _3: b14 });
-          const _tb8_0 = _bind$15._0;
-          const _tb8_1 = _bind$15._1;
-          const _tb8_2 = _bind$15._2;
-          const _tb8_3 = _bind$15._3;
-          b3 = _tb8_0;
-          b4 = _tb8_1;
-          b9 = _tb8_2;
-          b14 = _tb8_3;
-          _tmp$17 = round + 1 | 0;
-          continue;
-        } else {
-          break;
-        }
-      }
-      $bound_check(buf, i);
-      buf[i] = b0;
-      const _tmp$18 = 4 + i | 0;
-      $bound_check(buf, _tmp$18);
-      buf[_tmp$18] = b1;
-      const _tmp$19 = 8 + i | 0;
-      $bound_check(buf, _tmp$19);
-      buf[_tmp$19] = b2;
-      const _tmp$20 = 12 + i | 0;
-      $bound_check(buf, _tmp$20);
-      buf[_tmp$20] = b3;
-      const _index_2 = 16 + i | 0;
-      $bound_check(buf, _index_2);
-      $bound_check(buf, _index_2);
-      buf[_index_2] = (buf[_index_2] >>> 0) + (b4 >>> 0) | 0;
-      const _index_4 = 20 + i | 0;
-      $bound_check(buf, _index_4);
-      $bound_check(buf, _index_4);
-      buf[_index_4] = (buf[_index_4] >>> 0) + (b5 >>> 0) | 0;
-      const _index_6 = 24 + i | 0;
-      $bound_check(buf, _index_6);
-      $bound_check(buf, _index_6);
-      buf[_index_6] = (buf[_index_6] >>> 0) + (b6 >>> 0) | 0;
-      const _index_8 = 28 + i | 0;
-      $bound_check(buf, _index_8);
-      $bound_check(buf, _index_8);
-      buf[_index_8] = (buf[_index_8] >>> 0) + (b7 >>> 0) | 0;
-      const _index_10 = 32 + i | 0;
-      $bound_check(buf, _index_10);
-      $bound_check(buf, _index_10);
-      buf[_index_10] = (buf[_index_10] >>> 0) + (b8 >>> 0) | 0;
-      const _index_12 = 36 + i | 0;
-      $bound_check(buf, _index_12);
-      $bound_check(buf, _index_12);
-      buf[_index_12] = (buf[_index_12] >>> 0) + (b9 >>> 0) | 0;
-      const _index_14 = 40 + i | 0;
-      $bound_check(buf, _index_14);
-      $bound_check(buf, _index_14);
-      buf[_index_14] = (buf[_index_14] >>> 0) + (b10 >>> 0) | 0;
-      const _index_16 = 44 + i | 0;
-      $bound_check(buf, _index_16);
-      $bound_check(buf, _index_16);
-      buf[_index_16] = (buf[_index_16] >>> 0) + (b11 >>> 0) | 0;
-      const _tmp$21 = 48 + i | 0;
-      $bound_check(buf, _tmp$21);
-      buf[_tmp$21] = b12;
-      const _tmp$22 = 52 + i | 0;
-      $bound_check(buf, _tmp$22);
-      buf[_tmp$22] = b13;
-      const _tmp$23 = 56 + i | 0;
-      $bound_check(buf, _tmp$23);
-      buf[_tmp$23] = b14;
-      const _tmp$24 = 60 + i | 0;
-      $bound_check(buf, _tmp$24);
-      buf[_tmp$24] = b15;
-      _tmp = i + 1 | 0;
-      continue;
-    } else {
-      return;
-    }
-  }
-}
-function moonbitlang$core$random$internal$random_source$$ChaCha8$new(seed) {
-  const seed$2 = moonbitlang$core$array$$FixedArray$makei$36$(8, (i) => {
-    const _bind$8 = moonbitlang$core$bytes$$Bytes$sub$46$inner(seed, Math.imul(i, 4) | 0, undefined);
-    return (_bind$8.end - _bind$8.start | 0) >= 4 ? moonbitlang$core$bytes$$BytesView$unsafe_extract_uint_le(_bind$8, 0, 32) : moonbitlang$core$abort$$abort$25$("seed must be 32 bytes long");
-  });
-  const buffer = $make_array_len_and_init(64, 0);
-  moonbitlang$core$random$internal$random_source$$chacha_block(seed$2, buffer, 0);
-  const _bind$8 = 32;
-  return { buffer: buffer, seed: seed$2, i: 0, n: _bind$8, counter: 0 };
-}
-function moonbitlang$core$random$internal$random_source$$ChaCha8$next(self) {
-  const i = self.i;
-  if (i >>> 0 >= self.n >>> 0) {
-    return undefined;
-  }
-  self.i = (i >>> 0) + (1 >>> 0) | 0;
-  const index = i & 31;
-  const _tmp = self.buffer;
-  const _tmp$2 = Math.imul(index, 2) | 0;
-  $bound_check(_tmp, _tmp$2);
-  const lo = moonbitlang$core$uint$$UInt$to_uint64(_tmp[_tmp$2]);
-  const _tmp$3 = self.buffer;
-  const _tmp$4 = (Math.imul(index, 2) | 0) + 1 | 0;
-  $bound_check(_tmp$3, _tmp$4);
-  const hi = moonbitlang$core$uint$$UInt$to_uint64(_tmp$3[_tmp$4]);
-  return moonbitlang$core$builtin$$BitOr$lor$34$(moonbitlang$core$builtin$$Shl$shl$34$(hi, 32), lo);
-}
-function moonbitlang$core$random$internal$random_source$$ChaCha8$refill(self) {
-  self.counter = (self.counter >>> 0) + (4 >>> 0) | 0;
-  if (self.counter === 16) {
-    moonbitlang$core$array$$FixedArray$blit_to$46$inner$25$(self.buffer, self.seed, 8, 56, 0);
-    self.counter = 0;
-  }
-  moonbitlang$core$random$internal$random_source$$chacha_block(self.seed, self.buffer, self.counter);
-  self.i = 0;
-  self.n = self.counter === 12 ? 28 : 32;
-}
-function moonbitlang$core$array$$Array$sort_by_key$37$(self, map) {
-  moonbitlang$core$array$$MutArrayView$sort_by_key$37$(moonbitlang$core$array$$Array$mut_view$46$inner$24$(self, 0, undefined), map);
-}
-function moonbitlang$core$array$$Array$sort_by$26$(self, cmp) {
-  moonbitlang$core$array$$MutArrayView$sort_by$26$(moonbitlang$core$array$$Array$mut_view$46$inner$26$(self, 0, undefined), cmp);
-}
-function moonbitlang$core$array$$Array$sort$10$(self) {
-  moonbitlang$core$array$$MutArrayView$sort$10$(moonbitlang$core$array$$Array$mut_view$46$inner$10$(self, 0, undefined));
+function moonbitlang$core$builtin$$abort$30$(string, loc) {
+  return moonbitlang$core$abort$$abort$30$(`${string}\n  at${moonbitlang$core$builtin$$Show$to_string$31$(loc)}\n`);
 }
 function moonbitlang$core$array$$FixedArray$unsafe_blit$25$(dst, dst_offset, src, src_offset, len) {
   if (dst === src && dst_offset < src_offset) {
@@ -1783,17 +531,17 @@ function moonbitlang$core$array$$FixedArray$unsafe_blit$25$(dst, dst_offset, src
 function moonbitlang$core$builtin$$StringBuilder$new$46$inner(size_hint) {
   return { val: "" };
 }
-function moonbitlang$core$builtin$$Logger$write_char$38$(self, ch) {
+function moonbitlang$core$builtin$$Logger$write_char$32$(self, ch) {
   const _bind$8 = self;
   _bind$8.val = `${_bind$8.val}${String.fromCodePoint(ch)}`;
 }
-function moonbitlang$core$builtin$$op_notequal$39$(x, y) {
-  return !moonbitlang$core$builtin$$Eq$equal$39$(x, y);
+function moonbitlang$core$builtin$$op_notequal$33$(x, y) {
+  return !moonbitlang$core$builtin$$Eq$equal$33$(x, y);
 }
 function moonbitlang$core$builtin$$op_notequal$3$(x, y) {
   return !(x === y);
 }
-function moonbitlang$core$array$$Array$at$40$(self, index) {
+function moonbitlang$core$array$$Array$at$34$(self, index) {
   const len = self.length;
   if (index >= 0 && index < len) {
     $bound_check(self, index);
@@ -1802,7 +550,7 @@ function moonbitlang$core$array$$Array$at$40$(self, index) {
     return $panic();
   }
 }
-function moonbitlang$core$array$$Array$at$41$(self, index) {
+function moonbitlang$core$array$$Array$at$35$(self, index) {
   const len = self.length;
   if (index >= 0 && index < len) {
     $bound_check(self, index);
@@ -1820,7 +568,7 @@ function moonbitlang$core$array$$Array$at$10$(self, index) {
     return $panic();
   }
 }
-function moonbitlang$core$array$$Array$at$42$(self, index) {
+function moonbitlang$core$array$$Array$at$36$(self, index) {
   const len = self.length;
   if (index >= 0 && index < len) {
     $bound_check(self, index);
@@ -1829,7 +577,379 @@ function moonbitlang$core$array$$Array$at$42$(self, index) {
     return $panic();
   }
 }
-function moonbitlang$core$builtin$$Logger$write_string$38$(self, str) {
+function moonbitlang$core$builtin$$boyer_moore_horspool_find(haystack, needle) {
+  const haystack_len = haystack.end - haystack.start | 0;
+  const needle_len = needle.end - needle.start | 0;
+  if (needle_len > 0) {
+    if (haystack_len >= needle_len) {
+      const skip_table = $make_array_len_and_init(256, needle_len);
+      const _end4516 = needle_len - 1 | 0;
+      let _tmp = 0;
+      while (true) {
+        const i = _tmp;
+        if (i < _end4516) {
+          const _tmp$2 = needle.str;
+          const _tmp$3 = needle.start + i | 0;
+          const _tmp$4 = _tmp$2.charCodeAt(_tmp$3) & 255;
+          $bound_check(skip_table, _tmp$4);
+          skip_table[_tmp$4] = (needle_len - 1 | 0) - i | 0;
+          _tmp = i + 1 | 0;
+          continue;
+        } else {
+          break;
+        }
+      }
+      let _tmp$2 = 0;
+      while (true) {
+        const i = _tmp$2;
+        if (i <= (haystack_len - needle_len | 0)) {
+          const _end4522 = needle_len - 1 | 0;
+          let _tmp$3 = 0;
+          while (true) {
+            const j = _tmp$3;
+            if (j <= _end4522) {
+              const _p = i + j | 0;
+              const _tmp$4 = haystack.str;
+              const _tmp$5 = haystack.start + _p | 0;
+              const _tmp$6 = _tmp$4.charCodeAt(_tmp$5);
+              const _tmp$7 = needle.str;
+              const _tmp$8 = needle.start + j | 0;
+              if (_tmp$6 !== _tmp$7.charCodeAt(_tmp$8)) {
+                break;
+              }
+              _tmp$3 = j + 1 | 0;
+              continue;
+            } else {
+              return i;
+            }
+          }
+          const _p = (i + needle_len | 0) - 1 | 0;
+          const _tmp$4 = haystack.str;
+          const _tmp$5 = haystack.start + _p | 0;
+          const _tmp$6 = _tmp$4.charCodeAt(_tmp$5) & 255;
+          $bound_check(skip_table, _tmp$6);
+          _tmp$2 = i + skip_table[_tmp$6] | 0;
+          continue;
+        } else {
+          break;
+        }
+      }
+      return undefined;
+    } else {
+      return undefined;
+    }
+  } else {
+    return moonbitlang$core$builtin$$boyer_moore_horspool_find$46$constr$47$74;
+  }
+}
+function moonbitlang$core$builtin$$brute_force_find(haystack, needle) {
+  const haystack_len = haystack.end - haystack.start | 0;
+  const needle_len = needle.end - needle.start | 0;
+  if (needle_len > 0) {
+    if (haystack_len >= needle_len) {
+      const _p = 0;
+      const _tmp = needle.str;
+      const _tmp$2 = needle.start + _p | 0;
+      const needle_first = _tmp.charCodeAt(_tmp$2);
+      const forward_len = haystack_len - needle_len | 0;
+      let i = 0;
+      while (true) {
+        if (i <= forward_len) {
+          while (true) {
+            let _tmp$3;
+            if (i <= forward_len) {
+              const _p$2 = i;
+              const _tmp$4 = haystack.str;
+              const _tmp$5 = haystack.start + _p$2 | 0;
+              _tmp$3 = _tmp$4.charCodeAt(_tmp$5) !== needle_first;
+            } else {
+              _tmp$3 = false;
+            }
+            if (_tmp$3) {
+              i = i + 1 | 0;
+              continue;
+            } else {
+              break;
+            }
+          }
+          if (i <= forward_len) {
+            let _tmp$3 = 1;
+            while (true) {
+              const j = _tmp$3;
+              if (j < needle_len) {
+                const _p$2 = i + j | 0;
+                const _tmp$4 = haystack.str;
+                const _tmp$5 = haystack.start + _p$2 | 0;
+                const _tmp$6 = _tmp$4.charCodeAt(_tmp$5);
+                const _tmp$7 = needle.str;
+                const _tmp$8 = needle.start + j | 0;
+                if (_tmp$6 !== _tmp$7.charCodeAt(_tmp$8)) {
+                  break;
+                }
+                _tmp$3 = j + 1 | 0;
+                continue;
+              } else {
+                return i;
+              }
+            }
+            i = i + 1 | 0;
+          }
+          continue;
+        } else {
+          break;
+        }
+      }
+      return undefined;
+    } else {
+      return undefined;
+    }
+  } else {
+    return moonbitlang$core$builtin$$brute_force_find$46$constr$47$88;
+  }
+}
+function moonbitlang$core$string$$StringView$find(self, str) {
+  return (str.end - str.start | 0) <= 4 ? moonbitlang$core$builtin$$brute_force_find(self, str) : moonbitlang$core$builtin$$boyer_moore_horspool_find(self, str);
+}
+function moonbitlang$core$builtin$$boyer_moore_horspool_rev_find(haystack, needle) {
+  const haystack_len = haystack.end - haystack.start | 0;
+  const needle_len = needle.end - needle.start | 0;
+  if (needle_len > 0) {
+    if (haystack_len >= needle_len) {
+      const skip_table = $make_array_len_and_init(256, needle_len);
+      let _tmp = needle_len - 1 | 0;
+      while (true) {
+        const i = _tmp;
+        if (i > 0) {
+          const _tmp$2 = needle.str;
+          const _tmp$3 = needle.start + i | 0;
+          const _tmp$4 = _tmp$2.charCodeAt(_tmp$3) & 255;
+          $bound_check(skip_table, _tmp$4);
+          skip_table[_tmp$4] = i;
+          _tmp = i - 1 | 0;
+          continue;
+        } else {
+          break;
+        }
+      }
+      let _tmp$2 = haystack_len - needle_len | 0;
+      while (true) {
+        const i = _tmp$2;
+        if (i >= 0) {
+          let _tmp$3 = 0;
+          while (true) {
+            const j = _tmp$3;
+            if (j < needle_len) {
+              const _p = i + j | 0;
+              const _tmp$4 = haystack.str;
+              const _tmp$5 = haystack.start + _p | 0;
+              const _tmp$6 = _tmp$4.charCodeAt(_tmp$5);
+              const _tmp$7 = needle.str;
+              const _tmp$8 = needle.start + j | 0;
+              if (_tmp$6 !== _tmp$7.charCodeAt(_tmp$8)) {
+                break;
+              }
+              _tmp$3 = j + 1 | 0;
+              continue;
+            } else {
+              return i;
+            }
+          }
+          const _tmp$4 = haystack.str;
+          const _tmp$5 = haystack.start + i | 0;
+          const _tmp$6 = _tmp$4.charCodeAt(_tmp$5) & 255;
+          $bound_check(skip_table, _tmp$6);
+          _tmp$2 = i - skip_table[_tmp$6] | 0;
+          continue;
+        } else {
+          break;
+        }
+      }
+      return undefined;
+    } else {
+      return undefined;
+    }
+  } else {
+    return haystack_len;
+  }
+}
+function moonbitlang$core$builtin$$brute_force_rev_find(haystack, needle) {
+  const haystack_len = haystack.end - haystack.start | 0;
+  const needle_len = needle.end - needle.start | 0;
+  if (needle_len > 0) {
+    if (haystack_len >= needle_len) {
+      const _p = 0;
+      const _tmp = needle.str;
+      const _tmp$2 = needle.start + _p | 0;
+      const needle_first = _tmp.charCodeAt(_tmp$2);
+      let i = haystack_len - needle_len | 0;
+      while (true) {
+        if (i >= 0) {
+          while (true) {
+            let _tmp$3;
+            if (i >= 0) {
+              const _p$2 = i;
+              const _tmp$4 = haystack.str;
+              const _tmp$5 = haystack.start + _p$2 | 0;
+              _tmp$3 = _tmp$4.charCodeAt(_tmp$5) !== needle_first;
+            } else {
+              _tmp$3 = false;
+            }
+            if (_tmp$3) {
+              i = i - 1 | 0;
+              continue;
+            } else {
+              break;
+            }
+          }
+          if (i >= 0) {
+            let _tmp$3 = 1;
+            while (true) {
+              const j = _tmp$3;
+              if (j < needle_len) {
+                const _p$2 = i + j | 0;
+                const _tmp$4 = haystack.str;
+                const _tmp$5 = haystack.start + _p$2 | 0;
+                const _tmp$6 = _tmp$4.charCodeAt(_tmp$5);
+                const _tmp$7 = needle.str;
+                const _tmp$8 = needle.start + j | 0;
+                if (_tmp$6 !== _tmp$7.charCodeAt(_tmp$8)) {
+                  break;
+                }
+                _tmp$3 = j + 1 | 0;
+                continue;
+              } else {
+                return i;
+              }
+            }
+            i = i - 1 | 0;
+          }
+          continue;
+        } else {
+          break;
+        }
+      }
+      return undefined;
+    } else {
+      return undefined;
+    }
+  } else {
+    return haystack_len;
+  }
+}
+function moonbitlang$core$string$$StringView$rev_find(self, str) {
+  return (str.end - str.start | 0) <= 4 ? moonbitlang$core$builtin$$brute_force_rev_find(self, str) : moonbitlang$core$builtin$$boyer_moore_horspool_rev_find(self, str);
+}
+function moonbitlang$core$string$$StringView$view$46$inner(self, start_offset, end_offset) {
+  let end_offset$2;
+  if (end_offset === undefined) {
+    end_offset$2 = self.end - self.start | 0;
+  } else {
+    const _Some = end_offset;
+    end_offset$2 = _Some;
+  }
+  return start_offset >= 0 && (start_offset <= end_offset$2 && end_offset$2 <= (self.end - self.start | 0)) ? { str: self.str, start: self.start + start_offset | 0, end: self.start + end_offset$2 | 0 } : moonbitlang$core$builtin$$abort$29$("Invalid index for View", "@moonbitlang/core/builtin:stringview.mbt:122:5-122:36");
+}
+function moonbitlang$core$builtin$$parse$46$parse_loc$124$1128(view) {
+  const _bind$8 = moonbitlang$core$string$$StringView$find(view, { str: moonbitlang$core$builtin$$parse$46$42$bind$124$5475, start: 0, end: moonbitlang$core$builtin$$parse$46$42$bind$124$5475.length });
+  if (_bind$8 === undefined) {
+    return undefined;
+  } else {
+    const _Some = _bind$8;
+    const _i = _Some;
+    return _i > 0 && (_i + 1 | 0) < (view.end - view.start | 0) ? { _0: moonbitlang$core$string$$StringView$view$46$inner(view, 0, _i), _1: moonbitlang$core$string$$StringView$view$46$inner(view, _i + 1 | 0, undefined) } : undefined;
+  }
+}
+function moonbitlang$core$builtin$$SourceLocRepr$parse(repr) {
+  _L: {
+    if (moonbitlang$core$string$$String$char_length_ge$46$inner(repr, 1, 0, repr.length)) {
+      const _x = repr.charCodeAt(0);
+      if (_x === 64) {
+        const _bind$8 = moonbitlang$core$string$$String$offset_of_nth_char$46$inner(repr, 1, 0, repr.length);
+        let _tmp;
+        if (_bind$8 === undefined) {
+          _tmp = repr.length;
+        } else {
+          const _Some = _bind$8;
+          _tmp = _Some;
+        }
+        const _x$2 = { str: repr, start: _tmp, end: repr.length };
+        const _bind$9 = moonbitlang$core$string$$StringView$find(_x$2, { str: moonbitlang$core$builtin$$parse$46$42$bind$124$5514, start: 0, end: moonbitlang$core$builtin$$parse$46$42$bind$124$5514.length });
+        if (_bind$9 === undefined) {
+          return new $64$moonbitlang$47$core$47$builtin$46$SourceLocRepr$Legacy(repr);
+        } else {
+          const _Some = _bind$9;
+          const _pkg_end = _Some;
+          const pkg = moonbitlang$core$string$$StringView$view$46$inner(_x$2, 0, _pkg_end);
+          const _bind$10 = moonbitlang$core$string$$StringView$rev_find(_x$2, { str: moonbitlang$core$builtin$$parse$46$42$bind$124$5508, start: 0, end: moonbitlang$core$builtin$$parse$46$42$bind$124$5508.length });
+          if (_bind$10 === undefined) {
+            return new $64$moonbitlang$47$core$47$builtin$46$SourceLocRepr$Legacy(repr);
+          } else {
+            const _Some$2 = _bind$10;
+            const _start_loc_end = _Some$2;
+            if ((_start_loc_end + 1 | 0) < (_x$2.end - _x$2.start | 0)) {
+              const end_loc = moonbitlang$core$string$$StringView$view$46$inner(_x$2, _start_loc_end + 1 | 0, undefined);
+              const _bind$11 = moonbitlang$core$builtin$$parse$46$parse_loc$124$1128(end_loc);
+              if (_bind$11 === undefined) {
+                return new $64$moonbitlang$47$core$47$builtin$46$SourceLocRepr$Legacy(repr);
+              } else {
+                const _Some$3 = _bind$11;
+                const _x$3 = _Some$3;
+                const _end_line = _x$3._0;
+                const _end_column = _x$3._1;
+                const rest = moonbitlang$core$string$$StringView$view$46$inner(_x$2, 0, _start_loc_end);
+                _L$2: {
+                  const _bind$12 = moonbitlang$core$string$$StringView$rev_find(rest, { str: moonbitlang$core$builtin$$parse$46$42$bind$124$5495, start: 0, end: moonbitlang$core$builtin$$parse$46$42$bind$124$5495.length });
+                  if (_bind$12 === undefined) {
+                    break _L$2;
+                  } else {
+                    const _Some$4 = _bind$12;
+                    const _start_line_end = _Some$4;
+                    const _bind$13 = moonbitlang$core$string$$StringView$rev_find(moonbitlang$core$string$$StringView$view$46$inner(rest, 0, _start_line_end), { str: moonbitlang$core$builtin$$parse$46$42$bind$124$5489, start: 0, end: moonbitlang$core$builtin$$parse$46$42$bind$124$5489.length });
+                    if (_bind$13 === undefined) {
+                      break _L$2;
+                    } else {
+                      const _Some$5 = _bind$13;
+                      const _filename_end = _Some$5;
+                      if ((_filename_end + 1 | 0) < (rest.end - rest.start | 0)) {
+                        const start_loc = moonbitlang$core$string$$StringView$view$46$inner(rest, _filename_end + 1 | 0, undefined);
+                        const _bind$14 = moonbitlang$core$builtin$$parse$46$parse_loc$124$1128(start_loc);
+                        if (_bind$14 === undefined) {
+                          return new $64$moonbitlang$47$core$47$builtin$46$SourceLocRepr$Legacy(repr);
+                        } else {
+                          const _Some$6 = _bind$14;
+                          const _x$4 = _Some$6;
+                          const _start_line = _x$4._0;
+                          const _start_column = _x$4._1;
+                          if (_filename_end > (_pkg_end + 1 | 0)) {
+                            const filename = moonbitlang$core$string$$StringView$view$46$inner(rest, _pkg_end + 1 | 0, _filename_end);
+                            return new $64$moonbitlang$47$core$47$builtin$46$SourceLocRepr$New(pkg, filename, _start_line, _start_column, _end_line, _end_column);
+                          } else {
+                            return new $64$moonbitlang$47$core$47$builtin$46$SourceLocRepr$Legacy(repr);
+                          }
+                        }
+                      } else {
+                        return $panic();
+                      }
+                    }
+                  }
+                }
+                return new $64$moonbitlang$47$core$47$builtin$46$SourceLocRepr$Legacy(repr);
+              }
+            } else {
+              return $panic();
+            }
+          }
+        }
+      } else {
+        break _L;
+      }
+    } else {
+      break _L;
+    }
+  }
+  return new $64$moonbitlang$47$core$47$builtin$46$SourceLocRepr$Legacy(repr);
+}
+function moonbitlang$core$builtin$$Logger$write_string$32$(self, str) {
   const _bind$8 = self;
   _bind$8.val = `${_bind$8.val}${str}`;
 }
@@ -1851,17 +971,17 @@ function moonbitlang$core$builtin$$Hasher$combine$3$(self, value) {
 function moonbitlang$core$builtin$$Hasher$combine$17$(self, value) {
   moonbitlang$core$builtin$$Hash$hash_combine$17$(value, self);
 }
-function moonbitlang$core$builtin$$Hasher$combine$43$(self, value) {
-  moonbitlang$core$builtin$$Hash$hash_combine$43$(value, self);
+function moonbitlang$core$builtin$$Hasher$combine$37$(self, value) {
+  moonbitlang$core$builtin$$Hash$hash_combine$37$(value, self);
 }
-function moonbitlang$core$builtin$$Hasher$combine$44$(self, value) {
-  moonbitlang$core$builtin$$Hash$hash_combine$44$(value, self);
+function moonbitlang$core$builtin$$Hasher$combine$38$(self, value) {
+  moonbitlang$core$builtin$$Hash$hash_combine$38$(value, self);
 }
-function moonbitlang$core$builtin$$Hasher$combine$45$(self, value) {
-  moonbitlang$core$builtin$$Hash$hash_combine$45$(value, self);
+function moonbitlang$core$builtin$$Hasher$combine$39$(self, value) {
+  moonbitlang$core$builtin$$Hash$hash_combine$39$(value, self);
 }
-function moonbitlang$core$builtin$$Compare$op_lt$35$(x, y) {
-  return moonbitlang$core$builtin$$Compare$compare$34$(x, y) < 0;
+function moonbitlang$core$builtin$$Compare$op_lt$40$(x, y) {
+  return moonbitlang$core$builtin$$Compare$compare$41$(x, y) < 0;
 }
 function moonbitlang$core$builtin$$Hasher$avalanche(self) {
   let acc = self.acc;
@@ -1888,29 +1008,29 @@ function moonbitlang$core$builtin$$Hasher$new(seed$46$opt) {
   }
   return moonbitlang$core$builtin$$Hasher$new$46$inner(seed);
 }
-function moonbitlang$core$builtin$$Hash$hash$30$(self) {
+function moonbitlang$core$builtin$$Hash$hash$42$(self) {
   const _self = moonbitlang$core$builtin$$Hasher$new(undefined);
   moonbitlang$core$builtin$$Hasher$combine$3$(_self, self);
   return moonbitlang$core$builtin$$Hasher$finalize(_self);
 }
-function moonbitlang$core$builtin$$Hash$hash$31$(self) {
+function moonbitlang$core$builtin$$Hash$hash$43$(self) {
   const _self = moonbitlang$core$builtin$$Hasher$new(undefined);
   moonbitlang$core$builtin$$Hasher$combine$17$(_self, self);
   return moonbitlang$core$builtin$$Hasher$finalize(_self);
 }
+function moonbitlang$core$builtin$$Hash$hash$44$(self) {
+  const _self = moonbitlang$core$builtin$$Hasher$new(undefined);
+  moonbitlang$core$builtin$$Hasher$combine$37$(_self, self);
+  return moonbitlang$core$builtin$$Hasher$finalize(_self);
+}
+function moonbitlang$core$builtin$$Hash$hash$45$(self) {
+  const _self = moonbitlang$core$builtin$$Hasher$new(undefined);
+  moonbitlang$core$builtin$$Hasher$combine$38$(_self, self);
+  return moonbitlang$core$builtin$$Hasher$finalize(_self);
+}
 function moonbitlang$core$builtin$$Hash$hash$46$(self) {
   const _self = moonbitlang$core$builtin$$Hasher$new(undefined);
-  moonbitlang$core$builtin$$Hasher$combine$43$(_self, self);
-  return moonbitlang$core$builtin$$Hasher$finalize(_self);
-}
-function moonbitlang$core$builtin$$Hash$hash$47$(self) {
-  const _self = moonbitlang$core$builtin$$Hasher$new(undefined);
-  moonbitlang$core$builtin$$Hasher$combine$44$(_self, self);
-  return moonbitlang$core$builtin$$Hasher$finalize(_self);
-}
-function moonbitlang$core$builtin$$Hash$hash$48$(self) {
-  const _self = moonbitlang$core$builtin$$Hasher$new(undefined);
-  moonbitlang$core$builtin$$Hasher$combine$45$(_self, self);
+  moonbitlang$core$builtin$$Hasher$combine$39$(_self, self);
   return moonbitlang$core$builtin$$Hasher$finalize(_self);
 }
 function moonbitlang$core$string$$String$sub$46$inner(self, start, end) {
@@ -1933,7 +1053,7 @@ function moonbitlang$core$string$$String$sub$46$inner(self, start, end) {
       _tmp = false;
     }
     if (_tmp) {
-      return new Result$Err$3$(Error$moonbitlang$47$core$47$builtin$46$CreatingViewError$46$InvalidIndex);
+      return new Result$Err$2$(Error$moonbitlang$47$core$47$builtin$46$CreatingViewError$46$InvalidIndex);
     }
     let _tmp$2;
     if (end$2 < len) {
@@ -1943,14 +1063,14 @@ function moonbitlang$core$string$$String$sub$46$inner(self, start, end) {
       _tmp$2 = false;
     }
     if (_tmp$2) {
-      return new Result$Err$3$(Error$moonbitlang$47$core$47$builtin$46$CreatingViewError$46$InvalidIndex);
+      return new Result$Err$2$(Error$moonbitlang$47$core$47$builtin$46$CreatingViewError$46$InvalidIndex);
     }
-    return new Result$Ok$3$({ str: self, start: start$2, end: end$2 });
+    return new Result$Ok$2$({ str: self, start: start$2, end: end$2 });
   } else {
-    return new Result$Err$3$(Error$moonbitlang$47$core$47$builtin$46$CreatingViewError$46$IndexOutOfBounds);
+    return new Result$Err$2$(Error$moonbitlang$47$core$47$builtin$46$CreatingViewError$46$IndexOutOfBounds);
   }
 }
-function moonbitlang$core$builtin$$Logger$write_substring$49$(self, value, start, len) {
+function moonbitlang$core$builtin$$Logger$write_substring$47$(self, value, start, len) {
   let _tmp;
   let _try_err;
   _L: {
@@ -1969,22 +1089,115 @@ function moonbitlang$core$builtin$$Logger$write_substring$49$(self, value, start
     }
     _tmp = $panic();
   }
-  moonbitlang$core$builtin$$Logger$write_view$38$(self, _tmp);
+  moonbitlang$core$builtin$$Logger$write_view$32$(self, _tmp);
 }
-function moonbitlang$core$builtin$$Show$to_string$50$(self) {
+function moonbitlang$core$builtin$$Show$to_string$48$(self) {
   const logger = moonbitlang$core$builtin$$StringBuilder$new$46$inner(0);
-  moonbitlang$core$builtin$$Show$output$10$(self, { self: logger, method_0: moonbitlang$core$builtin$$Logger$write_string$38$, method_1: moonbitlang$core$builtin$$Logger$write_substring$49$, method_2: moonbitlang$core$builtin$$Logger$write_view$38$, method_3: moonbitlang$core$builtin$$Logger$write_char$38$ });
+  moonbitlang$core$builtin$$Show$output$10$(self, { self: logger, method_0: moonbitlang$core$builtin$$Logger$write_string$32$, method_1: moonbitlang$core$builtin$$Logger$write_substring$47$, method_2: moonbitlang$core$builtin$$Logger$write_view$32$, method_3: moonbitlang$core$builtin$$Logger$write_char$32$ });
+  return logger.val;
+}
+function moonbitlang$core$builtin$$Show$to_string$31$(self) {
+  const logger = moonbitlang$core$builtin$$StringBuilder$new$46$inner(0);
+  moonbitlang$core$builtin$$Show$output$49$(self, { self: logger, method_0: moonbitlang$core$builtin$$Logger$write_string$32$, method_1: moonbitlang$core$builtin$$Logger$write_substring$47$, method_2: moonbitlang$core$builtin$$Logger$write_view$32$, method_3: moonbitlang$core$builtin$$Logger$write_char$32$ });
   return logger.val;
 }
 function moonbitlang$core$int$$Int$to_string$46$inner(self, radix) {
   return moonbitlang$core$builtin$$int_to_string_js(self, radix);
 }
-function moonbitlang$core$builtin$$Show$to_string$51$(self) {
+function moonbitlang$core$builtin$$Show$to_string$29$(self) {
   return self.str.substring(self.start, self.end);
 }
-function moonbitlang$core$builtin$$Logger$write_view$38$(self, str) {
+function moonbitlang$core$string$$String$char_length_ge$46$inner(self, len, start_offset, end_offset) {
+  let end_offset$2;
+  if (end_offset === undefined) {
+    end_offset$2 = self.length;
+  } else {
+    const _Some = end_offset;
+    end_offset$2 = _Some;
+  }
+  let _tmp = start_offset;
+  let _tmp$2 = 0;
+  while (true) {
+    const index = _tmp;
+    const count = _tmp$2;
+    if (index < end_offset$2 && count < len) {
+      const c1 = self.charCodeAt(index);
+      if (55296 <= c1 && c1 <= 56319 && (index + 1 | 0) < end_offset$2) {
+        const _tmp$3 = index + 1 | 0;
+        const c2 = self.charCodeAt(_tmp$3);
+        if (56320 <= c2 && c2 <= 57343) {
+          _tmp = index + 2 | 0;
+          _tmp$2 = count + 1 | 0;
+          continue;
+        } else {
+          moonbitlang$core$builtin$$abort$22$("invalid surrogate pair", "@moonbitlang/core/builtin:string.mbt:544:9-544:40");
+        }
+      }
+      _tmp = index + 1 | 0;
+      _tmp$2 = count + 1 | 0;
+      continue;
+    } else {
+      return count >= len;
+    }
+  }
+}
+function moonbitlang$core$string$$String$offset_of_nth_char_backward(self, n, start_offset, end_offset) {
+  let char_count = 0;
+  let utf16_offset = end_offset;
+  while (true) {
+    if ((utf16_offset - 1 | 0) >= start_offset && char_count < n) {
+      const _tmp = utf16_offset - 1 | 0;
+      const c = self.charCodeAt(_tmp);
+      if (56320 <= c && c <= 57343) {
+        utf16_offset = utf16_offset - 2 | 0;
+      } else {
+        utf16_offset = utf16_offset - 1 | 0;
+      }
+      char_count = char_count + 1 | 0;
+      continue;
+    } else {
+      break;
+    }
+  }
+  return char_count < n || utf16_offset < start_offset ? undefined : utf16_offset;
+}
+function moonbitlang$core$string$$String$offset_of_nth_char_forward(self, n, start_offset, end_offset) {
+  if (start_offset >= 0 && start_offset <= end_offset) {
+    let utf16_offset = start_offset;
+    let char_count = 0;
+    while (true) {
+      if (utf16_offset < end_offset && char_count < n) {
+        const _tmp = utf16_offset;
+        const c = self.charCodeAt(_tmp);
+        if (55296 <= c && c <= 56319) {
+          utf16_offset = utf16_offset + 2 | 0;
+        } else {
+          utf16_offset = utf16_offset + 1 | 0;
+        }
+        char_count = char_count + 1 | 0;
+        continue;
+      } else {
+        break;
+      }
+    }
+    return char_count < n || utf16_offset >= end_offset ? undefined : utf16_offset;
+  } else {
+    return moonbitlang$core$builtin$$abort$30$("Invalid start index", "@moonbitlang/core/builtin:string.mbt:419:5-419:33");
+  }
+}
+function moonbitlang$core$string$$String$offset_of_nth_char$46$inner(self, i, start_offset, end_offset) {
+  let end_offset$2;
+  if (end_offset === undefined) {
+    end_offset$2 = self.length;
+  } else {
+    const _Some = end_offset;
+    end_offset$2 = _Some;
+  }
+  return i >= 0 ? moonbitlang$core$string$$String$offset_of_nth_char_forward(self, i, start_offset, end_offset$2) : moonbitlang$core$string$$String$offset_of_nth_char_backward(self, -i | 0, start_offset, end_offset$2);
+}
+function moonbitlang$core$builtin$$Logger$write_view$32$(self, str) {
   const _bind$8 = self;
-  _bind$8.val = `${_bind$8.val}${moonbitlang$core$builtin$$Show$to_string$51$(str)}`;
+  _bind$8.val = `${_bind$8.val}${moonbitlang$core$builtin$$Show$to_string$29$(str)}`;
 }
 function moonbitlang$core$array$$Array$new$46$inner$9$(capacity) {
   return [];
@@ -1992,10 +1205,16 @@ function moonbitlang$core$array$$Array$new$46$inner$9$(capacity) {
 function moonbitlang$core$array$$Array$new$46$inner$19$(capacity) {
   return [];
 }
-function moonbitlang$core$array$$Array$new$46$inner$52$(capacity) {
+function moonbitlang$core$array$$Array$new$46$inner$50$(capacity) {
   return [];
 }
 function moonbitlang$core$array$$Array$push$24$(self, value) {
+  moonbitlang$core$builtin$$JSArray$push(self, value);
+}
+function moonbitlang$core$array$$Array$push$51$(self, value) {
+  moonbitlang$core$builtin$$JSArray$push(self, value);
+}
+function moonbitlang$core$array$$Array$push$52$(self, value) {
   moonbitlang$core$builtin$$JSArray$push(self, value);
 }
 function moonbitlang$core$array$$Array$push$53$(self, value) {
@@ -2004,13 +1223,7 @@ function moonbitlang$core$array$$Array$push$53$(self, value) {
 function moonbitlang$core$array$$Array$push$54$(self, value) {
   moonbitlang$core$builtin$$JSArray$push(self, value);
 }
-function moonbitlang$core$array$$Array$push$55$(self, value) {
-  moonbitlang$core$builtin$$JSArray$push(self, value);
-}
-function moonbitlang$core$array$$Array$push$56$(self, value) {
-  moonbitlang$core$builtin$$JSArray$push(self, value);
-}
-function moonbitlang$core$array$$Array$push$41$(self, value) {
+function moonbitlang$core$array$$Array$push$35$(self, value) {
   moonbitlang$core$builtin$$JSArray$push(self, value);
 }
 function moonbitlang$core$array$$Array$push$11$(self, value) {
@@ -2025,16 +1238,16 @@ function moonbitlang$core$array$$Array$push$19$(self, value) {
 function moonbitlang$core$array$$Array$push$3$(self, value) {
   moonbitlang$core$builtin$$JSArray$push(self, value);
 }
-function moonbitlang$core$array$$Array$push$52$(self, value) {
+function moonbitlang$core$array$$Array$push$50$(self, value) {
   moonbitlang$core$builtin$$JSArray$push(self, value);
 }
-function moonbitlang$core$array$$Array$push$57$(self, value) {
+function moonbitlang$core$array$$Array$push$55$(self, value) {
   moonbitlang$core$builtin$$JSArray$push(self, value);
 }
 function moonbitlang$core$array$$Array$push$9$(self, value) {
   moonbitlang$core$builtin$$JSArray$push(self, value);
 }
-function moonbitlang$core$array$$Array$push$42$(self, value) {
+function moonbitlang$core$array$$Array$push$36$(self, value) {
   moonbitlang$core$builtin$$JSArray$push(self, value);
 }
 function moonbitlang$core$builtin$$Iterator$next$17$(self) {
@@ -2045,7 +1258,19 @@ function moonbitlang$core$builtin$$Iterator$next$3$(self) {
   const _func = self;
   return _func();
 }
+function moonbitlang$core$builtin$$Iterator$next$56$(self) {
+  const _func = self;
+  return _func();
+}
+function moonbitlang$core$builtin$$Iterator$next$57$(self) {
+  const _func = self;
+  return _func();
+}
 function moonbitlang$core$builtin$$Iterator$next$58$(self) {
+  const _func = self;
+  return _func();
+}
+function moonbitlang$core$builtin$$Iterator$next$36$(self) {
   const _func = self;
   return _func();
 }
@@ -2053,22 +1278,10 @@ function moonbitlang$core$builtin$$Iterator$next$59$(self) {
   const _func = self;
   return _func();
 }
-function moonbitlang$core$builtin$$Iterator$next$60$(self) {
-  const _func = self;
-  return _func();
-}
-function moonbitlang$core$builtin$$Iterator$next$42$(self) {
-  const _func = self;
-  return _func();
-}
-function moonbitlang$core$builtin$$Iterator$next$61$(self) {
-  const _func = self;
-  return _func();
-}
 function moonbitlang$core$builtin$$Show$output$10$(self, logger) {
   logger.method_0(logger.self, moonbitlang$core$int$$Int$to_string$46$inner(self, 10));
 }
-function moonbitlang$core$array$$FixedArray$makei$36$(length, value) {
+function moonbitlang$core$array$$FixedArray$makei$60$(length, value) {
   if (length <= 0) {
     return [];
   } else {
@@ -2086,6 +1299,14 @@ function moonbitlang$core$array$$FixedArray$makei$36$(length, value) {
       }
     }
     return array;
+  }
+}
+function moonbitlang$core$option$$Option$unwrap$61$(self) {
+  if (self.$tag === 0) {
+    return $panic();
+  } else {
+    const _Some = self;
+    return _Some._0;
   }
 }
 function moonbitlang$core$option$$Option$unwrap$62$(self) {
@@ -2120,23 +1341,15 @@ function moonbitlang$core$option$$Option$unwrap$65$(self) {
     return _Some._0;
   }
 }
-function moonbitlang$core$option$$Option$unwrap$66$(self) {
-  if (self.$tag === 0) {
-    return $panic();
-  } else {
-    const _Some = self;
-    return _Some._0;
-  }
-}
-function moonbitlang$core$option$$Option$unwrap_or_default$67$(self) {
+function moonbitlang$core$option$$Option$unwrap_or_default$66$(self) {
   if (self === undefined) {
-    return moonbitlang$core$builtin$$Default$default$67$();
+    return moonbitlang$core$builtin$$Default$default$66$();
   } else {
     const _Some = self;
     return _Some;
   }
 }
-function moonbitlang$core$option$$Option$map_or$68$(self, default_, f) {
+function moonbitlang$core$option$$Option$map_or$67$(self, default_, f) {
   if (self === undefined) {
     return default_;
   } else {
@@ -2145,7 +1358,7 @@ function moonbitlang$core$option$$Option$map_or$68$(self, default_, f) {
     return f(_x);
   }
 }
-function moonbitlang$core$option$$Option$map_or$69$(self, default_, f) {
+function moonbitlang$core$option$$Option$map_or$68$(self, default_, f) {
   if (self === undefined) {
     return default_;
   } else {
@@ -2161,7 +1374,7 @@ function moonbitlang$core$array$$MutArrayView$at$24$(self, index) {
     $bound_check(_tmp, _tmp$2);
     return _tmp[_tmp$2];
   } else {
-    return moonbitlang$core$abort$$abort$24$(`index out of bounds: the len is from 0 to ${moonbitlang$core$builtin$$Show$to_string$50$(self.end - self.start | 0)} but the index is ${moonbitlang$core$builtin$$Show$to_string$50$(index)}`);
+    return moonbitlang$core$builtin$$abort$24$(`index out of bounds: the len is from 0 to ${moonbitlang$core$builtin$$Show$to_string$48$(self.end - self.start | 0)} but the index is ${moonbitlang$core$builtin$$Show$to_string$48$(index)}`, "@moonbitlang/core/builtin:mutarrayview.mbt:91:5-93:6");
   }
 }
 function moonbitlang$core$array$$MutArrayView$at$26$(self, index) {
@@ -2171,7 +1384,7 @@ function moonbitlang$core$array$$MutArrayView$at$26$(self, index) {
     $bound_check(_tmp, _tmp$2);
     return _tmp[_tmp$2];
   } else {
-    return moonbitlang$core$abort$$abort$26$(`index out of bounds: the len is from 0 to ${moonbitlang$core$builtin$$Show$to_string$50$(self.end - self.start | 0)} but the index is ${moonbitlang$core$builtin$$Show$to_string$50$(index)}`);
+    return moonbitlang$core$builtin$$abort$26$(`index out of bounds: the len is from 0 to ${moonbitlang$core$builtin$$Show$to_string$48$(self.end - self.start | 0)} but the index is ${moonbitlang$core$builtin$$Show$to_string$48$(index)}`, "@moonbitlang/core/builtin:mutarrayview.mbt:91:5-93:6");
   }
 }
 function moonbitlang$core$array$$MutArrayView$at$10$(self, index) {
@@ -2181,7 +1394,7 @@ function moonbitlang$core$array$$MutArrayView$at$10$(self, index) {
     $bound_check(_tmp, _tmp$2);
     return _tmp[_tmp$2];
   } else {
-    return moonbitlang$core$abort$$abort$10$(`index out of bounds: the len is from 0 to ${moonbitlang$core$builtin$$Show$to_string$50$(self.end - self.start | 0)} but the index is ${moonbitlang$core$builtin$$Show$to_string$50$(index)}`);
+    return moonbitlang$core$builtin$$abort$10$(`index out of bounds: the len is from 0 to ${moonbitlang$core$builtin$$Show$to_string$48$(self.end - self.start | 0)} but the index is ${moonbitlang$core$builtin$$Show$to_string$48$(index)}`, "@moonbitlang/core/builtin:mutarrayview.mbt:91:5-93:6");
   }
 }
 function moonbitlang$core$array$$MutArrayView$set$24$(self, index, value) {
@@ -2192,7 +1405,7 @@ function moonbitlang$core$array$$MutArrayView$set$24$(self, index, value) {
     _tmp[_tmp$2] = value;
     return;
   } else {
-    moonbitlang$core$abort$$abort$22$(`index out of bounds: the len is from 0 to ${moonbitlang$core$builtin$$Show$to_string$50$(self.end - self.start | 0)} but the index is ${moonbitlang$core$builtin$$Show$to_string$50$(index)}`);
+    moonbitlang$core$builtin$$abort$22$(`index out of bounds: the len is from 0 to ${moonbitlang$core$builtin$$Show$to_string$48$(self.end - self.start | 0)} but the index is ${moonbitlang$core$builtin$$Show$to_string$48$(index)}`, "@moonbitlang/core/builtin:mutarrayview.mbt:151:5-153:6");
     return;
   }
 }
@@ -2204,7 +1417,7 @@ function moonbitlang$core$array$$MutArrayView$set$26$(self, index, value) {
     _tmp[_tmp$2] = value;
     return;
   } else {
-    moonbitlang$core$abort$$abort$22$(`index out of bounds: the len is from 0 to ${moonbitlang$core$builtin$$Show$to_string$50$(self.end - self.start | 0)} but the index is ${moonbitlang$core$builtin$$Show$to_string$50$(index)}`);
+    moonbitlang$core$builtin$$abort$22$(`index out of bounds: the len is from 0 to ${moonbitlang$core$builtin$$Show$to_string$48$(self.end - self.start | 0)} but the index is ${moonbitlang$core$builtin$$Show$to_string$48$(index)}`, "@moonbitlang/core/builtin:mutarrayview.mbt:151:5-153:6");
     return;
   }
 }
@@ -2216,7 +1429,7 @@ function moonbitlang$core$array$$MutArrayView$set$10$(self, index, value) {
     _tmp[_tmp$2] = value;
     return;
   } else {
-    moonbitlang$core$abort$$abort$22$(`index out of bounds: the len is from 0 to ${moonbitlang$core$builtin$$Show$to_string$50$(self.end - self.start | 0)} but the index is ${moonbitlang$core$builtin$$Show$to_string$50$(index)}`);
+    moonbitlang$core$builtin$$abort$22$(`index out of bounds: the len is from 0 to ${moonbitlang$core$builtin$$Show$to_string$48$(self.end - self.start | 0)} but the index is ${moonbitlang$core$builtin$$Show$to_string$48$(index)}`, "@moonbitlang/core/builtin:mutarrayview.mbt:151:5-153:6");
     return;
   }
 }
@@ -2231,7 +1444,7 @@ function moonbitlang$core$array$$Array$mut_view$46$inner$24$(self, start, end) {
     end$2 = _end < 0 ? len + _end | 0 : _end;
   }
   const start$2 = start < 0 ? len + start | 0 : start;
-  return start$2 >= 0 && (start$2 <= end$2 && end$2 <= len) ? { buf: self, start: start$2, end: end$2 } : moonbitlang$core$abort$$abort$21$("View index out of bounds");
+  return start$2 >= 0 && (start$2 <= end$2 && end$2 <= len) ? { buf: self, start: start$2, end: end$2 } : moonbitlang$core$builtin$$abort$21$("View index out of bounds", "@moonbitlang/core/builtin:mutarrayview.mbt:223:5-223:38");
 }
 function moonbitlang$core$array$$Array$mut_view$46$inner$26$(self, start, end) {
   const len = self.length;
@@ -2244,7 +1457,7 @@ function moonbitlang$core$array$$Array$mut_view$46$inner$26$(self, start, end) {
     end$2 = _end < 0 ? len + _end | 0 : _end;
   }
   const start$2 = start < 0 ? len + start | 0 : start;
-  return start$2 >= 0 && (start$2 <= end$2 && end$2 <= len) ? { buf: self, start: start$2, end: end$2 } : moonbitlang$core$abort$$abort$23$("View index out of bounds");
+  return start$2 >= 0 && (start$2 <= end$2 && end$2 <= len) ? { buf: self, start: start$2, end: end$2 } : moonbitlang$core$builtin$$abort$23$("View index out of bounds", "@moonbitlang/core/builtin:mutarrayview.mbt:223:5-223:38");
 }
 function moonbitlang$core$array$$Array$mut_view$46$inner$10$(self, start, end) {
   const len = self.length;
@@ -2257,7 +1470,7 @@ function moonbitlang$core$array$$Array$mut_view$46$inner$10$(self, start, end) {
     end$2 = _end < 0 ? len + _end | 0 : _end;
   }
   const start$2 = start < 0 ? len + start | 0 : start;
-  return start$2 >= 0 && (start$2 <= end$2 && end$2 <= len) ? { buf: self, start: start$2, end: end$2 } : moonbitlang$core$abort$$abort$28$("View index out of bounds");
+  return start$2 >= 0 && (start$2 <= end$2 && end$2 <= len) ? { buf: self, start: start$2, end: end$2 } : moonbitlang$core$builtin$$abort$28$("View index out of bounds", "@moonbitlang/core/builtin:mutarrayview.mbt:223:5-223:38");
 }
 function moonbitlang$core$array$$MutArrayView$mut_view$46$inner$24$(self, start, end) {
   const len = self.end - self.start | 0;
@@ -2270,7 +1483,7 @@ function moonbitlang$core$array$$MutArrayView$mut_view$46$inner$24$(self, start,
     end$2 = _end < 0 ? len + _end | 0 : _end;
   }
   const start$2 = start < 0 ? len + start | 0 : start;
-  return start$2 >= 0 && (start$2 <= end$2 && end$2 <= len) ? { buf: self.buf, start: self.start + start$2 | 0, end: (self.start + start$2 | 0) + (end$2 - start$2 | 0) | 0 } : moonbitlang$core$abort$$abort$21$("View index out of bounds");
+  return start$2 >= 0 && (start$2 <= end$2 && end$2 <= len) ? { buf: self.buf, start: self.start + start$2 | 0, end: (self.start + start$2 | 0) + (end$2 - start$2 | 0) | 0 } : moonbitlang$core$builtin$$abort$21$("View index out of bounds", "@moonbitlang/core/builtin:mutarrayview.mbt:270:5-270:38");
 }
 function moonbitlang$core$array$$MutArrayView$mut_view$46$inner$26$(self, start, end) {
   const len = self.end - self.start | 0;
@@ -2283,7 +1496,7 @@ function moonbitlang$core$array$$MutArrayView$mut_view$46$inner$26$(self, start,
     end$2 = _end < 0 ? len + _end | 0 : _end;
   }
   const start$2 = start < 0 ? len + start | 0 : start;
-  return start$2 >= 0 && (start$2 <= end$2 && end$2 <= len) ? { buf: self.buf, start: self.start + start$2 | 0, end: (self.start + start$2 | 0) + (end$2 - start$2 | 0) | 0 } : moonbitlang$core$abort$$abort$23$("View index out of bounds");
+  return start$2 >= 0 && (start$2 <= end$2 && end$2 <= len) ? { buf: self.buf, start: self.start + start$2 | 0, end: (self.start + start$2 | 0) + (end$2 - start$2 | 0) | 0 } : moonbitlang$core$builtin$$abort$23$("View index out of bounds", "@moonbitlang/core/builtin:mutarrayview.mbt:270:5-270:38");
 }
 function moonbitlang$core$array$$MutArrayView$mut_view$46$inner$10$(self, start, end) {
   const len = self.end - self.start | 0;
@@ -2296,7 +1509,7 @@ function moonbitlang$core$array$$MutArrayView$mut_view$46$inner$10$(self, start,
     end$2 = _end < 0 ? len + _end | 0 : _end;
   }
   const start$2 = start < 0 ? len + start | 0 : start;
-  return start$2 >= 0 && (start$2 <= end$2 && end$2 <= len) ? { buf: self.buf, start: self.start + start$2 | 0, end: (self.start + start$2 | 0) + (end$2 - start$2 | 0) | 0 } : moonbitlang$core$abort$$abort$28$("View index out of bounds");
+  return start$2 >= 0 && (start$2 <= end$2 && end$2 <= len) ? { buf: self.buf, start: self.start + start$2 | 0, end: (self.start + start$2 | 0) + (end$2 - start$2 | 0) | 0 } : moonbitlang$core$builtin$$abort$28$("View index out of bounds", "@moonbitlang/core/builtin:mutarrayview.mbt:270:5-270:38");
 }
 function moonbitlang$core$array$$ArrayView$at$11$(self, index) {
   if (index >= 0 && index < (self.end - self.start | 0)) {
@@ -2305,7 +1518,7 @@ function moonbitlang$core$array$$ArrayView$at$11$(self, index) {
     $bound_check(_tmp, _tmp$2);
     return _tmp[_tmp$2];
   } else {
-    return moonbitlang$core$abort$$abort$11$(`index out of bounds: the len is from 0 to ${moonbitlang$core$builtin$$Show$to_string$50$(self.end - self.start | 0)} but the index is ${moonbitlang$core$builtin$$Show$to_string$50$(index)}`);
+    return moonbitlang$core$builtin$$abort$11$(`index out of bounds: the len is from 0 to ${moonbitlang$core$builtin$$Show$to_string$48$(self.end - self.start | 0)} but the index is ${moonbitlang$core$builtin$$Show$to_string$48$(index)}`, "@moonbitlang/core/builtin:arrayview.mbt:101:5-103:6");
   }
 }
 function moonbitlang$core$int$$Int$next_power_of_two(self) {
@@ -2425,7 +1638,7 @@ function moonbitlang$core$builtin$$Map$new$46$inner$7$(capacity) {
   const _bind$11 = undefined;
   return { entries: _bind$10, size: 0, capacity: capacity$2, capacity_mask: _bind$8, grow_at: _bind$9, head: _bind$11, tail: -1 };
 }
-function moonbitlang$core$builtin$$Map$new$46$inner$70$(capacity) {
+function moonbitlang$core$builtin$$Map$new$46$inner$69$(capacity) {
   const capacity$2 = moonbitlang$core$int$$Int$next_power_of_two(capacity);
   const _bind$8 = capacity$2 - 1 | 0;
   const _bind$9 = (Math.imul(capacity$2, 13) | 0) / 16 | 0;
@@ -2441,7 +1654,7 @@ function moonbitlang$core$builtin$$Map$new$46$inner$18$(capacity) {
   const _bind$11 = undefined;
   return { entries: _bind$10, size: 0, capacity: capacity$2, capacity_mask: _bind$8, grow_at: _bind$9, head: _bind$11, tail: -1 };
 }
-function moonbitlang$core$builtin$$Map$new$46$inner$71$(capacity) {
+function moonbitlang$core$builtin$$Map$new$46$inner$70$(capacity) {
   const capacity$2 = moonbitlang$core$int$$Int$next_power_of_two(capacity);
   const _bind$8 = capacity$2 - 1 | 0;
   const _bind$9 = (Math.imul(capacity$2, 13) | 0) / 16 | 0;
@@ -2702,7 +1915,7 @@ function moonbitlang$core$builtin$$Map$add_entry_to_tail$7$(self, idx, entry) {
   _tmp[idx] = entry;
   self.size = self.size + 1 | 0;
 }
-function moonbitlang$core$builtin$$Map$add_entry_to_tail$70$(self, idx, entry) {
+function moonbitlang$core$builtin$$Map$add_entry_to_tail$69$(self, idx, entry) {
   const _bind$8 = self.tail;
   if (_bind$8 === -1) {
     self.head = entry;
@@ -2725,7 +1938,7 @@ function moonbitlang$core$builtin$$Map$add_entry_to_tail$70$(self, idx, entry) {
   _tmp[idx] = entry;
   self.size = self.size + 1 | 0;
 }
-function moonbitlang$core$builtin$$Map$add_entry_to_tail$71$(self, idx, entry) {
+function moonbitlang$core$builtin$$Map$add_entry_to_tail$70$(self, idx, entry) {
   const _bind$8 = self.tail;
   if (_bind$8 === -1) {
     self.head = entry;
@@ -2913,7 +2126,7 @@ function moonbitlang$core$builtin$$Map$set_entry$7$(self, entry, new_idx) {
     return;
   }
 }
-function moonbitlang$core$builtin$$Map$set_entry$70$(self, entry, new_idx) {
+function moonbitlang$core$builtin$$Map$set_entry$69$(self, entry, new_idx) {
   const _tmp = self.entries;
   $bound_check(_tmp, new_idx);
   _tmp[new_idx] = entry;
@@ -2928,7 +2141,7 @@ function moonbitlang$core$builtin$$Map$set_entry$70$(self, entry, new_idx) {
     return;
   }
 }
-function moonbitlang$core$builtin$$Map$set_entry$71$(self, entry, new_idx) {
+function moonbitlang$core$builtin$$Map$set_entry$70$(self, entry, new_idx) {
   const _tmp = self.entries;
   $bound_check(_tmp, new_idx);
   _tmp[new_idx] = entry;
@@ -3306,6 +2519,39 @@ function moonbitlang$core$builtin$$Map$push_away$7$(self, idx, entry) {
     }
   }
 }
+function moonbitlang$core$builtin$$Map$push_away$69$(self, idx, entry) {
+  let _tmp = entry.psl + 1 | 0;
+  let _tmp$2 = idx + 1 & self.capacity_mask;
+  let _tmp$3 = entry;
+  while (true) {
+    const psl = _tmp;
+    const idx$2 = _tmp$2;
+    const entry$2 = _tmp$3;
+    const _tmp$4 = self.entries;
+    $bound_check(_tmp$4, idx$2);
+    const _bind$8 = _tmp$4[idx$2];
+    if (_bind$8 === undefined) {
+      entry$2.psl = psl;
+      moonbitlang$core$builtin$$Map$set_entry$69$(self, entry$2, idx$2);
+      break;
+    } else {
+      const _Some = _bind$8;
+      const _curr_entry = _Some;
+      if (psl > _curr_entry.psl) {
+        entry$2.psl = psl;
+        moonbitlang$core$builtin$$Map$set_entry$69$(self, entry$2, idx$2);
+        _tmp = _curr_entry.psl + 1 | 0;
+        _tmp$2 = idx$2 + 1 & self.capacity_mask;
+        _tmp$3 = _curr_entry;
+        continue;
+      } else {
+        _tmp = psl + 1 | 0;
+        _tmp$2 = idx$2 + 1 & self.capacity_mask;
+        continue;
+      }
+    }
+  }
+}
 function moonbitlang$core$builtin$$Map$push_away$70$(self, idx, entry) {
   let _tmp = entry.psl + 1 | 0;
   let _tmp$2 = idx + 1 & self.capacity_mask;
@@ -3327,39 +2573,6 @@ function moonbitlang$core$builtin$$Map$push_away$70$(self, idx, entry) {
       if (psl > _curr_entry.psl) {
         entry$2.psl = psl;
         moonbitlang$core$builtin$$Map$set_entry$70$(self, entry$2, idx$2);
-        _tmp = _curr_entry.psl + 1 | 0;
-        _tmp$2 = idx$2 + 1 & self.capacity_mask;
-        _tmp$3 = _curr_entry;
-        continue;
-      } else {
-        _tmp = psl + 1 | 0;
-        _tmp$2 = idx$2 + 1 & self.capacity_mask;
-        continue;
-      }
-    }
-  }
-}
-function moonbitlang$core$builtin$$Map$push_away$71$(self, idx, entry) {
-  let _tmp = entry.psl + 1 | 0;
-  let _tmp$2 = idx + 1 & self.capacity_mask;
-  let _tmp$3 = entry;
-  while (true) {
-    const psl = _tmp;
-    const idx$2 = _tmp$2;
-    const entry$2 = _tmp$3;
-    const _tmp$4 = self.entries;
-    $bound_check(_tmp$4, idx$2);
-    const _bind$8 = _tmp$4[idx$2];
-    if (_bind$8 === undefined) {
-      entry$2.psl = psl;
-      moonbitlang$core$builtin$$Map$set_entry$71$(self, entry$2, idx$2);
-      break;
-    } else {
-      const _Some = _bind$8;
-      const _curr_entry = _Some;
-      if (psl > _curr_entry.psl) {
-        entry$2.psl = psl;
-        moonbitlang$core$builtin$$Map$set_entry$71$(self, entry$2, idx$2);
         _tmp = _curr_entry.psl + 1 | 0;
         _tmp$2 = idx$2 + 1 & self.capacity_mask;
         _tmp$3 = _curr_entry;
@@ -3882,6 +3095,46 @@ function moonbitlang$core$builtin$$Map$set_with_hash$7$(self, key, value, hash) 
   const entry = { prev: _bind$9, next: _bind$10, psl: _psl, hash: hash, key: key, value: value };
   moonbitlang$core$builtin$$Map$add_entry_to_tail$7$(self, _idx, entry);
 }
+function moonbitlang$core$builtin$$Map$set_with_hash$69$(self, key, value, hash) {
+  if (self.size >= self.grow_at) {
+    moonbitlang$core$builtin$$Map$grow$69$(self);
+  }
+  let _bind$8;
+  let _tmp = 0;
+  let _tmp$2 = hash & self.capacity_mask;
+  while (true) {
+    const psl = _tmp;
+    const idx = _tmp$2;
+    const _tmp$3 = self.entries;
+    $bound_check(_tmp$3, idx);
+    const _bind$9 = _tmp$3[idx];
+    if (_bind$9 === undefined) {
+      _bind$8 = { _0: idx, _1: psl };
+      break;
+    } else {
+      const _Some = _bind$9;
+      const _curr_entry = _Some;
+      if (_curr_entry.hash === hash && moonbitlang$core$builtin$$Eq$equal$38$(_curr_entry.key, key)) {
+        _curr_entry.value = value;
+        return undefined;
+      }
+      if (psl > _curr_entry.psl) {
+        moonbitlang$core$builtin$$Map$push_away$69$(self, idx, _curr_entry);
+        _bind$8 = { _0: idx, _1: psl };
+        break;
+      }
+      _tmp = psl + 1 | 0;
+      _tmp$2 = idx + 1 & self.capacity_mask;
+      continue;
+    }
+  }
+  const _idx = _bind$8._0;
+  const _psl = _bind$8._1;
+  const _bind$9 = self.tail;
+  const _bind$10 = undefined;
+  const entry = { prev: _bind$9, next: _bind$10, psl: _psl, hash: hash, key: key, value: value };
+  moonbitlang$core$builtin$$Map$add_entry_to_tail$69$(self, _idx, entry);
+}
 function moonbitlang$core$builtin$$Map$set_with_hash$70$(self, key, value, hash) {
   if (self.size >= self.grow_at) {
     moonbitlang$core$builtin$$Map$grow$70$(self);
@@ -3901,7 +3154,7 @@ function moonbitlang$core$builtin$$Map$set_with_hash$70$(self, key, value, hash)
     } else {
       const _Some = _bind$9;
       const _curr_entry = _Some;
-      if (_curr_entry.hash === hash && moonbitlang$core$builtin$$Eq$equal$44$(_curr_entry.key, key)) {
+      if (_curr_entry.hash === hash && moonbitlang$core$builtin$$Eq$equal$39$(_curr_entry.key, key)) {
         _curr_entry.value = value;
         return undefined;
       }
@@ -3921,46 +3174,6 @@ function moonbitlang$core$builtin$$Map$set_with_hash$70$(self, key, value, hash)
   const _bind$10 = undefined;
   const entry = { prev: _bind$9, next: _bind$10, psl: _psl, hash: hash, key: key, value: value };
   moonbitlang$core$builtin$$Map$add_entry_to_tail$70$(self, _idx, entry);
-}
-function moonbitlang$core$builtin$$Map$set_with_hash$71$(self, key, value, hash) {
-  if (self.size >= self.grow_at) {
-    moonbitlang$core$builtin$$Map$grow$71$(self);
-  }
-  let _bind$8;
-  let _tmp = 0;
-  let _tmp$2 = hash & self.capacity_mask;
-  while (true) {
-    const psl = _tmp;
-    const idx = _tmp$2;
-    const _tmp$3 = self.entries;
-    $bound_check(_tmp$3, idx);
-    const _bind$9 = _tmp$3[idx];
-    if (_bind$9 === undefined) {
-      _bind$8 = { _0: idx, _1: psl };
-      break;
-    } else {
-      const _Some = _bind$9;
-      const _curr_entry = _Some;
-      if (_curr_entry.hash === hash && moonbitlang$core$builtin$$Eq$equal$45$(_curr_entry.key, key)) {
-        _curr_entry.value = value;
-        return undefined;
-      }
-      if (psl > _curr_entry.psl) {
-        moonbitlang$core$builtin$$Map$push_away$71$(self, idx, _curr_entry);
-        _bind$8 = { _0: idx, _1: psl };
-        break;
-      }
-      _tmp = psl + 1 | 0;
-      _tmp$2 = idx + 1 & self.capacity_mask;
-      continue;
-    }
-  }
-  const _idx = _bind$8._0;
-  const _psl = _bind$8._1;
-  const _bind$9 = self.tail;
-  const _bind$10 = undefined;
-  const entry = { prev: _bind$9, next: _bind$10, psl: _psl, hash: hash, key: key, value: value };
-  moonbitlang$core$builtin$$Map$add_entry_to_tail$71$(self, _idx, entry);
 }
 function moonbitlang$core$builtin$$Map$grow$2$(self) {
   const old_head = self.head;
@@ -4281,6 +3494,35 @@ function moonbitlang$core$builtin$$Map$grow$7$(self) {
     }
   }
 }
+function moonbitlang$core$builtin$$Map$grow$69$(self) {
+  const old_head = self.head;
+  const new_capacity = self.capacity << 1;
+  self.entries = $make_array_len_and_init(new_capacity, undefined);
+  self.capacity = new_capacity;
+  self.capacity_mask = new_capacity - 1 | 0;
+  const _p = self.capacity;
+  self.grow_at = (Math.imul(_p, 13) | 0) / 16 | 0;
+  self.size = 0;
+  self.head = undefined;
+  self.tail = -1;
+  let _tmp = old_head;
+  while (true) {
+    const _param = _tmp;
+    if (_param === undefined) {
+      return;
+    } else {
+      const _Some = _param;
+      const _x = _Some;
+      const _next = _x.next;
+      const _key = _x.key;
+      const _value = _x.value;
+      const _hash = _x.hash;
+      moonbitlang$core$builtin$$Map$set_with_hash$69$(self, _key, _value, _hash);
+      _tmp = _next;
+      continue;
+    }
+  }
+}
 function moonbitlang$core$builtin$$Map$grow$70$(self) {
   const old_head = self.head;
   const new_capacity = self.capacity << 1;
@@ -4310,73 +3552,44 @@ function moonbitlang$core$builtin$$Map$grow$70$(self) {
     }
   }
 }
-function moonbitlang$core$builtin$$Map$grow$71$(self) {
-  const old_head = self.head;
-  const new_capacity = self.capacity << 1;
-  self.entries = $make_array_len_and_init(new_capacity, undefined);
-  self.capacity = new_capacity;
-  self.capacity_mask = new_capacity - 1 | 0;
-  const _p = self.capacity;
-  self.grow_at = (Math.imul(_p, 13) | 0) / 16 | 0;
-  self.size = 0;
-  self.head = undefined;
-  self.tail = -1;
-  let _tmp = old_head;
-  while (true) {
-    const _param = _tmp;
-    if (_param === undefined) {
-      return;
-    } else {
-      const _Some = _param;
-      const _x = _Some;
-      const _next = _x.next;
-      const _key = _x.key;
-      const _value = _x.value;
-      const _hash = _x.hash;
-      moonbitlang$core$builtin$$Map$set_with_hash$71$(self, _key, _value, _hash);
-      _tmp = _next;
-      continue;
-    }
-  }
-}
 function moonbitlang$core$builtin$$Map$set$2$(self, key, value) {
-  moonbitlang$core$builtin$$Map$set_with_hash$2$(self, key, value, moonbitlang$core$builtin$$Hash$hash$30$(key));
+  moonbitlang$core$builtin$$Map$set_with_hash$2$(self, key, value, moonbitlang$core$builtin$$Hash$hash$42$(key));
 }
 function moonbitlang$core$builtin$$Map$set$0$(self, key, value) {
-  moonbitlang$core$builtin$$Map$set_with_hash$0$(self, key, value, moonbitlang$core$builtin$$Hash$hash$30$(key));
+  moonbitlang$core$builtin$$Map$set_with_hash$0$(self, key, value, moonbitlang$core$builtin$$Hash$hash$42$(key));
 }
 function moonbitlang$core$builtin$$Map$set$1$(self, key, value) {
-  moonbitlang$core$builtin$$Map$set_with_hash$1$(self, key, value, moonbitlang$core$builtin$$Hash$hash$30$(key));
+  moonbitlang$core$builtin$$Map$set_with_hash$1$(self, key, value, moonbitlang$core$builtin$$Hash$hash$42$(key));
 }
 function moonbitlang$core$builtin$$Map$set$12$(self, key, value) {
-  moonbitlang$core$builtin$$Map$set_with_hash$12$(self, key, value, moonbitlang$core$builtin$$Hash$hash$30$(key));
+  moonbitlang$core$builtin$$Map$set_with_hash$12$(self, key, value, moonbitlang$core$builtin$$Hash$hash$42$(key));
 }
 function moonbitlang$core$builtin$$Map$set$5$(self, key, value) {
-  moonbitlang$core$builtin$$Map$set_with_hash$5$(self, key, value, moonbitlang$core$builtin$$Hash$hash$30$(key));
+  moonbitlang$core$builtin$$Map$set_with_hash$5$(self, key, value, moonbitlang$core$builtin$$Hash$hash$42$(key));
 }
 function moonbitlang$core$builtin$$Map$set$4$(self, key, value) {
-  moonbitlang$core$builtin$$Map$set_with_hash$4$(self, key, value, moonbitlang$core$builtin$$Hash$hash$30$(key));
+  moonbitlang$core$builtin$$Map$set_with_hash$4$(self, key, value, moonbitlang$core$builtin$$Hash$hash$42$(key));
 }
 function moonbitlang$core$builtin$$Map$set$6$(self, key, value) {
-  moonbitlang$core$builtin$$Map$set_with_hash$6$(self, key, value, moonbitlang$core$builtin$$Hash$hash$30$(key));
+  moonbitlang$core$builtin$$Map$set_with_hash$6$(self, key, value, moonbitlang$core$builtin$$Hash$hash$42$(key));
 }
 function moonbitlang$core$builtin$$Map$set$13$(self, key, value) {
-  moonbitlang$core$builtin$$Map$set_with_hash$13$(self, key, value, moonbitlang$core$builtin$$Hash$hash$30$(key));
+  moonbitlang$core$builtin$$Map$set_with_hash$13$(self, key, value, moonbitlang$core$builtin$$Hash$hash$42$(key));
 }
 function moonbitlang$core$builtin$$Map$set$18$(self, key, value) {
-  moonbitlang$core$builtin$$Map$set_with_hash$18$(self, key, value, moonbitlang$core$builtin$$Hash$hash$46$(key));
+  moonbitlang$core$builtin$$Map$set_with_hash$18$(self, key, value, moonbitlang$core$builtin$$Hash$hash$44$(key));
 }
 function moonbitlang$core$builtin$$Map$set$7$(self, key, value) {
-  moonbitlang$core$builtin$$Map$set_with_hash$7$(self, key, value, moonbitlang$core$builtin$$Hash$hash$30$(key));
+  moonbitlang$core$builtin$$Map$set_with_hash$7$(self, key, value, moonbitlang$core$builtin$$Hash$hash$42$(key));
+}
+function moonbitlang$core$builtin$$Map$set$69$(self, key, value) {
+  moonbitlang$core$builtin$$Map$set_with_hash$69$(self, key, value, moonbitlang$core$builtin$$Hash$hash$45$(key));
 }
 function moonbitlang$core$builtin$$Map$set$70$(self, key, value) {
-  moonbitlang$core$builtin$$Map$set_with_hash$70$(self, key, value, moonbitlang$core$builtin$$Hash$hash$47$(key));
-}
-function moonbitlang$core$builtin$$Map$set$71$(self, key, value) {
-  moonbitlang$core$builtin$$Map$set_with_hash$71$(self, key, value, moonbitlang$core$builtin$$Hash$hash$48$(key));
+  moonbitlang$core$builtin$$Map$set_with_hash$70$(self, key, value, moonbitlang$core$builtin$$Hash$hash$46$(key));
 }
 function moonbitlang$core$builtin$$Map$get$14$(self, key) {
-  const hash = moonbitlang$core$builtin$$Hash$hash$30$(key);
+  const hash = moonbitlang$core$builtin$$Hash$hash$42$(key);
   let _tmp = 0;
   let _tmp$2 = hash & self.capacity_mask;
   while (true) {
@@ -4410,7 +3623,7 @@ function moonbitlang$core$builtin$$Map$get$14$(self, key) {
   }
 }
 function moonbitlang$core$builtin$$Map$get$1$(self, key) {
-  const hash = moonbitlang$core$builtin$$Hash$hash$30$(key);
+  const hash = moonbitlang$core$builtin$$Hash$hash$42$(key);
   let _tmp = 0;
   let _tmp$2 = hash & self.capacity_mask;
   while (true) {
@@ -4444,7 +3657,7 @@ function moonbitlang$core$builtin$$Map$get$1$(self, key) {
   }
 }
 function moonbitlang$core$builtin$$Map$get$0$(self, key) {
-  const hash = moonbitlang$core$builtin$$Hash$hash$30$(key);
+  const hash = moonbitlang$core$builtin$$Hash$hash$42$(key);
   let _tmp = 0;
   let _tmp$2 = hash & self.capacity_mask;
   while (true) {
@@ -4478,7 +3691,7 @@ function moonbitlang$core$builtin$$Map$get$0$(self, key) {
   }
 }
 function moonbitlang$core$builtin$$Map$get$6$(self, key) {
-  const hash = moonbitlang$core$builtin$$Hash$hash$30$(key);
+  const hash = moonbitlang$core$builtin$$Hash$hash$42$(key);
   let _tmp = 0;
   let _tmp$2 = hash & self.capacity_mask;
   while (true) {
@@ -4512,7 +3725,7 @@ function moonbitlang$core$builtin$$Map$get$6$(self, key) {
   }
 }
 function moonbitlang$core$builtin$$Map$get$4$(self, key) {
-  const hash = moonbitlang$core$builtin$$Hash$hash$30$(key);
+  const hash = moonbitlang$core$builtin$$Hash$hash$42$(key);
   let _tmp = 0;
   let _tmp$2 = hash & self.capacity_mask;
   while (true) {
@@ -4546,7 +3759,7 @@ function moonbitlang$core$builtin$$Map$get$4$(self, key) {
   }
 }
 function moonbitlang$core$builtin$$Map$get$16$(self, key) {
-  const hash = moonbitlang$core$builtin$$Hash$hash$30$(key);
+  const hash = moonbitlang$core$builtin$$Hash$hash$42$(key);
   let _tmp = 0;
   let _tmp$2 = hash & self.capacity_mask;
   while (true) {
@@ -4580,7 +3793,7 @@ function moonbitlang$core$builtin$$Map$get$16$(self, key) {
   }
 }
 function moonbitlang$core$builtin$$Map$get$15$(self, key) {
-  const hash = moonbitlang$core$builtin$$Hash$hash$30$(key);
+  const hash = moonbitlang$core$builtin$$Hash$hash$42$(key);
   let _tmp = 0;
   let _tmp$2 = hash & self.capacity_mask;
   while (true) {
@@ -4614,7 +3827,7 @@ function moonbitlang$core$builtin$$Map$get$15$(self, key) {
   }
 }
 function moonbitlang$core$builtin$$Map$get$2$(self, key) {
-  const hash = moonbitlang$core$builtin$$Hash$hash$30$(key);
+  const hash = moonbitlang$core$builtin$$Hash$hash$42$(key);
   let _tmp = 0;
   let _tmp$2 = hash & self.capacity_mask;
   while (true) {
@@ -4648,7 +3861,7 @@ function moonbitlang$core$builtin$$Map$get$2$(self, key) {
   }
 }
 function moonbitlang$core$builtin$$Map$get$5$(self, key) {
-  const hash = moonbitlang$core$builtin$$Hash$hash$30$(key);
+  const hash = moonbitlang$core$builtin$$Hash$hash$42$(key);
   let _tmp = 0;
   let _tmp$2 = hash & self.capacity_mask;
   while (true) {
@@ -4682,7 +3895,7 @@ function moonbitlang$core$builtin$$Map$get$5$(self, key) {
   }
 }
 function moonbitlang$core$builtin$$Map$get$8$(self, key) {
-  const hash = moonbitlang$core$builtin$$Hash$hash$30$(key);
+  const hash = moonbitlang$core$builtin$$Hash$hash$42$(key);
   let _tmp = 0;
   let _tmp$2 = hash & self.capacity_mask;
   while (true) {
@@ -4716,7 +3929,7 @@ function moonbitlang$core$builtin$$Map$get$8$(self, key) {
   }
 }
 function moonbitlang$core$builtin$$Map$get$7$(self, key) {
-  const hash = moonbitlang$core$builtin$$Hash$hash$30$(key);
+  const hash = moonbitlang$core$builtin$$Hash$hash$42$(key);
   let _tmp = 0;
   let _tmp$2 = hash & self.capacity_mask;
   while (true) {
@@ -4750,7 +3963,41 @@ function moonbitlang$core$builtin$$Map$get$7$(self, key) {
   }
 }
 function moonbitlang$core$builtin$$Map$get$13$(self, key) {
-  const hash = moonbitlang$core$builtin$$Hash$hash$30$(key);
+  const hash = moonbitlang$core$builtin$$Hash$hash$42$(key);
+  let _tmp = 0;
+  let _tmp$2 = hash & self.capacity_mask;
+  while (true) {
+    const i = _tmp;
+    const idx = _tmp$2;
+    const _tmp$3 = self.entries;
+    $bound_check(_tmp$3, idx);
+    const _bind$8 = _tmp$3[idx];
+    if (_bind$8 === undefined) {
+      return Option$None$3$;
+    } else {
+      const _Some = _bind$8;
+      const _entry = _Some;
+      let _tmp$4;
+      if (_entry.hash === hash) {
+        const _p = _entry.key;
+        _tmp$4 = _p === key;
+      } else {
+        _tmp$4 = false;
+      }
+      if (_tmp$4) {
+        return new Option$Some$3$(_entry.value);
+      }
+      if (i > _entry.psl) {
+        return Option$None$3$;
+      }
+      _tmp = i + 1 | 0;
+      _tmp$2 = idx + 1 & self.capacity_mask;
+      continue;
+    }
+  }
+}
+function moonbitlang$core$builtin$$Map$get$18$(self, key) {
+  const hash = moonbitlang$core$builtin$$Hash$hash$44$(key);
   let _tmp = 0;
   let _tmp$2 = hash & self.capacity_mask;
   while (true) {
@@ -4764,14 +4011,7 @@ function moonbitlang$core$builtin$$Map$get$13$(self, key) {
     } else {
       const _Some = _bind$8;
       const _entry = _Some;
-      let _tmp$4;
-      if (_entry.hash === hash) {
-        const _p = _entry.key;
-        _tmp$4 = _p === key;
-      } else {
-        _tmp$4 = false;
-      }
-      if (_tmp$4) {
+      if (_entry.hash === hash && _entry.key === key) {
         return new Option$Some$4$(_entry.value);
       }
       if (i > _entry.psl) {
@@ -4783,35 +4023,8 @@ function moonbitlang$core$builtin$$Map$get$13$(self, key) {
     }
   }
 }
-function moonbitlang$core$builtin$$Map$get$18$(self, key) {
-  const hash = moonbitlang$core$builtin$$Hash$hash$46$(key);
-  let _tmp = 0;
-  let _tmp$2 = hash & self.capacity_mask;
-  while (true) {
-    const i = _tmp;
-    const idx = _tmp$2;
-    const _tmp$3 = self.entries;
-    $bound_check(_tmp$3, idx);
-    const _bind$8 = _tmp$3[idx];
-    if (_bind$8 === undefined) {
-      return Option$None$5$;
-    } else {
-      const _Some = _bind$8;
-      const _entry = _Some;
-      if (_entry.hash === hash && _entry.key === key) {
-        return new Option$Some$5$(_entry.value);
-      }
-      if (i > _entry.psl) {
-        return Option$None$5$;
-      }
-      _tmp = i + 1 | 0;
-      _tmp$2 = idx + 1 & self.capacity_mask;
-      continue;
-    }
-  }
-}
-function moonbitlang$core$builtin$$Map$get$70$(self, key) {
-  const hash = moonbitlang$core$builtin$$Hash$hash$47$(key);
+function moonbitlang$core$builtin$$Map$get$69$(self, key) {
+  const hash = moonbitlang$core$builtin$$Hash$hash$45$(key);
   let _tmp = 0;
   let _tmp$2 = hash & self.capacity_mask;
   while (true) {
@@ -4825,7 +4038,7 @@ function moonbitlang$core$builtin$$Map$get$70$(self, key) {
     } else {
       const _Some = _bind$8;
       const _entry = _Some;
-      if (_entry.hash === hash && moonbitlang$core$builtin$$Eq$equal$44$(_entry.key, key)) {
+      if (_entry.hash === hash && moonbitlang$core$builtin$$Eq$equal$38$(_entry.key, key)) {
         return _entry.value;
       }
       if (i > _entry.psl) {
@@ -4837,8 +4050,8 @@ function moonbitlang$core$builtin$$Map$get$70$(self, key) {
     }
   }
 }
-function moonbitlang$core$builtin$$Map$get$71$(self, key) {
-  const hash = moonbitlang$core$builtin$$Hash$hash$48$(key);
+function moonbitlang$core$builtin$$Map$get$70$(self, key) {
+  const hash = moonbitlang$core$builtin$$Hash$hash$46$(key);
   let _tmp = 0;
   let _tmp$2 = hash & self.capacity_mask;
   while (true) {
@@ -4852,7 +4065,7 @@ function moonbitlang$core$builtin$$Map$get$71$(self, key) {
     } else {
       const _Some = _bind$8;
       const _entry = _Some;
-      if (_entry.hash === hash && moonbitlang$core$builtin$$Eq$equal$45$(_entry.key, key)) {
+      if (_entry.hash === hash && moonbitlang$core$builtin$$Eq$equal$39$(_entry.key, key)) {
         return _entry.value;
       }
       if (i > _entry.psl) {
@@ -4865,7 +4078,7 @@ function moonbitlang$core$builtin$$Map$get$71$(self, key) {
   }
 }
 function moonbitlang$core$builtin$$Map$get_or_init$8$(self, key, default_) {
-  const hash = moonbitlang$core$builtin$$Hash$hash$30$(key);
+  const hash = moonbitlang$core$builtin$$Hash$hash$42$(key);
   let _bind$8;
   let _tmp = 0;
   let _tmp$2 = hash & self.capacity_mask;
@@ -4922,7 +4135,7 @@ function moonbitlang$core$builtin$$Map$get_or_init$8$(self, key, default_) {
   return _new_value;
 }
 function moonbitlang$core$builtin$$Map$contains$7$(self, key) {
-  const hash = moonbitlang$core$builtin$$Hash$hash$30$(key);
+  const hash = moonbitlang$core$builtin$$Hash$hash$42$(key);
   let _tmp = 0;
   let _tmp$2 = hash & self.capacity_mask;
   while (true) {
@@ -4955,6 +4168,28 @@ function moonbitlang$core$builtin$$Map$contains$7$(self, key) {
     }
   }
 }
+function moonbitlang$core$array$$FixedArray$fill$46$inner$71$(self, value, start, end) {
+  const array_length = self.length;
+  if (array_length > 0) {
+    if (start >= 0 && start < array_length) {
+      let length;
+      if (end === undefined) {
+        length = array_length - start | 0;
+      } else {
+        const _Some = end;
+        const _e = _Some;
+        length = _e >= start && _e <= array_length ? _e - start | 0 : $panic();
+      }
+      self.fill(value, start, start + length);
+      return;
+    } else {
+      $panic();
+      return;
+    }
+  } else {
+    return;
+  }
+}
 function moonbitlang$core$array$$FixedArray$fill$46$inner$72$(self, value, start, end) {
   const array_length = self.length;
   if (array_length > 0) {
@@ -4977,30 +4212,8 @@ function moonbitlang$core$array$$FixedArray$fill$46$inner$72$(self, value, start
     return;
   }
 }
-function moonbitlang$core$array$$FixedArray$fill$46$inner$32$(self, value, start, end) {
-  const array_length = self.length;
-  if (array_length > 0) {
-    if (start >= 0 && start < array_length) {
-      let length;
-      if (end === undefined) {
-        length = array_length - start | 0;
-      } else {
-        const _Some = end;
-        const _e = _Some;
-        length = _e >= start && _e <= array_length ? _e - start | 0 : $panic();
-      }
-      self.fill(value, start, start + length);
-      return;
-    } else {
-      $panic();
-      return;
-    }
-  } else {
-    return;
-  }
-}
 function moonbitlang$core$builtin$$Map$clear$13$(self) {
-  moonbitlang$core$array$$FixedArray$fill$46$inner$72$(self.entries, undefined, 0, undefined);
+  moonbitlang$core$array$$FixedArray$fill$46$inner$71$(self.entries, undefined, 0, undefined);
   self.size = 0;
   self.head = undefined;
   self.tail = -1;
@@ -5030,7 +4243,7 @@ function moonbitlang$core$builtin$$Map$iter$8$(self) {
   };
   return _p;
 }
-function moonbitlang$core$builtin$$Map$iter$70$(self) {
+function moonbitlang$core$builtin$$Map$iter$69$(self) {
   const _p = (yield_) => {
     let _tmp = self.head;
     while (true) {
@@ -5109,7 +4322,7 @@ function moonbitlang$core$builtin$$Map$iterator$1$(self) {
   };
   return _p;
 }
-function moonbitlang$core$builtin$$Map$iterator$70$(self) {
+function moonbitlang$core$builtin$$Map$iterator$69$(self) {
   const curr_entry = { val: self.head };
   const _p = () => {
     const _bind$8 = curr_entry.val;
@@ -5127,7 +4340,7 @@ function moonbitlang$core$builtin$$Map$iterator$70$(self) {
   };
   return _p;
 }
-function moonbitlang$core$builtin$$Map$iterator$71$(self) {
+function moonbitlang$core$builtin$$Map$iterator$70$(self) {
   const curr_entry = { val: self.head };
   const _p = () => {
     const _bind$8 = curr_entry.val;
@@ -5186,18 +4399,18 @@ function moonbitlang$core$uint$$UInt$to_uint64(self) {
   return moonbitlang$core$uint64$$UInt64$extend_uint(self);
 }
 function moonbitlang$core$builtin$$Iterator2$next$12$(self) {
-  return moonbitlang$core$builtin$$Iterator$next$58$(self);
+  return moonbitlang$core$builtin$$Iterator$next$56$(self);
 }
 function moonbitlang$core$builtin$$Iterator2$next$4$(self) {
-  return moonbitlang$core$builtin$$Iterator$next$59$(self);
+  return moonbitlang$core$builtin$$Iterator$next$57$(self);
 }
 function moonbitlang$core$builtin$$Iterator2$next$1$(self) {
-  return moonbitlang$core$builtin$$Iterator$next$60$(self);
+  return moonbitlang$core$builtin$$Iterator$next$58$(self);
 }
-function moonbitlang$core$builtin$$Iter$to_array$42$(self) {
+function moonbitlang$core$builtin$$Iter$to_array$36$(self) {
   const result = [];
   self((e) => {
-    moonbitlang$core$array$$Array$push$42$(result, e);
+    moonbitlang$core$array$$Array$push$36$(result, e);
     return 1;
   });
   return result;
@@ -5324,51 +4537,51 @@ function moonbitlang$core$builtin$$MyInt64$lsr(self, shift) {
   const shift$2 = shift & 63;
   return shift$2 === 0 ? self : shift$2 < 32 ? { hi: self.hi >>> shift$2 | 0, lo: self.lo >>> shift$2 | self.hi << (32 - shift$2 | 0) } : { hi: 0, lo: self.hi >>> (shift$2 - 32 | 0) | 0 };
 }
-function moonbitlang$core$builtin$$Add$add$34$(self, other) {
+function moonbitlang$core$builtin$$Add$add$41$(self, other) {
   return moonbitlang$core$builtin$$Add$add$73$(self, other);
 }
-function moonbitlang$core$builtin$$Sub$sub$34$(self, other) {
+function moonbitlang$core$builtin$$Sub$sub$41$(self, other) {
   return moonbitlang$core$builtin$$Sub$sub$73$(self, other);
 }
-function moonbitlang$core$builtin$$Mul$mul$34$(self, other) {
+function moonbitlang$core$builtin$$Mul$mul$41$(self, other) {
   return moonbitlang$core$builtin$$Mul$mul$73$(self, other);
 }
-function moonbitlang$core$builtin$$Mod$mod$34$(self, other) {
+function moonbitlang$core$builtin$$Mod$mod$41$(self, other) {
   return moonbitlang$core$builtin$$MyInt64$mod_u(self, other);
 }
 function moonbitlang$core$uint64$$UInt64$to_uint(self) {
   const _p = self;
   return _p.lo;
 }
-function moonbitlang$core$builtin$$Compare$compare$34$(self, other) {
+function moonbitlang$core$builtin$$Compare$compare$41$(self, other) {
   return moonbitlang$core$builtin$$MyInt64$compare_u(self, other);
 }
-function moonbitlang$core$builtin$$Eq$equal$34$(self, other) {
+function moonbitlang$core$builtin$$Eq$equal$41$(self, other) {
   const _p = self;
   const _p$2 = other;
   return _p.hi === _p$2.hi && _p.lo === _p$2.lo;
 }
-function moonbitlang$core$builtin$$BitAnd$land$34$(self, other) {
+function moonbitlang$core$builtin$$BitAnd$land$41$(self, other) {
   return moonbitlang$core$builtin$$MyInt64$land(self, other);
 }
-function moonbitlang$core$builtin$$BitOr$lor$34$(self, other) {
+function moonbitlang$core$builtin$$BitOr$lor$41$(self, other) {
   return moonbitlang$core$builtin$$MyInt64$lor(self, other);
 }
 function moonbitlang$core$uint64$$UInt64$lnot(self) {
   return moonbitlang$core$builtin$$MyInt64$lnot(self);
 }
-function moonbitlang$core$builtin$$Shl$shl$34$(self, shift) {
+function moonbitlang$core$builtin$$Shl$shl$41$(self, shift) {
   return moonbitlang$core$builtin$$MyInt64$lsl(self, shift);
 }
-function moonbitlang$core$builtin$$Shr$shr$34$(self, shift) {
+function moonbitlang$core$builtin$$Shr$shr$41$(self, shift) {
   return moonbitlang$core$builtin$$MyInt64$lsr(self, shift);
 }
 function moonbitlang$core$builtin$$Hasher$combine_string(self, value) {
-  const _end1620 = value.length;
+  const _end2505 = value.length;
   let _tmp = 0;
   while (true) {
     const i = _tmp;
-    if (i < _end1620) {
+    if (i < _end2505) {
       moonbitlang$core$builtin$$Hasher$combine_uint(self, value.charCodeAt(i));
       _tmp = i + 1 | 0;
       continue;
@@ -5377,7 +4590,7 @@ function moonbitlang$core$builtin$$Hasher$combine_string(self, value) {
     }
   }
 }
-function moonbitlang$core$builtin$$Hash$hash_combine$43$(self, hasher) {
+function moonbitlang$core$builtin$$Hash$hash_combine$37$(self, hasher) {
   moonbitlang$core$builtin$$Hasher$combine_string(hasher, self);
 }
 function moonbitlang$core$builtin$$Hash$hash_combine$25$(self, hasher) {
@@ -5388,18 +4601,162 @@ function moonbitlang$core$array$$FixedArray$blit_to$46$inner$25$(self, dst, len,
     moonbitlang$core$array$$FixedArray$unsafe_blit$25$(dst, dst_offset, self, src_offset, len);
     return;
   } else {
-    moonbitlang$core$abort$$abort$22$(`bounds check failed: dst_offset = ${moonbitlang$core$builtin$$Show$to_string$50$(dst_offset)}, src_offset = ${moonbitlang$core$builtin$$Show$to_string$50$(src_offset)}, len = ${moonbitlang$core$builtin$$Show$to_string$50$(len)}, dst.length = ${moonbitlang$core$builtin$$Show$to_string$50$(dst.length)}, self.length = ${moonbitlang$core$builtin$$Show$to_string$50$(self.length)}`);
+    moonbitlang$core$builtin$$abort$22$(`bounds check failed: dst_offset = ${moonbitlang$core$builtin$$Show$to_string$48$(dst_offset)}, src_offset = ${moonbitlang$core$builtin$$Show$to_string$48$(src_offset)}, len = ${moonbitlang$core$builtin$$Show$to_string$48$(len)}, dst.length = ${moonbitlang$core$builtin$$Show$to_string$48$(dst.length)}, self.length = ${moonbitlang$core$builtin$$Show$to_string$48$(self.length)}`, "@moonbitlang/core/builtin:fixedarray_block.mbt:111:5-113:6");
     return;
   }
 }
 function moonbitlang$core$double$$Double$to_int(self) {
   return self !== self ? 0 : self >= 2147483647 ? 2147483647 : self <= -2147483648 ? -2147483648 : self | 0;
 }
-function moonbitlang$core$builtin$$println$43$(input) {
+function moonbitlang$core$builtin$$println$37$(input) {
   console.log(input);
 }
-function moonbitlang$core$builtin$$Shr$shr$29$(self, count) {
+function moonbitlang$core$bytes$$Bytes$sub$46$inner(self, start, end) {
+  const len = self.length;
+  let end$2;
+  if (end === undefined) {
+    end$2 = len;
+  } else {
+    const _Some = end;
+    const _end = _Some;
+    end$2 = _end < 0 ? len + _end | 0 : _end;
+  }
+  const start$2 = start < 0 ? len + start | 0 : start;
+  return start$2 >= 0 && (start$2 <= end$2 && end$2 <= len) ? { bytes: self, start: start$2, end: end$2 } : moonbitlang$core$builtin$$abort$27$("Invalid index for View", "@moonbitlang/core/builtin:bytesview.mbt:152:5-152:36");
+}
+function moonbitlang$core$array$$Array$set$35$(self, index, value) {
+  const len = self.length;
+  if (index >= 0 && index < len) {
+    $bound_check(self, index);
+    self[index] = value;
+    return;
+  } else {
+    $panic();
+    return;
+  }
+}
+function moonbitlang$core$builtin$$Shr$shr$74$(self, count) {
   return (self >>> count | 0) & 255;
+}
+function moonbitlang$core$bytes$$BytesView$unsafe_extract_byte(bs, offset, len) {
+  const byte_index = offset >> 3;
+  if ((offset & 7) === 0) {
+    const _tmp = bs.bytes;
+    const _tmp$2 = bs.start + byte_index | 0;
+    $bound_check(_tmp, _tmp$2);
+    const byte = _tmp[_tmp$2];
+    const _p = moonbitlang$core$builtin$$Shr$shr$74$(byte, 8 - len | 0);
+    return _p;
+  } else {
+    if (((offset & 7) + len | 0) <= 8) {
+      const _tmp = bs.bytes;
+      const _tmp$2 = bs.start + byte_index | 0;
+      $bound_check(_tmp, _tmp$2);
+      const _p = _tmp[_tmp$2];
+      const byte = _p;
+      const shift = 8 - ((offset & 7) + len | 0) | 0;
+      const mask = (1 << len >>> 0) - (1 >>> 0) | 0;
+      return byte >>> shift & mask;
+    } else {
+      const _tmp = bs.bytes;
+      const _tmp$2 = bs.start + byte_index | 0;
+      $bound_check(_tmp, _tmp$2);
+      const _p = _tmp[_tmp$2];
+      const b0 = _p;
+      const _p$2 = byte_index + 1 | 0;
+      const _tmp$3 = bs.bytes;
+      const _tmp$4 = bs.start + _p$2 | 0;
+      $bound_check(_tmp$3, _tmp$4);
+      const _p$3 = _tmp$3[_tmp$4];
+      const b1 = _p$3;
+      const data = b0 << 8 | b1;
+      const bit_mask = (1 << (16 - (offset & 7) | 0) >>> 0) - (1 >>> 0) | 0;
+      const data$2 = data & bit_mask;
+      const shift = 16 - ((offset & 7) + len | 0) | 0;
+      return data$2 >>> shift | 0;
+    }
+  }
+}
+function moonbitlang$core$bytes$$BytesView$unsafe_extract_uint_le(bs, offset, len) {
+  const bytes_needed = (len + 7 | 0) / 8 | 0;
+  const b0 = moonbitlang$core$bytes$$BytesView$unsafe_extract_byte(bs, offset, 8);
+  switch (bytes_needed) {
+    case 2: {
+      const b1 = moonbitlang$core$bytes$$BytesView$unsafe_extract_byte(bs, offset + 8 | 0, len - 8 | 0);
+      return b1 << 8 | b0;
+    }
+    case 3: {
+      const b1$2 = moonbitlang$core$bytes$$BytesView$unsafe_extract_byte(bs, offset + 8 | 0, 8);
+      const b2 = moonbitlang$core$bytes$$BytesView$unsafe_extract_byte(bs, offset + 16 | 0, len - 16 | 0);
+      return b2 << 16 | b1$2 << 8 | b0;
+    }
+    case 4: {
+      const b1$3 = moonbitlang$core$bytes$$BytesView$unsafe_extract_byte(bs, offset + 8 | 0, 8);
+      const b2$2 = moonbitlang$core$bytes$$BytesView$unsafe_extract_byte(bs, offset + 16 | 0, 8);
+      const b3 = moonbitlang$core$bytes$$BytesView$unsafe_extract_byte(bs, offset + 24 | 0, len - 24 | 0);
+      return b3 << 24 | b2$2 << 16 | b1$3 << 8 | b0;
+    }
+    default: {
+      return moonbitlang$core$builtin$$abort$25$("Invalid byte count for int32 extraction", "@moonbitlang/core/builtin:bitstring.mbt:663:10-663:58");
+    }
+  }
+}
+function moonbitlang$core$builtin$$Show$output$75$(self, logger) {
+  if (self.$tag === 0) {
+    const _Legacy = self;
+    const _repr = _Legacy._0;
+    logger.method_0(logger.self, _repr);
+    return;
+  } else {
+    const _New = self;
+    const _pkg = _New._0;
+    const _filename = _New._1;
+    const _start_line = _New._2;
+    const _start_column = _New._3;
+    const _end_line = _New._4;
+    const _end_column = _New._5;
+    const _bind$8 = moonbitlang$core$string$$StringView$find(_pkg, { str: moonbitlang$core$builtin$$output$46$42$bind$124$8405, start: 0, end: moonbitlang$core$builtin$$output$46$42$bind$124$8405.length });
+    let _bind$9;
+    if (_bind$8 === undefined) {
+      _bind$9 = { _0: _pkg, _1: undefined };
+    } else {
+      const _Some = _bind$8;
+      const _first_slash = _Some;
+      const _bind$10 = moonbitlang$core$string$$StringView$find(moonbitlang$core$string$$StringView$view$46$inner(_pkg, _first_slash + 1 | 0, undefined), { str: moonbitlang$core$builtin$$output$46$42$bind$124$8399, start: 0, end: moonbitlang$core$builtin$$output$46$42$bind$124$8399.length });
+      if (_bind$10 === undefined) {
+        _bind$9 = { _0: _pkg, _1: undefined };
+      } else {
+        const _Some$2 = _bind$10;
+        const _second_slash = _Some$2;
+        const module_name_end = (_first_slash + 1 | 0) + _second_slash | 0;
+        _bind$9 = { _0: moonbitlang$core$string$$StringView$view$46$inner(_pkg, 0, module_name_end), _1: moonbitlang$core$string$$StringView$view$46$inner(_pkg, module_name_end + 1 | 0, undefined) };
+      }
+    }
+    const _module_name = _bind$9._0;
+    const _package_name = _bind$9._1;
+    if (_package_name === undefined) {
+    } else {
+      const _Some = _package_name;
+      const _pkg_name = _Some;
+      logger.method_2(logger.self, _pkg_name);
+      logger.method_3(logger.self, 47);
+    }
+    logger.method_2(logger.self, _filename);
+    logger.method_3(logger.self, 58);
+    logger.method_2(logger.self, _start_line);
+    logger.method_3(logger.self, 58);
+    logger.method_2(logger.self, _start_column);
+    logger.method_3(logger.self, 45);
+    logger.method_2(logger.self, _end_line);
+    logger.method_3(logger.self, 58);
+    logger.method_2(logger.self, _end_column);
+    logger.method_3(logger.self, 64);
+    logger.method_2(logger.self, _module_name);
+    return;
+  }
+}
+function moonbitlang$core$builtin$$Show$output$49$(self, logger) {
+  moonbitlang$core$builtin$$Show$output$75$(moonbitlang$core$builtin$$SourceLocRepr$parse(self), logger);
 }
 function moonbitlang$core$array$$Array$unsafe_truncate_to_length$9$(self, new_len) {
   moonbitlang$core$builtin$$JSArray$set_length(self, new_len);
@@ -5407,36 +4764,22 @@ function moonbitlang$core$array$$Array$unsafe_truncate_to_length$9$(self, new_le
 function moonbitlang$core$array$$Array$unsafe_truncate_to_length$19$(self, new_len) {
   moonbitlang$core$builtin$$JSArray$set_length(self, new_len);
 }
-function moonbitlang$core$array$$Array$unsafe_truncate_to_length$41$(self, new_len) {
+function moonbitlang$core$array$$Array$unsafe_truncate_to_length$35$(self, new_len) {
   moonbitlang$core$builtin$$JSArray$set_length(self, new_len);
 }
 function moonbitlang$core$array$$Array$unsafe_truncate_to_length$3$(self, new_len) {
   moonbitlang$core$builtin$$JSArray$set_length(self, new_len);
 }
-function moonbitlang$core$array$$Array$unsafe_pop$41$(self) {
+function moonbitlang$core$array$$Array$unsafe_pop$35$(self) {
   return moonbitlang$core$builtin$$JSArray$pop(self);
 }
-function moonbitlang$core$array$$Array$pop$41$(self) {
+function moonbitlang$core$array$$Array$pop$35$(self) {
   if (self.length === 0) {
     return undefined;
   } else {
-    const v = moonbitlang$core$array$$Array$unsafe_pop$41$(self);
+    const v = moonbitlang$core$array$$Array$unsafe_pop$35$(self);
     return v;
   }
-}
-function moonbitlang$core$builtin$$fixed_get_limit(len) {
-  let len$2 = len;
-  let limit = 0;
-  while (true) {
-    if (len$2 > 0) {
-      len$2 = len$2 / 2 | 0;
-      limit = limit + 1 | 0;
-      continue;
-    } else {
-      break;
-    }
-  }
-  return limit;
 }
 function moonbitlang$core$array$$MutArrayView$swap$24$(arr, i, j) {
   const temp = moonbitlang$core$array$$MutArrayView$at$24$(arr, i);
@@ -5453,53 +4796,14 @@ function moonbitlang$core$array$$MutArrayView$swap$10$(arr, i, j) {
   moonbitlang$core$array$$MutArrayView$set$10$(arr, i, moonbitlang$core$array$$MutArrayView$at$10$(arr, j));
   moonbitlang$core$array$$MutArrayView$set$10$(arr, j, temp);
 }
-function moonbitlang$core$builtin$$fixed_bubble_sort_by$24$(arr, cmp) {
-  const _end680 = arr.end - arr.start | 0;
-  let _tmp = 1;
-  while (true) {
-    const i = _tmp;
-    if (i < _end680) {
-      let _tmp$2 = i;
-      while (true) {
-        const j = _tmp$2;
-        if (j > 0 && cmp(moonbitlang$core$array$$MutArrayView$at$24$(arr, j - 1 | 0), moonbitlang$core$array$$MutArrayView$at$24$(arr, j)) > 0) {
-          moonbitlang$core$array$$MutArrayView$swap$24$(arr, j, j - 1 | 0);
-          _tmp$2 = j - 1 | 0;
-          continue;
-        } else {
-          break;
-        }
-      }
-      _tmp = i + 1 | 0;
-      continue;
-    } else {
-      return;
-    }
-  }
+function moonbitlang$core$array$$MutArrayView$slice$24$(arr, start, end) {
+  return moonbitlang$core$array$$MutArrayView$mut_view$46$inner$24$(arr, start, end);
 }
-function moonbitlang$core$builtin$$fixed_bubble_sort_by$26$(arr, cmp) {
-  const _end680 = arr.end - arr.start | 0;
-  let _tmp = 1;
-  while (true) {
-    const i = _tmp;
-    if (i < _end680) {
-      let _tmp$2 = i;
-      while (true) {
-        const j = _tmp$2;
-        if (j > 0 && cmp(moonbitlang$core$array$$MutArrayView$at$26$(arr, j - 1 | 0), moonbitlang$core$array$$MutArrayView$at$26$(arr, j)) > 0) {
-          moonbitlang$core$array$$MutArrayView$swap$26$(arr, j, j - 1 | 0);
-          _tmp$2 = j - 1 | 0;
-          continue;
-        } else {
-          break;
-        }
-      }
-      _tmp = i + 1 | 0;
-      continue;
-    } else {
-      return;
-    }
-  }
+function moonbitlang$core$array$$MutArrayView$slice$26$(arr, start, end) {
+  return moonbitlang$core$array$$MutArrayView$mut_view$46$inner$26$(arr, start, end);
+}
+function moonbitlang$core$array$$MutArrayView$slice$10$(arr, start, end) {
+  return moonbitlang$core$array$$MutArrayView$mut_view$46$inner$10$(arr, start, end);
 }
 function moonbitlang$core$array$$MutArrayView$rev_in_place$24$(arr) {
   const len = arr.end - arr.start | 0;
@@ -5555,7 +4859,309 @@ function moonbitlang$core$array$$MutArrayView$rev_in_place$10$(arr) {
     }
   }
 }
-function moonbitlang$core$builtin$$fixed_choose_pivot_by$46$sort_2$47$2020(_env, a, b) {
+function moonbitlang$core$builtin$$fixed_get_limit(len) {
+  let len$2 = len;
+  let limit = 0;
+  while (true) {
+    if (len$2 > 0) {
+      len$2 = len$2 / 2 | 0;
+      limit = limit + 1 | 0;
+      continue;
+    } else {
+      break;
+    }
+  }
+  return limit;
+}
+function moonbitlang$core$builtin$$fixed_bubble_sort$10$(arr) {
+  const _end719 = arr.end - arr.start | 0;
+  let _tmp = 1;
+  while (true) {
+    const i = _tmp;
+    if (i < _end719) {
+      let _tmp$2 = i;
+      while (true) {
+        const j = _tmp$2;
+        if (j > 0 && moonbitlang$core$array$$MutArrayView$at$10$(arr, j - 1 | 0) > moonbitlang$core$array$$MutArrayView$at$10$(arr, j)) {
+          moonbitlang$core$array$$MutArrayView$swap$10$(arr, j, j - 1 | 0);
+          _tmp$2 = j - 1 | 0;
+          continue;
+        } else {
+          break;
+        }
+      }
+      _tmp = i + 1 | 0;
+      continue;
+    } else {
+      return;
+    }
+  }
+}
+function moonbitlang$core$builtin$$fixed_choose_pivot$46$sort_2$47$1827(_env, a, b) {
+  const arr = _env._1;
+  const swaps = _env._0;
+  if (moonbitlang$core$array$$MutArrayView$at$10$(arr, a) > moonbitlang$core$array$$MutArrayView$at$10$(arr, b)) {
+    moonbitlang$core$array$$MutArrayView$swap$10$(arr, a, b);
+    swaps.val = swaps.val + 1 | 0;
+    return;
+  } else {
+    return;
+  }
+}
+function moonbitlang$core$builtin$$fixed_choose_pivot$46$sort_3$47$1828(_env, a, b, c) {
+  moonbitlang$core$builtin$$fixed_choose_pivot$46$sort_2$47$1827(_env, a, b);
+  moonbitlang$core$builtin$$fixed_choose_pivot$46$sort_2$47$1827(_env, b, c);
+  moonbitlang$core$builtin$$fixed_choose_pivot$46$sort_2$47$1827(_env, a, b);
+}
+function moonbitlang$core$builtin$$fixed_choose_pivot$10$(arr) {
+  const len = arr.end - arr.start | 0;
+  const swaps = { val: 0 };
+  const b = Math.imul(len / 4 | 0, 2) | 0;
+  if (len >= 8) {
+    const a = Math.imul(len / 4 | 0, 1) | 0;
+    const c = Math.imul(len / 4 | 0, 3) | 0;
+    const _env = { _0: swaps, _1: arr };
+    if (len > 50) {
+      moonbitlang$core$builtin$$fixed_choose_pivot$46$sort_3$47$1828(_env, a - 1 | 0, a, a + 1 | 0);
+      moonbitlang$core$builtin$$fixed_choose_pivot$46$sort_3$47$1828(_env, b - 1 | 0, b, b + 1 | 0);
+      moonbitlang$core$builtin$$fixed_choose_pivot$46$sort_3$47$1828(_env, c - 1 | 0, c, c + 1 | 0);
+    }
+    moonbitlang$core$builtin$$fixed_choose_pivot$46$sort_3$47$1828(_env, a, b, c);
+  }
+  if (swaps.val === 12) {
+    moonbitlang$core$array$$MutArrayView$rev_in_place$10$(arr);
+    return { _0: (len - b | 0) - 1 | 0, _1: true };
+  } else {
+    return { _0: b, _1: swaps.val === 0 };
+  }
+}
+function moonbitlang$core$builtin$$fixed_sift_down$10$(arr, index) {
+  let index$2 = index;
+  const len = arr.end - arr.start | 0;
+  let child = (Math.imul(index$2, 2) | 0) + 1 | 0;
+  while (true) {
+    if (child < len) {
+      if ((child + 1 | 0) < len && moonbitlang$core$array$$MutArrayView$at$10$(arr, child) < moonbitlang$core$array$$MutArrayView$at$10$(arr, child + 1 | 0)) {
+        child = child + 1 | 0;
+      }
+      if (moonbitlang$core$array$$MutArrayView$at$10$(arr, index$2) >= moonbitlang$core$array$$MutArrayView$at$10$(arr, child)) {
+        return undefined;
+      }
+      moonbitlang$core$array$$MutArrayView$swap$10$(arr, index$2, child);
+      index$2 = child;
+      child = (Math.imul(index$2, 2) | 0) + 1 | 0;
+      continue;
+    } else {
+      return;
+    }
+  }
+}
+function moonbitlang$core$builtin$$fixed_heap_sort$10$(arr) {
+  const len = arr.end - arr.start | 0;
+  let _tmp = (len / 2 | 0) - 1 | 0;
+  while (true) {
+    const i = _tmp;
+    if (i >= 0) {
+      moonbitlang$core$builtin$$fixed_sift_down$10$(arr, i);
+      _tmp = i - 1 | 0;
+      continue;
+    } else {
+      break;
+    }
+  }
+  let _tmp$2 = len - 1 | 0;
+  while (true) {
+    const i = _tmp$2;
+    if (i > 0) {
+      moonbitlang$core$array$$MutArrayView$swap$10$(arr, 0, i);
+      moonbitlang$core$builtin$$fixed_sift_down$10$(moonbitlang$core$array$$MutArrayView$slice$10$(arr, 0, i), 0);
+      _tmp$2 = i - 1 | 0;
+      continue;
+    } else {
+      return;
+    }
+  }
+}
+function moonbitlang$core$builtin$$fixed_partition$10$(arr, pivot_index) {
+  moonbitlang$core$array$$MutArrayView$swap$10$(arr, pivot_index, (arr.end - arr.start | 0) - 1 | 0);
+  const pivot = moonbitlang$core$array$$MutArrayView$at$10$(arr, (arr.end - arr.start | 0) - 1 | 0);
+  let i = 0;
+  let partitioned = true;
+  const _end711 = (arr.end - arr.start | 0) - 1 | 0;
+  let _tmp = 0;
+  while (true) {
+    const j = _tmp;
+    if (j < _end711) {
+      if (moonbitlang$core$array$$MutArrayView$at$10$(arr, j) < pivot) {
+        if (i !== j) {
+          moonbitlang$core$array$$MutArrayView$swap$10$(arr, i, j);
+          partitioned = false;
+        }
+        i = i + 1 | 0;
+      }
+      _tmp = j + 1 | 0;
+      continue;
+    } else {
+      break;
+    }
+  }
+  moonbitlang$core$array$$MutArrayView$swap$10$(arr, i, (arr.end - arr.start | 0) - 1 | 0);
+  return { _0: i, _1: partitioned };
+}
+function moonbitlang$core$builtin$$fixed_try_bubble_sort$10$(arr) {
+  let tries = 0;
+  const _end728 = arr.end - arr.start | 0;
+  let _tmp = 1;
+  while (true) {
+    const i = _tmp;
+    if (i < _end728) {
+      let sorted = true;
+      let _tmp$2 = i;
+      while (true) {
+        const j = _tmp$2;
+        if (j > 0 && moonbitlang$core$array$$MutArrayView$at$10$(arr, j - 1 | 0) > moonbitlang$core$array$$MutArrayView$at$10$(arr, j)) {
+          sorted = false;
+          moonbitlang$core$array$$MutArrayView$swap$10$(arr, j, j - 1 | 0);
+          _tmp$2 = j - 1 | 0;
+          continue;
+        } else {
+          break;
+        }
+      }
+      if (!sorted) {
+        tries = tries + 1 | 0;
+        if (tries > 8) {
+          return false;
+        }
+      }
+      _tmp = i + 1 | 0;
+      continue;
+    } else {
+      break;
+    }
+  }
+  return true;
+}
+function moonbitlang$core$builtin$$fixed_quick_sort$10$(arr, pred, limit) {
+  let limit$2 = limit;
+  let arr$2 = arr;
+  let pred$2 = pred;
+  let was_partitioned = true;
+  let balanced = true;
+  while (true) {
+    const _p = arr$2;
+    const len = _p.end - _p.start | 0;
+    if (len <= 16) {
+      if (len >= 2) {
+        moonbitlang$core$builtin$$fixed_bubble_sort$10$(arr$2);
+      }
+      return undefined;
+    }
+    if (limit$2 === 0) {
+      moonbitlang$core$builtin$$fixed_heap_sort$10$(arr$2);
+      return undefined;
+    }
+    const _bind$8 = moonbitlang$core$builtin$$fixed_choose_pivot$10$(arr$2);
+    const _pivot_index = _bind$8._0;
+    const _likely_sorted = _bind$8._1;
+    if (was_partitioned && (balanced && _likely_sorted)) {
+      if (moonbitlang$core$builtin$$fixed_try_bubble_sort$10$(arr$2)) {
+        return undefined;
+      }
+    }
+    const _bind$9 = moonbitlang$core$builtin$$fixed_partition$10$(arr$2, _pivot_index);
+    const _pivot = _bind$9._0;
+    const _partitioned = _bind$9._1;
+    was_partitioned = _partitioned;
+    const _p$2 = len - _pivot | 0;
+    balanced = (_pivot > _p$2 ? _p$2 : _pivot) >= (len / 8 | 0);
+    if (!balanced) {
+      limit$2 = limit$2 - 1 | 0;
+    }
+    const _bind$10 = pred$2;
+    if (_bind$10 === undefined) {
+    } else {
+      const _Some = _bind$10;
+      const _pred = _Some;
+      if (_pred === moonbitlang$core$array$$MutArrayView$at$10$(arr$2, _pivot)) {
+        let i = _pivot;
+        while (true) {
+          if (i < len && _pred === moonbitlang$core$array$$MutArrayView$at$10$(arr$2, i)) {
+            i = i + 1 | 0;
+            continue;
+          } else {
+            break;
+          }
+        }
+        arr$2 = moonbitlang$core$array$$MutArrayView$slice$10$(arr$2, i, len);
+        continue;
+      }
+    }
+    const left = moonbitlang$core$array$$MutArrayView$slice$10$(arr$2, 0, _pivot);
+    const right = moonbitlang$core$array$$MutArrayView$slice$10$(arr$2, _pivot + 1 | 0, len);
+    if ((left.end - left.start | 0) < (right.end - right.start | 0)) {
+      moonbitlang$core$builtin$$fixed_quick_sort$10$(left, pred$2, limit$2);
+      pred$2 = moonbitlang$core$array$$MutArrayView$at$10$(arr$2, _pivot);
+      arr$2 = right;
+    } else {
+      moonbitlang$core$builtin$$fixed_quick_sort$10$(right, moonbitlang$core$array$$MutArrayView$at$10$(arr$2, _pivot), limit$2);
+      arr$2 = left;
+    }
+    continue;
+  }
+}
+function moonbitlang$core$array$$MutArrayView$sort$10$(self) {
+  moonbitlang$core$builtin$$fixed_quick_sort$10$(self, undefined, moonbitlang$core$builtin$$fixed_get_limit(self.end - self.start | 0));
+}
+function moonbitlang$core$builtin$$fixed_bubble_sort_by$24$(arr, cmp) {
+  const _end578 = arr.end - arr.start | 0;
+  let _tmp = 1;
+  while (true) {
+    const i = _tmp;
+    if (i < _end578) {
+      let _tmp$2 = i;
+      while (true) {
+        const j = _tmp$2;
+        if (j > 0 && cmp(moonbitlang$core$array$$MutArrayView$at$24$(arr, j - 1 | 0), moonbitlang$core$array$$MutArrayView$at$24$(arr, j)) > 0) {
+          moonbitlang$core$array$$MutArrayView$swap$24$(arr, j, j - 1 | 0);
+          _tmp$2 = j - 1 | 0;
+          continue;
+        } else {
+          break;
+        }
+      }
+      _tmp = i + 1 | 0;
+      continue;
+    } else {
+      return;
+    }
+  }
+}
+function moonbitlang$core$builtin$$fixed_bubble_sort_by$26$(arr, cmp) {
+  const _end578 = arr.end - arr.start | 0;
+  let _tmp = 1;
+  while (true) {
+    const i = _tmp;
+    if (i < _end578) {
+      let _tmp$2 = i;
+      while (true) {
+        const j = _tmp$2;
+        if (j > 0 && cmp(moonbitlang$core$array$$MutArrayView$at$26$(arr, j - 1 | 0), moonbitlang$core$array$$MutArrayView$at$26$(arr, j)) > 0) {
+          moonbitlang$core$array$$MutArrayView$swap$26$(arr, j, j - 1 | 0);
+          _tmp$2 = j - 1 | 0;
+          continue;
+        } else {
+          break;
+        }
+      }
+      _tmp = i + 1 | 0;
+      continue;
+    } else {
+      return;
+    }
+  }
+}
+function moonbitlang$core$builtin$$fixed_choose_pivot_by$46$sort_2$47$1911(_env, a, b) {
   const cmp = _env._2;
   const swaps = _env._1;
   const arr = _env._0;
@@ -5567,10 +5173,10 @@ function moonbitlang$core$builtin$$fixed_choose_pivot_by$46$sort_2$47$2020(_env,
     return;
   }
 }
-function moonbitlang$core$builtin$$fixed_choose_pivot_by$46$sort_3$47$2021(_env, a, b, c) {
-  moonbitlang$core$builtin$$fixed_choose_pivot_by$46$sort_2$47$2020(_env, a, b);
-  moonbitlang$core$builtin$$fixed_choose_pivot_by$46$sort_2$47$2020(_env, b, c);
-  moonbitlang$core$builtin$$fixed_choose_pivot_by$46$sort_2$47$2020(_env, a, b);
+function moonbitlang$core$builtin$$fixed_choose_pivot_by$46$sort_3$47$1912(_env, a, b, c) {
+  moonbitlang$core$builtin$$fixed_choose_pivot_by$46$sort_2$47$1911(_env, a, b);
+  moonbitlang$core$builtin$$fixed_choose_pivot_by$46$sort_2$47$1911(_env, b, c);
+  moonbitlang$core$builtin$$fixed_choose_pivot_by$46$sort_2$47$1911(_env, a, b);
 }
 function moonbitlang$core$builtin$$fixed_choose_pivot_by$24$(arr, cmp) {
   const len = arr.end - arr.start | 0;
@@ -5581,11 +5187,11 @@ function moonbitlang$core$builtin$$fixed_choose_pivot_by$24$(arr, cmp) {
     const c = Math.imul(len / 4 | 0, 3) | 0;
     const _env = { _0: arr, _1: swaps, _2: cmp };
     if (len > 50) {
-      moonbitlang$core$builtin$$fixed_choose_pivot_by$46$sort_3$47$2021(_env, a - 1 | 0, a, a + 1 | 0);
-      moonbitlang$core$builtin$$fixed_choose_pivot_by$46$sort_3$47$2021(_env, b - 1 | 0, b, b + 1 | 0);
-      moonbitlang$core$builtin$$fixed_choose_pivot_by$46$sort_3$47$2021(_env, c - 1 | 0, c, c + 1 | 0);
+      moonbitlang$core$builtin$$fixed_choose_pivot_by$46$sort_3$47$1912(_env, a - 1 | 0, a, a + 1 | 0);
+      moonbitlang$core$builtin$$fixed_choose_pivot_by$46$sort_3$47$1912(_env, b - 1 | 0, b, b + 1 | 0);
+      moonbitlang$core$builtin$$fixed_choose_pivot_by$46$sort_3$47$1912(_env, c - 1 | 0, c, c + 1 | 0);
     }
-    moonbitlang$core$builtin$$fixed_choose_pivot_by$46$sort_3$47$2021(_env, a, b, c);
+    moonbitlang$core$builtin$$fixed_choose_pivot_by$46$sort_3$47$1912(_env, a, b, c);
   }
   if (swaps.val === 12) {
     moonbitlang$core$array$$MutArrayView$rev_in_place$24$(arr);
@@ -5594,7 +5200,7 @@ function moonbitlang$core$builtin$$fixed_choose_pivot_by$24$(arr, cmp) {
     return { _0: b, _1: swaps.val === 0 };
   }
 }
-function moonbitlang$core$builtin$$fixed_choose_pivot_by$46$sort_2$47$2040(_env, a, b) {
+function moonbitlang$core$builtin$$fixed_choose_pivot_by$46$sort_2$47$1931(_env, a, b) {
   const cmp = _env._2;
   const swaps = _env._1;
   const arr = _env._0;
@@ -5606,10 +5212,10 @@ function moonbitlang$core$builtin$$fixed_choose_pivot_by$46$sort_2$47$2040(_env,
     return;
   }
 }
-function moonbitlang$core$builtin$$fixed_choose_pivot_by$46$sort_3$47$2041(_env, a, b, c) {
-  moonbitlang$core$builtin$$fixed_choose_pivot_by$46$sort_2$47$2040(_env, a, b);
-  moonbitlang$core$builtin$$fixed_choose_pivot_by$46$sort_2$47$2040(_env, b, c);
-  moonbitlang$core$builtin$$fixed_choose_pivot_by$46$sort_2$47$2040(_env, a, b);
+function moonbitlang$core$builtin$$fixed_choose_pivot_by$46$sort_3$47$1932(_env, a, b, c) {
+  moonbitlang$core$builtin$$fixed_choose_pivot_by$46$sort_2$47$1931(_env, a, b);
+  moonbitlang$core$builtin$$fixed_choose_pivot_by$46$sort_2$47$1931(_env, b, c);
+  moonbitlang$core$builtin$$fixed_choose_pivot_by$46$sort_2$47$1931(_env, a, b);
 }
 function moonbitlang$core$builtin$$fixed_choose_pivot_by$26$(arr, cmp) {
   const len = arr.end - arr.start | 0;
@@ -5620,11 +5226,11 @@ function moonbitlang$core$builtin$$fixed_choose_pivot_by$26$(arr, cmp) {
     const c = Math.imul(len / 4 | 0, 3) | 0;
     const _env = { _0: arr, _1: swaps, _2: cmp };
     if (len > 50) {
-      moonbitlang$core$builtin$$fixed_choose_pivot_by$46$sort_3$47$2041(_env, a - 1 | 0, a, a + 1 | 0);
-      moonbitlang$core$builtin$$fixed_choose_pivot_by$46$sort_3$47$2041(_env, b - 1 | 0, b, b + 1 | 0);
-      moonbitlang$core$builtin$$fixed_choose_pivot_by$46$sort_3$47$2041(_env, c - 1 | 0, c, c + 1 | 0);
+      moonbitlang$core$builtin$$fixed_choose_pivot_by$46$sort_3$47$1932(_env, a - 1 | 0, a, a + 1 | 0);
+      moonbitlang$core$builtin$$fixed_choose_pivot_by$46$sort_3$47$1932(_env, b - 1 | 0, b, b + 1 | 0);
+      moonbitlang$core$builtin$$fixed_choose_pivot_by$46$sort_3$47$1932(_env, c - 1 | 0, c, c + 1 | 0);
     }
-    moonbitlang$core$builtin$$fixed_choose_pivot_by$46$sort_3$47$2041(_env, a, b, c);
+    moonbitlang$core$builtin$$fixed_choose_pivot_by$46$sort_3$47$1932(_env, a, b, c);
   }
   if (swaps.val === 12) {
     moonbitlang$core$array$$MutArrayView$rev_in_place$26$(arr);
@@ -5674,15 +5280,6 @@ function moonbitlang$core$builtin$$fixed_sift_down_by$26$(arr, index, cmp) {
       return;
     }
   }
-}
-function moonbitlang$core$array$$MutArrayView$slice$24$(arr, start, end) {
-  return moonbitlang$core$array$$MutArrayView$mut_view$46$inner$24$(arr, start, end);
-}
-function moonbitlang$core$array$$MutArrayView$slice$26$(arr, start, end) {
-  return moonbitlang$core$array$$MutArrayView$mut_view$46$inner$26$(arr, start, end);
-}
-function moonbitlang$core$array$$MutArrayView$slice$10$(arr, start, end) {
-  return moonbitlang$core$array$$MutArrayView$mut_view$46$inner$10$(arr, start, end);
 }
 function moonbitlang$core$builtin$$fixed_heap_sort_by$24$(arr, cmp) {
   const len = arr.end - arr.start | 0;
@@ -5741,11 +5338,11 @@ function moonbitlang$core$builtin$$fixed_partition_by$24$(arr, cmp, pivot_index)
   const pivot = moonbitlang$core$array$$MutArrayView$at$24$(arr, (arr.end - arr.start | 0) - 1 | 0);
   let i = 0;
   let partitioned = true;
-  const _end669 = (arr.end - arr.start | 0) - 1 | 0;
+  const _end567 = (arr.end - arr.start | 0) - 1 | 0;
   let _tmp = 0;
   while (true) {
     const j = _tmp;
-    if (j < _end669) {
+    if (j < _end567) {
       if (cmp(moonbitlang$core$array$$MutArrayView$at$24$(arr, j), pivot) < 0) {
         if (i !== j) {
           moonbitlang$core$array$$MutArrayView$swap$24$(arr, i, j);
@@ -5767,11 +5364,11 @@ function moonbitlang$core$builtin$$fixed_partition_by$26$(arr, cmp, pivot_index)
   const pivot = moonbitlang$core$array$$MutArrayView$at$26$(arr, (arr.end - arr.start | 0) - 1 | 0);
   let i = 0;
   let partitioned = true;
-  const _end669 = (arr.end - arr.start | 0) - 1 | 0;
+  const _end567 = (arr.end - arr.start | 0) - 1 | 0;
   let _tmp = 0;
   while (true) {
     const j = _tmp;
-    if (j < _end669) {
+    if (j < _end567) {
       if (cmp(moonbitlang$core$array$$MutArrayView$at$26$(arr, j), pivot) < 0) {
         if (i !== j) {
           moonbitlang$core$array$$MutArrayView$swap$26$(arr, i, j);
@@ -5790,11 +5387,11 @@ function moonbitlang$core$builtin$$fixed_partition_by$26$(arr, cmp, pivot_index)
 }
 function moonbitlang$core$builtin$$fixed_try_bubble_sort_by$24$(arr, cmp) {
   let tries = 0;
-  const _end690 = arr.end - arr.start | 0;
+  const _end588 = arr.end - arr.start | 0;
   let _tmp = 1;
   while (true) {
     const i = _tmp;
-    if (i < _end690) {
+    if (i < _end588) {
       let sorted = true;
       let _tmp$2 = i;
       while (true) {
@@ -5824,11 +5421,11 @@ function moonbitlang$core$builtin$$fixed_try_bubble_sort_by$24$(arr, cmp) {
 }
 function moonbitlang$core$builtin$$fixed_try_bubble_sort_by$26$(arr, cmp) {
   let tries = 0;
-  const _end690 = arr.end - arr.start | 0;
+  const _end588 = arr.end - arr.start | 0;
   let _tmp = 1;
   while (true) {
     const i = _tmp;
-    if (i < _end690) {
+    if (i < _end588) {
       let sorted = true;
       let _tmp$2 = i;
       while (true) {
@@ -5992,264 +5589,22 @@ function moonbitlang$core$builtin$$fixed_quick_sort_by$26$(arr, cmp, pred, limit
     continue;
   }
 }
-function moonbitlang$core$array$$MutArrayView$sort_by_key$37$(self, map) {
+function moonbitlang$core$array$$MutArrayView$sort_by_key$76$(self, map) {
   moonbitlang$core$builtin$$fixed_quick_sort_by$24$(self, (a, b) => $compare_int(map(a), map(b)), undefined, moonbitlang$core$builtin$$fixed_get_limit(self.end - self.start | 0));
 }
 function moonbitlang$core$array$$MutArrayView$sort_by$26$(self, cmp) {
   moonbitlang$core$builtin$$fixed_quick_sort_by$26$(self, cmp, undefined, moonbitlang$core$builtin$$fixed_get_limit(self.end - self.start | 0));
 }
-function moonbitlang$core$builtin$$fixed_bubble_sort$10$(arr) {
-  const _end518 = arr.end - arr.start | 0;
-  let _tmp = 1;
-  while (true) {
-    const i = _tmp;
-    if (i < _end518) {
-      let _tmp$2 = i;
-      while (true) {
-        const j = _tmp$2;
-        if (j > 0 && moonbitlang$core$array$$MutArrayView$at$10$(arr, j - 1 | 0) > moonbitlang$core$array$$MutArrayView$at$10$(arr, j)) {
-          moonbitlang$core$array$$MutArrayView$swap$10$(arr, j, j - 1 | 0);
-          _tmp$2 = j - 1 | 0;
-          continue;
-        } else {
-          break;
-        }
-      }
-      _tmp = i + 1 | 0;
-      continue;
-    } else {
-      return;
-    }
-  }
+function moonbitlang$core$array$$Array$sort$10$(self) {
+  moonbitlang$core$array$$MutArrayView$sort$10$(moonbitlang$core$array$$Array$mut_view$46$inner$10$(self, 0, undefined));
 }
-function moonbitlang$core$builtin$$fixed_choose_pivot$46$sort_2$47$2195(_env, a, b) {
-  const arr = _env._1;
-  const swaps = _env._0;
-  if (moonbitlang$core$array$$MutArrayView$at$10$(arr, a) > moonbitlang$core$array$$MutArrayView$at$10$(arr, b)) {
-    moonbitlang$core$array$$MutArrayView$swap$10$(arr, a, b);
-    swaps.val = swaps.val + 1 | 0;
-    return;
-  } else {
-    return;
-  }
+function moonbitlang$core$array$$Array$sort_by_key$76$(self, map) {
+  moonbitlang$core$array$$MutArrayView$sort_by_key$76$(moonbitlang$core$array$$Array$mut_view$46$inner$24$(self, 0, undefined), map);
 }
-function moonbitlang$core$builtin$$fixed_choose_pivot$46$sort_3$47$2196(_env, a, b, c) {
-  moonbitlang$core$builtin$$fixed_choose_pivot$46$sort_2$47$2195(_env, a, b);
-  moonbitlang$core$builtin$$fixed_choose_pivot$46$sort_2$47$2195(_env, b, c);
-  moonbitlang$core$builtin$$fixed_choose_pivot$46$sort_2$47$2195(_env, a, b);
+function moonbitlang$core$array$$Array$sort_by$26$(self, cmp) {
+  moonbitlang$core$array$$MutArrayView$sort_by$26$(moonbitlang$core$array$$Array$mut_view$46$inner$26$(self, 0, undefined), cmp);
 }
-function moonbitlang$core$builtin$$fixed_choose_pivot$10$(arr) {
-  const len = arr.end - arr.start | 0;
-  const swaps = { val: 0 };
-  const b = Math.imul(len / 4 | 0, 2) | 0;
-  if (len >= 8) {
-    const a = Math.imul(len / 4 | 0, 1) | 0;
-    const c = Math.imul(len / 4 | 0, 3) | 0;
-    const _env = { _0: swaps, _1: arr };
-    if (len > 50) {
-      moonbitlang$core$builtin$$fixed_choose_pivot$46$sort_3$47$2196(_env, a - 1 | 0, a, a + 1 | 0);
-      moonbitlang$core$builtin$$fixed_choose_pivot$46$sort_3$47$2196(_env, b - 1 | 0, b, b + 1 | 0);
-      moonbitlang$core$builtin$$fixed_choose_pivot$46$sort_3$47$2196(_env, c - 1 | 0, c, c + 1 | 0);
-    }
-    moonbitlang$core$builtin$$fixed_choose_pivot$46$sort_3$47$2196(_env, a, b, c);
-  }
-  if (swaps.val === 12) {
-    moonbitlang$core$array$$MutArrayView$rev_in_place$10$(arr);
-    return { _0: (len - b | 0) - 1 | 0, _1: true };
-  } else {
-    return { _0: b, _1: swaps.val === 0 };
-  }
-}
-function moonbitlang$core$builtin$$fixed_sift_down$10$(arr, index) {
-  let index$2 = index;
-  const len = arr.end - arr.start | 0;
-  let child = (Math.imul(index$2, 2) | 0) + 1 | 0;
-  while (true) {
-    if (child < len) {
-      if ((child + 1 | 0) < len && moonbitlang$core$array$$MutArrayView$at$10$(arr, child) < moonbitlang$core$array$$MutArrayView$at$10$(arr, child + 1 | 0)) {
-        child = child + 1 | 0;
-      }
-      if (moonbitlang$core$array$$MutArrayView$at$10$(arr, index$2) >= moonbitlang$core$array$$MutArrayView$at$10$(arr, child)) {
-        return undefined;
-      }
-      moonbitlang$core$array$$MutArrayView$swap$10$(arr, index$2, child);
-      index$2 = child;
-      child = (Math.imul(index$2, 2) | 0) + 1 | 0;
-      continue;
-    } else {
-      return;
-    }
-  }
-}
-function moonbitlang$core$builtin$$fixed_heap_sort$10$(arr) {
-  const len = arr.end - arr.start | 0;
-  let _tmp = (len / 2 | 0) - 1 | 0;
-  while (true) {
-    const i = _tmp;
-    if (i >= 0) {
-      moonbitlang$core$builtin$$fixed_sift_down$10$(arr, i);
-      _tmp = i - 1 | 0;
-      continue;
-    } else {
-      break;
-    }
-  }
-  let _tmp$2 = len - 1 | 0;
-  while (true) {
-    const i = _tmp$2;
-    if (i > 0) {
-      moonbitlang$core$array$$MutArrayView$swap$10$(arr, 0, i);
-      moonbitlang$core$builtin$$fixed_sift_down$10$(moonbitlang$core$array$$MutArrayView$slice$10$(arr, 0, i), 0);
-      _tmp$2 = i - 1 | 0;
-      continue;
-    } else {
-      return;
-    }
-  }
-}
-function moonbitlang$core$builtin$$fixed_partition$10$(arr, pivot_index) {
-  moonbitlang$core$array$$MutArrayView$swap$10$(arr, pivot_index, (arr.end - arr.start | 0) - 1 | 0);
-  const pivot = moonbitlang$core$array$$MutArrayView$at$10$(arr, (arr.end - arr.start | 0) - 1 | 0);
-  let i = 0;
-  let partitioned = true;
-  const _end510 = (arr.end - arr.start | 0) - 1 | 0;
-  let _tmp = 0;
-  while (true) {
-    const j = _tmp;
-    if (j < _end510) {
-      if (moonbitlang$core$array$$MutArrayView$at$10$(arr, j) < pivot) {
-        if (i !== j) {
-          moonbitlang$core$array$$MutArrayView$swap$10$(arr, i, j);
-          partitioned = false;
-        }
-        i = i + 1 | 0;
-      }
-      _tmp = j + 1 | 0;
-      continue;
-    } else {
-      break;
-    }
-  }
-  moonbitlang$core$array$$MutArrayView$swap$10$(arr, i, (arr.end - arr.start | 0) - 1 | 0);
-  return { _0: i, _1: partitioned };
-}
-function moonbitlang$core$builtin$$fixed_try_bubble_sort$10$(arr) {
-  let tries = 0;
-  const _end527 = arr.end - arr.start | 0;
-  let _tmp = 1;
-  while (true) {
-    const i = _tmp;
-    if (i < _end527) {
-      let sorted = true;
-      let _tmp$2 = i;
-      while (true) {
-        const j = _tmp$2;
-        if (j > 0 && moonbitlang$core$array$$MutArrayView$at$10$(arr, j - 1 | 0) > moonbitlang$core$array$$MutArrayView$at$10$(arr, j)) {
-          sorted = false;
-          moonbitlang$core$array$$MutArrayView$swap$10$(arr, j, j - 1 | 0);
-          _tmp$2 = j - 1 | 0;
-          continue;
-        } else {
-          break;
-        }
-      }
-      if (!sorted) {
-        tries = tries + 1 | 0;
-        if (tries > 8) {
-          return false;
-        }
-      }
-      _tmp = i + 1 | 0;
-      continue;
-    } else {
-      break;
-    }
-  }
-  return true;
-}
-function moonbitlang$core$builtin$$fixed_quick_sort$10$(arr, pred, limit) {
-  let limit$2 = limit;
-  let arr$2 = arr;
-  let pred$2 = pred;
-  let was_partitioned = true;
-  let balanced = true;
-  while (true) {
-    const _p = arr$2;
-    const len = _p.end - _p.start | 0;
-    if (len <= 16) {
-      if (len >= 2) {
-        moonbitlang$core$builtin$$fixed_bubble_sort$10$(arr$2);
-      }
-      return undefined;
-    }
-    if (limit$2 === 0) {
-      moonbitlang$core$builtin$$fixed_heap_sort$10$(arr$2);
-      return undefined;
-    }
-    const _bind$8 = moonbitlang$core$builtin$$fixed_choose_pivot$10$(arr$2);
-    const _pivot_index = _bind$8._0;
-    const _likely_sorted = _bind$8._1;
-    if (was_partitioned && (balanced && _likely_sorted)) {
-      if (moonbitlang$core$builtin$$fixed_try_bubble_sort$10$(arr$2)) {
-        return undefined;
-      }
-    }
-    const _bind$9 = moonbitlang$core$builtin$$fixed_partition$10$(arr$2, _pivot_index);
-    const _pivot = _bind$9._0;
-    const _partitioned = _bind$9._1;
-    was_partitioned = _partitioned;
-    const _p$2 = len - _pivot | 0;
-    balanced = (_pivot > _p$2 ? _p$2 : _pivot) >= (len / 8 | 0);
-    if (!balanced) {
-      limit$2 = limit$2 - 1 | 0;
-    }
-    const _bind$10 = pred$2;
-    if (_bind$10 === undefined) {
-    } else {
-      const _Some = _bind$10;
-      const _pred = _Some;
-      if (_pred === moonbitlang$core$array$$MutArrayView$at$10$(arr$2, _pivot)) {
-        let i = _pivot;
-        while (true) {
-          if (i < len && _pred === moonbitlang$core$array$$MutArrayView$at$10$(arr$2, i)) {
-            i = i + 1 | 0;
-            continue;
-          } else {
-            break;
-          }
-        }
-        arr$2 = moonbitlang$core$array$$MutArrayView$slice$10$(arr$2, i, len);
-        continue;
-      }
-    }
-    const left = moonbitlang$core$array$$MutArrayView$slice$10$(arr$2, 0, _pivot);
-    const right = moonbitlang$core$array$$MutArrayView$slice$10$(arr$2, _pivot + 1 | 0, len);
-    if ((left.end - left.start | 0) < (right.end - right.start | 0)) {
-      moonbitlang$core$builtin$$fixed_quick_sort$10$(left, pred$2, limit$2);
-      pred$2 = moonbitlang$core$array$$MutArrayView$at$10$(arr$2, _pivot);
-      arr$2 = right;
-    } else {
-      moonbitlang$core$builtin$$fixed_quick_sort$10$(right, moonbitlang$core$array$$MutArrayView$at$10$(arr$2, _pivot), limit$2);
-      arr$2 = left;
-    }
-    continue;
-  }
-}
-function moonbitlang$core$array$$MutArrayView$sort$10$(self) {
-  moonbitlang$core$builtin$$fixed_quick_sort$10$(self, undefined, moonbitlang$core$builtin$$fixed_get_limit(self.end - self.start | 0));
-}
-function moonbitlang$core$array$$Array$set$41$(self, index, value) {
-  const len = self.length;
-  if (index >= 0 && index < len) {
-    $bound_check(self, index);
-    self[index] = value;
-    return;
-  } else {
-    $panic();
-    return;
-  }
-}
-function moonbitlang$core$builtin$$Eq$equal$74$(self, other) {
+function moonbitlang$core$builtin$$Eq$equal$77$(self, other) {
   const self_len = self.length;
   const other_len = other.length;
   if (self_len === other_len) {
@@ -6274,13 +5629,13 @@ function moonbitlang$core$builtin$$Eq$equal$74$(self, other) {
 function moonbitlang$core$array$$Array$clear$9$(self) {
   moonbitlang$core$array$$Array$unsafe_truncate_to_length$9$(self, 0);
 }
-function moonbitlang$core$array$$Array$clear$41$(self) {
-  moonbitlang$core$array$$Array$unsafe_truncate_to_length$41$(self, 0);
+function moonbitlang$core$array$$Array$clear$35$(self) {
+  moonbitlang$core$array$$Array$unsafe_truncate_to_length$35$(self, 0);
 }
 function moonbitlang$core$array$$Array$clear$3$(self) {
   moonbitlang$core$array$$Array$unsafe_truncate_to_length$3$(self, 0);
 }
-function moonbitlang$core$array$$Array$contains$75$(self, value) {
+function moonbitlang$core$array$$Array$contains$78$(self, value) {
   const _len = self.length;
   let _tmp = 0;
   while (true) {
@@ -6297,7 +5652,1238 @@ function moonbitlang$core$array$$Array$contains$75$(self, value) {
     }
   }
 }
-function moonbitlang$core$ref$$Ref$new$76$(x) {
+function moonbitlang$core$list$$List$from_array$11$(arr) {
+  let _tmp = (arr.end - arr.start | 0) - 1 | 0;
+  let _tmp$2 = $64$moonbitlang$47$core$47$list$46$List$Empty$5$;
+  while (true) {
+    const i = _tmp;
+    const list = _tmp$2;
+    if (i >= 0) {
+      _tmp = i - 1 | 0;
+      _tmp$2 = new $64$moonbitlang$47$core$47$list$46$List$More$5$(moonbitlang$core$array$$ArrayView$at$11$(arr, i), list);
+      continue;
+    } else {
+      return list;
+    }
+  }
+}
+function moonbitlang$core$random$internal$random_source$$setup(seed, b32, counter) {
+  $bound_check(b32, 0);
+  b32[0] = 1634760805;
+  $bound_check(b32, 1);
+  b32[1] = 1634760805;
+  $bound_check(b32, 2);
+  b32[2] = 1634760805;
+  $bound_check(b32, 3);
+  b32[3] = 1634760805;
+  $bound_check(b32, 4);
+  b32[4] = 857760878;
+  $bound_check(b32, 5);
+  b32[5] = 857760878;
+  $bound_check(b32, 6);
+  b32[6] = 857760878;
+  $bound_check(b32, 7);
+  b32[7] = 857760878;
+  $bound_check(b32, 8);
+  b32[8] = 2036477234;
+  $bound_check(b32, 9);
+  b32[9] = 2036477234;
+  $bound_check(b32, 10);
+  b32[10] = 2036477234;
+  $bound_check(b32, 11);
+  b32[11] = 2036477234;
+  $bound_check(b32, 12);
+  b32[12] = 1797285236;
+  $bound_check(b32, 13);
+  b32[13] = 1797285236;
+  $bound_check(b32, 14);
+  b32[14] = 1797285236;
+  $bound_check(b32, 15);
+  b32[15] = 1797285236;
+  $bound_check(seed, 0);
+  $bound_check(b32, 16);
+  b32[16] = seed[0];
+  $bound_check(seed, 0);
+  $bound_check(b32, 17);
+  b32[17] = seed[0];
+  $bound_check(seed, 0);
+  $bound_check(b32, 18);
+  b32[18] = seed[0];
+  $bound_check(seed, 0);
+  $bound_check(b32, 19);
+  b32[19] = seed[0];
+  $bound_check(seed, 1);
+  $bound_check(b32, 20);
+  b32[20] = seed[1];
+  $bound_check(seed, 1);
+  $bound_check(b32, 21);
+  b32[21] = seed[1];
+  $bound_check(seed, 1);
+  $bound_check(b32, 22);
+  b32[22] = seed[1];
+  $bound_check(seed, 1);
+  $bound_check(b32, 23);
+  b32[23] = seed[1];
+  $bound_check(seed, 2);
+  $bound_check(b32, 24);
+  b32[24] = seed[2];
+  $bound_check(seed, 2);
+  $bound_check(b32, 25);
+  b32[25] = seed[2];
+  $bound_check(seed, 2);
+  $bound_check(b32, 26);
+  b32[26] = seed[2];
+  $bound_check(seed, 2);
+  $bound_check(b32, 27);
+  b32[27] = seed[2];
+  $bound_check(seed, 3);
+  $bound_check(b32, 28);
+  b32[28] = seed[3];
+  $bound_check(seed, 3);
+  $bound_check(b32, 29);
+  b32[29] = seed[3];
+  $bound_check(seed, 3);
+  $bound_check(b32, 30);
+  b32[30] = seed[3];
+  $bound_check(seed, 3);
+  $bound_check(b32, 31);
+  b32[31] = seed[3];
+  $bound_check(seed, 4);
+  $bound_check(b32, 32);
+  b32[32] = seed[4];
+  $bound_check(seed, 4);
+  $bound_check(b32, 33);
+  b32[33] = seed[4];
+  $bound_check(seed, 4);
+  $bound_check(b32, 34);
+  b32[34] = seed[4];
+  $bound_check(seed, 4);
+  $bound_check(b32, 35);
+  b32[35] = seed[4];
+  $bound_check(seed, 5);
+  $bound_check(b32, 36);
+  b32[36] = seed[5];
+  $bound_check(seed, 5);
+  $bound_check(b32, 37);
+  b32[37] = seed[5];
+  $bound_check(seed, 5);
+  $bound_check(b32, 38);
+  b32[38] = seed[5];
+  $bound_check(seed, 5);
+  $bound_check(b32, 39);
+  b32[39] = seed[5];
+  $bound_check(seed, 6);
+  $bound_check(b32, 40);
+  b32[40] = seed[6];
+  $bound_check(seed, 6);
+  $bound_check(b32, 41);
+  b32[41] = seed[6];
+  $bound_check(seed, 6);
+  $bound_check(b32, 42);
+  b32[42] = seed[6];
+  $bound_check(seed, 6);
+  $bound_check(b32, 43);
+  b32[43] = seed[6];
+  $bound_check(seed, 7);
+  $bound_check(b32, 44);
+  b32[44] = seed[7];
+  $bound_check(seed, 7);
+  $bound_check(b32, 45);
+  b32[45] = seed[7];
+  $bound_check(seed, 7);
+  $bound_check(b32, 46);
+  b32[46] = seed[7];
+  $bound_check(seed, 7);
+  $bound_check(b32, 47);
+  b32[47] = seed[7];
+  $bound_check(b32, 48);
+  b32[48] = counter;
+  $bound_check(b32, 49);
+  b32[49] = (counter >>> 0) + (1 >>> 0) | 0;
+  $bound_check(b32, 50);
+  b32[50] = (counter >>> 0) + (2 >>> 0) | 0;
+  $bound_check(b32, 51);
+  b32[51] = (counter >>> 0) + (3 >>> 0) | 0;
+  $bound_check(b32, 52);
+  b32[52] = 0;
+  $bound_check(b32, 53);
+  b32[53] = 0;
+  $bound_check(b32, 54);
+  b32[54] = 0;
+  $bound_check(b32, 55);
+  b32[55] = 0;
+  $bound_check(b32, 56);
+  b32[56] = 0;
+  $bound_check(b32, 57);
+  b32[57] = 0;
+  $bound_check(b32, 58);
+  b32[58] = 0;
+  $bound_check(b32, 59);
+  b32[59] = 0;
+  $bound_check(b32, 60);
+  b32[60] = 0;
+  $bound_check(b32, 61);
+  b32[61] = 0;
+  $bound_check(b32, 62);
+  b32[62] = 0;
+  $bound_check(b32, 63);
+  b32[63] = 0;
+}
+function moonbitlang$core$random$internal$random_source$$chacha_block$46$qr$124$35(t) {
+  const _a = t._0;
+  const _b = t._1;
+  const _c = t._2;
+  const _d = t._3;
+  const a = (_a >>> 0) + (_b >>> 0) | 0;
+  const d = _d ^ a;
+  const d$2 = d << 16 | (d >>> 16 | 0);
+  const c = (_c >>> 0) + (d$2 >>> 0) | 0;
+  const b = _b ^ c;
+  const b$2 = b << 12 | (b >>> 20 | 0);
+  const a$2 = (a >>> 0) + (b$2 >>> 0) | 0;
+  const d$3 = d$2 ^ a$2;
+  const d$4 = d$3 << 8 | (d$3 >>> 24 | 0);
+  const c$2 = (c >>> 0) + (d$4 >>> 0) | 0;
+  const b$3 = b$2 ^ c$2;
+  const b$4 = b$3 << 7 | (b$3 >>> 25 | 0);
+  return { _0: a$2, _1: b$4, _2: c$2, _3: d$4 };
+}
+function moonbitlang$core$random$internal$random_source$$chacha_block(seed, buf, counter) {
+  moonbitlang$core$random$internal$random_source$$setup(seed, buf, counter);
+  let _tmp = 0;
+  while (true) {
+    const i = _tmp;
+    if (i < 4) {
+      $bound_check(buf, i);
+      let b0 = buf[i];
+      const _tmp$2 = 4 + i | 0;
+      $bound_check(buf, _tmp$2);
+      let b1 = buf[_tmp$2];
+      const _tmp$3 = 8 + i | 0;
+      $bound_check(buf, _tmp$3);
+      let b2 = buf[_tmp$3];
+      const _tmp$4 = 12 + i | 0;
+      $bound_check(buf, _tmp$4);
+      let b3 = buf[_tmp$4];
+      const _tmp$5 = 16 + i | 0;
+      $bound_check(buf, _tmp$5);
+      let b4 = buf[_tmp$5];
+      const _tmp$6 = 20 + i | 0;
+      $bound_check(buf, _tmp$6);
+      let b5 = buf[_tmp$6];
+      const _tmp$7 = 24 + i | 0;
+      $bound_check(buf, _tmp$7);
+      let b6 = buf[_tmp$7];
+      const _tmp$8 = 28 + i | 0;
+      $bound_check(buf, _tmp$8);
+      let b7 = buf[_tmp$8];
+      const _tmp$9 = 32 + i | 0;
+      $bound_check(buf, _tmp$9);
+      let b8 = buf[_tmp$9];
+      const _tmp$10 = 36 + i | 0;
+      $bound_check(buf, _tmp$10);
+      let b9 = buf[_tmp$10];
+      const _tmp$11 = 40 + i | 0;
+      $bound_check(buf, _tmp$11);
+      let b10 = buf[_tmp$11];
+      const _tmp$12 = 44 + i | 0;
+      $bound_check(buf, _tmp$12);
+      let b11 = buf[_tmp$12];
+      const _tmp$13 = 48 + i | 0;
+      $bound_check(buf, _tmp$13);
+      let b12 = buf[_tmp$13];
+      const _tmp$14 = 52 + i | 0;
+      $bound_check(buf, _tmp$14);
+      let b13 = buf[_tmp$14];
+      const _tmp$15 = 56 + i | 0;
+      $bound_check(buf, _tmp$15);
+      let b14 = buf[_tmp$15];
+      const _tmp$16 = 60 + i | 0;
+      $bound_check(buf, _tmp$16);
+      let b15 = buf[_tmp$16];
+      let _tmp$17 = 0;
+      while (true) {
+        const round = _tmp$17;
+        if (round < 4) {
+          const _bind$8 = moonbitlang$core$random$internal$random_source$$chacha_block$46$qr$124$35({ _0: b0, _1: b4, _2: b8, _3: b12 });
+          const _tb1_0 = _bind$8._0;
+          const _tb1_1 = _bind$8._1;
+          const _tb1_2 = _bind$8._2;
+          const _tb1_3 = _bind$8._3;
+          b0 = _tb1_0;
+          b4 = _tb1_1;
+          b8 = _tb1_2;
+          b12 = _tb1_3;
+          const _bind$9 = moonbitlang$core$random$internal$random_source$$chacha_block$46$qr$124$35({ _0: b1, _1: b5, _2: b9, _3: b13 });
+          const _tb2_0 = _bind$9._0;
+          const _tb2_1 = _bind$9._1;
+          const _tb2_2 = _bind$9._2;
+          const _tb2_3 = _bind$9._3;
+          b1 = _tb2_0;
+          b5 = _tb2_1;
+          b9 = _tb2_2;
+          b13 = _tb2_3;
+          const _bind$10 = moonbitlang$core$random$internal$random_source$$chacha_block$46$qr$124$35({ _0: b2, _1: b6, _2: b10, _3: b14 });
+          const _tb3_0 = _bind$10._0;
+          const _tb3_1 = _bind$10._1;
+          const _tb3_2 = _bind$10._2;
+          const _tb3_3 = _bind$10._3;
+          b2 = _tb3_0;
+          b6 = _tb3_1;
+          b10 = _tb3_2;
+          b14 = _tb3_3;
+          const _bind$11 = moonbitlang$core$random$internal$random_source$$chacha_block$46$qr$124$35({ _0: b3, _1: b7, _2: b11, _3: b15 });
+          const _tb4_0 = _bind$11._0;
+          const _tb4_1 = _bind$11._1;
+          const _tb4_2 = _bind$11._2;
+          const _tb4_3 = _bind$11._3;
+          b3 = _tb4_0;
+          b7 = _tb4_1;
+          b11 = _tb4_2;
+          b15 = _tb4_3;
+          const _bind$12 = moonbitlang$core$random$internal$random_source$$chacha_block$46$qr$124$35({ _0: b0, _1: b5, _2: b10, _3: b15 });
+          const _tb5_0 = _bind$12._0;
+          const _tb5_1 = _bind$12._1;
+          const _tb5_2 = _bind$12._2;
+          const _tb5_3 = _bind$12._3;
+          b0 = _tb5_0;
+          b5 = _tb5_1;
+          b10 = _tb5_2;
+          b15 = _tb5_3;
+          const _bind$13 = moonbitlang$core$random$internal$random_source$$chacha_block$46$qr$124$35({ _0: b1, _1: b6, _2: b11, _3: b12 });
+          const _tb6_0 = _bind$13._0;
+          const _tb6_1 = _bind$13._1;
+          const _tb6_2 = _bind$13._2;
+          const _tb6_3 = _bind$13._3;
+          b1 = _tb6_0;
+          b6 = _tb6_1;
+          b11 = _tb6_2;
+          b12 = _tb6_3;
+          const _bind$14 = moonbitlang$core$random$internal$random_source$$chacha_block$46$qr$124$35({ _0: b2, _1: b7, _2: b8, _3: b13 });
+          const _tb7_0 = _bind$14._0;
+          const _tb7_1 = _bind$14._1;
+          const _tb7_2 = _bind$14._2;
+          const _tb7_3 = _bind$14._3;
+          b2 = _tb7_0;
+          b7 = _tb7_1;
+          b8 = _tb7_2;
+          b13 = _tb7_3;
+          const _bind$15 = moonbitlang$core$random$internal$random_source$$chacha_block$46$qr$124$35({ _0: b3, _1: b4, _2: b9, _3: b14 });
+          const _tb8_0 = _bind$15._0;
+          const _tb8_1 = _bind$15._1;
+          const _tb8_2 = _bind$15._2;
+          const _tb8_3 = _bind$15._3;
+          b3 = _tb8_0;
+          b4 = _tb8_1;
+          b9 = _tb8_2;
+          b14 = _tb8_3;
+          _tmp$17 = round + 1 | 0;
+          continue;
+        } else {
+          break;
+        }
+      }
+      $bound_check(buf, i);
+      buf[i] = b0;
+      const _tmp$18 = 4 + i | 0;
+      $bound_check(buf, _tmp$18);
+      buf[_tmp$18] = b1;
+      const _tmp$19 = 8 + i | 0;
+      $bound_check(buf, _tmp$19);
+      buf[_tmp$19] = b2;
+      const _tmp$20 = 12 + i | 0;
+      $bound_check(buf, _tmp$20);
+      buf[_tmp$20] = b3;
+      const _index_2 = 16 + i | 0;
+      $bound_check(buf, _index_2);
+      $bound_check(buf, _index_2);
+      buf[_index_2] = (buf[_index_2] >>> 0) + (b4 >>> 0) | 0;
+      const _index_4 = 20 + i | 0;
+      $bound_check(buf, _index_4);
+      $bound_check(buf, _index_4);
+      buf[_index_4] = (buf[_index_4] >>> 0) + (b5 >>> 0) | 0;
+      const _index_6 = 24 + i | 0;
+      $bound_check(buf, _index_6);
+      $bound_check(buf, _index_6);
+      buf[_index_6] = (buf[_index_6] >>> 0) + (b6 >>> 0) | 0;
+      const _index_8 = 28 + i | 0;
+      $bound_check(buf, _index_8);
+      $bound_check(buf, _index_8);
+      buf[_index_8] = (buf[_index_8] >>> 0) + (b7 >>> 0) | 0;
+      const _index_10 = 32 + i | 0;
+      $bound_check(buf, _index_10);
+      $bound_check(buf, _index_10);
+      buf[_index_10] = (buf[_index_10] >>> 0) + (b8 >>> 0) | 0;
+      const _index_12 = 36 + i | 0;
+      $bound_check(buf, _index_12);
+      $bound_check(buf, _index_12);
+      buf[_index_12] = (buf[_index_12] >>> 0) + (b9 >>> 0) | 0;
+      const _index_14 = 40 + i | 0;
+      $bound_check(buf, _index_14);
+      $bound_check(buf, _index_14);
+      buf[_index_14] = (buf[_index_14] >>> 0) + (b10 >>> 0) | 0;
+      const _index_16 = 44 + i | 0;
+      $bound_check(buf, _index_16);
+      $bound_check(buf, _index_16);
+      buf[_index_16] = (buf[_index_16] >>> 0) + (b11 >>> 0) | 0;
+      const _tmp$21 = 48 + i | 0;
+      $bound_check(buf, _tmp$21);
+      buf[_tmp$21] = b12;
+      const _tmp$22 = 52 + i | 0;
+      $bound_check(buf, _tmp$22);
+      buf[_tmp$22] = b13;
+      const _tmp$23 = 56 + i | 0;
+      $bound_check(buf, _tmp$23);
+      buf[_tmp$23] = b14;
+      const _tmp$24 = 60 + i | 0;
+      $bound_check(buf, _tmp$24);
+      buf[_tmp$24] = b15;
+      _tmp = i + 1 | 0;
+      continue;
+    } else {
+      return;
+    }
+  }
+}
+function moonbitlang$core$random$internal$random_source$$ChaCha8$new(seed) {
+  const seed$2 = moonbitlang$core$array$$FixedArray$makei$60$(8, (i) => {
+    const _bind$8 = moonbitlang$core$bytes$$Bytes$sub$46$inner(seed, Math.imul(i, 4) | 0, undefined);
+    return (_bind$8.end - _bind$8.start | 0) >= 4 ? moonbitlang$core$bytes$$BytesView$unsafe_extract_uint_le(_bind$8, 0, 32) : moonbitlang$core$builtin$$abort$25$("seed must be 32 bytes long", "@moonbitlang/core/random/internal/random_source:random_source_chacha.mbt:31:10-31:45");
+  });
+  const buffer = $make_array_len_and_init(64, 0);
+  moonbitlang$core$random$internal$random_source$$chacha_block(seed$2, buffer, 0);
+  const _bind$8 = 32;
+  return { buffer: buffer, seed: seed$2, i: 0, n: _bind$8, counter: 0 };
+}
+function moonbitlang$core$random$internal$random_source$$ChaCha8$next(self) {
+  const i = self.i;
+  if (i >>> 0 >= self.n >>> 0) {
+    return undefined;
+  }
+  self.i = (i >>> 0) + (1 >>> 0) | 0;
+  const index = i & 31;
+  const _tmp = self.buffer;
+  const _tmp$2 = Math.imul(index, 2) | 0;
+  $bound_check(_tmp, _tmp$2);
+  const lo = moonbitlang$core$uint$$UInt$to_uint64(_tmp[_tmp$2]);
+  const _tmp$3 = self.buffer;
+  const _tmp$4 = (Math.imul(index, 2) | 0) + 1 | 0;
+  $bound_check(_tmp$3, _tmp$4);
+  const hi = moonbitlang$core$uint$$UInt$to_uint64(_tmp$3[_tmp$4]);
+  return moonbitlang$core$builtin$$BitOr$lor$41$(moonbitlang$core$builtin$$Shl$shl$41$(hi, 32), lo);
+}
+function moonbitlang$core$random$internal$random_source$$ChaCha8$refill(self) {
+  self.counter = (self.counter >>> 0) + (4 >>> 0) | 0;
+  if (self.counter === 16) {
+    moonbitlang$core$array$$FixedArray$blit_to$46$inner$25$(self.buffer, self.seed, 8, 56, 0);
+    self.counter = 0;
+  }
+  moonbitlang$core$random$internal$random_source$$chacha_block(self.seed, self.buffer, self.counter);
+  self.i = 0;
+  self.n = self.counter === 12 ? 28 : 32;
+}
+function moonbitlang$core$random$$Source$next$79$(self) {
+  while (true) {
+    const _bind$8 = moonbitlang$core$random$internal$random_source$$ChaCha8$next(self);
+    if (_bind$8 === undefined) {
+    } else {
+      const _Some = _bind$8;
+      const _x = _Some;
+      return _x;
+    }
+    moonbitlang$core$random$internal$random_source$$ChaCha8$refill(self);
+    continue;
+  }
+}
+function moonbitlang$core$random$$Rand$chacha8$46$inner(seed) {
+  if (seed.length !== 32) {
+    moonbitlang$core$builtin$$abort$22$("seed must be 32 bytes long", "@moonbitlang/core/random:random.mbt:43:5-43:40");
+  }
+  return { self: moonbitlang$core$random$internal$random_source$$ChaCha8$new(seed), method_0: moonbitlang$core$random$$Source$next$79$ };
+}
+function moonbitlang$core$random$$Rand$new(generator) {
+  if (generator.$tag === 0) {
+    return moonbitlang$core$random$$Rand$chacha8$46$inner($bytes_literal$0);
+  } else {
+    const _Some = generator;
+    const _gen = _Some._0;
+    return _gen;
+  }
+}
+function moonbitlang$core$random$$umul128(a, b) {
+  const aLo = moonbitlang$core$builtin$$BitAnd$land$41$(a, $4294967295L);
+  const aHi = moonbitlang$core$builtin$$Shr$shr$41$(a, 32);
+  const bLo = moonbitlang$core$builtin$$BitAnd$land$41$(b, $4294967295L);
+  const bHi = moonbitlang$core$builtin$$Shr$shr$41$(b, 32);
+  const x = moonbitlang$core$builtin$$Mul$mul$41$(aLo, bLo);
+  const y = moonbitlang$core$builtin$$Add$add$41$(moonbitlang$core$builtin$$Mul$mul$41$(aHi, bLo), moonbitlang$core$builtin$$Shr$shr$41$(x, 32));
+  const z = moonbitlang$core$builtin$$Add$add$41$(moonbitlang$core$builtin$$Mul$mul$41$(aLo, bHi), moonbitlang$core$builtin$$BitAnd$land$41$(y, $4294967295L));
+  const w = moonbitlang$core$builtin$$Add$add$41$(moonbitlang$core$builtin$$Add$add$41$(moonbitlang$core$builtin$$Mul$mul$41$(aHi, bHi), moonbitlang$core$builtin$$Shr$shr$41$(y, 32)), moonbitlang$core$builtin$$Shr$shr$41$(z, 32));
+  return { hi: w, lo: moonbitlang$core$builtin$$Mul$mul$41$(a, b) };
+}
+function moonbitlang$core$random$$Rand$uint64$46$inner(self, limit) {
+  if (moonbitlang$core$builtin$$Eq$equal$41$(limit, $0L)) {
+    const _p = self;
+    return _p.method_0(_p.self);
+  } else {
+    if (moonbitlang$core$builtin$$Eq$equal$41$(moonbitlang$core$builtin$$BitAnd$land$41$(limit, moonbitlang$core$builtin$$Sub$sub$41$(limit, $1L)), $0L)) {
+      const _p = self;
+      return moonbitlang$core$builtin$$BitAnd$land$41$(_p.method_0(_p.self), moonbitlang$core$builtin$$Sub$sub$41$(limit, $1L));
+    }
+  }
+  const _p = self;
+  let r = moonbitlang$core$random$$umul128(_p.method_0(_p.self), limit);
+  if (moonbitlang$core$builtin$$Compare$op_lt$40$(r.lo, limit)) {
+    const thresh = moonbitlang$core$builtin$$Mod$mod$41$(moonbitlang$core$uint64$$UInt64$lnot(limit), limit);
+    while (true) {
+      if (moonbitlang$core$builtin$$Compare$op_lt$40$(r.lo, thresh)) {
+        const _p$2 = self;
+        r = moonbitlang$core$random$$umul128(_p$2.method_0(_p$2.self), limit);
+        continue;
+      } else {
+        break;
+      }
+    }
+  }
+  return r.hi;
+}
+function moonbitlang$core$random$$Rand$uint$46$inner(self, limit) {
+  if (limit === 0) {
+    const _p = self;
+    return moonbitlang$core$uint64$$UInt64$to_uint(_p.method_0(_p.self));
+  }
+  return moonbitlang$core$uint64$$UInt64$to_uint(moonbitlang$core$random$$Rand$uint64$46$inner(self, moonbitlang$core$uint$$UInt$to_uint64(limit)));
+}
+function moonbitlang$core$set$$Set$new$46$inner$17$(capacity) {
+  const capacity$2 = moonbitlang$core$int$$Int$next_power_of_two(capacity);
+  const _bind$8 = capacity$2 - 1 | 0;
+  const _bind$9 = (Math.imul(capacity$2, 13) | 0) / 16 | 0;
+  const _bind$10 = $make_array_len_and_init(capacity$2, undefined);
+  const _bind$11 = undefined;
+  return { entries: _bind$10, size: 0, capacity: capacity$2, capacity_mask: _bind$8, grow_at: _bind$9, head: _bind$11, tail: -1 };
+}
+function moonbitlang$core$set$$Set$new$46$inner$3$(capacity) {
+  const capacity$2 = moonbitlang$core$int$$Int$next_power_of_two(capacity);
+  const _bind$8 = capacity$2 - 1 | 0;
+  const _bind$9 = (Math.imul(capacity$2, 13) | 0) / 16 | 0;
+  const _bind$10 = $make_array_len_and_init(capacity$2, undefined);
+  const _bind$11 = undefined;
+  return { entries: _bind$10, size: 0, capacity: capacity$2, capacity_mask: _bind$8, grow_at: _bind$9, head: _bind$11, tail: -1 };
+}
+function moonbitlang$core$set$$Set$add_entry_to_tail$3$(self, idx, entry) {
+  const _bind$8 = self.tail;
+  if (_bind$8 === -1) {
+    self.head = entry;
+  } else {
+    const _tmp = self.entries;
+    $bound_check(_tmp, _bind$8);
+    const _p = _tmp[_bind$8];
+    let _tmp$2;
+    if (_p === undefined) {
+      _tmp$2 = $panic();
+    } else {
+      const _p$2 = _p;
+      _tmp$2 = _p$2;
+    }
+    _tmp$2.next = entry;
+  }
+  self.tail = idx;
+  const _tmp = self.entries;
+  $bound_check(_tmp, idx);
+  _tmp[idx] = entry;
+  self.size = self.size + 1 | 0;
+}
+function moonbitlang$core$set$$Set$add_entry_to_tail$17$(self, idx, entry) {
+  const _bind$8 = self.tail;
+  if (_bind$8 === -1) {
+    self.head = entry;
+  } else {
+    const _tmp = self.entries;
+    $bound_check(_tmp, _bind$8);
+    const _p = _tmp[_bind$8];
+    let _tmp$2;
+    if (_p === undefined) {
+      _tmp$2 = $panic();
+    } else {
+      const _p$2 = _p;
+      _tmp$2 = _p$2;
+    }
+    _tmp$2.next = entry;
+  }
+  self.tail = idx;
+  const _tmp = self.entries;
+  $bound_check(_tmp, idx);
+  _tmp[idx] = entry;
+  self.size = self.size + 1 | 0;
+}
+function moonbitlang$core$set$$Set$set_entry$17$(self, entry, new_idx) {
+  const _tmp = self.entries;
+  $bound_check(_tmp, new_idx);
+  _tmp[new_idx] = entry;
+  const _bind$8 = entry.next;
+  if (_bind$8 === undefined) {
+    self.tail = new_idx;
+    return;
+  } else {
+    const _Some = _bind$8;
+    const _next = _Some;
+    _next.prev = new_idx;
+    return;
+  }
+}
+function moonbitlang$core$set$$Set$set_entry$3$(self, entry, new_idx) {
+  const _tmp = self.entries;
+  $bound_check(_tmp, new_idx);
+  _tmp[new_idx] = entry;
+  const _bind$8 = entry.next;
+  if (_bind$8 === undefined) {
+    self.tail = new_idx;
+    return;
+  } else {
+    const _Some = _bind$8;
+    const _next = _Some;
+    _next.prev = new_idx;
+    return;
+  }
+}
+function moonbitlang$core$set$$Set$push_away$3$(self, idx, entry) {
+  let _tmp = entry.psl + 1 | 0;
+  let _tmp$2 = idx + 1 & self.capacity_mask;
+  let _tmp$3 = entry;
+  while (true) {
+    const psl = _tmp;
+    const idx$2 = _tmp$2;
+    const entry$2 = _tmp$3;
+    const _tmp$4 = self.entries;
+    $bound_check(_tmp$4, idx$2);
+    const _bind$8 = _tmp$4[idx$2];
+    if (_bind$8 === undefined) {
+      entry$2.psl = psl;
+      moonbitlang$core$set$$Set$set_entry$3$(self, entry$2, idx$2);
+      break;
+    } else {
+      const _Some = _bind$8;
+      const _curr_entry = _Some;
+      if (psl > _curr_entry.psl) {
+        entry$2.psl = psl;
+        moonbitlang$core$set$$Set$set_entry$3$(self, entry$2, idx$2);
+        _tmp = _curr_entry.psl + 1 | 0;
+        _tmp$2 = idx$2 + 1 & self.capacity_mask;
+        _tmp$3 = _curr_entry;
+        continue;
+      } else {
+        _tmp = psl + 1 | 0;
+        _tmp$2 = idx$2 + 1 & self.capacity_mask;
+        continue;
+      }
+    }
+  }
+}
+function moonbitlang$core$set$$Set$push_away$17$(self, idx, entry) {
+  let _tmp = entry.psl + 1 | 0;
+  let _tmp$2 = idx + 1 & self.capacity_mask;
+  let _tmp$3 = entry;
+  while (true) {
+    const psl = _tmp;
+    const idx$2 = _tmp$2;
+    const entry$2 = _tmp$3;
+    const _tmp$4 = self.entries;
+    $bound_check(_tmp$4, idx$2);
+    const _bind$8 = _tmp$4[idx$2];
+    if (_bind$8 === undefined) {
+      entry$2.psl = psl;
+      moonbitlang$core$set$$Set$set_entry$17$(self, entry$2, idx$2);
+      break;
+    } else {
+      const _Some = _bind$8;
+      const _curr_entry = _Some;
+      if (psl > _curr_entry.psl) {
+        entry$2.psl = psl;
+        moonbitlang$core$set$$Set$set_entry$17$(self, entry$2, idx$2);
+        _tmp = _curr_entry.psl + 1 | 0;
+        _tmp$2 = idx$2 + 1 & self.capacity_mask;
+        _tmp$3 = _curr_entry;
+        continue;
+      } else {
+        _tmp = psl + 1 | 0;
+        _tmp$2 = idx$2 + 1 & self.capacity_mask;
+        continue;
+      }
+    }
+  }
+}
+function moonbitlang$core$set$$Set$add_with_hash$3$(self, key, hash) {
+  if (self.size >= self.grow_at) {
+    moonbitlang$core$set$$Set$grow$3$(self);
+  }
+  let _bind$8;
+  let _tmp = 0;
+  let _tmp$2 = hash & self.capacity_mask;
+  while (true) {
+    const psl = _tmp;
+    const idx = _tmp$2;
+    const _tmp$3 = self.entries;
+    $bound_check(_tmp$3, idx);
+    const _bind$9 = _tmp$3[idx];
+    if (_bind$9 === undefined) {
+      _bind$8 = { _0: idx, _1: psl };
+      break;
+    } else {
+      const _Some = _bind$9;
+      const _curr_entry = _Some;
+      let _tmp$4;
+      if (_curr_entry.hash === hash) {
+        const _p = _curr_entry.key;
+        _tmp$4 = _p === key;
+      } else {
+        _tmp$4 = false;
+      }
+      if (_tmp$4) {
+        return undefined;
+      }
+      if (psl > _curr_entry.psl) {
+        moonbitlang$core$set$$Set$push_away$3$(self, idx, _curr_entry);
+        _bind$8 = { _0: idx, _1: psl };
+        break;
+      }
+      _tmp = psl + 1 | 0;
+      _tmp$2 = idx + 1 & self.capacity_mask;
+      continue;
+    }
+  }
+  const _idx = _bind$8._0;
+  const _psl = _bind$8._1;
+  const _bind$9 = self.tail;
+  const _bind$10 = undefined;
+  const entry = { prev: _bind$9, next: _bind$10, psl: _psl, hash: hash, key: key };
+  moonbitlang$core$set$$Set$add_entry_to_tail$3$(self, _idx, entry);
+}
+function moonbitlang$core$set$$Set$add_with_hash$17$(self, key, hash) {
+  if (self.size >= self.grow_at) {
+    moonbitlang$core$set$$Set$grow$17$(self);
+  }
+  let _bind$8;
+  let _tmp = 0;
+  let _tmp$2 = hash & self.capacity_mask;
+  while (true) {
+    const psl = _tmp;
+    const idx = _tmp$2;
+    const _tmp$3 = self.entries;
+    $bound_check(_tmp$3, idx);
+    const _bind$9 = _tmp$3[idx];
+    if (_bind$9 === undefined) {
+      _bind$8 = { _0: idx, _1: psl };
+      break;
+    } else {
+      const _Some = _bind$9;
+      const _curr_entry = _Some;
+      if (_curr_entry.hash === hash && moonbitlang$core$builtin$$Eq$equal$17$(_curr_entry.key, key)) {
+        return undefined;
+      }
+      if (psl > _curr_entry.psl) {
+        moonbitlang$core$set$$Set$push_away$17$(self, idx, _curr_entry);
+        _bind$8 = { _0: idx, _1: psl };
+        break;
+      }
+      _tmp = psl + 1 | 0;
+      _tmp$2 = idx + 1 & self.capacity_mask;
+      continue;
+    }
+  }
+  const _idx = _bind$8._0;
+  const _psl = _bind$8._1;
+  const _bind$9 = self.tail;
+  const _bind$10 = undefined;
+  const entry = { prev: _bind$9, next: _bind$10, psl: _psl, hash: hash, key: key };
+  moonbitlang$core$set$$Set$add_entry_to_tail$17$(self, _idx, entry);
+}
+function moonbitlang$core$set$$Set$grow$3$(self) {
+  const old_head = self.head;
+  const new_capacity = self.capacity << 1;
+  self.entries = $make_array_len_and_init(new_capacity, undefined);
+  self.capacity = new_capacity;
+  self.capacity_mask = new_capacity - 1 | 0;
+  const _p = self.capacity;
+  self.grow_at = (Math.imul(_p, 13) | 0) / 16 | 0;
+  self.size = 0;
+  self.head = undefined;
+  self.tail = -1;
+  let _tmp = old_head;
+  while (true) {
+    const _param = _tmp;
+    if (_param === undefined) {
+      return;
+    } else {
+      const _Some = _param;
+      const _x = _Some;
+      const _next = _x.next;
+      const _key = _x.key;
+      const _hash = _x.hash;
+      moonbitlang$core$set$$Set$add_with_hash$3$(self, _key, _hash);
+      _tmp = _next;
+      continue;
+    }
+  }
+}
+function moonbitlang$core$set$$Set$grow$17$(self) {
+  const old_head = self.head;
+  const new_capacity = self.capacity << 1;
+  self.entries = $make_array_len_and_init(new_capacity, undefined);
+  self.capacity = new_capacity;
+  self.capacity_mask = new_capacity - 1 | 0;
+  const _p = self.capacity;
+  self.grow_at = (Math.imul(_p, 13) | 0) / 16 | 0;
+  self.size = 0;
+  self.head = undefined;
+  self.tail = -1;
+  let _tmp = old_head;
+  while (true) {
+    const _param = _tmp;
+    if (_param === undefined) {
+      return;
+    } else {
+      const _Some = _param;
+      const _x = _Some;
+      const _next = _x.next;
+      const _key = _x.key;
+      const _hash = _x.hash;
+      moonbitlang$core$set$$Set$add_with_hash$17$(self, _key, _hash);
+      _tmp = _next;
+      continue;
+    }
+  }
+}
+function moonbitlang$core$set$$Set$add$3$(self, key) {
+  moonbitlang$core$set$$Set$add_with_hash$3$(self, key, moonbitlang$core$builtin$$Hash$hash$42$(key));
+}
+function moonbitlang$core$set$$Set$add$17$(self, key) {
+  moonbitlang$core$set$$Set$add_with_hash$17$(self, key, moonbitlang$core$builtin$$Hash$hash$43$(key));
+}
+function moonbitlang$core$set$$Set$from_array$17$(arr) {
+  const length = arr.end - arr.start | 0;
+  let capacity = moonbitlang$core$int$$Int$next_power_of_two(length);
+  const _p = capacity;
+  if (length > ((Math.imul(_p, 13) | 0) / 16 | 0)) {
+    capacity = Math.imul(capacity, 2) | 0;
+  }
+  const m = moonbitlang$core$set$$Set$new$46$inner$17$(capacity);
+  const _len = arr.end - arr.start | 0;
+  let _tmp = 0;
+  while (true) {
+    const _i = _tmp;
+    if (_i < _len) {
+      const e = arr.buf[arr.start + _i | 0];
+      moonbitlang$core$set$$Set$add$17$(m, e);
+      _tmp = _i + 1 | 0;
+      continue;
+    } else {
+      break;
+    }
+  }
+  return m;
+}
+function moonbitlang$core$set$$Set$contains$3$(self, key) {
+  const hash = moonbitlang$core$builtin$$Hash$hash$42$(key);
+  let _tmp = 0;
+  let _tmp$2 = hash & self.capacity_mask;
+  while (true) {
+    const i = _tmp;
+    const idx = _tmp$2;
+    const _tmp$3 = self.entries;
+    $bound_check(_tmp$3, idx);
+    const _bind$8 = _tmp$3[idx];
+    if (_bind$8 === undefined) {
+      return false;
+    } else {
+      const _Some = _bind$8;
+      const _entry = _Some;
+      let _tmp$4;
+      if (_entry.hash === hash) {
+        const _p = _entry.key;
+        _tmp$4 = _p === key;
+      } else {
+        _tmp$4 = false;
+      }
+      if (_tmp$4) {
+        return true;
+      }
+      if (i > _entry.psl) {
+        return false;
+      }
+      _tmp = i + 1 | 0;
+      _tmp$2 = idx + 1 & self.capacity_mask;
+      continue;
+    }
+  }
+}
+function moonbitlang$core$set$$Set$contains$17$(self, key) {
+  const hash = moonbitlang$core$builtin$$Hash$hash$43$(key);
+  let _tmp = 0;
+  let _tmp$2 = hash & self.capacity_mask;
+  while (true) {
+    const i = _tmp;
+    const idx = _tmp$2;
+    const _tmp$3 = self.entries;
+    $bound_check(_tmp$3, idx);
+    const _bind$8 = _tmp$3[idx];
+    if (_bind$8 === undefined) {
+      return false;
+    } else {
+      const _Some = _bind$8;
+      const _entry = _Some;
+      if (_entry.hash === hash && moonbitlang$core$builtin$$Eq$equal$17$(_entry.key, key)) {
+        return true;
+      }
+      if (i > _entry.psl) {
+        return false;
+      }
+      _tmp = i + 1 | 0;
+      _tmp$2 = idx + 1 & self.capacity_mask;
+      continue;
+    }
+  }
+}
+function moonbitlang$core$set$$Set$remove_entry$17$(self, entry) {
+  const _bind$8 = entry.prev;
+  if (_bind$8 === -1) {
+    self.head = entry.next;
+  } else {
+    const _tmp = self.entries;
+    $bound_check(_tmp, _bind$8);
+    const _p = _tmp[_bind$8];
+    let _tmp$2;
+    if (_p === undefined) {
+      _tmp$2 = $panic();
+    } else {
+      const _p$2 = _p;
+      _tmp$2 = _p$2;
+    }
+    const _tmp$3 = _tmp$2;
+    _tmp$3.next = entry.next;
+  }
+  const _bind$9 = entry.next;
+  if (_bind$9 === undefined) {
+    self.tail = entry.prev;
+    return;
+  } else {
+    const _Some = _bind$9;
+    const _next = _Some;
+    _next.prev = entry.prev;
+    return;
+  }
+}
+function moonbitlang$core$set$$Set$remove_entry$3$(self, entry) {
+  const _bind$8 = entry.prev;
+  if (_bind$8 === -1) {
+    self.head = entry.next;
+  } else {
+    const _tmp = self.entries;
+    $bound_check(_tmp, _bind$8);
+    const _p = _tmp[_bind$8];
+    let _tmp$2;
+    if (_p === undefined) {
+      _tmp$2 = $panic();
+    } else {
+      const _p$2 = _p;
+      _tmp$2 = _p$2;
+    }
+    const _tmp$3 = _tmp$2;
+    _tmp$3.next = entry.next;
+  }
+  const _bind$9 = entry.next;
+  if (_bind$9 === undefined) {
+    self.tail = entry.prev;
+    return;
+  } else {
+    const _Some = _bind$9;
+    const _next = _Some;
+    _next.prev = entry.prev;
+    return;
+  }
+}
+function moonbitlang$core$set$$Set$shift_back$17$(self, idx) {
+  let _tmp = idx;
+  while (true) {
+    const idx$2 = _tmp;
+    const next = idx$2 + 1 & self.capacity_mask;
+    _L: {
+      const _tmp$2 = self.entries;
+      $bound_check(_tmp$2, next);
+      const _bind$8 = _tmp$2[next];
+      if (_bind$8 === undefined) {
+        break _L;
+      } else {
+        const _Some = _bind$8;
+        const _x = _Some;
+        const _x$2 = _x.psl;
+        if (_x$2 === 0) {
+          break _L;
+        } else {
+          _x.psl = _x.psl - 1 | 0;
+          moonbitlang$core$set$$Set$set_entry$17$(self, _x, idx$2);
+          _tmp = next;
+          continue;
+        }
+      }
+    }
+    const _tmp$2 = self.entries;
+    $bound_check(_tmp$2, idx$2);
+    _tmp$2[idx$2] = undefined;
+    return;
+  }
+}
+function moonbitlang$core$set$$Set$shift_back$3$(self, idx) {
+  let _tmp = idx;
+  while (true) {
+    const idx$2 = _tmp;
+    const next = idx$2 + 1 & self.capacity_mask;
+    _L: {
+      const _tmp$2 = self.entries;
+      $bound_check(_tmp$2, next);
+      const _bind$8 = _tmp$2[next];
+      if (_bind$8 === undefined) {
+        break _L;
+      } else {
+        const _Some = _bind$8;
+        const _x = _Some;
+        const _x$2 = _x.psl;
+        if (_x$2 === 0) {
+          break _L;
+        } else {
+          _x.psl = _x.psl - 1 | 0;
+          moonbitlang$core$set$$Set$set_entry$3$(self, _x, idx$2);
+          _tmp = next;
+          continue;
+        }
+      }
+    }
+    const _tmp$2 = self.entries;
+    $bound_check(_tmp$2, idx$2);
+    _tmp$2[idx$2] = undefined;
+    return;
+  }
+}
+function moonbitlang$core$set$$Set$remove$17$(self, key) {
+  const hash = moonbitlang$core$builtin$$Hash$hash$43$(key);
+  let _tmp = 0;
+  let _tmp$2 = hash & self.capacity_mask;
+  while (true) {
+    const i = _tmp;
+    const idx = _tmp$2;
+    const _tmp$3 = self.entries;
+    $bound_check(_tmp$3, idx);
+    const _bind$8 = _tmp$3[idx];
+    if (_bind$8 === undefined) {
+      break;
+    } else {
+      const _Some = _bind$8;
+      const _entry = _Some;
+      if (_entry.hash === hash && moonbitlang$core$builtin$$Eq$equal$17$(_entry.key, key)) {
+        moonbitlang$core$set$$Set$remove_entry$17$(self, _entry);
+        moonbitlang$core$set$$Set$shift_back$17$(self, idx);
+        self.size = self.size - 1 | 0;
+        break;
+      }
+      if (i > _entry.psl) {
+        break;
+      }
+      _tmp = i + 1 | 0;
+      _tmp$2 = idx + 1 & self.capacity_mask;
+      continue;
+    }
+  }
+}
+function moonbitlang$core$set$$Set$remove$3$(self, key) {
+  const hash = moonbitlang$core$builtin$$Hash$hash$42$(key);
+  let _tmp = 0;
+  let _tmp$2 = hash & self.capacity_mask;
+  while (true) {
+    const i = _tmp;
+    const idx = _tmp$2;
+    const _tmp$3 = self.entries;
+    $bound_check(_tmp$3, idx);
+    const _bind$8 = _tmp$3[idx];
+    if (_bind$8 === undefined) {
+      break;
+    } else {
+      const _Some = _bind$8;
+      const _entry = _Some;
+      let _tmp$4;
+      if (_entry.hash === hash) {
+        const _p = _entry.key;
+        _tmp$4 = _p === key;
+      } else {
+        _tmp$4 = false;
+      }
+      if (_tmp$4) {
+        moonbitlang$core$set$$Set$remove_entry$3$(self, _entry);
+        moonbitlang$core$set$$Set$shift_back$3$(self, idx);
+        self.size = self.size - 1 | 0;
+        break;
+      }
+      if (i > _entry.psl) {
+        break;
+      }
+      _tmp = i + 1 | 0;
+      _tmp$2 = idx + 1 & self.capacity_mask;
+      continue;
+    }
+  }
+}
+function moonbitlang$core$set$$Set$clear$17$(self) {
+  moonbitlang$core$array$$FixedArray$fill$46$inner$72$(self.entries, undefined, 0, undefined);
+  self.size = 0;
+  self.head = undefined;
+  self.tail = -1;
+}
+function moonbitlang$core$set$$Set$iter$3$(self) {
+  const _p = (yield_) => {
+    let _tmp = self.head;
+    while (true) {
+      const _param = _tmp;
+      if (_param === undefined) {
+        return 1;
+      } else {
+        const _Some = _param;
+        const _x = _Some;
+        const _key = _x.key;
+        const _next = _x.next;
+        const _bind$8 = yield_(_key);
+        if (_bind$8 === 1) {
+          _tmp = _next;
+          continue;
+        } else {
+          return 0;
+        }
+      }
+    }
+  };
+  return _p;
+}
+function moonbitlang$core$set$$Set$iterator$17$(self) {
+  const curr_entry = { val: self.head };
+  const _p = () => {
+    const _bind$8 = curr_entry.val;
+    if (_bind$8 === undefined) {
+      return undefined;
+    } else {
+      const _Some = _bind$8;
+      const _x = _Some;
+      const _key = _x.key;
+      const _next = _x.next;
+      curr_entry.val = _next;
+      return _key;
+    }
+  };
+  return _p;
+}
+function moonbitlang$core$set$$Set$iterator$3$(self) {
+  const curr_entry = { val: self.head };
+  const _p = () => {
+    const _bind$8 = curr_entry.val;
+    if (_bind$8 === undefined) {
+      return undefined;
+    } else {
+      const _Some = _bind$8;
+      const _x = _Some;
+      const _key = _x.key;
+      const _next = _x.next;
+      curr_entry.val = _next;
+      return _key;
+    }
+  };
+  return _p;
+}
+function moonbitlang$core$set$$Set$difference$17$(self, other) {
+  const m = moonbitlang$core$set$$Set$new$46$inner$17$(8);
+  let _tmp = self.head;
+  while (true) {
+    const _p = _tmp;
+    if (_p === undefined) {
+      break;
+    } else {
+      const _p$2 = _p;
+      const _p$3 = _p$2;
+      const _p$4 = _p$3.key;
+      const _p$5 = _p$3.next;
+      if (!moonbitlang$core$set$$Set$contains$17$(other, _p$4)) {
+        moonbitlang$core$set$$Set$add$17$(m, _p$4);
+      }
+      _tmp = _p$5;
+      continue;
+    }
+  }
+  return m;
+}
+function moonbitlang$core$set$$Set$union$17$(self, other) {
+  const m = moonbitlang$core$set$$Set$new$46$inner$17$(8);
+  let _tmp = self.head;
+  while (true) {
+    const _p = _tmp;
+    if (_p === undefined) {
+      break;
+    } else {
+      const _p$2 = _p;
+      const _p$3 = _p$2;
+      const _p$4 = _p$3.key;
+      const _p$5 = _p$3.next;
+      moonbitlang$core$set$$Set$add$17$(m, _p$4);
+      _tmp = _p$5;
+      continue;
+    }
+  }
+  let _tmp$2 = other.head;
+  while (true) {
+    const _p = _tmp$2;
+    if (_p === undefined) {
+      break;
+    } else {
+      const _p$2 = _p;
+      const _p$3 = _p$2;
+      const _p$4 = _p$3.key;
+      const _p$5 = _p$3.next;
+      moonbitlang$core$set$$Set$add$17$(m, _p$4);
+      _tmp$2 = _p$5;
+      continue;
+    }
+  }
+  return m;
+}
+function moonbitlang$core$set$$Set$union$3$(self, other) {
+  const m = moonbitlang$core$set$$Set$new$46$inner$3$(8);
+  let _tmp = self.head;
+  while (true) {
+    const _p = _tmp;
+    if (_p === undefined) {
+      break;
+    } else {
+      const _p$2 = _p;
+      const _p$3 = _p$2;
+      const _p$4 = _p$3.key;
+      const _p$5 = _p$3.next;
+      moonbitlang$core$set$$Set$add$3$(m, _p$4);
+      _tmp = _p$5;
+      continue;
+    }
+  }
+  let _tmp$2 = other.head;
+  while (true) {
+    const _p = _tmp$2;
+    if (_p === undefined) {
+      break;
+    } else {
+      const _p$2 = _p;
+      const _p$3 = _p$2;
+      const _p$4 = _p$3.key;
+      const _p$5 = _p$3.next;
+      moonbitlang$core$set$$Set$add$3$(m, _p$4);
+      _tmp$2 = _p$5;
+      continue;
+    }
+  }
+  return m;
+}
+function moonbitlang$core$ref$$Ref$new$80$(x) {
   return { val: x };
 }
 function moonbitlang$core$ref$$Ref$new$20$(x) {
@@ -6309,7 +6895,7 @@ function moonbitlang$core$ref$$Ref$new$11$(x) {
 function moonbitlang$core$ref$$Ref$new$10$(x) {
   return { val: x };
 }
-function moonbitlang$core$builtin$$Default$default$67$() {
+function moonbitlang$core$builtin$$Default$default$66$() {
   return { _0: 0, _1: 0 };
 }
 function Milky2018$selene$math$$Vec2D$op_get(this_, axis) {
@@ -6787,100 +7373,100 @@ function Milky2018$selene$inputs$$is_mouse_just_released(button) {
 function Milky2018$selene$inputs$$Code$from_string(code) {
   switch (code) {
     case "KeyA": {
-      return Milky2018$selene$inputs$$from_string$46$constr$47$2368;
+      return Milky2018$selene$inputs$$from_string$46$constr$47$2551;
     }
     case "KeyB": {
-      return Milky2018$selene$inputs$$from_string$46$constr$47$2369;
+      return Milky2018$selene$inputs$$from_string$46$constr$47$2552;
     }
     case "KeyC": {
-      return Milky2018$selene$inputs$$from_string$46$constr$47$2370;
+      return Milky2018$selene$inputs$$from_string$46$constr$47$2553;
     }
     case "KeyD": {
-      return Milky2018$selene$inputs$$from_string$46$constr$47$2371;
+      return Milky2018$selene$inputs$$from_string$46$constr$47$2554;
     }
     case "KeyE": {
-      return Milky2018$selene$inputs$$from_string$46$constr$47$2372;
+      return Milky2018$selene$inputs$$from_string$46$constr$47$2555;
     }
     case "KeyF": {
-      return Milky2018$selene$inputs$$from_string$46$constr$47$2373;
+      return Milky2018$selene$inputs$$from_string$46$constr$47$2556;
     }
     case "KeyG": {
-      return Milky2018$selene$inputs$$from_string$46$constr$47$2374;
+      return Milky2018$selene$inputs$$from_string$46$constr$47$2557;
     }
     case "KeyH": {
-      return Milky2018$selene$inputs$$from_string$46$constr$47$2375;
+      return Milky2018$selene$inputs$$from_string$46$constr$47$2558;
     }
     case "KeyI": {
-      return Milky2018$selene$inputs$$from_string$46$constr$47$2376;
+      return Milky2018$selene$inputs$$from_string$46$constr$47$2559;
     }
     case "KeyJ": {
-      return Milky2018$selene$inputs$$from_string$46$constr$47$2377;
+      return Milky2018$selene$inputs$$from_string$46$constr$47$2560;
     }
     case "KeyK": {
-      return Milky2018$selene$inputs$$from_string$46$constr$47$2378;
+      return Milky2018$selene$inputs$$from_string$46$constr$47$2561;
     }
     case "KeyL": {
-      return Milky2018$selene$inputs$$from_string$46$constr$47$2379;
+      return Milky2018$selene$inputs$$from_string$46$constr$47$2562;
     }
     case "KeyM": {
-      return Milky2018$selene$inputs$$from_string$46$constr$47$2380;
+      return Milky2018$selene$inputs$$from_string$46$constr$47$2563;
     }
     case "KeyN": {
-      return Milky2018$selene$inputs$$from_string$46$constr$47$2381;
+      return Milky2018$selene$inputs$$from_string$46$constr$47$2564;
     }
     case "KeyO": {
-      return Milky2018$selene$inputs$$from_string$46$constr$47$2382;
+      return Milky2018$selene$inputs$$from_string$46$constr$47$2565;
     }
     case "KeyP": {
-      return Milky2018$selene$inputs$$from_string$46$constr$47$2383;
+      return Milky2018$selene$inputs$$from_string$46$constr$47$2566;
     }
     case "KeyQ": {
-      return Milky2018$selene$inputs$$from_string$46$constr$47$2384;
+      return Milky2018$selene$inputs$$from_string$46$constr$47$2567;
     }
     case "KeyR": {
-      return Milky2018$selene$inputs$$from_string$46$constr$47$2385;
+      return Milky2018$selene$inputs$$from_string$46$constr$47$2568;
     }
     case "KeyS": {
-      return Milky2018$selene$inputs$$from_string$46$constr$47$2386;
+      return Milky2018$selene$inputs$$from_string$46$constr$47$2569;
     }
     case "KeyT": {
-      return Milky2018$selene$inputs$$from_string$46$constr$47$2387;
+      return Milky2018$selene$inputs$$from_string$46$constr$47$2570;
     }
     case "KeyU": {
-      return Milky2018$selene$inputs$$from_string$46$constr$47$2388;
+      return Milky2018$selene$inputs$$from_string$46$constr$47$2571;
     }
     case "KeyV": {
-      return Milky2018$selene$inputs$$from_string$46$constr$47$2389;
+      return Milky2018$selene$inputs$$from_string$46$constr$47$2572;
     }
     case "KeyW": {
-      return Milky2018$selene$inputs$$from_string$46$constr$47$2390;
+      return Milky2018$selene$inputs$$from_string$46$constr$47$2573;
     }
     case "KeyX": {
-      return Milky2018$selene$inputs$$from_string$46$constr$47$2391;
+      return Milky2018$selene$inputs$$from_string$46$constr$47$2574;
     }
     case "KeyY": {
-      return Milky2018$selene$inputs$$from_string$46$constr$47$2392;
+      return Milky2018$selene$inputs$$from_string$46$constr$47$2575;
     }
     case "ArrowUp": {
-      return Milky2018$selene$inputs$$from_string$46$constr$47$2393;
+      return Milky2018$selene$inputs$$from_string$46$constr$47$2576;
     }
     case "ArrowDown": {
-      return Milky2018$selene$inputs$$from_string$46$constr$47$2394;
+      return Milky2018$selene$inputs$$from_string$46$constr$47$2577;
     }
     case "ArrowLeft": {
-      return Milky2018$selene$inputs$$from_string$46$constr$47$2395;
+      return Milky2018$selene$inputs$$from_string$46$constr$47$2578;
     }
     case "ArrowRight": {
-      return Milky2018$selene$inputs$$from_string$46$constr$47$2396;
+      return Milky2018$selene$inputs$$from_string$46$constr$47$2579;
     }
     case "Space": {
-      return Milky2018$selene$inputs$$from_string$46$constr$47$2397;
+      return Milky2018$selene$inputs$$from_string$46$constr$47$2580;
     }
     case "Enter": {
-      return Milky2018$selene$inputs$$from_string$46$constr$47$2398;
+      return Milky2018$selene$inputs$$from_string$46$constr$47$2581;
     }
     case "Escape": {
-      return Milky2018$selene$inputs$$from_string$46$constr$47$2399;
+      return Milky2018$selene$inputs$$from_string$46$constr$47$2582;
     }
     default: {
       return undefined;
@@ -6928,74 +7514,74 @@ function Milky2018$selene$inputs$$advanced_key_system(_delta) {
     }
   }
 }
-function rami3l$js$45$ffi$js$$Union3$from0$77$(value) {
+function rami3l$js$45$ffi$js$$Union3$from0$81$(value) {
   return value;
 }
-function rami3l$js$45$ffi$js$$Union3$from2$77$(value) {
+function rami3l$js$45$ffi$js$$Union3$from2$81$(value) {
   return value;
 }
-function rami3l$js$45$ffi$js$$Union5$to0$78$(self) {
-  return rami3l$js$45$ffi$js$$Cast$into$65$(self);
+function rami3l$js$45$ffi$js$$Union5$to0$82$(self) {
+  return rami3l$js$45$ffi$js$$Cast$into$64$(self);
 }
-function rami3l$js$45$ffi$js$$Union7$from0$79$(value) {
-  return rami3l$js$45$ffi$js$$Cast$from$80$(value);
+function rami3l$js$45$ffi$js$$Union7$from0$83$(value) {
+  return rami3l$js$45$ffi$js$$Cast$from$84$(value);
 }
 function rami3l$js$45$ffi$js$$Optional$undefined$20$() {
   return rami3l$js$45$ffi$js$$Value$undefined();
 }
-function rami3l$js$45$ffi$js$$Nullable$is_null$81$(self) {
+function rami3l$js$45$ffi$js$$Nullable$is_null$85$(self) {
   return rami3l$js$45$ffi$js$$Value$is_null(self);
 }
-function rami3l$js$45$ffi$js$$Nullable$unwrap$81$(self) {
-  if (rami3l$js$45$ffi$js$$Nullable$is_null$81$(self)) {
-    moonbitlang$core$abort$$abort$22$("Cannot unwrap a null value");
+function rami3l$js$45$ffi$js$$Nullable$unwrap$85$(self) {
+  if (rami3l$js$45$ffi$js$$Nullable$is_null$85$(self)) {
+    moonbitlang$core$builtin$$abort$22$("Cannot unwrap a null value", "@rami3l/js-ffi/js:null.mbt:17:5-17:40");
   }
   return self;
 }
-function rami3l$js$45$ffi$js$$Nullable$to_option$62$(self) {
+function rami3l$js$45$ffi$js$$Nullable$to_option$61$(self) {
   return !rami3l$js$45$ffi$js$$Value$is_null(self) ? new Option$Some$6$(self) : Option$None$6$;
 }
-function rami3l$js$45$ffi$js$$Nullable$to_option$63$(self) {
+function rami3l$js$45$ffi$js$$Nullable$to_option$62$(self) {
   return !rami3l$js$45$ffi$js$$Value$is_null(self) ? new Option$Some$7$(self) : Option$None$7$;
 }
-function rami3l$js$45$ffi$js$$Nullable$to_option$64$(self) {
+function rami3l$js$45$ffi$js$$Nullable$to_option$63$(self) {
   return !rami3l$js$45$ffi$js$$Value$is_null(self) ? new Option$Some$8$(self) : Option$None$8$;
 }
-function rami3l$js$45$ffi$js$$Nullable$to_option$65$(self) {
+function rami3l$js$45$ffi$js$$Nullable$to_option$64$(self) {
   return !rami3l$js$45$ffi$js$$Value$is_null(self) ? new Option$Some$9$(self) : Option$None$9$;
 }
-function Yoorkin$rabbit$45$tea$dom$$IsMouseEvent$get_button$82$(s) {
+function Yoorkin$rabbit$45$tea$dom$$IsMouseEvent$get_button$86$(s) {
   return Yoorkin$rabbit$45$tea$dom$$ffi_mouse_event_button(s);
 }
-function Yoorkin$rabbit$45$tea$dom$$IsMouseEvent$get_movement_x$82$(s) {
+function Yoorkin$rabbit$45$tea$dom$$IsMouseEvent$get_movement_x$86$(s) {
   return Yoorkin$rabbit$45$tea$dom$$ffi_mouse_event_movement_x(s);
 }
-function Yoorkin$rabbit$45$tea$dom$$IsMouseEvent$get_movement_y$82$(s) {
+function Yoorkin$rabbit$45$tea$dom$$IsMouseEvent$get_movement_y$86$(s) {
   return Yoorkin$rabbit$45$tea$dom$$ffi_mouse_event_movement_y(s);
 }
-function Yoorkin$rabbit$45$tea$dom$$IsMouseEvent$get_offset_x$82$(s) {
+function Yoorkin$rabbit$45$tea$dom$$IsMouseEvent$get_offset_x$86$(s) {
   return Yoorkin$rabbit$45$tea$dom$$ffi_mouse_event_offset_x(s);
 }
-function Yoorkin$rabbit$45$tea$dom$$IsMouseEvent$get_offset_y$82$(s) {
+function Yoorkin$rabbit$45$tea$dom$$IsMouseEvent$get_offset_y$86$(s) {
   return Yoorkin$rabbit$45$tea$dom$$ffi_mouse_event_offset_y(s);
 }
-function rami3l$js$45$ffi$js$$Cast$from$80$(value) {
+function rami3l$js$45$ffi$js$$Cast$from$84$(value) {
   return value;
 }
-function Yoorkin$rabbit$45$tea$dom$$IsEventTarget$add_event_listener$83$(s, type_, callback) {
+function Yoorkin$rabbit$45$tea$dom$$IsEventTarget$add_event_listener$87$(s, type_, callback) {
   Yoorkin$rabbit$45$tea$dom$$ffi_add_event_listener(s, type_, callback);
 }
-function Yoorkin$rabbit$45$tea$dom$$IsEventTarget$to_html_canvas_element$84$(s) {
-  return rami3l$js$45$ffi$js$$Nullable$to_option$64$(Yoorkin$rabbit$45$tea$dom$$ffi_to_html_canvas_element(s));
+function Yoorkin$rabbit$45$tea$dom$$IsEventTarget$to_html_canvas_element$88$(s) {
+  return rami3l$js$45$ffi$js$$Nullable$to_option$63$(Yoorkin$rabbit$45$tea$dom$$ffi_to_html_canvas_element(s));
 }
-function Yoorkin$rabbit$45$tea$dom$$IsEvent$to_mouse_event$85$(s) {
-  return rami3l$js$45$ffi$js$$Nullable$to_option$63$(Yoorkin$rabbit$45$tea$dom$$ffi_to_mouse_event(s));
+function Yoorkin$rabbit$45$tea$dom$$IsEvent$to_mouse_event$89$(s) {
+  return rami3l$js$45$ffi$js$$Nullable$to_option$62$(Yoorkin$rabbit$45$tea$dom$$ffi_to_mouse_event(s));
 }
-function Yoorkin$rabbit$45$tea$dom$$IsEvent$to_keyboard_event$85$(s) {
-  return rami3l$js$45$ffi$js$$Nullable$to_option$62$(Yoorkin$rabbit$45$tea$dom$$ffi_to_keyboard_event(s));
+function Yoorkin$rabbit$45$tea$dom$$IsEvent$to_keyboard_event$89$(s) {
+  return rami3l$js$45$ffi$js$$Nullable$to_option$61$(Yoorkin$rabbit$45$tea$dom$$ffi_to_keyboard_event(s));
 }
-function rami3l$js$45$ffi$js$$Cast$into$65$(value) {
-  return rami3l$js$45$ffi$js$$Nullable$to_option$65$(Yoorkin$rabbit$45$tea$dom$$checked_to_canvas_rendering_context_2d(value));
+function rami3l$js$45$ffi$js$$Cast$into$64$(value) {
+  return rami3l$js$45$ffi$js$$Nullable$to_option$64$(Yoorkin$rabbit$45$tea$dom$$checked_to_canvas_rendering_context_2d(value));
 }
 function Yoorkin$rabbit$45$tea$dom$$CanvasRenderingContext2D$fill_text(self, text, x, y, max_width$46$opt) {
   let max_width;
@@ -7008,22 +7594,22 @@ function Yoorkin$rabbit$45$tea$dom$$CanvasRenderingContext2D$fill_text(self, tex
   Yoorkin$rabbit$45$tea$dom$$CanvasRenderingContext2D$fill_text$46$inner(self, text, x, y, max_width);
 }
 function Milky2018$selene$backend$$CanvasBackend$new() {
-  const canvas = moonbitlang$core$option$$Option$unwrap$64$(Yoorkin$rabbit$45$tea$dom$$IsEventTarget$to_html_canvas_element$84$(rami3l$js$45$ffi$js$$Nullable$unwrap$81$(Yoorkin$rabbit$45$tea$dom$$Document$get_element_by_id(Yoorkin$rabbit$45$tea$dom$$document(), "canvas"))));
-  const context = moonbitlang$core$option$$Option$unwrap$65$(rami3l$js$45$ffi$js$$Union5$to0$78$(Yoorkin$rabbit$45$tea$dom$$HTMLCanvasElement$get_context(canvas, "2d")));
+  const canvas = moonbitlang$core$option$$Option$unwrap$63$(Yoorkin$rabbit$45$tea$dom$$IsEventTarget$to_html_canvas_element$88$(rami3l$js$45$ffi$js$$Nullable$unwrap$85$(Yoorkin$rabbit$45$tea$dom$$Document$get_element_by_id(Yoorkin$rabbit$45$tea$dom$$document(), "canvas"))));
+  const context = moonbitlang$core$option$$Option$unwrap$64$(rami3l$js$45$ffi$js$$Union5$to0$82$(Yoorkin$rabbit$45$tea$dom$$HTMLCanvasElement$get_context(canvas, "2d")));
   const _bind$8 = { _0: 0, _1: 0 };
-  const _bind$9 = moonbitlang$core$ref$$Ref$new$76$(undefined);
+  const _bind$9 = moonbitlang$core$ref$$Ref$new$80$(undefined);
   return { canvas: canvas, context: context, viewport_size: _bind$8, zoom: 1, time_scale: 1, mouse_movement: _bind$9 };
 }
 function Milky2018$selene$backend$$register_mouse_events(mouse, mouse_movement) {
   Milky2018$selene$backend$$canvas_backend.mouse_movement.val = mouse_movement;
-  Yoorkin$rabbit$45$tea$dom$$IsEventTarget$add_event_listener$83$(Milky2018$selene$backend$$window, "mousemove", (event) => {
-    const mouse_event = moonbitlang$core$option$$Option$unwrap$63$(Yoorkin$rabbit$45$tea$dom$$IsEvent$to_mouse_event$85$(event));
-    mouse.pos = { _0: Yoorkin$rabbit$45$tea$dom$$IsMouseEvent$get_offset_x$82$(mouse_event) + 0, _1: Yoorkin$rabbit$45$tea$dom$$IsMouseEvent$get_offset_y$82$(mouse_event) + 0 };
-    mouse_movement.movement = { _0: Yoorkin$rabbit$45$tea$dom$$IsMouseEvent$get_movement_x$82$(mouse_event) + 0, _1: Yoorkin$rabbit$45$tea$dom$$IsMouseEvent$get_movement_y$82$(mouse_event) + 0 };
+  Yoorkin$rabbit$45$tea$dom$$IsEventTarget$add_event_listener$87$(Milky2018$selene$backend$$window, "mousemove", (event) => {
+    const mouse_event = moonbitlang$core$option$$Option$unwrap$62$(Yoorkin$rabbit$45$tea$dom$$IsEvent$to_mouse_event$89$(event));
+    mouse.pos = { _0: Yoorkin$rabbit$45$tea$dom$$IsMouseEvent$get_offset_x$86$(mouse_event) + 0, _1: Yoorkin$rabbit$45$tea$dom$$IsMouseEvent$get_offset_y$86$(mouse_event) + 0 };
+    mouse_movement.movement = { _0: Yoorkin$rabbit$45$tea$dom$$IsMouseEvent$get_movement_x$86$(mouse_event) + 0, _1: Yoorkin$rabbit$45$tea$dom$$IsMouseEvent$get_movement_y$86$(mouse_event) + 0 };
   });
-  Yoorkin$rabbit$45$tea$dom$$IsEventTarget$add_event_listener$83$(Milky2018$selene$backend$$window, "mousedown", (event) => {
-    const mouse_event = moonbitlang$core$option$$Option$unwrap$63$(Yoorkin$rabbit$45$tea$dom$$IsEvent$to_mouse_event$85$(event));
-    const _bind$8 = Yoorkin$rabbit$45$tea$dom$$IsMouseEvent$get_button$82$(mouse_event);
+  Yoorkin$rabbit$45$tea$dom$$IsEventTarget$add_event_listener$87$(Milky2018$selene$backend$$window, "mousedown", (event) => {
+    const mouse_event = moonbitlang$core$option$$Option$unwrap$62$(Yoorkin$rabbit$45$tea$dom$$IsEvent$to_mouse_event$89$(event));
+    const _bind$8 = Yoorkin$rabbit$45$tea$dom$$IsMouseEvent$get_button$86$(mouse_event);
     switch (_bind$8) {
       case 0: {
         mouse.left_button = true;
@@ -7042,9 +7628,9 @@ function Milky2018$selene$backend$$register_mouse_events(mouse, mouse_movement) 
       }
     }
   });
-  Yoorkin$rabbit$45$tea$dom$$IsEventTarget$add_event_listener$83$(Milky2018$selene$backend$$window, "mouseup", (event) => {
-    const mouse_event = moonbitlang$core$option$$Option$unwrap$63$(Yoorkin$rabbit$45$tea$dom$$IsEvent$to_mouse_event$85$(event));
-    const _bind$8 = Yoorkin$rabbit$45$tea$dom$$IsMouseEvent$get_button$82$(mouse_event);
+  Yoorkin$rabbit$45$tea$dom$$IsEventTarget$add_event_listener$87$(Milky2018$selene$backend$$window, "mouseup", (event) => {
+    const mouse_event = moonbitlang$core$option$$Option$unwrap$62$(Yoorkin$rabbit$45$tea$dom$$IsEvent$to_mouse_event$89$(event));
+    const _bind$8 = Yoorkin$rabbit$45$tea$dom$$IsMouseEvent$get_button$86$(mouse_event);
     switch (_bind$8) {
       case 0: {
         mouse.left_button = false;
@@ -7065,8 +7651,8 @@ function Milky2018$selene$backend$$register_mouse_events(mouse, mouse_movement) 
   });
 }
 function Milky2018$selene$backend$$register_key_events(pressed_keys) {
-  Yoorkin$rabbit$45$tea$dom$$IsEventTarget$add_event_listener$83$(Milky2018$selene$backend$$window, "keyup", (event) => {
-    const keyboard_event = moonbitlang$core$option$$Option$unwrap$62$(Yoorkin$rabbit$45$tea$dom$$IsEvent$to_keyboard_event$85$(event));
+  Yoorkin$rabbit$45$tea$dom$$IsEventTarget$add_event_listener$87$(Milky2018$selene$backend$$window, "keyup", (event) => {
+    const keyboard_event = moonbitlang$core$option$$Option$unwrap$61$(Yoorkin$rabbit$45$tea$dom$$IsEvent$to_keyboard_event$89$(event));
     const keycode = Milky2018$selene$inputs$$Code$from_string(Yoorkin$rabbit$45$tea$dom$$KeyboardEvent$code(keyboard_event));
     if (keycode === undefined) {
       return;
@@ -7077,8 +7663,8 @@ function Milky2018$selene$backend$$register_key_events(pressed_keys) {
       return;
     }
   });
-  Yoorkin$rabbit$45$tea$dom$$IsEventTarget$add_event_listener$83$(Milky2018$selene$backend$$window, "keydown", (event) => {
-    const keyboard_event = moonbitlang$core$option$$Option$unwrap$62$(Yoorkin$rabbit$45$tea$dom$$IsEvent$to_keyboard_event$85$(event));
+  Yoorkin$rabbit$45$tea$dom$$IsEventTarget$add_event_listener$87$(Milky2018$selene$backend$$window, "keydown", (event) => {
+    const keyboard_event = moonbitlang$core$option$$Option$unwrap$61$(Yoorkin$rabbit$45$tea$dom$$IsEvent$to_keyboard_event$89$(event));
     const keycode = Milky2018$selene$inputs$$Code$from_string(Yoorkin$rabbit$45$tea$dom$$KeyboardEvent$code(keyboard_event));
     if (keycode === undefined) {
       return;
@@ -7123,9 +7709,9 @@ function Milky2018$selene$backend$$draw_picture(png, x, y, width, height, transf
     }
   }
   const context = Milky2018$selene$backend$$canvas_backend.context;
-  const pattern = Yoorkin$rabbit$45$tea$dom$$CanvasRenderingContext2D$create_pattern(context, rami3l$js$45$ffi$js$$Union7$from0$79$(element), repeat_mode);
+  const pattern = Yoorkin$rabbit$45$tea$dom$$CanvasRenderingContext2D$create_pattern(context, rami3l$js$45$ffi$js$$Union7$from0$83$(element), repeat_mode);
   Yoorkin$rabbit$45$tea$dom$$CanvasRenderingContext2D$save(context);
-  Yoorkin$rabbit$45$tea$dom$$CanvasRenderingContext2D$set_fill_style(context, rami3l$js$45$ffi$js$$Union3$from2$77$(pattern));
+  Yoorkin$rabbit$45$tea$dom$$CanvasRenderingContext2D$set_fill_style(context, rami3l$js$45$ffi$js$$Union3$from2$81$(pattern));
   Yoorkin$rabbit$45$tea$dom$$CanvasRenderingContext2D$translate(context, x, y);
   Yoorkin$rabbit$45$tea$dom$$CanvasRenderingContext2D$transform(context, transform.a, transform.b, transform.c, transform.d, transform.tx, transform.ty);
   Yoorkin$rabbit$45$tea$dom$$CanvasRenderingContext2D$fill_rect(context, 0, 0, width, height);
@@ -7174,16 +7760,16 @@ function Milky2018$selene$backend$$draw_text(text, x, y, font, color, align, bas
     }
   }
   Milky2018$selene$backend$$set_text_baseline(context, baseline$2);
-  Yoorkin$rabbit$45$tea$dom$$CanvasRenderingContext2D$set_fill_style(context, rami3l$js$45$ffi$js$$Union3$from0$77$(color));
+  Yoorkin$rabbit$45$tea$dom$$CanvasRenderingContext2D$set_fill_style(context, rami3l$js$45$ffi$js$$Union3$from0$81$(color));
   Yoorkin$rabbit$45$tea$dom$$CanvasRenderingContext2D$fill_text(context, text, x, y, Option$None$10$);
   Yoorkin$rabbit$45$tea$dom$$CanvasRenderingContext2D$restore(context);
 }
 function Milky2018$selene$backend$$draw_color_rect(x, y, width, height, color, stroke_color) {
   const context = Milky2018$selene$backend$$canvas_backend.context;
   Yoorkin$rabbit$45$tea$dom$$CanvasRenderingContext2D$save(context);
-  Yoorkin$rabbit$45$tea$dom$$CanvasRenderingContext2D$set_stroke_style(context, rami3l$js$45$ffi$js$$Union3$from0$77$(stroke_color));
+  Yoorkin$rabbit$45$tea$dom$$CanvasRenderingContext2D$set_stroke_style(context, rami3l$js$45$ffi$js$$Union3$from0$81$(stroke_color));
   Yoorkin$rabbit$45$tea$dom$$CanvasRenderingContext2D$stroke_rect(context, x, y, width, height);
-  Yoorkin$rabbit$45$tea$dom$$CanvasRenderingContext2D$set_fill_style(context, rami3l$js$45$ffi$js$$Union3$from0$77$(color));
+  Yoorkin$rabbit$45$tea$dom$$CanvasRenderingContext2D$set_fill_style(context, rami3l$js$45$ffi$js$$Union3$from0$81$(color));
   Yoorkin$rabbit$45$tea$dom$$CanvasRenderingContext2D$fill_rect(context, x, y, width, height);
   Yoorkin$rabbit$45$tea$dom$$CanvasRenderingContext2D$restore(context);
 }
@@ -7191,9 +7777,9 @@ function Milky2018$selene$backend$$draw_color_circle(x, y, radius, color, stroke
   const context = Milky2018$selene$backend$$canvas_backend.context;
   Milky2018$selene$backend$$begin_path(context);
   Yoorkin$rabbit$45$tea$dom$$CanvasRenderingContext2D$arc$46$inner(context, x, y, radius, 0, 6.28318530717958623, false);
-  Yoorkin$rabbit$45$tea$dom$$CanvasRenderingContext2D$set_fill_style(context, rami3l$js$45$ffi$js$$Union3$from0$77$(color));
+  Yoorkin$rabbit$45$tea$dom$$CanvasRenderingContext2D$set_fill_style(context, rami3l$js$45$ffi$js$$Union3$from0$81$(color));
   Yoorkin$rabbit$45$tea$dom$$CanvasRenderingContext2D$fill$46$inner(context, "nonzero");
-  Yoorkin$rabbit$45$tea$dom$$CanvasRenderingContext2D$set_stroke_style(context, rami3l$js$45$ffi$js$$Union3$from0$77$(stroke_color));
+  Yoorkin$rabbit$45$tea$dom$$CanvasRenderingContext2D$set_stroke_style(context, rami3l$js$45$ffi$js$$Union3$from0$81$(stroke_color));
   Yoorkin$rabbit$45$tea$dom$$CanvasRenderingContext2D$stroke(context);
   Yoorkin$rabbit$45$tea$dom$$CanvasRenderingContext2D$restore(context);
 }
@@ -7231,7 +7817,7 @@ function Milky2018$selene$backend$$schedule_with_fixed_interval(interval, callba
 }
 function Milky2018$selene$backend$$initialize(startup, render_loop, game_loop, canvas_width, canvas_height, fps, image_smooth, zoom) {
   if (fps >>> 0 > 60 >>> 0) {
-    moonbitlang$core$builtin$$println$43$("Warning: FPS is set above 60. The browser's window only support up to 60 FPS.");
+    moonbitlang$core$builtin$$println$37$("Warning: FPS is set above 60. The browser's window only support up to 60 FPS.");
   }
   Milky2018$selene$backend$$canvas_backend.viewport_size = { _0: canvas_width, _1: canvas_height };
   Milky2018$selene$backend$$set_viewport_height(Milky2018$selene$backend$$canvas_backend.canvas, canvas_height);
@@ -7413,11 +7999,11 @@ function Milky2018$selene$system$$App$with_zoom(self, zoom) {
 }
 function Milky2018$selene$system$$App$add_plugin(self, plugin) {
   const plugins = self.plugins;
-  moonbitlang$core$array$$Array$push$55$(plugins, plugin);
+  moonbitlang$core$array$$Array$push$53$(plugins, plugin);
   return { ...self, plugins: plugins };
 }
 function Milky2018$selene$system$$App$add_system$46$inner(self, system, schedule, system_name) {
-  const _p = `unnamed_system${moonbitlang$core$builtin$$Show$to_string$50$(self.systems.length)}`;
+  const _p = `unnamed_system${moonbitlang$core$builtin$$Show$to_string$48$(self.systems.length)}`;
   let system_name$2;
   if (system_name === undefined) {
     system_name$2 = _p;
@@ -7426,7 +8012,7 @@ function Milky2018$selene$system$$App$add_system$46$inner(self, system, schedule
     system_name$2 = _p$2;
   }
   const systems = self.systems;
-  moonbitlang$core$array$$Array$push$54$(systems, { _0: system, _1: schedule, _2: system_name$2 });
+  moonbitlang$core$array$$Array$push$52$(systems, { _0: system, _1: schedule, _2: system_name$2 });
   return { ...self, systems: systems };
 }
 function Milky2018$selene$system$$App$add_system(self, system, schedule$46$opt, system_name) {
@@ -7494,7 +8080,7 @@ function Milky2018$selene$system$$App$run(self) {
       break;
     }
   }
-  moonbitlang$core$array$$Array$sort_by_key$37$(renders, (system) => -system._1 | 0);
+  moonbitlang$core$array$$Array$sort_by_key$76$(renders, (system) => -system._1 | 0);
   const render_loop = (delta) => {
     const _len$3 = renders.length;
     let _tmp$3 = 0;
@@ -7521,7 +8107,7 @@ function Milky2018$selene$system$$App$run(self) {
       const system = _arr$3[_i];
       const _bind$8 = system._1;
       if (_bind$8.$tag === 1) {
-        moonbitlang$core$array$$Array$push$53$(game_loops, system._0);
+        moonbitlang$core$array$$Array$push$51$(game_loops, system._0);
       }
       _tmp$3 = _i + 1 | 0;
       continue;
@@ -7620,11 +8206,11 @@ function Milky2018$selene$entity$$Entity$spawn_child(parent, offset) {
   const child_entity = Milky2018$selene$entity$$Entity$new();
   const p = moonbitlang$core$builtin$$Map$get_or_init$8$(Milky2018$selene$entity$$parents, parent, () => ({ children: [], is_root: !moonbitlang$core$builtin$$Map$contains$7$(Milky2018$selene$entity$$children, parent) }));
   moonbitlang$core$array$$Array$push$3$(p.children, child_entity);
-  moonbitlang$core$builtin$$Map$set$7$(Milky2018$selene$entity$$children, child_entity, { parent: parent, offset: moonbitlang$core$option$$Option$unwrap_or_default$67$(offset) });
+  moonbitlang$core$builtin$$Map$set$7$(Milky2018$selene$entity$$children, child_entity, { parent: parent, offset: moonbitlang$core$option$$Option$unwrap_or_default$66$(offset) });
   return child_entity;
 }
 function Milky2018$selene$entity$$Entity$get_children(parent) {
-  return moonbitlang$core$option$$Option$map_or$68$(moonbitlang$core$builtin$$Map$get$8$(Milky2018$selene$entity$$parents, parent), [], (p) => p.children);
+  return moonbitlang$core$option$$Option$map_or$67$(moonbitlang$core$builtin$$Map$get$8$(Milky2018$selene$entity$$parents, parent), [], (p) => p.children);
 }
 function Milky2018$selene$entity$$Entity$is_child(entity) {
   return moonbitlang$core$builtin$$Map$contains$7$(Milky2018$selene$entity$$children, entity);
@@ -7784,7 +8370,7 @@ function Milky2018$selene$collision$$quadtree_query(area) {
           if (_p$3 < _p$2) {
             const _p$4 = _p[_p$3];
             const _p$5 = trees.val;
-            trees.val = new $64$moonbitlang$47$core$47$list$46$List$More$2$(_p$4, _p$5);
+            trees.val = new $64$moonbitlang$47$core$47$list$46$List$More$5$(_p$4, _p$5);
             _tmp = _p$3 + 1 | 0;
             continue;
           } else {
@@ -7832,7 +8418,7 @@ function Milky2018$selene$collision$$quadtree_clear_system(_delta) {
             const _bind$11 = { _0: _position._0 + _offset._0, _1: _position._1 + _offset._1 };
             const _bind$12 = { _0: _width, _1: _height };
             const box = { position: _bind$11, size: _bind$12 };
-            moonbitlang$core$array$$Array$push$56$(boxes, { _0: _e, _1: box });
+            moonbitlang$core$array$$Array$push$54$(boxes, { _0: _e, _1: box });
             const _p = left_limit;
             const _p$2 = Milky2018$selene$math$$Vec2D$op_get(_bind$11, 0);
             left_limit = _p > _p$2 ? _p$2 : _p;
@@ -7874,7 +8460,7 @@ function Milky2018$selene$collision$$Pickable$new() {
   return { on_pressed_callbacks: [], on_released_callbacks: [], on_just_pressed_callbacks: [], on_just_released_callbacks: [] };
 }
 function Milky2018$selene$collision$$Pickable$on_just_pressed(self, callback) {
-  moonbitlang$core$array$$Array$push$57$(self.on_just_pressed_callbacks, callback);
+  moonbitlang$core$array$$Array$push$55$(self.on_just_pressed_callbacks, callback);
 }
 function Milky2018$selene$collision$$pickable_click_system(_delta) {
   const zoom = Milky2018$selene$backend$$canvas_backend.zoom;
@@ -8158,9 +8744,9 @@ function Milky2018$selene$collision$$aabb_resolve(a, b) {
 function Milky2018$selene$collision$$add_collision_info(entity, target, direction) {
   const _bind$8 = moonbitlang$core$builtin$$Map$get$13$(Milky2018$selene$collision$$collision_infos, entity);
   if (_bind$8.$tag === 0) {
-    moonbitlang$core$builtin$$Map$set$13$(Milky2018$selene$collision$$collision_infos, entity, moonbitlang$core$array$$Array$new$46$inner$52$(0));
+    moonbitlang$core$builtin$$Map$set$13$(Milky2018$selene$collision$$collision_infos, entity, moonbitlang$core$array$$Array$new$46$inner$50$(0));
   }
-  moonbitlang$core$array$$Array$push$52$(moonbitlang$core$option$$Option$unwrap$66$(moonbitlang$core$builtin$$Map$get$13$(Milky2018$selene$collision$$collision_infos, entity)), { entity: target, direction: direction });
+  moonbitlang$core$array$$Array$push$50$(moonbitlang$core$option$$Option$unwrap$65$(moonbitlang$core$builtin$$Map$get$13$(Milky2018$selene$collision$$collision_infos, entity)), { entity: target, direction: direction });
 }
 function Milky2018$selene$collision$$make_ray_collision(object, speed, axis) {
   const pos = { _0: Milky2018$selene$math$$Vec2D$op_get(object.position, 0), _1: Milky2018$selene$math$$Vec2D$op_get(object.position, 1) };
@@ -8168,7 +8754,7 @@ function Milky2018$selene$collision$$make_ray_collision(object, speed, axis) {
   return speed >= 0 ? { position: pos, size: Milky2018$selene$math$$Vec2D$update(size, axis, Milky2018$selene$math$$Vec2D$op_get(size, axis) + speed) } : { position: Milky2018$selene$math$$Vec2D$update(pos, axis, Milky2018$selene$math$$Vec2D$op_get(pos, axis) + speed), size: Milky2018$selene$math$$Vec2D$update(size, axis, Milky2018$selene$math$$Vec2D$op_get(size, axis) - speed) };
 }
 function Milky2018$selene$collision$$CollisionMask$contains(self, layer) {
-  return moonbitlang$core$array$$Array$contains$75$(self, layer);
+  return moonbitlang$core$array$$Array$contains$78$(self, layer);
 }
 function Milky2018$selene$collision$$move_axis(entity, object, velocity, axis, mask) {
   const ray_collision = Milky2018$selene$collision$$make_ray_collision(object, Milky2018$selene$math$$Vec2D$op_get(velocity, axis), axis);
@@ -8594,7 +9180,7 @@ function Milky2018$selene$sprite$$Sprite$from_color_rect(color_rect, zindex, off
   return Milky2018$selene$sprite$$Sprite$from_color_rect$46$inner(color_rect, zindex, offset);
 }
 function Milky2018$selene$sprite$$render_animation(animation, current_frame, pos, visible, delta) {
-  const frame = moonbitlang$core$array$$Array$at$40$(animation.frames, moonbitlang$core$double$$Double$to_int(current_frame));
+  const frame = moonbitlang$core$array$$Array$at$34$(animation.frames, moonbitlang$core$double$$Double$to_int(current_frame));
   if (visible) {
     Milky2018$selene$backend$$draw_sprite(frame.sprite_path, Milky2018$selene$math$$Vec2D$op_get(pos, 0), Milky2018$selene$math$$Vec2D$op_get(pos, 1), Milky2018$selene$math$$Vec2D$op_get(frame.offset, 0), Milky2018$selene$math$$Vec2D$op_get(frame.offset, 1), Milky2018$selene$math$$Vec2D$op_get(frame.size, 0), Milky2018$selene$math$$Vec2D$op_get(frame.size, 1), animation.transform);
   }
@@ -8790,7 +9376,7 @@ function Milky2018$selene$sprite$$generate_animation() {
 function Milky2018$selene$sprite$$Animation$new$46$inner(frames, loop_, fps, transform) {
   const max_frame = frames.length;
   if (max_frame === 0) {
-    moonbitlang$core$abort$$abort$22$("Animation must have at least one frame");
+    moonbitlang$core$builtin$$abort$22$("Animation must have at least one frame", "@Milky2018/selene/sprite:animation.mbt:136:5-136:52");
   }
   return { frames: frames, transform: transform, loop_: loop_, fps: fps, id: Milky2018$selene$sprite$$generate_animation() };
 }
@@ -8815,7 +9401,7 @@ function Milky2018$selene$sprite$$Animation$single_frame(sprite_path, size, tran
   return Milky2018$selene$sprite$$Animation$single_frame$46$inner(sprite_path, size, transform, offset);
 }
 function Milky2018$selene$style$$get_zindex(entity) {
-  return moonbitlang$core$option$$Option$map_or$69$(moonbitlang$core$builtin$$Map$get$5$(Milky2018$selene$sprite$$sprites, entity), 100, (s) => s.zindex);
+  return moonbitlang$core$option$$Option$map_or$68$(moonbitlang$core$builtin$$Map$get$5$(Milky2018$selene$sprite$$sprites, entity), 100, (s) => s.zindex);
 }
 function Milky2018$selene$style$$Style$new$46$inner(size_plan, flex, h_padding, v_padding, h_offset, v_offset) {
   return { size_plan: size_plan, flex: flex, h_padding: h_padding, v_padding: v_padding, h_offset: h_offset, v_offset: v_offset };
@@ -8966,7 +9552,7 @@ function Milky2018$selene$style$$arrange(entity, offset) {
             case 1: {
               const _Animation = _bind$11;
               const _anime = _Animation._0;
-              return Milky2018$selene$math$$Transform$apply_to_vec2d(_anime.transform, moonbitlang$core$array$$Array$at$40$(_anime.frames, 0).size);
+              return Milky2018$selene$math$$Transform$apply_to_vec2d(_anime.transform, moonbitlang$core$array$$Array$at$34$(_anime.frames, 0).size);
             }
             case 3: {
               const _ColorRect = _bind$11;
@@ -9040,21 +9626,21 @@ function Milky2018$selene$style$$style_system(_delta) {
 }
 function Milky2018$selene$plugins$$default_plugin(app) {
   const _self = app.systems;
-  moonbitlang$core$array$$Array$push$54$(_self, { _0: Milky2018$selene$collision$$move_system, _1: $64$Milky2018$47$selene$47$system$46$Schedule$Update, _2: "Move System" });
-  moonbitlang$core$array$$Array$push$54$(_self, { _0: Milky2018$selene$inputs$$advanced_key_system, _1: $64$Milky2018$47$selene$47$system$46$Schedule$Update, _2: "Advanced Key System" });
-  moonbitlang$core$array$$Array$push$54$(_self, { _0: Milky2018$selene$inputs$$advanced_mouse_system, _1: $64$Milky2018$47$selene$47$system$46$Schedule$Update, _2: "Advanced Mouse System" });
-  moonbitlang$core$array$$Array$push$54$(_self, { _0: Milky2018$selene$collision$$quadtree_clear_system, _1: $64$Milky2018$47$selene$47$system$46$Schedule$Update, _2: "Quadtree Clear System" });
-  moonbitlang$core$array$$Array$push$54$(_self, { _0: Milky2018$selene$collision$$pickable_click_system, _1: $64$Milky2018$47$selene$47$system$46$Schedule$Update, _2: "Pickable Click System" });
-  moonbitlang$core$array$$Array$push$54$(_self, { _0: Milky2018$selene$collision$$area_collide_system, _1: $64$Milky2018$47$selene$47$system$46$Schedule$Update, _2: "Area Collide System" });
-  moonbitlang$core$array$$Array$push$54$(_self, { _0: Milky2018$selene$system$$deferred_event_system, _1: $64$Milky2018$47$selene$47$system$46$Schedule$Update, _2: "Deferred Event System" });
-  moonbitlang$core$array$$Array$push$54$(_self, { _0: Milky2018$selene$sprite$$render_sprite_system, _1: Milky2018$selene$plugins$$default_plugin$46$constr$47$3255, _2: "Render Sprite System" });
-  moonbitlang$core$array$$Array$push$54$(_self, { _0: Milky2018$selene$camera$$camera_system, _1: $64$Milky2018$47$selene$47$system$46$Schedule$Update, _2: "Camera System" });
-  moonbitlang$core$array$$Array$push$54$(_self, { _0: Milky2018$selene$system$$timer_system, _1: $64$Milky2018$47$selene$47$system$46$Schedule$Update, _2: "Timer System" });
-  moonbitlang$core$array$$Array$push$54$(_self, { _0: Milky2018$selene$system$$realtime_timer_system, _1: $64$Milky2018$47$selene$47$system$46$Schedule$Update, _2: "Realtime Timer System" });
-  moonbitlang$core$array$$Array$push$54$(_self, { _0: Milky2018$selene$inherit$$inherit_position_system, _1: $64$Milky2018$47$selene$47$system$46$Schedule$Update, _2: "Inherit Position System" });
-  moonbitlang$core$array$$Array$push$54$(_self, { _0: Milky2018$selene$style$$style_system, _1: $64$Milky2018$47$selene$47$system$46$Schedule$Update, _2: "Style System" });
+  moonbitlang$core$array$$Array$push$52$(_self, { _0: Milky2018$selene$collision$$move_system, _1: $64$Milky2018$47$selene$47$system$46$Schedule$Update, _2: "Move System" });
+  moonbitlang$core$array$$Array$push$52$(_self, { _0: Milky2018$selene$inputs$$advanced_key_system, _1: $64$Milky2018$47$selene$47$system$46$Schedule$Update, _2: "Advanced Key System" });
+  moonbitlang$core$array$$Array$push$52$(_self, { _0: Milky2018$selene$inputs$$advanced_mouse_system, _1: $64$Milky2018$47$selene$47$system$46$Schedule$Update, _2: "Advanced Mouse System" });
+  moonbitlang$core$array$$Array$push$52$(_self, { _0: Milky2018$selene$collision$$quadtree_clear_system, _1: $64$Milky2018$47$selene$47$system$46$Schedule$Update, _2: "Quadtree Clear System" });
+  moonbitlang$core$array$$Array$push$52$(_self, { _0: Milky2018$selene$collision$$pickable_click_system, _1: $64$Milky2018$47$selene$47$system$46$Schedule$Update, _2: "Pickable Click System" });
+  moonbitlang$core$array$$Array$push$52$(_self, { _0: Milky2018$selene$collision$$area_collide_system, _1: $64$Milky2018$47$selene$47$system$46$Schedule$Update, _2: "Area Collide System" });
+  moonbitlang$core$array$$Array$push$52$(_self, { _0: Milky2018$selene$system$$deferred_event_system, _1: $64$Milky2018$47$selene$47$system$46$Schedule$Update, _2: "Deferred Event System" });
+  moonbitlang$core$array$$Array$push$52$(_self, { _0: Milky2018$selene$sprite$$render_sprite_system, _1: Milky2018$selene$plugins$$default_plugin$46$constr$47$3438, _2: "Render Sprite System" });
+  moonbitlang$core$array$$Array$push$52$(_self, { _0: Milky2018$selene$camera$$camera_system, _1: $64$Milky2018$47$selene$47$system$46$Schedule$Update, _2: "Camera System" });
+  moonbitlang$core$array$$Array$push$52$(_self, { _0: Milky2018$selene$system$$timer_system, _1: $64$Milky2018$47$selene$47$system$46$Schedule$Update, _2: "Timer System" });
+  moonbitlang$core$array$$Array$push$52$(_self, { _0: Milky2018$selene$system$$realtime_timer_system, _1: $64$Milky2018$47$selene$47$system$46$Schedule$Update, _2: "Realtime Timer System" });
+  moonbitlang$core$array$$Array$push$52$(_self, { _0: Milky2018$selene$inherit$$inherit_position_system, _1: $64$Milky2018$47$selene$47$system$46$Schedule$Update, _2: "Inherit Position System" });
+  moonbitlang$core$array$$Array$push$52$(_self, { _0: Milky2018$selene$style$$style_system, _1: $64$Milky2018$47$selene$47$system$46$Schedule$Update, _2: "Style System" });
 }
-function moonbitlang$core$builtin$$Eq$equal$45$(_x_282, _x_283) {
+function moonbitlang$core$builtin$$Eq$equal$39$(_x_282, _x_283) {
   switch (_x_282) {
     case 0: {
       if (_x_283 === 0) {
@@ -9086,7 +9672,7 @@ function moonbitlang$core$builtin$$Eq$equal$45$(_x_282, _x_283) {
     }
   }
 }
-function moonbitlang$core$builtin$$Hash$hash_combine$45$(_x_278, _x_279) {
+function moonbitlang$core$builtin$$Hash$hash_combine$39$(_x_278, _x_279) {
   switch (_x_278) {
     case 0: {
       moonbitlang$core$builtin$$Hasher$combine_int(_x_279, 0);
@@ -9106,7 +9692,7 @@ function moonbitlang$core$builtin$$Hash$hash_combine$45$(_x_278, _x_279) {
     }
   }
 }
-function moonbitlang$core$builtin$$Eq$equal$39$(_x_274, _x_275) {
+function moonbitlang$core$builtin$$Eq$equal$33$(_x_274, _x_275) {
   switch (_x_274) {
     case 0: {
       if (_x_275 === 0) {
@@ -9152,7 +9738,7 @@ function moonbitlang$core$builtin$$Eq$equal$39$(_x_274, _x_275) {
     }
   }
 }
-function moonbitlang$core$builtin$$Eq$equal$44$(_x_262, _x_263) {
+function moonbitlang$core$builtin$$Eq$equal$38$(_x_262, _x_263) {
   switch (_x_262) {
     case 0: {
       if (_x_263 === 0) {
@@ -9247,7 +9833,7 @@ function moonbitlang$core$builtin$$Eq$equal$44$(_x_262, _x_263) {
     }
   }
 }
-function moonbitlang$core$builtin$$Hash$hash_combine$44$(_x_258, _x_259) {
+function moonbitlang$core$builtin$$Hash$hash_combine$38$(_x_258, _x_259) {
   switch (_x_258) {
     case 0: {
       moonbitlang$core$builtin$$Hasher$combine_int(_x_259, 0);
@@ -9310,7 +9896,7 @@ function Milky2018$selene$examples$cards$$hide_action_buttons() {
   Milky2018$selene$entity$$Entity$destroy(Milky2018$selene$examples$cards$$game_state.raise_button);
 }
 function Milky2018$selene$examples$cards$$deal_card() {
-  return Milky2018$selene$examples$cards$$game_state.deck.length > 0 ? moonbitlang$core$array$$Array$pop$41$(Milky2018$selene$examples$cards$$game_state.deck) : undefined;
+  return Milky2018$selene$examples$cards$$game_state.deck.length > 0 ? moonbitlang$core$array$$Array$pop$35$(Milky2018$selene$examples$cards$$game_state.deck) : undefined;
 }
 function Milky2018$selene$examples$cards$$CardNum$to_string(self) {
   switch (self) {
@@ -9419,14 +10005,14 @@ function Milky2018$selene$examples$cards$$reset_betting_round() {
   Milky2018$selene$examples$cards$$game_state.player.current_bet = 0;
 }
 function Milky2018$selene$examples$cards$$count_by_num(hand) {
-  const map = moonbitlang$core$builtin$$Map$new$46$inner$70$(8);
+  const map = moonbitlang$core$builtin$$Map$new$46$inner$69$(8);
   const _len = hand.length;
   let _tmp = 0;
   while (true) {
     const _i = _tmp;
     if (_i < _len) {
       const card = hand[_i];
-      const _p = moonbitlang$core$builtin$$Map$get$70$(map, card._0);
+      const _p = moonbitlang$core$builtin$$Map$get$69$(map, card._0);
       const _p$2 = 0;
       let count;
       if (_p === undefined) {
@@ -9435,7 +10021,7 @@ function Milky2018$selene$examples$cards$$count_by_num(hand) {
         const _p$3 = _p;
         count = _p$3;
       }
-      moonbitlang$core$builtin$$Map$set$70$(map, card._0, count + 1 | 0);
+      moonbitlang$core$builtin$$Map$set$69$(map, card._0, count + 1 | 0);
       _tmp = _i + 1 | 0;
       continue;
     } else {
@@ -9445,14 +10031,14 @@ function Milky2018$selene$examples$cards$$count_by_num(hand) {
   return map;
 }
 function Milky2018$selene$examples$cards$$count_by_suit(hand) {
-  const map = moonbitlang$core$builtin$$Map$new$46$inner$71$(8);
+  const map = moonbitlang$core$builtin$$Map$new$46$inner$70$(8);
   const _len = hand.length;
   let _tmp = 0;
   while (true) {
     const _i = _tmp;
     if (_i < _len) {
       const card = hand[_i];
-      const _p = moonbitlang$core$builtin$$Map$get$71$(map, card._1);
+      const _p = moonbitlang$core$builtin$$Map$get$70$(map, card._1);
       const _p$2 = 0;
       let count;
       if (_p === undefined) {
@@ -9461,7 +10047,7 @@ function Milky2018$selene$examples$cards$$count_by_suit(hand) {
         const _p$3 = _p;
         count = _p$3;
       }
-      moonbitlang$core$builtin$$Map$set$71$(map, card._1, count + 1 | 0);
+      moonbitlang$core$builtin$$Map$set$70$(map, card._1, count + 1 | 0);
       _tmp = _i + 1 | 0;
       continue;
     } else {
@@ -9515,9 +10101,9 @@ function Milky2018$selene$examples$cards$$CardNum$to_int(self) {
 }
 function Milky2018$selene$examples$cards$$is_flush(hand) {
   const suit_counts = Milky2018$selene$examples$cards$$count_by_suit(hand);
-  const _it = moonbitlang$core$builtin$$Map$iterator$71$(suit_counts);
+  const _it = moonbitlang$core$builtin$$Map$iterator$70$(suit_counts);
   while (true) {
-    const _bind$8 = moonbitlang$core$builtin$$Iterator$next$61$(_it);
+    const _bind$8 = moonbitlang$core$builtin$$Iterator$next$59$(_it);
     if (_bind$8 === undefined) {
       break;
     } else {
@@ -9531,8 +10117,8 @@ function Milky2018$selene$examples$cards$$is_flush(hand) {
           const _p$3 = _tmp;
           if (_p$3 < _p$2) {
             const _p$4 = hand[_p$3];
-            if (moonbitlang$core$builtin$$Eq$equal$45$(_p$4._1, _entry._0)) {
-              moonbitlang$core$array$$Array$push$41$(_p, _p$4);
+            if (moonbitlang$core$builtin$$Eq$equal$39$(_p$4._1, _entry._0)) {
+              moonbitlang$core$array$$Array$push$35$(_p, _p$4);
             }
             _tmp = _p$3 + 1 | 0;
             continue;
@@ -9588,8 +10174,8 @@ function Milky2018$selene$examples$cards$$is_straight(hand) {
   if ((moonbitlang$core$array$$Array$at$10$(hand$2, 4) - moonbitlang$core$array$$Array$at$10$(hand$2, 0) | 0) === 4) {
     return moonbitlang$core$array$$Array$at$10$(hand$2, 4);
   }
-  if (moonbitlang$core$builtin$$Eq$equal$74$(hand$2, [2, 3, 4, 5, 14])) {
-    return Milky2018$selene$examples$cards$$is_straight$46$constr$47$3327;
+  if (moonbitlang$core$builtin$$Eq$equal$77$(hand$2, [2, 3, 4, 5, 14])) {
+    return Milky2018$selene$examples$cards$$is_straight$46$constr$47$3510;
   }
   return undefined;
 }
@@ -9620,9 +10206,9 @@ function Milky2018$selene$examples$cards$$eval_rank(hand) {
       return new HandRank$Straight(_n);
     }
   }
-  const _it = moonbitlang$core$builtin$$Map$iterator$70$(nums);
+  const _it = moonbitlang$core$builtin$$Map$iterator$69$(nums);
   while (true) {
-    const _bind$8 = moonbitlang$core$builtin$$Iterator$next$42$(_it);
+    const _bind$8 = moonbitlang$core$builtin$$Iterator$next$36$(_it);
     if (_bind$8 === undefined) {
       break;
     } else {
@@ -9636,9 +10222,9 @@ function Milky2018$selene$examples$cards$$eval_rank(hand) {
   }
   let three_kind = undefined;
   let pair = undefined;
-  const _it$2 = moonbitlang$core$builtin$$Map$iterator$70$(nums);
+  const _it$2 = moonbitlang$core$builtin$$Map$iterator$69$(nums);
   while (true) {
-    const _bind$8 = moonbitlang$core$builtin$$Iterator$next$42$(_it$2);
+    const _bind$8 = moonbitlang$core$builtin$$Iterator$next$36$(_it$2);
     if (_bind$8 === undefined) {
       break;
     } else {
@@ -9673,8 +10259,8 @@ function Milky2018$selene$examples$cards$$eval_rank(hand) {
     const _n = _Some;
     return new HandRank$ThreeOfKind(_n);
   }
-  const _bind$10 = moonbitlang$core$builtin$$Map$iter$70$(nums);
-  const pairs = moonbitlang$core$builtin$$Iter$to_array$42$((_p) => _bind$10((_p$2) => _p$2._1 === 2 ? _p(_p$2) : 1));
+  const _bind$10 = moonbitlang$core$builtin$$Map$iter$69$(nums);
+  const pairs = moonbitlang$core$builtin$$Iter$to_array$36$((_p) => _bind$10((_p$2) => _p$2._1 === 2 ? _p(_p$2) : 1));
   if (pairs.length >= 2) {
     const _p = new Array(pairs.length);
     const _p$2 = pairs.length;
@@ -9697,7 +10283,7 @@ function Milky2018$selene$examples$cards$$eval_rank(hand) {
     return new HandRank$TwoPair(high_pair, low_pair);
   }
   if (pairs.length === 1) {
-    return new HandRank$OnePair(Milky2018$selene$examples$cards$$CardNum$to_int(moonbitlang$core$array$$Array$at$42$(pairs, 0)._0));
+    return new HandRank$OnePair(Milky2018$selene$examples$cards$$CardNum$to_int(moonbitlang$core$array$$Array$at$36$(pairs, 0)._0));
   }
   const _p = new Array(hand.length);
   const _p$2 = hand.length;
@@ -9778,7 +10364,7 @@ function Milky2018$selene$examples$cards$$find_best_hand(cards) {
   if (cards.length === 5) {
     return Milky2018$selene$examples$cards$$eval_rank(cards);
   }
-  let best_rank = Milky2018$selene$examples$cards$$find_best_hand$46$constr$47$3392;
+  let best_rank = Milky2018$selene$examples$cards$$find_best_hand$46$constr$47$3575;
   let best_value = 0;
   const n = cards.length;
   let _tmp = 0;
@@ -9805,7 +10391,7 @@ function Milky2018$selene$examples$cards$$find_best_hand(cards) {
                   while (true) {
                     const m = _tmp$5;
                     if (m < n) {
-                      const hand_5 = [moonbitlang$core$array$$Array$at$41$(cards, i), moonbitlang$core$array$$Array$at$41$(cards, j), moonbitlang$core$array$$Array$at$41$(cards, k), moonbitlang$core$array$$Array$at$41$(cards, l), moonbitlang$core$array$$Array$at$41$(cards, m)];
+                      const hand_5 = [moonbitlang$core$array$$Array$at$35$(cards, i), moonbitlang$core$array$$Array$at$35$(cards, j), moonbitlang$core$array$$Array$at$35$(cards, k), moonbitlang$core$array$$Array$at$35$(cards, l), moonbitlang$core$array$$Array$at$35$(cards, m)];
                       const rank = Milky2018$selene$examples$cards$$eval_rank(hand_5);
                       const value = Milky2018$selene$examples$cards$$hand_rank_base_award(rank);
                       if (value > best_value) {
@@ -9891,7 +10477,7 @@ function Milky2018$selene$examples$cards$$update_hand_strength() {
     const _i = _tmp;
     if (_i < _len) {
       const card = _arr[_i];
-      moonbitlang$core$array$$Array$push$41$(hand, card);
+      moonbitlang$core$array$$Array$push$35$(hand, card);
       _tmp = _i + 1 | 0;
       continue;
     } else {
@@ -9905,7 +10491,7 @@ function Milky2018$selene$examples$cards$$update_hand_strength() {
     const _i = _tmp$2;
     if (_i < _len$2) {
       const card = _arr$2[_i];
-      moonbitlang$core$array$$Array$push$41$(hand, card);
+      moonbitlang$core$array$$Array$push$35$(hand, card);
       _tmp$2 = _i + 1 | 0;
       continue;
     } else {
@@ -9956,7 +10542,7 @@ function Milky2018$selene$examples$cards$$update_ui() {
   _tmp.content = _tmp$2;
   Milky2018$selene$examples$cards$$game_state.turns_text.content = `Turns: ${moonbitlang$core$int$$Int$to_string$46$inner(Milky2018$selene$examples$cards$$game_state.turns_remaining, 10)}/10`;
   Milky2018$selene$examples$cards$$update_hand_strength();
-  if (moonbitlang$core$builtin$$Eq$equal$39$(Milky2018$selene$examples$cards$$game_state.phase, 5)) {
+  if (moonbitlang$core$builtin$$Eq$equal$33$(Milky2018$selene$examples$cards$$game_state.phase, 5)) {
     const player = Milky2018$selene$examples$cards$$game_state.player;
     const profit = player.chips - Milky2018$selene$examples$cards$$game_state.starting_chips | 0;
     const profit_text = profit >= 0 ? `Profit: +$${moonbitlang$core$int$$Int$to_string$46$inner(profit, 10)}` : `Loss: $${moonbitlang$core$int$$Int$to_string$46$inner(profit, 10)}`;
@@ -9979,7 +10565,7 @@ function Milky2018$selene$examples$cards$$advance_to_next_phase() {
           } else {
             const _Some = _bind$9;
             const _card = _Some;
-            moonbitlang$core$array$$Array$push$41$(Milky2018$selene$examples$cards$$game_state.community_cards, _card);
+            moonbitlang$core$array$$Array$push$35$(Milky2018$selene$examples$cards$$game_state.community_cards, _card);
           }
           _tmp = _ + 1 | 0;
           continue;
@@ -9998,7 +10584,7 @@ function Milky2018$selene$examples$cards$$advance_to_next_phase() {
       } else {
         const _Some = _bind$9;
         const _card = _Some;
-        moonbitlang$core$array$$Array$push$41$(Milky2018$selene$examples$cards$$game_state.community_cards, _card);
+        moonbitlang$core$array$$Array$push$35$(Milky2018$selene$examples$cards$$game_state.community_cards, _card);
       }
       Milky2018$selene$examples$cards$$game_state.phase = 2;
       Milky2018$selene$examples$cards$$reset_betting_round();
@@ -10011,7 +10597,7 @@ function Milky2018$selene$examples$cards$$advance_to_next_phase() {
       } else {
         const _Some = _bind$10;
         const _card = _Some;
-        moonbitlang$core$array$$Array$push$41$(Milky2018$selene$examples$cards$$game_state.community_cards, _card);
+        moonbitlang$core$array$$Array$push$35$(Milky2018$selene$examples$cards$$game_state.community_cards, _card);
       }
       Milky2018$selene$examples$cards$$game_state.phase = 3;
       Milky2018$selene$examples$cards$$reset_betting_round();
@@ -10073,39 +10659,39 @@ function Milky2018$selene$examples$cards$$on_raise_click() {
 function Milky2018$selene$examples$cards$$create_action_buttons() {
   const fold_button = Milky2018$selene$style$$add_widget(Milky2018$selene$style$$screen_root, (zindex) => Milky2018$selene$sprite$$Sprite$from_color_rect(Milky2018$selene$sprite$$ColorRect$new$46$inner({ _0: 70, _1: 25 }, "#cc0000", "rgba(0, 0, 0, 0)"), zindex, undefined), (_button) => {
     Milky2018$selene$examples$cards$$on_fold_click();
-  }, new $64$Milky2018$47$selene$47$collision$46$CollisionShape$Rect({ _0: 70, _1: 25 }, { _0: 0, _1: 0 }), undefined, undefined, Option$None$0$, Option$None$0$, Milky2018$selene$examples$cards$$create_action_buttons$46$constr$47$3455, Milky2018$selene$examples$cards$$create_action_buttons$46$constr$47$3456);
+  }, new $64$Milky2018$47$selene$47$collision$46$CollisionShape$Rect({ _0: 70, _1: 25 }, { _0: 0, _1: 0 }), undefined, undefined, Option$None$0$, Option$None$0$, Milky2018$selene$examples$cards$$create_action_buttons$46$constr$47$3638, Milky2018$selene$examples$cards$$create_action_buttons$46$constr$47$3639);
   Milky2018$selene$examples$cards$$game_state.fold_button = fold_button;
-  Milky2018$selene$style$$add_widget(fold_button, (zindex) => Milky2018$selene$sprite$$Sprite$from_text(Milky2018$selene$sprite$$Text$new("Fold", Milky2018$selene$examples$cards$$create_action_buttons$46$constr$47$3457, Milky2018$selene$examples$cards$$create_action_buttons$46$constr$47$3458, undefined, undefined), zindex, undefined), undefined, undefined, undefined, undefined, Option$None$0$, Option$None$0$, Milky2018$selene$examples$cards$$create_action_buttons$46$constr$47$3459, Milky2018$selene$examples$cards$$create_action_buttons$46$constr$47$3460);
+  Milky2018$selene$style$$add_widget(fold_button, (zindex) => Milky2018$selene$sprite$$Sprite$from_text(Milky2018$selene$sprite$$Text$new("Fold", Milky2018$selene$examples$cards$$create_action_buttons$46$constr$47$3640, Milky2018$selene$examples$cards$$create_action_buttons$46$constr$47$3641, undefined, undefined), zindex, undefined), undefined, undefined, undefined, undefined, Option$None$0$, Option$None$0$, Milky2018$selene$examples$cards$$create_action_buttons$46$constr$47$3642, Milky2018$selene$examples$cards$$create_action_buttons$46$constr$47$3643);
   const call_button = Milky2018$selene$style$$add_widget(Milky2018$selene$style$$screen_root, (zindex) => Milky2018$selene$sprite$$Sprite$from_color_rect(Milky2018$selene$sprite$$ColorRect$new$46$inner({ _0: 70, _1: 25 }, "#00aa00", "rgba(0, 0, 0, 0)"), zindex, undefined), (_button) => {
     Milky2018$selene$examples$cards$$on_call_click();
-  }, new $64$Milky2018$47$selene$47$collision$46$CollisionShape$Rect({ _0: 70, _1: 25 }, { _0: 0, _1: 0 }), undefined, undefined, Option$None$0$, Option$None$0$, Milky2018$selene$examples$cards$$create_action_buttons$46$constr$47$3461, Milky2018$selene$examples$cards$$create_action_buttons$46$constr$47$3462);
+  }, new $64$Milky2018$47$selene$47$collision$46$CollisionShape$Rect({ _0: 70, _1: 25 }, { _0: 0, _1: 0 }), undefined, undefined, Option$None$0$, Option$None$0$, Milky2018$selene$examples$cards$$create_action_buttons$46$constr$47$3644, Milky2018$selene$examples$cards$$create_action_buttons$46$constr$47$3645);
   Milky2018$selene$examples$cards$$game_state.call_button = call_button;
-  Milky2018$selene$style$$add_widget(call_button, (zindex) => Milky2018$selene$sprite$$Sprite$from_text(Milky2018$selene$examples$cards$$game_state.call_button_text, zindex, undefined), undefined, undefined, undefined, undefined, Option$None$0$, Option$None$0$, Milky2018$selene$examples$cards$$create_action_buttons$46$constr$47$3463, Milky2018$selene$examples$cards$$create_action_buttons$46$constr$47$3464);
+  Milky2018$selene$style$$add_widget(call_button, (zindex) => Milky2018$selene$sprite$$Sprite$from_text(Milky2018$selene$examples$cards$$game_state.call_button_text, zindex, undefined), undefined, undefined, undefined, undefined, Option$None$0$, Option$None$0$, Milky2018$selene$examples$cards$$create_action_buttons$46$constr$47$3646, Milky2018$selene$examples$cards$$create_action_buttons$46$constr$47$3647);
   const raise_button = Milky2018$selene$style$$add_widget(Milky2018$selene$style$$screen_root, (zindex) => Milky2018$selene$sprite$$Sprite$from_color_rect(Milky2018$selene$sprite$$ColorRect$new$46$inner({ _0: 70, _1: 25 }, "#0066cc", "rgba(0, 0, 0, 0)"), zindex, undefined), (_button) => {
     Milky2018$selene$examples$cards$$on_raise_click();
-  }, new $64$Milky2018$47$selene$47$collision$46$CollisionShape$Rect({ _0: 70, _1: 25 }, { _0: 0, _1: 0 }), undefined, undefined, Option$None$0$, Option$None$0$, Milky2018$selene$examples$cards$$create_action_buttons$46$constr$47$3465, Milky2018$selene$examples$cards$$create_action_buttons$46$constr$47$3466);
+  }, new $64$Milky2018$47$selene$47$collision$46$CollisionShape$Rect({ _0: 70, _1: 25 }, { _0: 0, _1: 0 }), undefined, undefined, Option$None$0$, Option$None$0$, Milky2018$selene$examples$cards$$create_action_buttons$46$constr$47$3648, Milky2018$selene$examples$cards$$create_action_buttons$46$constr$47$3649);
   Milky2018$selene$examples$cards$$game_state.raise_button = raise_button;
-  Milky2018$selene$style$$add_widget(raise_button, (zindex) => Milky2018$selene$sprite$$Sprite$from_text(Milky2018$selene$sprite$$Text$new("Raise", Milky2018$selene$examples$cards$$create_action_buttons$46$constr$47$3467, Milky2018$selene$examples$cards$$create_action_buttons$46$constr$47$3468, undefined, undefined), zindex, undefined), undefined, undefined, undefined, undefined, Option$None$0$, Option$None$0$, Milky2018$selene$examples$cards$$create_action_buttons$46$constr$47$3469, Milky2018$selene$examples$cards$$create_action_buttons$46$constr$47$3470);
+  Milky2018$selene$style$$add_widget(raise_button, (zindex) => Milky2018$selene$sprite$$Sprite$from_text(Milky2018$selene$sprite$$Text$new("Raise", Milky2018$selene$examples$cards$$create_action_buttons$46$constr$47$3650, Milky2018$selene$examples$cards$$create_action_buttons$46$constr$47$3651, undefined, undefined), zindex, undefined), undefined, undefined, undefined, undefined, Option$None$0$, Option$None$0$, Milky2018$selene$examples$cards$$create_action_buttons$46$constr$47$3652, Milky2018$selene$examples$cards$$create_action_buttons$46$constr$47$3653);
   Milky2018$selene$examples$cards$$hide_action_buttons();
 }
 function Milky2018$selene$examples$cards$$setup_ui() {
   const table_entity = Milky2018$selene$entity$$Entity$new();
   moonbitlang$core$builtin$$Map$set$0$(Milky2018$selene$position$$positions, table_entity, { _0: 0, _1: 0 });
   moonbitlang$core$builtin$$Map$set$5$(Milky2018$selene$sprite$$sprites, table_entity, Milky2018$selene$sprite$$Sprite$from_color_rect(Milky2018$selene$sprite$$ColorRect$new$46$inner({ _0: 480, _1: 320 }, "#2d5016", "rgba(0, 0, 0, 0)"), 0, undefined));
-  Milky2018$selene$style$$add_widget(Milky2018$selene$style$$screen_root, (zindex) => Milky2018$selene$sprite$$Sprite$from_text(Milky2018$selene$examples$cards$$game_state.blind_text, zindex, undefined), undefined, undefined, undefined, undefined, Option$None$0$, Option$None$0$, Milky2018$selene$examples$cards$$setup_ui$46$constr$47$3483, Milky2018$selene$examples$cards$$setup_ui$46$constr$47$3484);
-  Milky2018$selene$style$$add_widget(Milky2018$selene$style$$screen_root, (zindex) => Milky2018$selene$sprite$$Sprite$from_text(Milky2018$selene$examples$cards$$game_state.chips_text, zindex, undefined), undefined, undefined, undefined, undefined, Option$None$0$, Option$None$0$, Milky2018$selene$examples$cards$$setup_ui$46$constr$47$3485, Milky2018$selene$examples$cards$$setup_ui$46$constr$47$3486);
-  Milky2018$selene$style$$add_widget(Milky2018$selene$style$$screen_root, (zindex) => Milky2018$selene$sprite$$Sprite$from_text(Milky2018$selene$examples$cards$$game_state.phase_text, zindex, undefined), undefined, undefined, undefined, undefined, Option$None$0$, Option$None$0$, Milky2018$selene$examples$cards$$setup_ui$46$constr$47$3487, Milky2018$selene$examples$cards$$setup_ui$46$constr$47$3488);
-  Milky2018$selene$style$$add_widget(Milky2018$selene$style$$screen_root, (zindex) => Milky2018$selene$sprite$$Sprite$from_text(Milky2018$selene$examples$cards$$game_state.turns_text, zindex, undefined), undefined, undefined, undefined, undefined, Option$None$0$, Option$None$0$, Milky2018$selene$examples$cards$$setup_ui$46$constr$47$3489, Milky2018$selene$examples$cards$$setup_ui$46$constr$47$3490);
-  Milky2018$selene$style$$add_widget(Milky2018$selene$style$$screen_root, (zindex) => Milky2018$selene$sprite$$Sprite$from_text(Milky2018$selene$examples$cards$$game_state.hand_strength_text, zindex, undefined), undefined, undefined, undefined, undefined, Option$None$0$, Option$None$0$, Milky2018$selene$examples$cards$$setup_ui$46$constr$47$3491, Milky2018$selene$examples$cards$$setup_ui$46$constr$47$3492);
+  Milky2018$selene$style$$add_widget(Milky2018$selene$style$$screen_root, (zindex) => Milky2018$selene$sprite$$Sprite$from_text(Milky2018$selene$examples$cards$$game_state.blind_text, zindex, undefined), undefined, undefined, undefined, undefined, Option$None$0$, Option$None$0$, Milky2018$selene$examples$cards$$setup_ui$46$constr$47$3666, Milky2018$selene$examples$cards$$setup_ui$46$constr$47$3667);
+  Milky2018$selene$style$$add_widget(Milky2018$selene$style$$screen_root, (zindex) => Milky2018$selene$sprite$$Sprite$from_text(Milky2018$selene$examples$cards$$game_state.chips_text, zindex, undefined), undefined, undefined, undefined, undefined, Option$None$0$, Option$None$0$, Milky2018$selene$examples$cards$$setup_ui$46$constr$47$3668, Milky2018$selene$examples$cards$$setup_ui$46$constr$47$3669);
+  Milky2018$selene$style$$add_widget(Milky2018$selene$style$$screen_root, (zindex) => Milky2018$selene$sprite$$Sprite$from_text(Milky2018$selene$examples$cards$$game_state.phase_text, zindex, undefined), undefined, undefined, undefined, undefined, Option$None$0$, Option$None$0$, Milky2018$selene$examples$cards$$setup_ui$46$constr$47$3670, Milky2018$selene$examples$cards$$setup_ui$46$constr$47$3671);
+  Milky2018$selene$style$$add_widget(Milky2018$selene$style$$screen_root, (zindex) => Milky2018$selene$sprite$$Sprite$from_text(Milky2018$selene$examples$cards$$game_state.turns_text, zindex, undefined), undefined, undefined, undefined, undefined, Option$None$0$, Option$None$0$, Milky2018$selene$examples$cards$$setup_ui$46$constr$47$3672, Milky2018$selene$examples$cards$$setup_ui$46$constr$47$3673);
+  Milky2018$selene$style$$add_widget(Milky2018$selene$style$$screen_root, (zindex) => Milky2018$selene$sprite$$Sprite$from_text(Milky2018$selene$examples$cards$$game_state.hand_strength_text, zindex, undefined), undefined, undefined, undefined, undefined, Option$None$0$, Option$None$0$, Milky2018$selene$examples$cards$$setup_ui$46$constr$47$3674, Milky2018$selene$examples$cards$$setup_ui$46$constr$47$3675);
   Milky2018$selene$examples$cards$$create_action_buttons();
 }
 function Milky2018$selene$examples$cards$$show_action_buttons() {
   Milky2018$selene$examples$cards$$game_state.waiting_for_player = true;
-  if (moonbitlang$core$builtin$$op_notequal$39$(Milky2018$selene$examples$cards$$game_state.phase, 3)) {
+  if (moonbitlang$core$builtin$$op_notequal$33$(Milky2018$selene$examples$cards$$game_state.phase, 3)) {
     Milky2018$selene$entity$$Entity$respawn(Milky2018$selene$examples$cards$$game_state.fold_button);
   }
   Milky2018$selene$entity$$Entity$respawn(Milky2018$selene$examples$cards$$game_state.call_button);
-  if (moonbitlang$core$builtin$$op_notequal$39$(Milky2018$selene$examples$cards$$game_state.phase, 3)) {
+  if (moonbitlang$core$builtin$$op_notequal$33$(Milky2018$selene$examples$cards$$game_state.phase, 3)) {
     Milky2018$selene$entity$$Entity$respawn(Milky2018$selene$examples$cards$$game_state.raise_button);
   }
   const call_amount = Milky2018$selene$examples$cards$$game_state.current_bet - Milky2018$selene$examples$cards$$game_state.player.current_bet | 0;
@@ -10188,7 +10774,7 @@ function Milky2018$selene$examples$cards$$create_deck() {
         const _i$2 = _tmp$2;
         if (_i$2 < _len$2) {
           const suit = suits[_i$2];
-          moonbitlang$core$array$$Array$push$41$(deck, { _0: rank, _1: suit });
+          moonbitlang$core$array$$Array$push$35$(deck, { _0: rank, _1: suit });
           _tmp$2 = _i$2 + 1 | 0;
           continue;
         } else {
@@ -10213,7 +10799,7 @@ function Milky2018$selene$examples$cards$$deal_hole_cards() {
       } else {
         const _Some = _bind$8;
         const _card = _Some;
-        moonbitlang$core$array$$Array$push$41$(Milky2018$selene$examples$cards$$game_state.player.hole_cards, _card);
+        moonbitlang$core$array$$Array$push$35$(Milky2018$selene$examples$cards$$game_state.player.hole_cards, _card);
       }
       _tmp = _ + 1 | 0;
       continue;
@@ -10232,9 +10818,9 @@ function Milky2018$selene$examples$cards$$shuffle_deck(deck, rand) {
       const range = deck.length - i | 0;
       const j_offset = (moonbitlang$core$random$$Rand$uint$46$inner(rand, 0) >>> 0) % (range >>> 0) | 0;
       const j = i + j_offset | 0;
-      const temp = moonbitlang$core$array$$Array$at$41$(deck, i);
-      moonbitlang$core$array$$Array$set$41$(deck, i, moonbitlang$core$array$$Array$at$41$(deck, j));
-      moonbitlang$core$array$$Array$set$41$(deck, j, temp);
+      const temp = moonbitlang$core$array$$Array$at$35$(deck, i);
+      moonbitlang$core$array$$Array$set$35$(deck, i, moonbitlang$core$array$$Array$at$35$(deck, j));
+      moonbitlang$core$array$$Array$set$35$(deck, j, temp);
       _tmp = i + 1 | 0;
       continue;
     } else {
@@ -10262,14 +10848,14 @@ function Milky2018$selene$examples$cards$$start_new_hand() {
   Milky2018$selene$examples$cards$$game_state.hand_number = Milky2018$selene$examples$cards$$game_state.hand_number + 1 | 0;
   Milky2018$selene$examples$cards$$game_state.phase = 0;
   Milky2018$selene$examples$cards$$game_state.current_bet = Milky2018$selene$examples$cards$$game_state.big_blind;
-  moonbitlang$core$array$$Array$clear$41$(Milky2018$selene$examples$cards$$game_state.community_cards);
+  moonbitlang$core$array$$Array$clear$35$(Milky2018$selene$examples$cards$$game_state.community_cards);
   Milky2018$selene$examples$cards$$game_state.action_text.content = "";
   Milky2018$selene$examples$cards$$game_state.magnification = 1;
   if ((Milky2018$selene$examples$cards$$game_state.hand_number % 10 | 0) === 1 && Milky2018$selene$examples$cards$$game_state.hand_number > 1) {
     Milky2018$selene$examples$cards$$game_state.small_blind = Math.imul(Milky2018$selene$examples$cards$$game_state.small_blind, 2) | 0;
     Milky2018$selene$examples$cards$$game_state.big_blind = Math.imul(Milky2018$selene$examples$cards$$game_state.big_blind, 2) | 0;
   }
-  moonbitlang$core$array$$Array$clear$41$(player.hole_cards);
+  moonbitlang$core$array$$Array$clear$35$(player.hole_cards);
   player.current_bet = Milky2018$selene$examples$cards$$game_state.big_blind;
   player.has_folded = false;
   const _p = Milky2018$selene$examples$cards$$game_state.big_blind;
@@ -10305,7 +10891,7 @@ function Milky2018$selene$examples$cards$$handle_showdown() {
       const _i = _tmp;
       if (_i < _len) {
         const card = _arr[_i];
-        moonbitlang$core$array$$Array$push$41$(hand, card);
+        moonbitlang$core$array$$Array$push$35$(hand, card);
         _tmp = _i + 1 | 0;
         continue;
       } else {
@@ -10319,7 +10905,7 @@ function Milky2018$selene$examples$cards$$handle_showdown() {
       const _i = _tmp$2;
       if (_i < _len$2) {
         const card = _arr$2[_i];
-        moonbitlang$core$array$$Array$push$41$(hand, card);
+        moonbitlang$core$array$$Array$push$35$(hand, card);
         _tmp$2 = _i + 1 | 0;
         continue;
       } else {
