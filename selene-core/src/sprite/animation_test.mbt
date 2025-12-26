@@ -12,18 +12,21 @@ test "variable duration timeline animation" {
       size: @math.Vec2D(10.0, 10.0),
       offset: @math.Vec2D(0.0, 0.0),
       duration: 0.1,
+      pivot: @math.Vec2D(0.0, 0.0),
     },
     @sprite.AnimationFrame::{
       sprite_path: "f1",
       size: @math.Vec2D(10.0, 10.0),
       offset: @math.Vec2D(0.0, 0.0),
       duration: 0.5,
+      pivot: @math.Vec2D(0.0, 0.0),
     },
     @sprite.AnimationFrame::{
       sprite_path: "f2",
       size: @math.Vec2D(10.0, 10.0),
       offset: @math.Vec2D(0.0, 0.0),
       duration: 0.2,
+      pivot: @math.Vec2D(0.0, 0.0),
     },
   ]
   let animation = @sprite.Animation::new(frames, loop_=false)
@@ -103,12 +106,14 @@ test "looping animation behavior" {
       size: @math.Vec2D(10.0, 10.0),
       offset: @math.Vec2D(0.0, 0.0),
       duration: 1.0,
+      pivot: @math.Vec2D(0.0, 0.0),
     },
     @sprite.AnimationFrame::{
       sprite_path: "1",
       size: @math.Vec2D(10.0, 10.0),
       offset: @math.Vec2D(0.0, 0.0),
       duration: 1.0,
+      pivot: @math.Vec2D(0.0, 0.0),
     },
   ]
   let animation = @sprite.Animation::new(frames, loop_=true)

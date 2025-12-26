@@ -65,6 +65,8 @@ pub struct Animation {
 /// * `size` : Width and height of the frame in pixels.
 /// * `offset` : Pixel offset within the sprite sheet where this frame is
 ///   located.
+/// * `pivot` : The origin point of this frame used for positioning. The sprite
+///   is drawn such that this point aligns with the entity's position.
 ///
 /// Example:
 ///
@@ -75,11 +77,13 @@ pub struct Animation {
 ///     size: @math.Vec2D(32.0, 32.0),
 ///     offset: @math.Vec2D(64.0, 0.0),
 ///     duration: 1.0,
+///     pivot: @math.Vec2D(16.0, 32.0), // bottom center
 ///   }
 ///   inspect(frame.sprite_path, content="characters/player.png")
 ///   inspect(frame.size[X], content="32")
 ///   inspect(frame.offset[X], content="64")
 ///   inspect(frame.duration, content="1")
+///   inspect(frame.pivot[Y], content="32")
 /// }
 /// ```
 ///
@@ -88,6 +92,7 @@ pub(all) struct AnimationFrame {
   size : @math.Vec2D
   offset : @math.Vec2D
   duration : Double
+  pivot : @math.Vec2D
 }
 
 ///|
@@ -207,10 +212,11 @@ pub fn Animation::single_frame(
   size : @math.Vec2D,
   transform? : @math.Transform = @math.Transform::new(),
   offset? : @math.Vec2D = @math.Vec2D(0, 0),
+  pivot? : @math.Vec2D = @math.Vec2D(0, 0),
   duration? : Double = 1.0,
 ) -> Animation {
   Animation::new(
-    [{ sprite_path, size, offset, duration }],
+    [{ sprite_path, size, offset, duration, pivot }],
     transform~,
     loop_=false,
   )
@@ -268,6 +274,7 @@ pub fn frames_from_atlas(
   width~ : Double,
   height~ : Double,
   offset? : @math.Vec2D = @math.Vec2D(0, 0),
+  pivot? : @math.Vec2D = @math.Vec2D(0, 0),
   space_x? : Double = 0.0,
   duration? : Double = 1.0,
 ) -> Array[AnimationFrame] {
@@ -279,6 +286,7 @@ pub fn frames_from_atlas(
       size: @math.Vec2D(width, height),
       offset: offset.update(X, x),
       duration,
+      pivot,
     })
   }
   frames
@@ -414,10 +422,12 @@ fn render_animation(
   }
   let frame = animation.frames[current_frame]
   if visible {
+    let t = animation.transform
+    let p = t.apply_to_vec2d(frame.pivot)
     @backend.draw_sprite(
       sprite_path=frame.sprite_path,
-      x=pos[X],
-      y=pos[Y],
+      x=pos[X] - p[X],
+      y=pos[Y] - p[Y],
       offset_x=frame.offset[X],
       offset_y=frame.offset[Y],
       width=frame.size[X],
