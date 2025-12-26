@@ -8,22 +8,25 @@ test "variable duration timeline animation" {
   // Total: 0.8s
   let frames = [
     @sprite.AnimationFrame::{
-      sprite_path: "f0",
+      image: @asset.load_image("f0"),
       size: @math.Vec2D(10.0, 10.0),
       offset: @math.Vec2D(0.0, 0.0),
       duration: 0.1,
+      pivot: @math.Vec2D(0.0, 0.0),
     },
     @sprite.AnimationFrame::{
-      sprite_path: "f1",
+      image: @asset.load_image("f1"),
       size: @math.Vec2D(10.0, 10.0),
       offset: @math.Vec2D(0.0, 0.0),
       duration: 0.5,
+      pivot: @math.Vec2D(0.0, 0.0),
     },
     @sprite.AnimationFrame::{
-      sprite_path: "f2",
+      image: @asset.load_image("f2"),
       size: @math.Vec2D(10.0, 10.0),
       offset: @math.Vec2D(0.0, 0.0),
       duration: 0.2,
+      pivot: @math.Vec2D(0.0, 0.0),
     },
   ]
   let animation = @sprite.Animation::new(frames, loop_=false)
@@ -99,16 +102,18 @@ test "looping animation behavior" {
   let entity = @entity.Entity::new()
   let frames = [
     @sprite.AnimationFrame::{
-      sprite_path: "0",
+      image: @asset.load_image("f0"),
       size: @math.Vec2D(10.0, 10.0),
       offset: @math.Vec2D(0.0, 0.0),
       duration: 1.0,
+      pivot: @math.Vec2D(0.0, 0.0),
     },
     @sprite.AnimationFrame::{
-      sprite_path: "1",
+      image: @asset.load_image("f1"),
       size: @math.Vec2D(10.0, 10.0),
       offset: @math.Vec2D(0.0, 0.0),
       duration: 1.0,
+      pivot: @math.Vec2D(0.0, 0.0),
     },
   ]
   let animation = @sprite.Animation::new(frames, loop_=true)

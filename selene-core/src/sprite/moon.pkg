@@ -13,3 +13,7 @@ import {
   "Milky2018/selene/visibility",
   "moonbitlang/core/strconv",
 }
+
+import {
+  "Milky2018/selene/position",
+} for "test"
