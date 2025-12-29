@@ -28,4 +28,4 @@ pub(all) enum RepeatMode {
   RepeatY
   NoRepeat
   Repeat
-}
+} derive(Show)
