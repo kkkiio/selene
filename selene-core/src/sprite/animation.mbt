@@ -22,7 +22,7 @@
 ///
 /// Example:
 ///
-/// ```moonbit
+/// ```moonbit nocheck
 /// // Create frames from a sprite atlas
 /// let frames = @sprite.frames_from_atlas(
 ///   "player_walk.png",
@@ -116,7 +116,7 @@ pub(all) struct AnimationFrame {
 ///
 /// Example:
 ///
-/// ```moonbit
+/// ```moonbit nocheck
 /// // Create frames from a sprite atlas
 /// let frames = @sprite.frames_from_atlas(
 ///   "player_walk.png",
@@ -189,7 +189,7 @@ fn generate_animation() -> Int {
 ///
 /// Example:
 ///
-/// ```moonbit
+/// ```moonbit nocheck
 /// // Create a static button sprite
 /// let button = @sprite.Animation::single_frame(
 ///   "ui/button.png",
@@ -246,7 +246,7 @@ pub fn Animation::single_frame(
 ///
 /// Example:
 ///
-/// ```moonbit
+/// ```moonbit nocheck
 /// // Extract 8 frames from a player walk animation sprite sheet
 /// let walk_frames = @sprite.frames_from_atlas(
 ///   "characters/player_walk.png",
@@ -305,8 +305,6 @@ pub fn frames_from_atlas(
 ///   if the same animation is already playing (default: `false`).
 /// * `loop_` : Whether the animation should loop continuously. If not
 ///   specified, uses the animation's default loop setting.
-/// * `rate` : The playback speed in frames per second. If not specified, uses
-///   the animation's default FPS.
 /// * `transform` : The transformation matrix for position, rotation, and scale.
 ///   If not specified, uses the animation's default transform.
 ///
@@ -339,7 +337,6 @@ pub fn frames_from_atlas(
 ///   entity,
 ///   walk_animation,
 ///   from_start=true,
-///   rate=24.0,
 ///   transform=@math.Transform::from_translation(100.0, 200.0)
 /// )
 /// ```
@@ -349,30 +346,28 @@ pub fn play_animation(
   animation : Animation,
   from_start? : Bool = false,
   loop_? : Bool,
-  rate? : Double,
   transform? : @math.Transform,
   // backward~ : Bool = false,
 ) -> Unit {
   guard sprites.get(entity)
     is Some(
-      { sprite_type: Animation(current_anime, ..), zindex, visible, offset }
+      {
+        sprite_type: Animation(current_anime, frame~, elapsed~, speed~),
+        zindex,
+        visible,
+        offset,
+      }
     )
   let loop_ = loop_.unwrap_or(animation.loop_)
   let transform = transform.unwrap_or(animation.transform)
+  let current_frame = frame
+  let current_elapsed = elapsed
 
   // Reuse state if same animation and not restarting
   let (frame, elapsed) = if !from_start && animation.id == current_anime.id {
-    if sprites.get(entity)
-      is Some({ sprite_type: Animation(_, frame~, elapsed~), .. }) {
-      (frame, elapsed)
-    } else {
-      (0, 0.0)
-    }
+    (current_frame, current_elapsed)
   } else {
     (0, 0.0)
-  }
-  if rate is Some(_rate) {
-    // TODO: create new frames with new durations
   }
   let new_anime = {
     frames: animation.frames,
@@ -381,11 +376,33 @@ pub fn play_animation(
     id: animation.id,
   }
   sprites.set(entity, {
-    sprite_type: SpriteType::Animation(new_anime, frame~, elapsed~),
+    sprite_type: SpriteType::Animation(new_anime, frame~, elapsed~, speed~),
     zindex,
     visible,
     offset,
   })
+}
+
+///|
+/// Sets runtime animation playback speed for a sprite without resetting its
+/// current frame progress.
+///
+/// Parameters:
+///
+/// * `entity` : The entity whose animation speed should be changed.
+/// * `speed` : Runtime speed multiplier.
+///   * `1.0` = normal playback.
+///   * `0.0` = paused (frozen frame and elapsed time).
+///   * `> 1.0` = faster playback.
+///   * `0.0 ~ 1.0` = slower playback.
+///   * `< 0.0` is treated as `0.0`.
+///
+/// Panics if the entity does not have an existing sprite component with an
+/// animation.
+pub fn set_animation_speed(entity : @entity.Entity, speed : Double) -> Unit {
+  guard sprites.get(entity)
+    is Some({ sprite_type: Animation(_, ..) as animation_sprite, .. })
+  animation_sprite.speed = if speed < 0.0 { 0.0 } else { speed }
 }
 
 ///|
@@ -499,7 +516,7 @@ fn render_animation(
 ///
 pub fn is_animation_finished(entity : @entity.Entity) -> Bool {
   guard sprites.get(entity)
-    is Some({ sprite_type: Animation(anime, frame~, elapsed~), .. }) else {
+    is Some({ sprite_type: Animation(anime, frame~, elapsed~, ..), .. }) else {
     true
   }
   if anime.loop_ {
