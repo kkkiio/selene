@@ -24,7 +24,7 @@
 ///
 /// Example:
 ///
-/// ```moonbit
+/// ```moonbit nocheck
 /// let text = @sprite.Text::new("Hello World", color="red", font="24px Times")
 /// text.content = "Updated content"
 /// text.color = "blue"

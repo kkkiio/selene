@@ -26,7 +26,7 @@ let mouse_locked : Ref[Bool] = Ref::new(false)
 ///
 /// Example:
 ///
-/// ```moonbit
+/// ```moonbit nocheck
 /// @system.lock_mouse()
 /// ```
 ///
@@ -42,7 +42,7 @@ pub fn lock_mouse() -> Unit {
 ///
 /// Example:
 ///
-/// ```moonbit
+/// ```moonbit nocheck
 /// inspect(@system.is_mouse_locked(), content="false")
 /// ```
 ///

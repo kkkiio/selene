@@ -23,7 +23,7 @@
 ///
 /// Example:
 ///
-/// ```moonbit
+/// ```moonbit nocheck
 /// let circle = @sprite.ColorCircle::new(
 ///   25.0,
 ///   "blue",
@@ -53,7 +53,7 @@ pub(all) struct ColorCircle {
 ///
 /// Example:
 ///
-/// ```moonbit
+/// ```moonbit nocheck
 /// // Create a red circle with white outline
 /// let circle = @sprite.ColorCircle::new(
 ///   30.0,

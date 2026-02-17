@@ -1,0 +1,8 @@
+import {
+  "Milky2018/selene/inputs",
+  "Milky2018/selene/math",
+}
+
+options(
+  virtual: { "has-default": true },
+)

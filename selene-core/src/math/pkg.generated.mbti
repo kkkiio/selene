@@ -33,6 +33,7 @@ pub(all) enum RepeatMode {
   NoRepeat
   Repeat
 }
+pub impl Show for RepeatMode
 
 pub(all) struct Transform {
   a : Double

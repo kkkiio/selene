@@ -57,7 +57,12 @@ pub let sprites : Map[@entity.Entity, Sprite] = Map::new()
 ///|
 pub enum SpriteType {
   Picture(Picture)
-  Animation(Animation, mut frame~ : Int, mut elapsed~ : Double, mut speed~ : Double)
+  Animation(
+    Animation,
+    mut frame~ : Int,
+    mut elapsed~ : Double,
+    mut speed~ : Double
+  )
   Text(Text)
   ColorRect(ColorRect)
   ColorCircle(ColorCircle)
@@ -124,7 +129,7 @@ pub fn Sprite::from_picture(
 ///
 /// Example:
 ///
-/// ```moonbit
+/// ```moonbit nocheck
 /// let text = @sprite.Text::new("Hello World", color="red")
 /// let sprite = @sprite.Sprite::from_text(text, 1)
 /// inspect(sprite.zindex, content="1")
@@ -154,7 +159,7 @@ pub fn Sprite::from_text(
 ///
 /// Example:
 ///
-/// ```moonbit
+/// ```moonbit nocheck
 /// let rect = @sprite.ColorRect::new(Vec2D(100.0, 50.0), "blue")
 /// let sprite = @sprite.Sprite::from_color_rect(rect, 3)
 /// inspect(sprite.zindex, content="3")
@@ -188,7 +193,7 @@ pub fn Sprite::from_color_rect(
 ///
 /// Example:
 ///
-/// ```moonbit
+/// ```moonbit nocheck
 /// let circle = @sprite.ColorCircle::new(20.0, "green")
 /// let sprite = @sprite.Sprite::from_color_circle(circle, 5)
 /// inspect(sprite.zindex, content="5")

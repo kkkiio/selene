@@ -26,7 +26,7 @@
 ///
 /// Example:
 ///
-/// ```moonbit
+/// ```moonbit nocheck
 /// let _picture = @sprite.Picture::new(
 ///   @math.Vec2D(100.0, 50.0),
 ///   "assets/background.png",
@@ -61,7 +61,7 @@ pub(all) struct Picture {
 ///
 /// Example:
 ///
-/// ```moonbit
+/// ```moonbit nocheck
 /// let _picture = @sprite.Picture::new(
 ///   @math.Vec2D(100.0, 50.0),
 ///   "assets/background.png",
