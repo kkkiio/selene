@@ -48,7 +48,8 @@ fn draw_sprite(
   offset_y~ : Double,
   width~ : Double,
   height~ : Double,
-  transform~ : @math.Transform
+  transform~ : @math.Transform,
+  alpha~ : Double
 ) -> Unit
 
 fn register_key_events(Set[@inputs.Code]) -> Unit

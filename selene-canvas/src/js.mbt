@@ -84,3 +84,9 @@ pub extern "js" fn Audio::set_loop(self : Self, loop_ : Bool) -> Unit = "(self, 
 ///|
 #external
 type Audio
+
+///|
+extern "js" fn set_global_alpha(
+  ctx : @dom.CanvasRenderingContext2D,
+  alpha : Double,
+) -> Unit = "(ctx, a) => { ctx.globalAlpha = a; }"

@@ -75,6 +75,7 @@ pub fn draw_sprite(
   width~ : Double,
   height~ : Double,
   transform~ : @smath.Transform,
+  alpha~ : Double,
 ) -> Unit {
   let context = canvas_backend.context
   context.save()
@@ -87,6 +88,7 @@ pub fn draw_sprite(
     transform.tx,
     transform.ty,
   )
+  set_global_alpha(context, alpha)
   let element = get_image_element(sprite_path)
   context.draw_image_with_src_and_dst_size(
     element |> @js.Value::cast_from |> @js.Value::cast,

@@ -356,6 +356,7 @@ pub fn play_animation(
         zindex,
         visible,
         offset,
+        alpha,
       }
     )
   let loop_ = loop_.unwrap_or(animation.loop_)
@@ -380,6 +381,7 @@ pub fn play_animation(
     zindex,
     visible,
     offset,
+    alpha,
   })
 }
 
@@ -426,6 +428,7 @@ fn render_animation(
   pos : @math.Vec2D,
   visible : Bool,
   delta : Double,
+  alpha : Double,
 ) -> (Int, Double) {
   // Safety check
   if animation.frames.length() == 0 {
@@ -441,6 +444,7 @@ fn render_animation(
   if visible {
     let t = animation.transform
     let p = t.apply_to_vec2d(frame.pivot)
+    let a = if alpha < 0.0 { 0.0 } else if alpha > 1.0 { 1.0 } else { alpha }
     @backend.draw_sprite(
       sprite_path=frame.sprite_path,
       x=pos[X] - p[X],
@@ -450,6 +454,7 @@ fn render_animation(
       width=frame.size[X],
       height=frame.size[Y],
       transform=animation.transform,
+      alpha=a,
     )
   }
 
