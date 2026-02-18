@@ -72,8 +72,8 @@ fn arrange(entity : @entity.Entity, offset : @math.Vec2D) -> @math.Vec2D {
       match sprite.sprite_type {
         Picture(picture) => picture.transform.apply_to_vec2d(picture.size)
         Text(_text) => default_text_size()
-        Animation(anime, ..) =>
-          anime.transform.apply_to_vec2d(anime.frames[0].size)
+        Animation(anime, transform~, ..) =>
+          transform.apply_to_vec2d(anime.frames[0].size)
         ColorRect(rect) => rect.size
         ColorCircle(circle) => Vec2D(circle.radius * 2, circle.radius * 2)
       }

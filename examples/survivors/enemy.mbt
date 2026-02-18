@@ -17,8 +17,7 @@ struct EnemyData {
   health : Double
   speed : Double
   points : Int
-  right_animation : @sprite.Animation
-  left_animation : @sprite.Animation
+  animation : @sprite.Animation
 }
 
 ///|
@@ -187,50 +186,43 @@ let enemy_data : Map[EnemyType, EnemyData] = {
     health: 1.0,
     speed: 60.0,
     points: 10,
-    right_animation: creeper_right_animation,
-    left_animation: creeper_left_animation,
+    animation: creeper_right_animation,
   })
   data.set(Icecream, {
     health: 2.0,
     speed: 90.0,
     points: 20,
-    right_animation: icecream_right_animation,
-    left_animation: icecream_left_animation,
+    animation: icecream_right_animation,
   })
   data.set(Orc, {
     health: 3.0,
     speed: 75,
     points: 30,
-    right_animation: orc_right_animation,
-    left_animation: orc_left_animation,
+    animation: orc_right_animation,
   })
   data.set(Skull, {
     health: 5.0,
     speed: 60.0,
     points: 40,
-    right_animation: skull_right_animation,
-    left_animation: skull_left_animation,
+    animation: skull_right_animation,
   })
   data.set(Teleman, {
     health: 20.0,
     speed: 60.0,
     points: 80,
-    right_animation: teleman_right_animation,
-    left_animation: teleman_left_animation,
+    animation: teleman_right_animation,
   })
   data.set(Devil, {
     health: 8.0,
     speed: 90.0,
     points: 50,
-    right_animation: devil_right_animation,
-    left_animation: devil_left_animation,
+    animation: devil_right_animation,
   })
   data.set(Pirate, {
     health: 500.0,
     speed: 60.0,
     points: 200,
-    right_animation: pirate_right_animation,
-    left_animation: pirate_left_animation,
+    animation: pirate_right_animation,
   })
   data
 }
@@ -270,7 +262,7 @@ fn spawn_enemy_system(_delta : Double) -> Unit {
 
         // Create sprite and enemy state using data structure
         let sprite = @sprite.Sprite::from_animation(
-          data.right_animation,
+          data.animation,
           ENEMY_ZINDEX,
           offset=Vec2D(-8.0, -12.0),
         )
@@ -427,9 +419,17 @@ fn enemy_ai_system(_delta : Double) -> Unit {
 
     // Use the appropriate animation based on direction
     if vel[X] >= 0.0 {
-      @sprite.play_animation(e, data.right_animation)
+      @sprite.play_animation(
+        e,
+        data.animation,
+        transform=@math.Transform::new(),
+      )
     } else {
-      @sprite.play_animation(e, data.left_animation)
+      @sprite.play_animation(
+        e,
+        data.animation,
+        transform=@math.Transform::flip_x(16.0),
+      )
     }
   }
 }

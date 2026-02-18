@@ -60,6 +60,7 @@ pub enum SpriteType {
   Picture(Picture)
   Animation(
     Animation,
+    mut transform~ : @math.Transform,
     mut frame~ : Int,
     mut elapsed~ : Double,
     mut speed~ : Double
@@ -76,10 +77,12 @@ pub fn Sprite::from_animation(
   zindex : Int,
   offset? : @math.Vec2D = @math.Vec2D::zero(),
   alpha? : Double = 1.0,
+  transform? : @math.Transform = @math.Transform::new(),
 ) -> Sprite {
   {
     sprite_type: SpriteType::Animation(
       animation,
+      transform~,
       frame=0,
       elapsed=0.0,
       speed=1.0,
@@ -269,10 +272,17 @@ pub fn render_sprite_system(delta : Double) -> Unit {
     match sprite.sprite_type {
       SpriteType::Picture(picture) if sprite.visible =>
         render_picture(picture, pos + sprite.offset)
-      SpriteType::Animation(anime, frame~, elapsed~, speed~) as animation_sprite => {
+      SpriteType::Animation(
+        anime,
+        transform~,
+        frame~,
+        elapsed~,
+        speed~
+      ) as animation_sprite => {
         let scaled_delta = if speed < 0.0 { 0.0 } else { delta * speed }
         let (new_frame, new_elapsed) = render_animation(
           anime,
+          transform,
           frame,
           elapsed,
           pos + sprite.offset,

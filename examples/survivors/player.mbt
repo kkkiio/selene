@@ -75,16 +75,23 @@ fn player_update_system(delta : Double) -> Unit {
   } else if vel[Y] < 0.0 {
     game_state.player_direction = Up
   }
-  match (vel == @math.Vec2D::zero(), game_state.player_direction) {
-    (true, Left) => @sprite.play_animation(entity, player_idle_left_animation)
-    (true, Right) => @sprite.play_animation(entity, player_idle_right_animation)
-    (true, Up) => @sprite.play_animation(entity, player_idle_up_animation)
-    (true, Down) => @sprite.play_animation(entity, player_idle_down_animation)
-    (false, Left) => @sprite.play_animation(entity, player_run_left_animation)
-    (false, Right) => @sprite.play_animation(entity, player_run_right_animation)
-    (false, Up) => @sprite.play_animation(entity, player_run_up_animation)
-    (false, Down) => @sprite.play_animation(entity, player_run_down_animation)
+  let facing_transform = match game_state.player_direction {
+    Left => @math.Transform::flip_x(PLAYER_SIZE)
+    _ => @math.Transform::new()
   }
+  let current_animation = match (vel == @math.Vec2D::zero(), game_state.player_direction) {
+    (true, Up) => player_idle_up_animation
+    (true, Down) => player_idle_down_animation
+    (true, _) => player_idle_right_animation
+    (false, Up) => player_run_up_animation
+    (false, Down) => player_run_down_animation
+    (false, _) => player_run_right_animation
+  }
+  @sprite.play_animation(
+    entity,
+    current_animation,
+    transform=facing_transform,
+  )
 }
 
 ///|
