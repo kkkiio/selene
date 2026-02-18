@@ -77,6 +77,7 @@ pub fn draw_sprite(
   width~ : Double,
   height~ : Double,
   transform~ : @math.Transform,
+  alpha~ : Double,
 ) -> Unit {
   ignore(sprite_path)
   ignore(x)
@@ -86,6 +87,7 @@ pub fn draw_sprite(
   ignore(width)
   ignore(height)
   ignore(transform)
+  ignore(alpha)
 }
 
 ///|
