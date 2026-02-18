@@ -399,6 +399,7 @@ pub fn play_animation(
         zindex,
         visible,
         offset,
+        alpha,
       }
     )
   let loop_ = loop_.unwrap_or(animation.loop_)
@@ -423,6 +424,7 @@ pub fn play_animation(
     zindex,
     visible,
     offset,
+    alpha,
   })
 }
 
