@@ -27,21 +27,6 @@ let player_idle_right_animation : @sprite.Animation = @sprite.Animation::new(
 )
 
 ///|
-let player_idle_left_animation : @sprite.Animation = @sprite.Animation::new(
-  @sprite.frames_from_atlas(
-    "assets/whiteboy/idle.png",
-    4,
-    width=PLAYER_SIZE,
-    height=PLAYER_SIZE,
-    offset=Vec2D(32.0, 32.0),
-    space_x=64.0,
-  ),
-  loop_=true,
-  fps=12,
-  transform=@math.Transform::flip_x(PLAYER_SIZE),
-)
-
-///|
 let player_idle_up_animation : @sprite.Animation = @sprite.Animation::new(
   @sprite.frames_from_atlas(
     "assets/whiteboy/idle.png",
@@ -81,21 +66,6 @@ let player_run_right_animation : @sprite.Animation = @sprite.Animation::new(
   ),
   fps=12,
   loop_=true,
-)
-
-///|
-let player_run_left_animation : @sprite.Animation = @sprite.Animation::new(
-  @sprite.frames_from_atlas(
-    "assets/whiteboy/run.png",
-    8,
-    width=PLAYER_SIZE,
-    height=PLAYER_SIZE,
-    offset=Vec2D(32.0, 32.0),
-    space_x=64.0,
-  ),
-  fps=12,
-  loop_=true,
-  transform=@math.Transform::flip_x(PLAYER_SIZE),
 )
 
 ///|
@@ -152,22 +122,6 @@ let creeper_right_animation : @sprite.Animation = @sprite.Animation::new(
   ),
   fps=12,
   loop_=true,
-  transform=@math.Transform::new(),
-)
-
-///|
-let creeper_left_animation : @sprite.Animation = @sprite.Animation::new(
-  @sprite.frames_from_atlas(
-    "assets/enemy/Creeper.png",
-    4,
-    width=16,
-    height=24,
-    offset=Vec2D(0, 48),
-    space_x=0,
-  ),
-  fps=12,
-  loop_=true,
-  transform=@math.Transform::flip_x(16),
 )
 
 ///|
@@ -182,22 +136,6 @@ let icecream_right_animation : @sprite.Animation = @sprite.Animation::new(
   ),
   fps=12,
   loop_=true,
-  transform=@math.Transform::new(),
-)
-
-///|
-let icecream_left_animation : @sprite.Animation = @sprite.Animation::new(
-  @sprite.frames_from_atlas(
-    "assets/enemy/Icecream.png",
-    4,
-    width=16,
-    height=24,
-    offset=Vec2D(0, 48),
-    space_x=0,
-  ),
-  fps=12,
-  loop_=true,
-  transform=@math.Transform::flip_x(16),
 )
 
 ///|
@@ -212,22 +150,6 @@ let orc_right_animation : @sprite.Animation = @sprite.Animation::new(
   ),
   fps=12,
   loop_=true,
-  transform=@math.Transform::new(),
-)
-
-///|
-let orc_left_animation : @sprite.Animation = @sprite.Animation::new(
-  @sprite.frames_from_atlas(
-    "assets/enemy/Orc.png",
-    4,
-    width=16,
-    height=24,
-    offset=Vec2D(0, 48),
-    space_x=0,
-  ),
-  fps=12,
-  loop_=true,
-  transform=@math.Transform::flip_x(16),
 )
 
 ///|
@@ -242,22 +164,6 @@ let skull_right_animation : @sprite.Animation = @sprite.Animation::new(
   ),
   fps=12,
   loop_=true,
-  transform=@math.Transform::new(),
-)
-
-///|
-let skull_left_animation : @sprite.Animation = @sprite.Animation::new(
-  @sprite.frames_from_atlas(
-    "assets/enemy/Skull.png",
-    4,
-    width=16,
-    height=24,
-    offset=Vec2D(0, 48),
-    space_x=0,
-  ),
-  fps=12,
-  loop_=true,
-  transform=@math.Transform::flip_x(16),
 )
 
 ///|
@@ -272,22 +178,6 @@ let devil_right_animation : @sprite.Animation = @sprite.Animation::new(
   ),
   fps=12,
   loop_=true,
-  transform=@math.Transform::new(),
-)
-
-///|
-let devil_left_animation : @sprite.Animation = @sprite.Animation::new(
-  @sprite.frames_from_atlas(
-    "assets/enemy/Devil.png",
-    4,
-    width=16,
-    height=24,
-    offset=Vec2D(0, 48),
-    space_x=0,
-  ),
-  fps=12,
-  loop_=true,
-  transform=@math.Transform::flip_x(16),
 )
 
 ///|
@@ -302,22 +192,6 @@ let pirate_right_animation : @sprite.Animation = @sprite.Animation::new(
   ),
   fps=12,
   loop_=true,
-  transform=@math.Transform::new(),
-)
-
-///|
-let pirate_left_animation : @sprite.Animation = @sprite.Animation::new(
-  @sprite.frames_from_atlas(
-    "assets/enemy/Pirate.png",
-    4,
-    width=16,
-    height=24,
-    offset=Vec2D(0, 48),
-    space_x=0,
-  ),
-  fps=12,
-  loop_=true,
-  transform=@math.Transform::flip_x(16),
 )
 
 ///|
@@ -332,22 +206,6 @@ let teleman_right_animation : @sprite.Animation = @sprite.Animation::new(
   ),
   fps=12,
   loop_=true,
-  transform=@math.Transform::new(),
-)
-
-///|
-let teleman_left_animation : @sprite.Animation = @sprite.Animation::new(
-  @sprite.frames_from_atlas(
-    "assets/enemy/Teleman.png",
-    4,
-    width=16,
-    height=24,
-    offset=Vec2D(0, 0),
-    space_x=0,
-  ),
-  fps=12,
-  loop_=true,
-  transform=@math.Transform::flip_x(16),
 )
 
 ///|

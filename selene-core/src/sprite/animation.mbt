@@ -35,8 +35,7 @@
 /// let walk_animation = @sprite.Animation::new(
 ///   frames,
 ///   loop_=true,
-///   fps=12.0,
-///   transform=@math.Transform::new()
+///   fps=12.0
 /// )
 /// ignore(walk_animation)
 ///
@@ -50,7 +49,6 @@
 ///
 pub struct Animation {
   frames : Array[AnimationFrame]
-  transform : @math.Transform
   loop_ : Bool
   id : Int
 }
@@ -107,9 +105,6 @@ pub(all) struct AnimationFrame {
 /// * `fps` : Optional playback speed in frames per second. If provided, it
 ///   overrides the duration of all frames. If omitted, existing frame durations
 ///   are used.
-/// * `transform` : The transformation matrix for position, rotation, and scale
-///   applied to the entire animation (default: identity transform).
-///
 /// Returns a new `Animation` instance with a unique identifier.
 ///
 /// Panics if the `frames` array is empty.
@@ -129,8 +124,7 @@ pub(all) struct AnimationFrame {
 /// let walk_animation = @sprite.Animation::new(
 ///   frames,
 ///   loop_=true,
-///   fps=12.0,
-///   transform=@math.Transform::new()
+///   fps=12.0
 /// )
 /// ignore(walk_animation)
 /// ```
@@ -139,7 +133,6 @@ pub fn Animation::new(
   frames : Array[AnimationFrame],
   loop_? : Bool = false,
   fps? : Double,
-  transform? : @math.Transform = @math.Transform::new(),
 ) -> Animation {
   let max_frame = frames.length().reinterpret_as_uint()
   if max_frame == 0 {
@@ -158,7 +151,7 @@ pub fn Animation::new(
       }
     }
   }
-  { frames, transform, loop_, id: generate_animation() }
+  { frames, loop_, id: generate_animation() }
 }
 
 ///|
@@ -178,8 +171,6 @@ fn generate_animation() -> Int {
 ///
 /// * `sprite_path` : The file path to the sprite image.
 /// * `size` : The width and height of the sprite in pixels.
-/// * `transform` : The transformation matrix for position, rotation, and scale
-///   applied to the sprite (default: identity transform).
 /// * `offset` : The pixel offset within the sprite image where the frame is
 ///   located (default: `@math.Vec2D(0, 0)`).
 /// * `duration` : The duration of the animation in seconds (default: `1.0`).
@@ -201,7 +192,6 @@ fn generate_animation() -> Int {
 /// let icon = @sprite.Animation::single_frame(
 ///   "icons/health.png", 
 ///   @math.Vec2D(32.0, 32.0),
-///   transform=@math.Transform::from_translation(10.0, 20.0),
 ///   offset=@math.Vec2D(16.0, 16.0)
 /// )
 /// ignore(icon)
@@ -210,16 +200,11 @@ fn generate_animation() -> Int {
 pub fn Animation::single_frame(
   sprite_path : String,
   size : @math.Vec2D,
-  transform? : @math.Transform = @math.Transform::new(),
   offset? : @math.Vec2D = @math.Vec2D(0, 0),
   pivot? : @math.Vec2D = @math.Vec2D(0, 0),
   duration? : Double = 1.0,
 ) -> Animation {
-  Animation::new(
-    [{ sprite_path, size, offset, duration, pivot }],
-    transform~,
-    loop_=false,
-  )
+  Animation::new([{ sprite_path, size, offset, duration, pivot }], loop_=false)
 }
 
 ///|
@@ -299,14 +284,15 @@ pub fn frames_from_atlas(
 /// Parameters:
 ///
 /// * `entity` : The entity to attach the animation to.
-/// * `animation` : The animation configuration containing frames, timing, and
-///   transform data.
+/// * `animation` : The animation configuration containing frames and timing.
 /// * `from_start` : Whether to restart the animation from the first frame, even
 ///   if the same animation is already playing (default: `false`).
 /// * `loop_` : Whether the animation should loop continuously. If not
 ///   specified, uses the animation's default loop setting.
 /// * `transform` : The transformation matrix for position, rotation, and scale.
-///   If not specified, uses the animation's default transform.
+///   If not specified, keeps the current animation instance transform.
+///   In this stage, `tx/ty` should remain zero. Runtime translation should use
+///   `Position + Sprite.offset`.
 ///
 /// Panics if the entity does not have an existing sprite component with an
 /// animation.
@@ -337,7 +323,7 @@ pub fn frames_from_atlas(
 ///   entity,
 ///   walk_animation,
 ///   from_start=true,
-///   transform=@math.Transform::from_translation(100.0, 200.0)
+///   transform=@math.Transform::flip_x(32.0)
 /// )
 /// ```
 ///
@@ -352,7 +338,13 @@ pub fn play_animation(
   guard sprites.get(entity)
     is Some(
       {
-        sprite_type: Animation(current_anime, frame~, elapsed~, speed~),
+        sprite_type: Animation(
+          current_anime,
+          transform=current_transform,
+          frame~,
+          elapsed~,
+          speed~
+        ),
         zindex,
         visible,
         offset,
@@ -360,7 +352,7 @@ pub fn play_animation(
       }
     )
   let loop_ = loop_.unwrap_or(animation.loop_)
-  let transform = transform.unwrap_or(animation.transform)
+  let transform = transform.unwrap_or(current_transform)
   let current_frame = frame
   let current_elapsed = elapsed
 
@@ -370,14 +362,15 @@ pub fn play_animation(
   } else {
     (0, 0.0)
   }
-  let new_anime = {
-    frames: animation.frames,
-    transform,
-    loop_,
-    id: animation.id,
-  }
+  let new_anime = { frames: animation.frames, loop_, id: animation.id }
   sprites.set(entity, {
-    sprite_type: SpriteType::Animation(new_anime, frame~, elapsed~, speed~),
+    sprite_type: SpriteType::Animation(
+      new_anime,
+      transform~,
+      frame~,
+      elapsed~,
+      speed~,
+    ),
     zindex,
     visible,
     offset,
@@ -399,12 +392,38 @@ pub fn play_animation(
 ///   * `0.0 ~ 1.0` = slower playback.
 ///   * `< 0.0` is treated as `0.0`.
 ///
-/// Panics if the entity does not have an existing sprite component with an
-/// animation.
+/// If the entity does not have an existing sprite component with an animation,
+/// this function does nothing.
 pub fn set_animation_speed(entity : @entity.Entity, speed : Double) -> Unit {
   guard sprites.get(entity)
-    is Some({ sprite_type: Animation(_, ..) as animation_sprite, .. })
+    is Some({ sprite_type: Animation(_, ..) as animation_sprite, .. }) else {
+    return
+  }
   animation_sprite.speed = if speed < 0.0 { 0.0 } else { speed }
+}
+
+///|
+/// Sets runtime animation transform for a sprite without resetting its
+/// animation progress.
+///
+/// Parameters:
+///
+/// * `entity` : The entity whose animation transform should be changed.
+/// * `transform` : Runtime transform for this animation instance.
+///   In this stage, `tx/ty` should remain zero. Runtime translation should use
+///   `Position + Sprite.offset`.
+///
+/// If the entity does not have an existing sprite component with an animation,
+/// this function does nothing.
+pub fn set_animation_transform(
+  entity : @entity.Entity,
+  transform : @math.Transform,
+) -> Unit {
+  guard sprites.get(entity)
+    is Some({ sprite_type: Animation(_, ..) as animation_sprite, .. }) else {
+    return
+  }
+  animation_sprite.transform = transform
 }
 
 ///|
@@ -423,6 +442,7 @@ pub fn set_animation_speed(entity : @entity.Entity, speed : Double) -> Unit {
 ///
 fn render_animation(
   animation : Animation,
+  instance_transform : @math.Transform,
   current_frame : Int,
   elapsed : Double,
   pos : @math.Vec2D,
@@ -442,7 +462,7 @@ fn render_animation(
   }
   let frame = animation.frames[current_frame]
   if visible {
-    let t = animation.transform
+    let t = instance_transform
     let p = t.apply_to_vec2d(frame.pivot)
     let a = if alpha < 0.0 { 0.0 } else if alpha > 1.0 { 1.0 } else { alpha }
     @backend.draw_sprite(
@@ -453,7 +473,7 @@ fn render_animation(
       offset_y=frame.offset[Y],
       width=frame.size[X],
       height=frame.size[Y],
-      transform=animation.transform,
+      transform=instance_transform,
       alpha=a,
     )
   }
