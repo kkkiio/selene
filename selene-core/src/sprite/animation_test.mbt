@@ -158,14 +158,14 @@ test "animation speed scales delta" {
   defer entity.destroy()
   let frames = [
     @sprite.AnimationFrame::{
-      sprite_path: "0",
+      image: @asset.load_image("f0"),
       size: @math.Vec2D(10.0, 10.0),
       offset: @math.Vec2D(0.0, 0.0),
       duration: 1.0,
       pivot: @math.Vec2D(0.0, 0.0),
     },
     @sprite.AnimationFrame::{
-      sprite_path: "1",
+      image: @asset.load_image("f1"),
       size: @math.Vec2D(10.0, 10.0),
       offset: @math.Vec2D(0.0, 0.0),
       duration: 1.0,
@@ -192,14 +192,14 @@ test "animation speed zero freezes" {
   defer entity.destroy()
   let frames = [
     @sprite.AnimationFrame::{
-      sprite_path: "0",
+      image: @asset.load_image("f0"),
       size: @math.Vec2D(10.0, 10.0),
       offset: @math.Vec2D(0.0, 0.0),
       duration: 1.0,
       pivot: @math.Vec2D(0.0, 0.0),
     },
     @sprite.AnimationFrame::{
-      sprite_path: "1",
+      image: @asset.load_image("f1"),
       size: @math.Vec2D(10.0, 10.0),
       offset: @math.Vec2D(0.0, 0.0),
       duration: 1.0,
@@ -232,14 +232,14 @@ test "negative speed treated as zero" {
   defer entity.destroy()
   let frames = [
     @sprite.AnimationFrame::{
-      sprite_path: "0",
+      image: @asset.load_image("f0"),
       size: @math.Vec2D(10.0, 10.0),
       offset: @math.Vec2D(0.0, 0.0),
       duration: 1.0,
       pivot: @math.Vec2D(0.0, 0.0),
     },
     @sprite.AnimationFrame::{
-      sprite_path: "1",
+      image: @asset.load_image("f1"),
       size: @math.Vec2D(10.0, 10.0),
       offset: @math.Vec2D(0.0, 0.0),
       duration: 1.0,
@@ -271,14 +271,14 @@ test "play_animation preserves speed across clip switch" {
   defer entity.destroy()
   let frames_a = [
     @sprite.AnimationFrame::{
-      sprite_path: "a0",
+      image: @asset.load_image("a0"),
       size: @math.Vec2D(10.0, 10.0),
       offset: @math.Vec2D(0.0, 0.0),
       duration: 1.0,
       pivot: @math.Vec2D(0.0, 0.0),
     },
     @sprite.AnimationFrame::{
-      sprite_path: "a1",
+      image: @asset.load_image("a1"),
       size: @math.Vec2D(10.0, 10.0),
       offset: @math.Vec2D(0.0, 0.0),
       duration: 1.0,
@@ -287,14 +287,14 @@ test "play_animation preserves speed across clip switch" {
   ]
   let frames_b = [
     @sprite.AnimationFrame::{
-      sprite_path: "b0",
+      image: @asset.load_image("b0"),
       size: @math.Vec2D(10.0, 10.0),
       offset: @math.Vec2D(0.0, 0.0),
       duration: 1.0,
       pivot: @math.Vec2D(0.0, 0.0),
     },
     @sprite.AnimationFrame::{
-      sprite_path: "b1",
+      image: @asset.load_image("b1"),
       size: @math.Vec2D(10.0, 10.0),
       offset: @math.Vec2D(0.0, 0.0),
       duration: 1.0,
