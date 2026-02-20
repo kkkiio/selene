@@ -157,6 +157,7 @@ pub fn Code::from_string(code : String) -> Code? {
     "KeyW" => Some(KeyW)
     "KeyX" => Some(KeyX)
     "KeyY" => Some(KeyY)
+    "KeyZ" => Some(KeyZ)
     "ArrowUp" => Some(ArrowUp)
     "ArrowDown" => Some(ArrowDown)
     "ArrowLeft" => Some(ArrowLeft)
@@ -403,5 +404,5 @@ pub fn is_just_pressed(code : Code) -> Bool {
 /// ```
 ///
 pub fn is_just_released(code : Code) -> Bool {
-  just_pressed_keys.contains(code)
+  just_release_keys.contains(code)
 }
