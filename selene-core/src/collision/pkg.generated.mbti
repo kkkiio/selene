@@ -24,6 +24,8 @@ pub fn get_collision_infos(@entity.Entity) -> Array[CollisionInfo]
 
 pub fn get_contains(@entity.Entity) -> @set.Set[@entity.Entity]
 
+pub fn is_hover(@entity.Entity) -> Bool
+
 pub fn is_on_floor(@entity.Entity) -> Bool
 
 pub fn move_system(Double) -> Unit

@@ -46,6 +46,7 @@
 /// FIXME: replace all callbacks with state access
 /// 
 struct Pickable {
+  mut hovered : Bool
   on_pressed_callbacks : Array[(@inputs.MouseButton) -> Unit]
   on_released_callbacks : Array[(@inputs.MouseButton) -> Unit]
   on_just_pressed_callbacks : Array[(@inputs.MouseButton) -> Unit]
@@ -96,11 +97,24 @@ pub let pickables : Map[@entity.Entity, Pickable] = Map::new()
 ///
 pub fn Pickable::new() -> Pickable {
   {
+    hovered: false,
     on_pressed_callbacks: [],
     on_released_callbacks: [],
     on_just_pressed_callbacks: [],
     on_just_released_callbacks: [],
   }
+}
+
+///|
+/// Returns whether an entity is hovered by the mouse in the current frame.
+///
+/// If the entity is not alive or has no pickable component, this returns
+/// `false`.
+///
+pub fn is_hover(entity : @entity.Entity) -> Bool {
+  guard entity.is_alive() else { return false }
+  guard pickables.get(entity) is Some(pickable) else { return false }
+  pickable.hovered
 }
 
 ///|
@@ -248,6 +262,11 @@ pub fn Pickable::on_just_released(
 /// ```
 ///
 pub fn pickable_click_system(_delta : Double) -> Unit {
+  for e, pick in pickables {
+    if e.is_alive() {
+      pick.hovered = false
+    }
+  }
   let zoom = @backend.get_zoom()
   let box = @math.Rect::{
     size: @math.Vec2D(1.0, 1.0),
@@ -266,6 +285,7 @@ pub fn pickable_click_system(_delta : Double) -> Unit {
     if !box.intersects(area_box) {
       continue
     }
+    pick.hovered = true
     for button in [@inputs.MouseButton::Left, Right, Middle] {
       if @inputs.is_mouse_pressed(button) {
         for callback in pick.on_pressed_callbacks {
@@ -303,6 +323,7 @@ pub fn pickable_click_system(_delta : Double) -> Unit {
     if !box.shift(@camera.get_position()).intersects(area_box) {
       continue
     }
+    pick.hovered = true
     for button in [@inputs.MouseButton::Left, Right, Middle] {
       if @inputs.is_mouse_pressed(button) {
         for callback in pick.on_pressed_callbacks {
