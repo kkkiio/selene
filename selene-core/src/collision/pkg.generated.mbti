@@ -79,6 +79,7 @@ pub(all) enum CollisionShape {
 
 type Pickable
 pub fn Pickable::new() -> Self
+pub fn Pickable::on_double_click(Self, (@inputs.MouseButton) -> Unit) -> Unit
 pub fn Pickable::on_just_pressed(Self, (@inputs.MouseButton) -> Unit) -> Unit
 pub fn Pickable::on_just_released(Self, (@inputs.MouseButton) -> Unit) -> Unit
 pub fn Pickable::on_pressed(Self, (@inputs.MouseButton) -> Unit) -> Unit

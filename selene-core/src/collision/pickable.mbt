@@ -51,7 +51,23 @@ struct Pickable {
   on_released_callbacks : Array[(@inputs.MouseButton) -> Unit]
   on_just_pressed_callbacks : Array[(@inputs.MouseButton) -> Unit]
   on_just_released_callbacks : Array[(@inputs.MouseButton) -> Unit]
+  on_double_click_callbacks : Array[(@inputs.MouseButton) -> Unit]
 }
+
+///|
+const DOUBLE_CLICK_WINDOW : Double = 0.25
+
+///|
+let elapsed_time : Ref[Double] = Ref::new(0.0)
+
+///|
+let last_left_click : Ref[(@entity.Entity, Double)?] = Ref::new(None)
+
+///|
+let last_right_click : Ref[(@entity.Entity, Double)?] = Ref::new(None)
+
+///|
+let last_middle_click : Ref[(@entity.Entity, Double)?] = Ref::new(None)
 
 ///|
 /// Global registry that maps entities to their `Pickable` components for mouse
@@ -102,6 +118,7 @@ pub fn Pickable::new() -> Pickable {
     on_released_callbacks: [],
     on_just_pressed_callbacks: [],
     on_just_released_callbacks: [],
+    on_double_click_callbacks: [],
   }
 }
 
@@ -222,6 +239,66 @@ pub fn Pickable::on_just_released(
 }
 
 ///|
+/// Registers a callback function to be executed when a mouse button is
+/// double-clicked on the entity.
+///
+pub fn Pickable::on_double_click(
+  self : Pickable,
+  callback : (@inputs.MouseButton) -> Unit,
+) -> Unit {
+  self.on_double_click_callbacks.push(callback)
+}
+
+///|
+fn get_last_click_time(
+  button : @inputs.MouseButton,
+) -> (@entity.Entity, Double)? {
+  match button {
+    @inputs.MouseButton::Left => last_left_click.val
+    @inputs.MouseButton::Right => last_right_click.val
+    @inputs.MouseButton::Middle => last_middle_click.val
+  }
+}
+
+///|
+fn set_last_click_time(
+  button : @inputs.MouseButton,
+  click : (@entity.Entity, Double)?,
+) -> Unit {
+  match button {
+    @inputs.MouseButton::Left => last_left_click.val = click
+    @inputs.MouseButton::Right => last_right_click.val = click
+    @inputs.MouseButton::Middle => last_middle_click.val = click
+  }
+}
+
+///|
+fn handle_just_pressed(
+  e : @entity.Entity,
+  pick : Pickable,
+  button : @inputs.MouseButton,
+) -> Unit {
+  guard @inputs.is_mouse_just_pressed(button) else { return }
+  for callback in pick.on_just_pressed_callbacks {
+    callback(button)
+  }
+  let now = elapsed_time.val
+  match get_last_click_time(button) {
+    Some((last_entity, last_time)) => {
+      if last_entity == e && now - last_time <= DOUBLE_CLICK_WINDOW {
+        for callback in pick.on_double_click_callbacks {
+          callback(button)
+        }
+        set_last_click_time(button, None)
+      } else {
+        set_last_click_time(button, Some((e, now)))
+      }
+    }
+    None => set_last_click_time(button, Some((e, now)))
+  }
+}
+
+///|
 /// Processes mouse interaction events for all pickable entities in the game
 /// world.
 ///
@@ -261,7 +338,8 @@ pub fn Pickable::on_just_released(
 /// app.add_system(pickable_click_system).run()
 /// ```
 ///
-pub fn pickable_click_system(_delta : Double) -> Unit {
+pub fn pickable_click_system(delta : Double) -> Unit {
+  elapsed_time.val += delta
   for e, pick in pickables {
     if e.is_alive() {
       pick.hovered = false
@@ -297,11 +375,7 @@ pub fn pickable_click_system(_delta : Double) -> Unit {
           callback(button)
         }
       }
-      if @inputs.is_mouse_just_pressed(button) {
-        for callback in pick.on_just_pressed_callbacks {
-          callback(button)
-        }
-      }
+      handle_just_pressed(e, pick, button)
       if @inputs.is_mouse_just_released(button) {
         for callback in pick.on_just_released_callbacks {
           callback(button)
@@ -335,11 +409,7 @@ pub fn pickable_click_system(_delta : Double) -> Unit {
           callback(button)
         }
       }
-      if @inputs.is_mouse_just_pressed(button) {
-        for callback in pick.on_just_pressed_callbacks {
-          callback(button)
-        }
-      }
+      handle_just_pressed(e, pick, button)
       if @inputs.is_mouse_just_released(button) {
         for callback in pick.on_just_released_callbacks {
           callback(button)
