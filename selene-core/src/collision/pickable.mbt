@@ -16,13 +16,14 @@
 /// Marker component for pointer-interactive entities.
 pub(all) struct Pickable {
   mut active : Bool
+  mut hovered : Bool
 
   fn new() -> Pickable
 }
 
 ///|
 pub fn Pickable::new() -> Pickable {
-  { active: true }
+  { active: true, hovered: false }
 }
 
 ///|
@@ -52,7 +53,23 @@ pub(all) enum PointerPhase {
   Released
   JustPressed
   JustReleased
+  DoubleClicked
 } derive(Eq)
+
+///|
+const DOUBLE_CLICK_WINDOW : Double = 0.25
+
+///|
+let elapsed_time : Ref[Double] = Ref::new(0.0)
+
+///|
+let last_left_click : Ref[(@entity.Entity, Double)?] = Ref::new(None)
+
+///|
+let last_right_click : Ref[(@entity.Entity, Double)?] = Ref::new(None)
+
+///|
+let last_middle_click : Ref[(@entity.Entity, Double)?] = Ref::new(None)
 
 ///|
 /// Pointer event emitted during the latest update frame.
@@ -71,7 +88,7 @@ fn push_pointer_event(
   button : @inputs.MouseButton,
   phase : PointerPhase,
 ) -> Unit {
-  pointer_event_bus.send({ entity, button, phase })
+  pointer_event_bus.trigger({ entity, button, phase }, Some(entity))
 }
 
 ///|
@@ -80,6 +97,34 @@ pub fn emit_pickable_just_pressed(
   button? : @inputs.MouseButton = @inputs.MouseButton::Left,
 ) -> Unit {
   push_pointer_event(entity, button, JustPressed)
+}
+
+///|
+pub fn is_hover(entity : @entity.Entity) -> Bool {
+  guard entity.is_alive() else { return false }
+  guard pickables().get(entity) is Some(pickable) else { return false }
+  pickable.hovered
+}
+
+///|
+fn get_last_click(button : @inputs.MouseButton) -> (@entity.Entity, Double)? {
+  match button {
+    Left => last_left_click.val
+    Right => last_right_click.val
+    Middle => last_middle_click.val
+  }
+}
+
+///|
+fn set_last_click(
+  button : @inputs.MouseButton,
+  value : (@entity.Entity, Double)?,
+) -> Unit {
+  match button {
+    Left => last_left_click.val = value
+    Right => last_right_click.val = value
+    Middle => last_middle_click.val = value
+  }
 }
 
 ///|
@@ -129,6 +174,19 @@ fn dispatch_pointer_events(entity : @entity.Entity) -> Unit {
     }
     if @inputs.is_mouse_just_pressed(button) {
       push_pointer_event(entity, button, JustPressed)
+      let now = elapsed_time.val
+      match get_last_click(button) {
+        Some((last_entity, last_time)) => {
+          if last_entity == entity &&
+            now - last_time <= DOUBLE_CLICK_WINDOW {
+            push_pointer_event(entity, button, DoubleClicked)
+            set_last_click(button, None)
+          } else {
+            set_last_click(button, Some((entity, now)))
+          }
+        }
+        None => set_last_click(button, Some((entity, now)))
+      }
     }
     if @inputs.is_mouse_just_released(button) {
       push_pointer_event(entity, button, JustReleased)
@@ -137,7 +195,8 @@ fn dispatch_pointer_events(entity : @entity.Entity) -> Unit {
 }
 
 ///|
-pub fn pickable_click_system(_delta : Double) -> Unit {
+pub fn pickable_click_system(delta : Double) -> Unit {
+  elapsed_time.val += @cmp.maximum(0.0, delta)
   let mouse_screen = @inputs.mouse.pos
   let camera_pos = @camera.get_position()
   let mouse_world = @system.screen_to_world(mouse_screen, camera_pos)
@@ -145,7 +204,9 @@ pub fn pickable_click_system(_delta : Double) -> Unit {
   for entity, pickable in pickables() {
     guard entity.is_alive() else { continue }
     guard pickable.active else { continue }
+    pickable.hovered = false
     if hit_test_pickable(entity, mouse_screen, mouse_world, mouse_virtual) {
+      pickable.hovered = true
       dispatch_pointer_events(entity)
     }
   }
