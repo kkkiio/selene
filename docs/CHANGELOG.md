@@ -1467,6 +1467,10 @@
 
 - raylib runtime cleanup now clears cached texture/sound/font and 3D synced-asset maps after unload, preventing stale resource handles from causing white/missing textures across multiple `App::run()` sessions
 
+### Fixed
+
+- `Sprite.alpha` now consistently multiplies picture, animation, text, rectangle, and circle draw-command alpha in the WebGPU 2D pipeline, restoring sprite fade animations after the backend migration
+
 ## [0.24.2] - 2026-03-06
 
 ### Fixed

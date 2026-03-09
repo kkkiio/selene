@@ -87,6 +87,7 @@ fn render_text(
   text : Text,
   position : @math.Vec2D,
   scale_with_zoom : Bool,
+  alpha : Double,
 ) -> Unit {
   let style = parse_text_style(
     text.font,
@@ -100,6 +101,7 @@ fn render_text(
   } else {
     style
   }
+  let style = { ..style, color: multiply_alpha(style.color, alpha) }
   let command : @render2d_types.TextDrawCommand2D = {
     text: text.content,
     position,

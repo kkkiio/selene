@@ -122,6 +122,7 @@ fn render_picture(
   picture : Picture,
   pos : @math.Vec2D,
   scale_with_zoom : Bool,
+  alpha : Double,
 ) -> Unit {
   let size = if scale_with_zoom {
     @system.scale_vec2(picture.size)
@@ -139,7 +140,7 @@ fn render_picture(
     source: None,
     repeat: picture.repeat,
     transform,
-    color: picture.color,
+    color: multiply_alpha(picture.color, alpha),
   }
   @render2d.push_image(command)
 }

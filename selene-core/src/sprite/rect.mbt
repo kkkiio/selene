@@ -39,6 +39,7 @@ fn render_color_rect(
   color_rect : ColorRect,
   position : @math.Vec2D,
   scale_with_zoom : Bool,
+  alpha : Double,
 ) -> Unit {
   let size = if scale_with_zoom {
     @system.scale_vec2(color_rect.size)
@@ -47,8 +48,11 @@ fn render_color_rect(
   }
   let command : @render2d_types.RectDrawCommand2D = {
     rect: @math.Rect::{ position, size },
-    fill_color: parse_color(color_rect.color),
-    stroke_color: parse_optional_color(color_rect.stroke_color),
+    fill_color: multiply_alpha(parse_color(color_rect.color), alpha),
+    stroke_color: match parse_optional_color(color_rect.stroke_color) {
+      Some(stroke_color) => Some(multiply_alpha(stroke_color, alpha))
+      None => None
+    },
   }
   @render2d.push_rect(command)
 }

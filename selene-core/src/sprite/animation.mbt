@@ -474,6 +474,7 @@ fn render_animation(
   pos : @math.Vec2D,
   scale_with_zoom : Bool,
   visible : Bool,
+  alpha : Double,
   delta : Double,
   overlay? : Bool = false,
 ) -> (Int, Double) {
@@ -506,7 +507,7 @@ fn render_animation(
       source: Some({ position: frame.offset, size: frame.size }),
       repeat: NoRepeat,
       transform,
-      color: { r: 255U, g: 255U, b: 255U, a: 1.0 },
+      color: { r: 255U, g: 255U, b: 255U, a: alpha },
     }
     if overlay {
       @render2d.push_overlay_image(command)

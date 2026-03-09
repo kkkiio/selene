@@ -292,7 +292,7 @@ pub fn render_sprite_system(delta : Double) -> Unit {
     let screen_pos = @system.world_to_screen(raw_pos, camera_pos)
     match sprite.sprite_type {
       SpriteType::Picture(picture) if sprite.visible =>
-        render_picture(picture, screen_pos, true)
+        render_picture(picture, screen_pos, true, sprite.alpha)
       SpriteType::Animation(
         anime,
         transform~,
@@ -309,17 +309,18 @@ pub fn render_sprite_system(delta : Double) -> Unit {
           screen_pos,
           true,
           sprite.visible,
+          sprite.alpha,
           scaled_delta,
         )
         animation_sprite.frame = new_frame
         animation_sprite.elapsed = new_elapsed
       }
       SpriteType::Text(text) if sprite.visible =>
-        render_text(text, screen_pos, true)
+        render_text(text, screen_pos, true, sprite.alpha)
       SpriteType::ColorRect(color_rect) if sprite.visible =>
-        render_color_rect(color_rect, screen_pos, true)
+        render_color_rect(color_rect, screen_pos, true, sprite.alpha)
       SpriteType::ColorCircle(color_circle) if sprite.visible =>
-        render_color_circle(color_circle, screen_pos, true)
+        render_color_circle(color_circle, screen_pos, true, sprite.alpha)
       _ => ()
     }
   }

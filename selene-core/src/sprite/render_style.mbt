@@ -35,6 +35,14 @@ fn clamp_alpha(alpha : Double) -> Double {
 }
 
 ///|
+fn multiply_alpha(
+  color : @render.Color,
+  alpha : Double,
+) -> @render.Color {
+  { ..color, a: clamp_alpha(color.a * alpha) }
+}
+
+///|
 fn rgba(r : Int, g : Int, b : Int, a : Double) -> @render.Color {
   @render.Color::{
     r: clamp_channel(r),
