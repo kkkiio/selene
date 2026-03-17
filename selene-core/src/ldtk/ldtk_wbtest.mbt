@@ -614,10 +614,10 @@ test "spawn_ldtk_world spawns level backgrounds from bg color and image" {
     let background_entity = image_background_entity.unwrap()
     let background_sprite = @sprite.sprites().get(background_entity).unwrap()
     match background_sprite.sprite_type {
-      Animation(animation, frame=_) => {
+      Animation(animation, transform~, frame=_, ..) => {
         inspect(animation.frames[0].offset, content="Vec2D(3, 5)")
         inspect(animation.frames[0].size, content="Vec2D(20, 10)")
-        let (scale_x, scale_y) = animation.transform.get_scale()
+        let (scale_x, scale_y) = transform.get_scale()
         inspect(scale_x, content="2")
         inspect(scale_y, content="3")
       }
@@ -915,12 +915,12 @@ test "ldtk entity tile sprite registration inserts placeholder sprite from __til
     let sprite = @sprite.sprites().get(enemy).unwrap()
     inspect(sprite.offset, content="Vec2D(0, 8)")
     match sprite.sprite_type {
-      Animation(animation, frame~) => {
-        inspect(frame.to_int(), content="0")
+      Animation(animation, transform~, frame~, ..) => {
+        inspect(frame, content="0")
         inspect(animation.frames[0].offset, content="Vec2D(16, 24)")
         inspect(animation.frames[0].size, content="Vec2D(16, 8)")
-        inspect(animation.transform.a, content="2")
-        inspect(animation.transform.d, content="2")
+        inspect(transform.a, content="2")
+        inspect(transform.d, content="2")
       }
       _ => fail("expected entity tile sprite animation")
     }
@@ -1110,7 +1110,7 @@ test "ldtk tile render alpha multiplies layer opacity and tile alpha" {
     let tile_entity = ldtk_spawned_tile_instances().to_array()[0].0
     let sprite = @sprite.sprites().get(tile_entity).unwrap()
     match sprite.sprite_type {
-      Animation(animation, frame=_) => inspect(animation.color.a, content="0.2")
+      Animation(_, frame=_, ..) => inspect(sprite.alpha, content="0.2")
       _ => fail("expected animation sprite for LDtk tile")
     }
     cleanup_ldtk_entity(world)

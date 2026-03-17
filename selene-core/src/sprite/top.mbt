@@ -293,13 +293,7 @@ pub fn render_sprite_system(delta : Double) -> Unit {
     match sprite.sprite_type {
       SpriteType::Picture(picture) if sprite.visible =>
         render_picture(picture, screen_pos, true, sprite.alpha)
-      SpriteType::Animation(
-        anime,
-        transform~,
-        frame~,
-        elapsed~,
-        speed~,
-      ) as animation_sprite => {
+      SpriteType::Animation(anime, transform~, frame~, elapsed~, speed~) as animation_sprite => {
         let scaled_delta = if speed < 0.0 { 0.0 } else { delta * speed }
         let (new_frame, new_elapsed) = render_animation(
           anime,

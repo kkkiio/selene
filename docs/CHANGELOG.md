@@ -3,10 +3,19 @@
 ## [Unreleased]
 
 ### Added
+- Added `@collision.PointerPhase::DoubleClicked` and `@collision.is_hover(entity)` for richer pointer interaction semantics.
+- Added runtime animation controls in `@sprite`: per-instance speed (`set_animation_speed`) and transform (`set_animation_transform`).
+- Added sprite animation tests `selene-core/src/sprite/animation_test.mbt` and alpha regression tests `selene-core/src/sprite/alpha_test.mbt`.
+- Added pointer interaction tests `selene-core/src/collision/pickable_test.mbt`.
 
 ### Changed
+- Changed sprite animation playback to timeline-based frame progression (frame index + elapsed time).
+- Changed `@sprite.AnimationFrame` to support per-frame pivot and duration metadata for anchor-aware rendering.
+- Changed sprite animation transform ownership from shared animation config to sprite instance state.
+- Changed `@math.RepeatMode` to derive `Show`.
 
 ### Fixed
+- Fixed sprite alpha rendering path so picture/text/rect/circle/animation all respect sprite alpha.
 
 ### Removed
 

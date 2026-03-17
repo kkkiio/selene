@@ -48,6 +48,8 @@ pub fn intersect_shape(CollisionShape, @math.Vec2D, rotation? : Double, query_fi
 
 pub fn is_grounded(@entity.Entity) -> Bool
 
+pub fn is_hover(@entity.Entity) -> Bool
+
 pub fn joint_handle(@entity.Entity) -> @dynamics.ImpulseJointHandle?
 
 pub fn joints() -> Map[@entity.Entity, Joint]
@@ -249,6 +251,7 @@ pub(all) struct PhysicsConfig {
 
 pub(all) struct Pickable {
   mut active : Bool
+  mut hovered : Bool
 
   fn new() -> Pickable
 }
@@ -265,6 +268,7 @@ pub(all) enum PointerPhase {
   Released
   JustPressed
   JustReleased
+  DoubleClicked
 }
 pub impl Eq for PointerPhase
 

@@ -176,15 +176,13 @@ fn dispatch_pointer_events(entity : @entity.Entity) -> Unit {
       push_pointer_event(entity, button, JustPressed)
       let now = elapsed_time.val
       match get_last_click(button) {
-        Some((last_entity, last_time)) => {
-          if last_entity == entity &&
-            now - last_time <= DOUBLE_CLICK_WINDOW {
+        Some((last_entity, last_time)) =>
+          if last_entity == entity && now - last_time <= DOUBLE_CLICK_WINDOW {
             push_pointer_event(entity, button, DoubleClicked)
             set_last_click(button, None)
           } else {
             set_last_click(button, Some((entity, now)))
           }
-        }
         None => set_last_click(button, Some((entity, now)))
       }
     }

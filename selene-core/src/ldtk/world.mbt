@@ -788,14 +788,20 @@ pub fn ldtk_entity_tile_sprite(
   let animation = @sprite.Animation::single_frame_from_image(
     image,
     @math.Vec2D(source_width, source_height),
-    transform=@math.Transform::from_scale(scale_x, scale_y),
     offset=@math.Vec2D(tile.x.to_double(), tile.y.to_double()),
   )
   let pivot_offset = @math.Vec2D(
     target_width * (event.instance.pivot[X] - 0.5),
     target_height * (event.instance.pivot[Y] - 0.5),
   )
-  Some(@sprite.Sprite::from_animation(animation, zindex, offset=pivot_offset))
+  Some(
+    @sprite.Sprite::from_animation(
+      animation,
+      zindex,
+      offset=pivot_offset,
+      transform=@math.Transform::from_scale(scale_x, scale_y),
+    ),
+  )
 }
 
 ///|
@@ -1578,10 +1584,13 @@ fn ldtk_spawn_level_background(
     let animation = @sprite.Animation::single_frame_from_image(
       image,
       image_size,
-      transform=image_transform,
       offset=image_offset,
     )
-    let sprite = @sprite.Sprite::from_animation(animation, zindex)
+    let sprite = @sprite.Sprite::from_animation(
+      animation,
+      zindex,
+      transform=image_transform,
+    )
     sprite.visible = true
     @sprite.sprites().set(background_entity, sprite)
     ldtk_level_backgrounds().set(background_entity, {
@@ -1743,15 +1752,16 @@ fn ldtk_spawn_layer_tiles(
       image,
       offset: tile_src,
       size: @math.Vec2D(tile_size, tile_size),
+      duration: 1.0,
+      pivot: @math.Vec2D::zero(),
     }
-    let animation = @sprite.Animation::new(
-      [frame],
-      loop_=false,
-      fps=0.0,
+    let animation = @sprite.Animation::new([frame], loop_=false, fps=0.0)
+    let sprite = @sprite.Sprite::from_animation(
+      animation,
+      zindex,
       transform=ldtk_tile_transform(tile, tile_size),
-      color={ r: 255U, g: 255U, b: 255U, a: render_alpha },
+      alpha=render_alpha,
     )
-    let sprite = @sprite.Sprite::from_animation(animation, zindex)
     sprite.visible = visible
     @sprite.sprites().set(tile_entity, sprite)
     let tile_event : LdtkTileSpawnedEvent = {

@@ -22,7 +22,7 @@ fn create_pickable_rect_entity(
   ignore(is_ui)
   pickables().set(entity, Pickable::new())
   @position.positions().set(entity, @position.Position(position))
-  shapes().set(entity, Rect(size=size, offset=@math.Vec2D::zero()))
+  shapes().set(entity, Rect(size~, offset=@math.Vec2D::zero()))
   entity
 }
 
@@ -40,7 +40,7 @@ fn click_left_on_pos(pos : @math.Vec2D, interval : Double) -> Unit {
 ///|
 test "is_hover returns true for world entity hit by mouse" {
   reset_pickable_test_state()
-  defer { pickable_click_system(1.0) }
+  defer pickable_click_system(1.0)
   let entity = create_pickable_rect_entity(
     @math.Vec2D(10.0, 10.0),
     @math.Vec2D(20.0, 20.0),
@@ -54,7 +54,7 @@ test "is_hover returns true for world entity hit by mouse" {
 ///|
 test "is_hover returns false for world entity missed by mouse" {
   reset_pickable_test_state()
-  defer { pickable_click_system(1.0) }
+  defer pickable_click_system(1.0)
   let entity = create_pickable_rect_entity(
     @math.Vec2D(10.0, 10.0),
     @math.Vec2D(20.0, 20.0),
@@ -68,7 +68,7 @@ test "is_hover returns false for world entity missed by mouse" {
 ///|
 test "is_hover resets to false after mouse leaves entity" {
   reset_pickable_test_state()
-  defer { pickable_click_system(1.0) }
+  defer pickable_click_system(1.0)
   let entity = create_pickable_rect_entity(
     @math.Vec2D(10.0, 10.0),
     @math.Vec2D(20.0, 20.0),
@@ -87,7 +87,7 @@ test "is_hover resets to false after mouse leaves entity" {
 ///|
 test "double click emits DoubleClicked within time window" {
   reset_pickable_test_state()
-  defer { pickable_click_system(1.0) }
+  defer pickable_click_system(1.0)
   let entity = create_pickable_rect_entity(
     @math.Vec2D(10.0, 10.0),
     @math.Vec2D(20.0, 20.0),
@@ -110,11 +110,9 @@ test "double click emits DoubleClicked within time window" {
 ///|
 test "double click does not emit when interval is too long" {
   reset_pickable_test_state()
-  defer { pickable_click_system(1.0) }
-  create_pickable_rect_entity(
-    @math.Vec2D(10.0, 10.0),
-    @math.Vec2D(20.0, 20.0),
-  ) |> ignore
+  defer pickable_click_system(1.0)
+  create_pickable_rect_entity(@math.Vec2D(10.0, 10.0), @math.Vec2D(20.0, 20.0))
+  |> ignore
   let reader : @event.EventReader[PointerEvent] = @event.EventReader::new()
 
   click_left_on_pos(@math.Vec2D(11.0, 11.0), 0.01)
@@ -129,7 +127,7 @@ test "double click does not emit when interval is too long" {
 ///|
 test "pointer_event_bus entity observers receive targeted events" {
   reset_pickable_test_state()
-  defer { pickable_click_system(1.0) }
+  defer pickable_click_system(1.0)
   let entity = create_pickable_rect_entity(
     @math.Vec2D(10.0, 10.0),
     @math.Vec2D(20.0, 20.0),
@@ -138,7 +136,7 @@ test "pointer_event_bus entity observers receive targeted events" {
   let handle = @event.observe_entity(pointer_event_bus, entity, fn(trigger) {
     received.push(trigger.event.phase)
   })
-  defer { @event.unobserve(pointer_event_bus, handle) }
+  defer @event.unobserve(pointer_event_bus, handle)
 
   click_left_on_pos(@math.Vec2D(11.0, 11.0), 0.01)
   @event.event_observer_dispatch_system(0.0)

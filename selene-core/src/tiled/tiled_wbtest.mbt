@@ -1040,7 +1040,7 @@ test "spawn_tiled_map expands tiled animated tiles into frame timelines" {
     match sprite.sprite_type {
       Animation(animation, ..) => {
         inspect(animation.loop_, content="true")
-        inspect(animation.fps.to_int(), content="10")
+        inspect((1.0 / animation.frames[0].duration).to_int(), content="10")
         inspect(animation.frames.length(), content="3")
         let offsets = animation.frames.map(fn(frame) {
           frame.offset[X].to_int().to_string()

@@ -476,7 +476,6 @@ fn render_animation(
   visible : Bool,
   alpha : Double,
   delta : Double,
-  overlay? : Bool = false,
 ) -> (Int, Double) {
   // Safety check
   if animation.frames.length() == 0 {
@@ -509,11 +508,7 @@ fn render_animation(
       transform,
       color: { r: 255U, g: 255U, b: 255U, a: alpha },
     }
-    if overlay {
-      @render2d.push_overlay_image(command)
-    } else {
-      @render2d.push_image(command)
-    }
+    @render2d.push_image(command)
   }
 
   // Time update logic

@@ -4,16 +4,17 @@ test "sprite alpha multiplies picture and animation draw commands" {
 
   let picture_entity = @entity.Entity::new()
   defer picture_entity.destroy()
-  let picture = @sprite.Picture::new(
-    @math.Vec2D(16.0, 16.0),
-    "picture-alpha",
-    color={ r: 255U, g: 255U, b: 255U, a: 0.5 },
-  )
-  @sprite.sprites.set(
+  let picture = @sprite.Picture::new(@math.Vec2D(16.0, 16.0), "picture-alpha", color={
+    r: 255U,
+    g: 255U,
+    b: 255U,
+    a: 0.5,
+  })
+  @sprite.sprites().set(
     picture_entity,
     @sprite.Sprite::from_picture(picture, 0, alpha=0.5),
   )
-  @position.positions.set(
+  @position.positions().set(
     picture_entity,
     @position.Position(@math.Vec2D(0.0, 0.0)),
   )
@@ -37,11 +38,11 @@ test "sprite alpha multiplies picture and animation draw commands" {
       pivot: @math.Vec2D(0.0, 0.0),
     },
   ])
-  @sprite.sprites.set(
+  @sprite.sprites().set(
     animation_entity,
     @sprite.Sprite::from_animation(animation, 0, alpha=0.4),
   )
-  @position.positions.set(
+  @position.positions().set(
     animation_entity,
     @position.Position(@math.Vec2D(0.0, 0.0)),
   )
@@ -58,7 +59,7 @@ test "sprite alpha multiplies text and shape colors" {
 
   let text_entity = @entity.Entity::new()
   defer text_entity.destroy()
-  @sprite.sprites.set(
+  @sprite.sprites().set(
     text_entity,
     @sprite.Sprite::from_text(
       @sprite.Text::new("alpha", color="rgba(255, 255, 255, 0.8)"),
@@ -66,7 +67,10 @@ test "sprite alpha multiplies text and shape colors" {
       alpha=0.5,
     ),
   )
-  @position.positions.set(text_entity, @position.Position(@math.Vec2D(0.0, 0.0)))
+  @position.positions().set(
+    text_entity,
+    @position.Position(@math.Vec2D(0.0, 0.0)),
+  )
   @sprite.render_sprite_system(0.0)
   match @render2d.get_frame2d().world_commands[0] {
     Text(command) => assert_eq(command.style.color.a, 0.4)
@@ -78,7 +82,7 @@ test "sprite alpha multiplies text and shape colors" {
 
   let rect_entity = @entity.Entity::new()
   defer rect_entity.destroy()
-  @sprite.sprites.set(
+  @sprite.sprites().set(
     rect_entity,
     @sprite.Sprite::from_color_rect(
       @sprite.ColorRect::new(
@@ -90,7 +94,10 @@ test "sprite alpha multiplies text and shape colors" {
       alpha=0.5,
     ),
   )
-  @position.positions.set(rect_entity, @position.Position(@math.Vec2D(0.0, 0.0)))
+  @position.positions().set(
+    rect_entity,
+    @position.Position(@math.Vec2D(0.0, 0.0)),
+  )
   @sprite.render_sprite_system(0.0)
   match @render2d.get_frame2d().world_commands[0] {
     Rect(command) => {
@@ -108,7 +115,7 @@ test "sprite alpha multiplies text and shape colors" {
 
   let circle_entity = @entity.Entity::new()
   defer circle_entity.destroy()
-  @sprite.sprites.set(
+  @sprite.sprites().set(
     circle_entity,
     @sprite.Sprite::from_color_circle(
       @sprite.ColorCircle::new(
@@ -120,7 +127,10 @@ test "sprite alpha multiplies text and shape colors" {
       alpha=0.5,
     ),
   )
-  @position.positions.set(circle_entity, @position.Position(@math.Vec2D(0.0, 0.0)))
+  @position.positions().set(
+    circle_entity,
+    @position.Position(@math.Vec2D(0.0, 0.0)),
+  )
   @sprite.render_sprite_system(0.0)
   match @render2d.get_frame2d().world_commands[0] {
     Circle(command) => {

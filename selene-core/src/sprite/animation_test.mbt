@@ -32,11 +32,11 @@ test "variable duration timeline animation" {
   ]
   let animation = @sprite.Animation::new(frames, loop_=false)
   let sprite = @sprite.Sprite::from_animation(animation, 0)
-  @sprite.sprites.set(entity, sprite)
-  @position.positions.set(entity, @position.Position(@math.Vec2D(0, 0)))
+  @sprite.sprites().set(entity, sprite)
+  @position.positions().set(entity, @position.Position(@math.Vec2D(0, 0)))
 
   // 1. Initial State: Frame 0, Elapsed 0.0
-  match @sprite.sprites.get(entity) {
+  match @sprite.sprites().get(entity) {
     Some({ sprite_type: Animation(_, frame~, elapsed~, ..), .. }) => {
       assert_eq(frame, 0)
       assert_eq(elapsed, 0.0)
@@ -46,7 +46,7 @@ test "variable duration timeline animation" {
 
   // 2. Advance by 0.05s -> Total 0.05s (Inside Frame 0)
   @sprite.render_sprite_system(0.05)
-  match @sprite.sprites.get(entity) {
+  match @sprite.sprites().get(entity) {
     Some({ sprite_type: Animation(_, frame~, elapsed~, ..), .. }) => {
       assert_eq(frame, 0)
       assert_true(elapsed > 0.04 && elapsed < 0.06) // Approx 0.05
@@ -57,7 +57,7 @@ test "variable duration timeline animation" {
   // 3. Advance by 0.1s -> Total 0.15s (Should be Frame 1, Elapsed 0.05s inside Frame 1)
   // Explanation: 0.15s total - 0.1s (Frame 0) = 0.05s remainder into Frame 1
   @sprite.render_sprite_system(0.1)
-  match @sprite.sprites.get(entity) {
+  match @sprite.sprites().get(entity) {
     Some({ sprite_type: Animation(_, frame~, elapsed~, ..), .. }) => {
       assert_eq(frame, 1) // Advanced to frame 1
       assert_true(elapsed > 0.04 && elapsed < 0.06) // 0.05s into frame 1
@@ -67,7 +67,7 @@ test "variable duration timeline animation" {
 
   // 4. Advance by 0.4s -> Total 0.55s (elapsed 0.45s) -> Still Frame 1 (Duration 0.5s)
   @sprite.render_sprite_system(0.4)
-  match @sprite.sprites.get(entity) {
+  match @sprite.sprites().get(entity) {
     Some({ sprite_type: Animation(_, frame~, elapsed~, ..), .. }) => {
       assert_eq(frame, 1)
       assert_true(elapsed > 0.44 && elapsed < 0.46) // 0.45s into frame 1
@@ -79,7 +79,7 @@ test "variable duration timeline animation" {
   // Explanation: 0.45 + 0.1 = 0.55. Frame 1 duration is 0.5. 
   // 0.55 - 0.5 = 0.05 remainder into Frame 2.
   @sprite.render_sprite_system(0.1)
-  match @sprite.sprites.get(entity) {
+  match @sprite.sprites().get(entity) {
     Some({ sprite_type: Animation(_, frame~, elapsed~, ..), .. }) => {
       assert_eq(frame, 2)
       assert_true(elapsed > 0.04 && elapsed < 0.06)
@@ -119,15 +119,15 @@ test "looping animation behavior" {
   ]
   let animation = @sprite.Animation::new(frames, loop_=true)
   let sprite = @sprite.Sprite::from_animation(animation, 0)
-  @sprite.sprites.set(entity, sprite)
-  @position.positions.set(entity, @position.Position(@math.Vec2D(0, 0)))
+  @sprite.sprites().set(entity, sprite)
+  @position.positions().set(entity, @position.Position(@math.Vec2D(0, 0)))
 
   // 1. Initial State: Frame 0
   assert_false(@sprite.is_animation_finished(entity))
 
   // 2. Advance to Frame 1 (1.5s total time)
   @sprite.render_sprite_system(1.5)
-  match @sprite.sprites.get(entity) {
+  match @sprite.sprites().get(entity) {
     Some({ sprite_type: Animation(_, frame~, elapsed~, ..), .. }) => {
       assert_eq(frame, 1)
       assert_true(elapsed > 0.49 && elapsed < 0.51) // Approx 0.5s into frame 1
@@ -140,7 +140,7 @@ test "looping animation behavior" {
   // Frame 1 duration is 1.0, we have 0.5 elapsed. Need 0.5 more to finish frame 1.
   // Advancing 1.0s means: 0.5s finish Frame 1 -> 0.5s into Frame 0 (next loop)
   @sprite.render_sprite_system(1.0)
-  match @sprite.sprites.get(entity) {
+  match @sprite.sprites().get(entity) {
     Some({ sprite_type: Animation(_, frame~, elapsed~, ..), .. }) => {
       assert_eq(frame, 0)
       assert_true(elapsed > 0.49 && elapsed < 0.51) // Approx 0.5s into frame 0
@@ -173,11 +173,11 @@ test "animation speed scales delta" {
     },
   ]
   let animation = @sprite.Animation::new(frames, loop_=false)
-  @sprite.sprites.set(entity, @sprite.Sprite::from_animation(animation, 0))
-  @position.positions.set(entity, @position.Position(@math.Vec2D(0, 0)))
+  @sprite.sprites().set(entity, @sprite.Sprite::from_animation(animation, 0))
+  @position.positions().set(entity, @position.Position(@math.Vec2D(0, 0)))
   @sprite.set_animation_speed(entity, 2.0)
   @sprite.render_sprite_system(0.6)
-  match @sprite.sprites.get(entity) {
+  match @sprite.sprites().get(entity) {
     Some({ sprite_type: Animation(_, frame~, elapsed~, ..), .. }) => {
       assert_eq(frame, 1)
       assert_true(elapsed > 0.19 && elapsed < 0.21)
@@ -207,17 +207,17 @@ test "animation speed zero freezes" {
     },
   ]
   let animation = @sprite.Animation::new(frames, loop_=false)
-  @sprite.sprites.set(entity, @sprite.Sprite::from_animation(animation, 0))
-  @position.positions.set(entity, @position.Position(@math.Vec2D(0, 0)))
+  @sprite.sprites().set(entity, @sprite.Sprite::from_animation(animation, 0))
+  @position.positions().set(entity, @position.Position(@math.Vec2D(0, 0)))
   @sprite.render_sprite_system(0.3)
-  let before = match @sprite.sprites.get(entity) {
+  let before = match @sprite.sprites().get(entity) {
     Some({ sprite_type: Animation(_, frame~, elapsed~, ..), .. }) =>
       (frame, elapsed)
     _ => fail("Sprite missing")
   }
   @sprite.set_animation_speed(entity, 0.0)
   @sprite.render_sprite_system(10.0)
-  match @sprite.sprites.get(entity) {
+  match @sprite.sprites().get(entity) {
     Some({ sprite_type: Animation(_, frame~, elapsed~, ..), .. }) => {
       assert_eq(frame, before.0)
       assert_eq(elapsed, before.1)
@@ -247,16 +247,16 @@ test "negative speed treated as zero" {
     },
   ]
   let animation = @sprite.Animation::new(frames, loop_=false)
-  @sprite.sprites.set(entity, @sprite.Sprite::from_animation(animation, 0))
-  @position.positions.set(entity, @position.Position(@math.Vec2D(0, 0)))
-  let before = match @sprite.sprites.get(entity) {
+  @sprite.sprites().set(entity, @sprite.Sprite::from_animation(animation, 0))
+  @position.positions().set(entity, @position.Position(@math.Vec2D(0, 0)))
+  let before = match @sprite.sprites().get(entity) {
     Some({ sprite_type: Animation(_, frame~, elapsed~, ..), .. }) =>
       (frame, elapsed)
     _ => fail("Sprite missing")
   }
   @sprite.set_animation_speed(entity, -1.0)
   @sprite.render_sprite_system(1.0)
-  match @sprite.sprites.get(entity) {
+  match @sprite.sprites().get(entity) {
     Some({ sprite_type: Animation(_, frame~, elapsed~, ..), .. }) => {
       assert_eq(frame, before.0)
       assert_eq(elapsed, before.1)
@@ -303,17 +303,17 @@ test "play_animation preserves speed across clip switch" {
   ]
   let animation_a = @sprite.Animation::new(frames_a, loop_=false)
   let animation_b = @sprite.Animation::new(frames_b, loop_=false)
-  @sprite.sprites.set(entity, @sprite.Sprite::from_animation(animation_a, 0))
-  @position.positions.set(entity, @position.Position(@math.Vec2D(0, 0)))
+  @sprite.sprites().set(entity, @sprite.Sprite::from_animation(animation_a, 0))
+  @position.positions().set(entity, @position.Position(@math.Vec2D(0, 0)))
   @sprite.set_animation_speed(entity, 0.0)
   @sprite.play_animation(entity, animation_b, from_start=true)
-  let before = match @sprite.sprites.get(entity) {
+  let before = match @sprite.sprites().get(entity) {
     Some({ sprite_type: Animation(_, frame~, elapsed~, ..), .. }) =>
       (frame, elapsed)
     _ => fail("Sprite missing")
   }
   @sprite.render_sprite_system(1.0)
-  match @sprite.sprites.get(entity) {
+  match @sprite.sprites().get(entity) {
     Some({ sprite_type: Animation(_, frame~, elapsed~, ..), .. }) => {
       assert_eq(frame, before.0)
       assert_eq(elapsed, before.1)

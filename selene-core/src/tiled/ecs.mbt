@@ -379,10 +379,11 @@ fn spawn_tiled_tile_layer(
     if settings.tile_hook is Some(tile_hook) {
       tile_hook(tile_event)
     }
-    guard build_tiled_tile_animation(map, tileset, cell.gid) is Some(animation) else {
+    guard build_tiled_tile_animation(map, tileset, cell.gid)
+      is Some((animation, transform)) else {
       continue
     }
-    let sprite = @sprite.Sprite::from_animation(animation, zindex)
+    let sprite = @sprite.Sprite::from_animation(animation, zindex, transform~)
     sprite.visible = visible
     @sprite.sprites().set(tile_entity, sprite)
   }
@@ -438,10 +439,10 @@ fn spawn_tiled_object_layer(
         size=object_size,
         extra_transform=tiled_object_rotation_transform(object, object_size),
       )
-      is Some(animation) else {
+      is Some((animation, transform)) else {
       continue
     }
-    let sprite = @sprite.Sprite::from_animation(animation, zindex)
+    let sprite = @sprite.Sprite::from_animation(animation, zindex, transform~)
     sprite.visible = visible && object.visible
     @sprite.sprites().set(object_entity, sprite)
   }
@@ -499,7 +500,7 @@ fn build_tiled_tile_animation(
   gid : TiledGid,
   size? : @math.Vec2D,
   extra_transform? : @math.Transform = @math.Transform::identity(),
-) -> @sprite.Animation? {
+) -> (@sprite.Animation, @math.Transform)? {
   let local_id = gid.tile_id - tileset.first_gid
   if local_id < 0 {
     return None
@@ -518,7 +519,7 @@ fn build_tiled_tile_animation(
       tile_size,
     )
     if frames.length() > 0 {
-      return Some(@sprite.Animation::new(frames, loop_=true, fps~, transform~))
+      return Some((@sprite.Animation::new(frames, loop_=true, fps~), transform))
     }
   }
   let frames = tiled_visual_frames_for_local_tile(
@@ -527,7 +528,7 @@ fn build_tiled_tile_animation(
   if frames.length() == 0 {
     return None
   }
-  Some(@sprite.Animation::new(frames, loop_=false, fps=0.0, transform~))
+  Some((@sprite.Animation::new(frames, loop_=false, fps=0.0), transform))
 }
 
 ///|
