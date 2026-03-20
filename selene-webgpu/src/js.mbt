@@ -202,13 +202,14 @@ extern "js" fn webgpu_measure_text(
   text : String,
   family : String,
   size : Double,
+  bold : Bool,
 ) -> Array[Double] =
-  #| (text, family, size) => {
+  #| (text, family, size, bold) => {
   #|   const cvs = document.createElement('canvas');
   #|   const ctx = cvs.getContext('2d');
   #|   const fontSize = Number.isFinite(size) && size > 0 ? size : 16;
   #|   const fontFamily = family && family.length > 0 ? family : 'Arial';
-  #|   ctx.font = `${fontSize}px ${fontFamily}`;
+  #|   ctx.font = `${bold ? 'bold ' : ''}${fontSize}px ${fontFamily}`;
   #|   const m = ctx.measureText(text ?? '');
   #|   const width = Math.max(0, Number(m.width) || 0);
   #|   const ascent = Math.max(0, Number(m.actualBoundingBoxAscent) || fontSize * 0.8);
@@ -750,14 +751,14 @@ extern "js" fn webgpu_initialize(
   #|       return rec;
   #|     };
   #|
-  #|     rt.ensureTextTexture = (text, family, size, r, g, b, a) => {
-  #|       const key = `${text}\u0000${family}\u0000${size}\u0000${r}\u0000${g}\u0000${b}\u0000${a}`;
+  #|     rt.ensureTextTexture = (text, family, size, bold, r, g, b, a) => {
+  #|       const key = `${text}\u0000${family}\u0000${size}\u0000${bold ? 1 : 0}\u0000${r}\u0000${g}\u0000${b}\u0000${a}`;
   #|       const existed = rt.textCache.get(key);
   #|       if (existed) return existed;
   #|       if (!rt.ready) return null;
   #|       const cvs = document.createElement('canvas');
   #|       const ctx = cvs.getContext('2d');
-  #|       const font = `${size}px ${family}`;
+  #|       const font = `${bold ? 'bold ' : ''}${size}px ${family}`;
   #|       ctx.font = font;
   #|       const m = ctx.measureText(text);
   #|       const ascent = Math.max(1, Math.ceil(m.actualBoundingBoxAscent || size * 0.8));
@@ -992,8 +993,8 @@ extern "js" fn webgpu_initialize(
   #|       rt.pushTex2d(samplerCode, rec, verts);
   #|     };
   #|
-  #|     rt.pushText = (text, x, y, family, size, align, baseline, r, g, b, a) => {
-  #|       const rec = rt.ensureTextTexture(text, family, size, r, g, b, a);
+  #|     rt.pushText = (text, x, y, family, size, bold, align, baseline, r, g, b, a) => {
+  #|       const rec = rt.ensureTextTexture(text, family, size, bold, r, g, b, a);
   #|       if (!rec) return;
   #|       let ox = x;
   #|       let oy = y;
@@ -3127,6 +3128,7 @@ extern "js" fn webgpu_draw_text(
   y : Double,
   family : String,
   size : Double,
+  bold : Bool,
   align : Int,
   baseline : Int,
   r : Double,
@@ -3134,10 +3136,10 @@ extern "js" fn webgpu_draw_text(
   b : Double,
   a : Double,
 ) -> Unit =
-  #| (text, x, y, family, size, align, baseline, r, g, b, a) => {
+  #| (text, x, y, family, size, bold, align, baseline, r, g, b, a) => {
   #|   const rt = globalThis.__selene_webgpu_runtime;
   #|   if (rt) {
-  #|     rt.pushText(text, x, y, family, size, align, baseline, r, g, b, a);
+  #|     rt.pushText(text, x, y, family, size, bold, align, baseline, r, g, b, a);
   #|   }
   #| }
 

@@ -35,8 +35,11 @@ fn cleanup_test_ui_entity(entity : @entity.Entity) -> Unit {
   outlines().remove(entity)
   material_nodes().remove(entity)
   texts().remove(entity)
+  text_spans().remove(entity)
   text_fonts().remove(entity)
   text_colors().remove(entity)
+  underlines().remove(entity)
+  underline_colors().remove(entity)
   text_layouts().remove(entity)
   ui_images().remove(entity)
   z_indexes().remove(entity)
@@ -354,6 +357,64 @@ test "ui override clip removes inherited clip from child rendering" {
 
   cleanup_test_ui_entity(child)
   cleanup_test_ui_entity(parent)
+}
+
+///|
+test "ui rich text spans render fragment styles and underline" {
+  @render2d.begin_frame2d_system(0.0)
+  let entity = @entity.Entity::new()
+  let child = entity.spawn_child()
+  let rect = test_rect(0.0, 0.0, 160.0, 48.0)
+  nodes().set(entity, Node::new())
+  global_ui_nodes().set(entity, test_global_node(rect, rect))
+  texts().set(entity, Text::new("Hello "))
+  text_spans().set(child, TextSpan::new("World"))
+  text_colors().set(entity, TextColor::from_css("white"))
+  text_colors().set(child, TextColor::from_css("red"))
+  text_fonts().set(child, TextFont::new(family="Arial", size=18.0, bold=true))
+  underlines().set(child, Underline::new())
+  tree_orders().set(entity, 1)
+
+  render_entity(entity)
+
+  let frame = @render2d.get_frame2d()
+  inspect(frame.ui_commands.length(), content="4")
+  inspect(
+    match frame.ui_commands[0] {
+      Text(command) => command.text == "Hello" && !command.style.bold
+      _ => false
+    },
+    content="true",
+  )
+  inspect(
+    match frame.ui_commands[1] {
+      Text(command) => command.text == " " && !command.style.bold
+      _ => false
+    },
+    content="true",
+  )
+  inspect(
+    match frame.ui_commands[2] {
+      Text(command) =>
+        command.text == "World" &&
+        command.style.bold &&
+        command.style.color.r == 255 &&
+        command.style.color.g == 0 &&
+        command.style.color.b == 0
+      _ => false
+    },
+    content="true",
+  )
+  inspect(
+    match frame.ui_commands[3] {
+      Rect(command) => command.rect.size[X] > 0.0 && command.fill_color.r == 255
+      _ => false
+    },
+    content="true",
+  )
+
+  cleanup_test_ui_entity(child)
+  cleanup_test_ui_entity(entity)
 }
 
 ///|

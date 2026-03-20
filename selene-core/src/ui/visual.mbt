@@ -309,29 +309,44 @@ pub fn Text::new(content : String) -> Text {
 }
 
 ///|
+pub(all) struct TextSpan {
+  mut content : String
+
+  fn new(content : String) -> TextSpan
+}
+
+///|
+pub fn TextSpan::new(content : String) -> TextSpan {
+  { content, }
+}
+
+///|
 pub(all) struct TextFont {
   mut family : String
   mut size : Double
+  mut bold : Bool
   mut font_handle : @asset.FontHandle?
 
-  fn new(family? : String, size? : Double) -> TextFont
+  fn new(family? : String, size? : Double, bold? : Bool) -> TextFont
 }
 
 ///|
 pub fn TextFont::new(
   family? : String = "Arial",
   size? : Double = 16.0,
+  bold? : Bool = false,
 ) -> TextFont {
-  { family, size, font_handle: @asset.font_by_family(family) }
+  { family, size, bold, font_handle: @asset.font_by_family(family) }
 }
 
 ///|
 pub fn TextFont::from_font(
   font : @asset.FontHandle,
   size? : Double = 16.0,
+  bold? : Bool = false,
 ) -> TextFont {
   let family = @asset.font_family(font).unwrap_or("Arial")
-  { family, size, font_handle: Some(font) }
+  { family, size, bold, font_handle: Some(font) }
 }
 
 ///|
@@ -359,6 +374,12 @@ pub fn TextFont::from_css(font : String) -> TextFont {
   if font == "" {
     return TextFont::new()
   }
+  let bold = font.has_prefix("bold ")
+  let font = if bold {
+    font.unsafe_substring(start=5, end=font.length())
+  } else {
+    font
+  }
   let parts : Array[StringView] = []
   for part in font.split("px") {
     parts.push(part)
@@ -367,9 +388,10 @@ pub fn TextFont::from_css(font : String) -> TextFont {
     TextFont::new(
       family=parse_font_family(parts[1]),
       size=parse_font_size(parts[0]),
+      bold~,
     )
   } else {
-    TextFont::new(family=font)
+    TextFont::new(family=font, bold~)
   }
 }
 
@@ -388,6 +410,30 @@ pub fn TextColor::new(color : @render.Color) -> TextColor {
 ///|
 pub fn TextColor::from_css(color : String) -> TextColor {
   TextColor::new(parse_color(color))
+}
+
+///|
+pub(all) struct Underline {
+  enabled : Bool
+
+  fn new(enabled? : Bool) -> Underline
+} derive(Eq, Show)
+
+///|
+pub fn Underline::new(enabled? : Bool = true) -> Underline {
+  { enabled, }
+}
+
+///|
+pub(all) struct UnderlineColor {
+  color : @render.Color
+
+  fn new(color : @render.Color) -> UnderlineColor
+}
+
+///|
+pub fn UnderlineColor::new(color : @render.Color) -> UnderlineColor {
+  { color, }
 }
 
 ///|
@@ -459,8 +505,11 @@ priv struct UiVisualWorldStore {
   ui_images : Map[@entity.Entity, UiImage]
   material_nodes : Map[@entity.Entity, MaterialNode]
   texts : Map[@entity.Entity, Text]
+  text_spans : Map[@entity.Entity, TextSpan]
   text_fonts : Map[@entity.Entity, TextFont]
   text_colors : Map[@entity.Entity, TextColor]
+  underlines : Map[@entity.Entity, Underline]
+  underline_colors : Map[@entity.Entity, UnderlineColor]
   text_layouts : Map[@entity.Entity, TextLayout]
   buttons : Map[@entity.Entity, Button]
   interactions : Map[@entity.Entity, Interaction]
@@ -481,8 +530,11 @@ fn ui_visual_world_store() -> UiVisualWorldStore {
     ui_images: Map::new(),
     material_nodes: Map::new(),
     texts: Map::new(),
+    text_spans: Map::new(),
     text_fonts: Map::new(),
     text_colors: Map::new(),
+    underlines: Map::new(),
+    underline_colors: Map::new(),
     text_layouts: Map::new(),
     buttons: Map::new(),
     interactions: Map::new(),
@@ -536,6 +588,11 @@ pub fn texts() -> Map[@entity.Entity, Text] {
 }
 
 ///|
+pub fn text_spans() -> Map[@entity.Entity, TextSpan] {
+  ui_visual_world_store().text_spans
+}
+
+///|
 pub fn text_fonts() -> Map[@entity.Entity, TextFont] {
   ui_visual_world_store().text_fonts
 }
@@ -543,6 +600,16 @@ pub fn text_fonts() -> Map[@entity.Entity, TextFont] {
 ///|
 pub fn text_colors() -> Map[@entity.Entity, TextColor] {
   ui_visual_world_store().text_colors
+}
+
+///|
+pub fn underlines() -> Map[@entity.Entity, Underline] {
+  ui_visual_world_store().underlines
+}
+
+///|
+pub fn underline_colors() -> Map[@entity.Entity, UnderlineColor] {
+  ui_visual_world_store().underline_colors
 }
 
 ///|
@@ -616,20 +683,4 @@ fn text_color(entity : @entity.Entity) -> TextColor {
 ///|
 fn text_layout(entity : @entity.Entity) -> TextLayout {
   text_layouts().get(entity).unwrap_or(default_text_layout())
-}
-
-///|
-fn text_style_for(entity : @entity.Entity) -> @render2d_types.TextStyle2D? {
-  guard texts().get(entity) is Some(_) else { return None }
-  let font = text_font(entity)
-  let color = text_color(entity)
-  let layout = text_layout(entity)
-  Some({
-    font: font.font_handle,
-    family: font.family,
-    size: font.size,
-    color: color.color,
-    align: layout.align,
-    baseline: layout.baseline,
-  })
 }

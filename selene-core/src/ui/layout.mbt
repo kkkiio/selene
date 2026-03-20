@@ -297,19 +297,15 @@ fn measure_node(
   _style : @moon_taffy.Style,
 ) -> @moon_taffy.Size[Double] {
   guard entity is Some(entity) else { return @moon_taffy.Size::zero() }
-  let (intrinsic_width, intrinsic_height) = if texts().get(entity) is Some(text) {
-    let measured = @platform_render.measure_text(
-      text_style_for(entity).unwrap_or({
-        font: None,
-        family: "Arial",
-        size: 16.0,
-        color: rgba(255, 255, 255, 1.0),
-        align: Left,
-        baseline: Top,
-      }),
-      text.content,
+  let spans = collect_paragraph_spans(entity)
+  let (intrinsic_width, intrinsic_height) = if not(spans.is_empty()) {
+    let layout = text_layout(entity)
+    let measured = layout_paragraph(
+      spans,
+      layout,
+      max_width=known_dimensions.width.unwrap_or(0.0),
     )
-    (measured[X], measured[Y])
+    (measured.size[X], measured.size[Y])
   } else if ui_images().get(entity) is Some(image) {
     (image.size[X], image.size[Y])
   } else {
@@ -527,6 +523,11 @@ fn cleanup_dead_ui_state() -> Unit {
       texts().remove(pair.0)
     }
   }
+  for pair in text_spans().to_array() {
+    if !pair.0.is_alive() {
+      text_spans().remove(pair.0)
+    }
+  }
   for pair in text_fonts().to_array() {
     if !pair.0.is_alive() {
       text_fonts().remove(pair.0)
@@ -535,6 +536,16 @@ fn cleanup_dead_ui_state() -> Unit {
   for pair in text_colors().to_array() {
     if !pair.0.is_alive() {
       text_colors().remove(pair.0)
+    }
+  }
+  for pair in underlines().to_array() {
+    if !pair.0.is_alive() {
+      underlines().remove(pair.0)
+    }
+  }
+  for pair in underline_colors().to_array() {
+    if !pair.0.is_alive() {
+      underline_colors().remove(pair.0)
     }
   }
   for pair in text_layouts().to_array() {

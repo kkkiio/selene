@@ -167,6 +167,8 @@ pub fn text_fonts() -> Map[@entity.Entity, TextFont]
 
 pub fn text_layouts() -> Map[@entity.Entity, TextLayout]
 
+pub fn text_spans() -> Map[@entity.Entity, TextSpan]
+
 pub fn texts() -> Map[@entity.Entity, Text]
 
 pub fn transparent() -> @render.Color
@@ -182,6 +184,10 @@ pub fn ui_layout_system(Double) -> Unit
 pub fn ui_material_asset(UiMaterialHandle) -> UiMaterialAsset?
 
 pub fn ui_prepare_system(Double) -> Unit
+
+pub fn underline_colors() -> Map[@entity.Entity, UnderlineColor]
+
+pub fn underlines() -> Map[@entity.Entity, Underline]
 
 pub fn update_ui_material_asset(UiMaterialHandle, UiMaterialAsset) -> Unit
 
@@ -537,6 +543,39 @@ pub fn OverrideClip::new() -> Self
 pub impl Eq for OverrideClip
 pub impl Show for OverrideClip
 
+pub(all) struct ParagraphFragment {
+  text : String
+  font : TextFont
+  color : TextColor
+  underline : Bool
+  underline_color : @render.Color?
+  x : Double
+  width : Double
+  height : Double
+}
+
+pub(all) struct ParagraphLayout {
+  lines : Array[ParagraphLine]
+  size : @math.Vec2D
+}
+
+pub(all) struct ParagraphLine {
+  fragments : Array[ParagraphFragment]
+  width : Double
+  height : Double
+}
+
+pub(all) struct ParagraphSpan {
+  text : String
+  font : TextFont
+  color : TextColor
+  underline : Bool
+  underline_color : @render.Color?
+
+  fn new(String, font? : TextFont, color? : TextColor, underline? : Bool, underline_color? : @render.Color?) -> ParagraphSpan
+}
+pub fn ParagraphSpan::new(String, font? : TextFont, color? : TextColor, underline? : Bool, underline_color? : @render.Color?) -> Self
+
 pub(all) enum PositionType {
   Relative
   Absolute
@@ -603,13 +642,14 @@ pub fn TextColor::new(@render.Color) -> Self
 pub(all) struct TextFont {
   mut family : String
   mut size : Double
+  mut bold : Bool
   mut font_handle : @asset_types.FontHandle?
 
-  fn new(family? : String, size? : Double) -> TextFont
+  fn new(family? : String, size? : Double, bold? : Bool) -> TextFont
 }
 pub fn TextFont::from_css(String) -> Self
-pub fn TextFont::from_font(@asset_types.FontHandle, size? : Double) -> Self
-pub fn TextFont::new(family? : String, size? : Double) -> Self
+pub fn TextFont::from_font(@asset_types.FontHandle, size? : Double, bold? : Bool) -> Self
+pub fn TextFont::new(family? : String, size? : Double, bold? : Bool) -> Self
 
 pub(all) struct TextLayout {
   mut align : @math.HAlign
@@ -628,6 +668,13 @@ pub(all) enum TextOverflow {
 }
 pub impl Eq for TextOverflow
 pub impl Show for TextOverflow
+
+pub(all) struct TextSpan {
+  mut content : String
+
+  fn new(String) -> TextSpan
+}
+pub fn TextSpan::new(String) -> Self
 
 pub(all) enum TextWrap {
   NoWrap
@@ -767,6 +814,22 @@ pub(all) enum UiScaleMode {
 }
 pub impl Eq for UiScaleMode
 pub impl Show for UiScaleMode
+
+pub(all) struct Underline {
+  enabled : Bool
+
+  fn new(enabled? : Bool) -> Underline
+}
+pub fn Underline::new(enabled? : Bool) -> Self
+pub impl Eq for Underline
+pub impl Show for Underline
+
+pub(all) struct UnderlineColor {
+  color : @render.Color
+
+  fn new(@render.Color) -> UnderlineColor
+}
+pub fn UnderlineColor::new(@render.Color) -> Self
 
 pub(all) enum Val {
   Auto

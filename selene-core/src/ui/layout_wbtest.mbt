@@ -21,8 +21,11 @@ fn cleanup_layout_test_entity(entity : @entity.Entity) -> Unit {
   material_nodes().remove(entity)
   ui_images().remove(entity)
   texts().remove(entity)
+  text_spans().remove(entity)
   text_fonts().remove(entity)
   text_colors().remove(entity)
+  underlines().remove(entity)
+  underline_colors().remove(entity)
   text_layouts().remove(entity)
   buttons().remove(entity)
   interactions().remove(entity)
@@ -309,4 +312,54 @@ test "ui override clip ignores inherited clipping rectangles" {
 
   cleanup_layout_test_entity(child)
   cleanup_layout_test_entity(parent)
+}
+
+///|
+test "ui paragraph layout wraps rich text spans across lines" {
+  let layout = layout_paragraph(
+    [
+      ParagraphSpan::new(
+        "Hello ",
+        font=TextFont::new(family="Arial", size=16.0),
+        color=TextColor::from_css("white"),
+      ),
+      ParagraphSpan::new(
+        "World",
+        font=TextFont::new(family="Arial", size=16.0, bold=true),
+        color=TextColor::from_css("red"),
+        underline=true,
+      ),
+    ],
+    TextLayout::new(wrap=WordWrap, line_height=1.0),
+    max_width=60.0,
+  )
+
+  inspect(layout.lines.length(), content="2")
+  inspect(layout.lines[0].fragments.length(), content="2")
+  inspect(layout.lines[1].fragments.length(), content="1")
+  inspect(layout.lines[1].fragments[0].underline, content="true")
+  inspect(layout.lines[1].fragments[0].font.bold, content="true")
+}
+
+///|
+test "ui paragraph layout wordwrap with oversized first word has no empty first line" {
+  let content = "Supercalifragilisticexpialidocious tiny"
+  let layout = layout_paragraph(
+    [
+      ParagraphSpan::new(
+        content,
+        font=TextFont::new(family="Arial", size=16.0),
+        color=TextColor::from_css("white"),
+      ),
+    ],
+    TextLayout::new(wrap=WordWrap, line_height=1.0),
+    max_width=24.0,
+  )
+
+  inspect(layout.lines.length() >= 1, content="true")
+  inspect(layout.lines[0].fragments.length() > 0, content="true")
+  inspect(
+    layout.lines[0].fragments[0].text == "Supercalifragilisticexpialidocious",
+    content="true",
+  )
 }
