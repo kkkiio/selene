@@ -328,18 +328,11 @@ fn should_render_ui(entity : @entity.Entity) -> Bool {
 }
 
 ///|
-fn scaled_text_style(
-  style : @render2d_types.TextStyle2D,
-) -> @render2d_types.TextStyle2D {
+fn scaled_text_font(font : TextFont) -> TextFont {
   match get_ui_scale_mode() {
-    Screen => style
-    Viewport => { ..style, size: @system.scale_value(style.size) }
+    Screen => font
+    Viewport => { ..font, size: @system.scale_value(font.size) }
   }
-}
-
-///|
-fn render_text_style(entity : @entity.Entity) -> @render2d_types.TextStyle2D? {
-  text_style_for(entity).map(scaled_text_style)
 }
 
 ///|
@@ -635,125 +628,210 @@ fn push_image(entity : @entity.Entity) -> Unit {
 }
 
 ///|
-fn measure_text_fragment(entity : @entity.Entity, text : String) -> @math.Vec2D {
+fn measure_text_fragment(
+  font : TextFont,
+  color : TextColor,
+  text : String,
+) -> @math.Vec2D {
   @platform_render.measure_text(
-    render_text_style(entity).unwrap_or(
-      scaled_text_style({
-        font: None,
-        family: "Arial",
-        size: 16.0,
-        color: rgba(255, 255, 255, 1.0),
-        align: Left,
-        baseline: Top,
-      }),
-    ),
+    {
+      font: font.font_handle,
+      family: font.family,
+      size: font.size,
+      bold: font.bold,
+      color: color.color,
+      align: Left,
+      baseline: Top,
+    },
     text,
   )
 }
 
 ///|
-fn truncate_line(
-  entity : @entity.Entity,
-  text : String,
-  max_width : Double,
-) -> String {
+fn truncate_word(token : ParagraphToken, max_width : Double) -> ParagraphToken {
   if max_width <= 0.0 {
-    return ""
+    return { ..token, text: "", width: 0.0 }
   }
-  if measure_text_fragment(entity, text)[X] <= max_width {
-    return text
+  if token.width <= max_width {
+    return token
   }
   let ellipsis = "..."
-  let mut current = text
-  while current.length() > 0 &&
-        measure_text_fragment(entity, current + ellipsis)[X] > max_width {
-    current = current.unsafe_substring(start=0, end=current.length() - 1)
-  }
-  current + ellipsis
-}
-
-///|
-fn wrap_line(
-  entity : @entity.Entity,
-  text : String,
-  max_width : Double,
-) -> Array[String] {
-  if max_width <= 0.0 {
-    return [""]
-  }
-  let words : Array[String] = []
-  for word in text.split(" ") {
-    words.push(word.to_string())
-  }
-  if words.length() <= 1 {
-    return [truncate_line(entity, text, max_width)]
-  }
-  let lines : Array[String] = []
-  let mut current = ""
-  for word in words {
-    let candidate = if current == "" { word } else { current + " " + word }
-    if measure_text_fragment(entity, candidate)[X] <= max_width {
-      current = candidate
-    } else if current == "" {
-      lines.push(truncate_line(entity, word, max_width))
+  let mut current = token.text
+  let mut width = token.width
+  while current.length() > 0 {
+    width = measure_text_fragment(token.font, token.color, current + ellipsis)[X]
+    if width > max_width {
+      current = current.unsafe_substring(start=0, end=current.length() - 1)
     } else {
-      lines.push(current)
-      current = word
+      break
     }
   }
-  if current != "" {
-    lines.push(current)
-  }
-  lines
+  { ..token, text: current + ellipsis, width }
 }
 
 ///|
-fn prepared_text_lines(
+/// collect all text spans from entity and its children
+fn collect_paragraph_spans(entity : @entity.Entity) -> Array[ParagraphSpan] {
+  guard texts().get(entity) is Some(text) else { return [] }
+  let root_font = text_font(entity) |> scaled_text_font
+  let root_color = text_color(entity)
+  let root_underline = text_underline(entity, false)
+  let root_underline_color = text_underline_color(entity, None)
+  let spans = Array::new(capacity=1 + entity.get_children().length())
+  spans.push(
+    ParagraphSpan::new(
+      text.content,
+      font=root_font,
+      color=root_color,
+      underline=root_underline,
+      underline_color=root_underline_color,
+    ),
+  )
+  for child in entity.get_children() {
+    guard child.is_alive() else { continue }
+    guard text_spans().get(child) is Some(span) else { continue }
+    spans.push(
+      ParagraphSpan::new(
+        span.content,
+        font=text_fonts().get(child).map_or(root_font, scaled_text_font),
+        color=text_colors().get(child).unwrap_or(root_color),
+        underline=text_underline(child, root_underline),
+        underline_color=text_underline_color(child, root_underline_color),
+      ),
+    )
+  }
+  spans
+}
+
+///|
+fn layout_paragraph(
+  spans : Array[ParagraphSpan],
+  layout : TextLayout,
+  max_width? : Double = 0.0,
+) -> ParagraphLayout {
+  let tokens = paragraph_tokens(spans)
+  let lines : Array[ParagraphLine] = []
+  let mut fragments : Array[ParagraphFragment] = []
+  let mut cursor_x = 0.0
+  let mut truncated = false
+  fn new_line() {
+    lines.push(make_line(fragments))
+    fragments = []
+    cursor_x = 0.0
+    truncated = false
+  }
+  fn push_token(token : ParagraphToken) {
+    if token.text.is_empty() {
+      return
+    }
+    fragments.push({
+      text: token.text,
+      font: token.font,
+      color: token.color,
+      underline: token.underline,
+      underline_color: token.underline_color,
+      x: cursor_x,
+      width: token.width,
+      height: token.height,
+    })
+    cursor_x += token.width
+  }
+  let max_width = @cmp.maximum(0.0, max_width)
+  for token in tokens {
+    match token {
+      { kind: ParagraphTokenKind::ForcedBreak, .. } => new_line()
+      // do we need to trim leading whitespace? 
+      // if fragments.is_empty() {
+      //   continue
+      // }
+      { kind: ParagraphTokenKind::Whitespace, .. } as token => {
+        let overflow = max_width > 0.0 && cursor_x + token.width > max_width
+        if layout.wrap is WordWrap && overflow {
+          new_line()
+        } else {
+          push_token(token)
+        }
+      }
+      { kind: ParagraphTokenKind::Word, .. } as token => {
+        let overflow = max_width > 0.0 && cursor_x + token.width > max_width
+        if overflow {
+          match layout {
+            { wrap: NoWrap, overflow: Clip, .. } => push_token(token)
+            { wrap: NoWrap, overflow: Ellipsis, .. } =>
+              if not(truncated) {
+                truncated = true
+                push_token(truncate_word(token, max_width - cursor_x))
+              }
+            { wrap: WordWrap, .. } => {
+              if not(fragments.is_empty()) {
+                new_line()
+              }
+              push_token(token)
+            }
+          }
+        } else {
+          push_token(token)
+        }
+      }
+    }
+  }
+  if !fragments.is_empty() || lines.is_empty() {
+    ignore(new_line())
+  }
+  let scaled_lines = lines.map(fn(line) {
+    let raw_height = if line.height <= 0.0 { 1.0 } else { line.height }
+    { ..line, height: raw_height * @cmp.maximum(1.0, layout.line_height) }
+  })
+  let width = scaled_lines.fold(init=0.0, fn(acc, line) {
+    @cmp.maximum(acc, line.width)
+  })
+  let height = scaled_lines.fold(init=0.0, fn(acc, line) { acc + line.height })
+  { lines: scaled_lines, size: @math.Vec2D(width, height) }
+}
+
+///|
+fn prepare_paragraph_layout(
   entity : @entity.Entity,
   content_rect : @math.Rect,
-) -> Array[String] {
-  guard texts().get(entity) is Some(text) else { return [] }
+) -> ParagraphLayout {
+  let spans = collect_paragraph_spans(entity)
   let layout = text_layout(entity)
-  let raw_lines : Array[String] = []
-  for raw_line in text.content.split("\n") {
-    raw_lines.push(raw_line.to_string())
-  }
-  let lines : Array[String] = []
-  for raw_line in raw_lines {
-    match layout.wrap {
-      NoWrap =>
-        lines.push(
-          match layout.overflow {
-            Clip => raw_line
-            Ellipsis => truncate_line(entity, raw_line, content_rect.size[X])
-          },
-        )
-      WordWrap =>
-        for line in wrap_line(entity, raw_line, content_rect.size[X]) {
-          lines.push(
-            match layout.overflow {
-              Clip => line
-              Ellipsis => truncate_line(entity, line, content_rect.size[X])
-            },
-          )
-        }
-    }
-  }
-  lines
+  layout_paragraph(spans, layout, max_width=content_rect.size[X])
+}
+
+///|
+fn push_fragment_underline(
+  fragment : ParagraphFragment,
+  x : Double,
+  y : Double,
+  line_height : Double,
+) -> Unit {
+  guard fragment.underline && fragment.width > 0.0 else { return }
+  let thickness = @cmp.maximum(1.0, fragment.font.size * 0.08)
+  let underline_y = y +
+    @cmp.maximum(line_height - thickness, fragment.height * 0.85)
+  push_ui_rect_fill(
+    {
+      position: @math.Vec2D(x, underline_y),
+      size: @math.Vec2D(fragment.width, thickness),
+    },
+    fragment.underline_color.unwrap_or(fragment.color.color),
+  )
 }
 
 ///|
 fn push_text(entity : @entity.Entity) -> Unit {
   guard texts().get(entity) is Some(_) else { return }
   guard global_ui_nodes().get(entity) is Some(transform) else { return }
-  guard render_text_style(entity) is Some(style) else { return }
   let layout = text_layout(entity)
-  let lines = prepared_text_lines(entity, transform.screen_content_rect)
-  if lines.is_empty() {
+  let paragraph = prepare_paragraph_layout(
+    entity,
+    transform.screen_content_rect,
+  )
+  if paragraph.lines.is_empty() {
     return
   }
-  let line_height = style.size * @cmp.maximum(1.0, layout.line_height)
-  let block_height = line_height * lines.length().to_double()
+  let block_height = paragraph.size[Y]
   let start_y = match layout.baseline {
     Top => transform.screen_content_rect.position[Y]
     Center =>
@@ -764,26 +842,39 @@ fn push_text(entity : @entity.Entity) -> Unit {
       transform.screen_content_rect.size[Y] -
       block_height
   }
-  for index, line in lines {
-    let measured = measure_text_fragment(entity, line)
-    let x = match layout.align {
+  let mut line_y = start_y
+  for line in paragraph.lines {
+    let line_x = match layout.align {
       Left => transform.screen_content_rect.position[X]
       Center =>
         transform.screen_content_rect.position[X] +
-        (transform.screen_content_rect.size[X] - measured[X]) / 2.0
+        (transform.screen_content_rect.size[X] - line.width) / 2.0
       Right =>
         transform.screen_content_rect.position[X] +
         transform.screen_content_rect.size[X] -
-        measured[X]
+        line.width
     }
-    // `x`/`y` are already fully resolved in UI layout space.
-    // Force renderer-local alignment to top-left to avoid applying alignment twice.
-    let style_for_draw = { ..style, align: Left, baseline: Top }
-    @render2d.push_ui_text({
-      text: line,
-      position: @math.Vec2D(x, start_y + index.to_double() * line_height),
-      style: style_for_draw,
-    })
+    for fragment in line.fragments {
+      // `x`/`y` are already fully resolved in UI layout space.
+      // Force renderer-local alignment to top-left to avoid applying alignment twice.
+      let style_for_draw : @render2d_types.TextStyle2D = {
+        font: fragment.font.font_handle,
+        family: fragment.font.family,
+        size: fragment.font.size,
+        bold: fragment.font.bold,
+        color: fragment.color.color,
+        align: @math.Left,
+        baseline: @math.Top,
+      }
+      let fragment_x = line_x + fragment.x
+      @render2d.push_ui_text({
+        text: fragment.text,
+        position: @math.Vec2D(fragment_x, line_y),
+        style: style_for_draw,
+      })
+      push_fragment_underline(fragment, fragment_x, line_y, line.height)
+    }
+    line_y += line.height
   }
 }
 

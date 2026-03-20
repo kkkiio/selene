@@ -75,6 +75,8 @@ fn text_cache_key(command : @render2d_types.TextDrawCommand2D) -> String {
   command.style.family +
   "|s:" +
   command.style.size.to_string() +
+  "|w:" +
+  command.style.bold.to_string() +
   "|r:" +
   color.r.to_string() +
   "|g:" +
@@ -123,7 +125,15 @@ fn rasterize_with_cosmic(
     Float::from_double(font_size),
     Float::from_double(font_size * 1.25),
   )
-  let attrs = @cosmic.Attrs::new().family(@cosmic.Family::Name(family))
+  let attrs = @cosmic.Attrs::new()
+    .family(@cosmic.Family::Name(family))
+    .weight(
+      if command.style.bold {
+        @cosmic.Weight::bold()
+      } else {
+        @cosmic.Weight::normal()
+      },
+    )
   let attrs_list = @cosmic.AttrsList::new(attrs)
   let buffer = @cosmic.Buffer::new(metrics)
     .set_wrap(@cosmic.Wrap::None)

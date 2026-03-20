@@ -19,19 +19,21 @@
 ///
 /// * `content` : The text content to be displayed.
 /// * `color` : The color of the text (e.g., "white", "#FF0000").
-/// * `font` : The font specification including size and family (e.g., "16px
+/// * `font` : The font specification including weight, size and family (e.g., "bold 16px
 ///   Arial").
 ///
 /// Example:
 ///
-/// ```moonbit nocheck
-/// let text = @sprite.Text::new("Hello World", color="red", font="24px Times")
-/// text.content = "Updated content"
-/// text.color = "blue"
-/// text.font = "18px Helvetica"
-/// inspect(text.content, content="Updated content")
-/// inspect(text.color, content="blue")
-/// inspect(text.font, content="18px Helvetica")
+/// ```mbt check
+/// test {
+///   let text = @sprite.Text::new("Hello World", color="red", font="24px Times")
+///   text.content = "Updated content"
+///   text.color = "blue"
+///   text.font = "bold 18px Helvetica"
+///   inspect(text.content, content="Updated content")
+///   inspect(text.color, content="blue")
+///   inspect(text.font, content="bold 18px Helvetica")
+/// }
 /// ```
 ///
 pub(all) struct Text {

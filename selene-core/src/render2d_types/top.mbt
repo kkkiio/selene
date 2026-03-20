@@ -19,6 +19,7 @@ pub(all) struct TextStyle2D {
   font : @asset_types.FontHandle?
   family : String
   size : Double
+  bold : Bool
   color : @render.Color
   align : @math.HAlign
   baseline : @math.VAlign

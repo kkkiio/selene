@@ -16,6 +16,7 @@ pub fn measure_text(
 ) -> @math.Vec2D {
   ignore(style.font)
   ignore(style.family)
+  ignore(style.bold)
   let width = text.length().to_double() * style.size * 0.6
   let height = style.size
   @math.Vec2D(width, height)

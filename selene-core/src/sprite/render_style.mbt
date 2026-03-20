@@ -35,10 +35,7 @@ fn clamp_alpha(alpha : Double) -> Double {
 }
 
 ///|
-fn multiply_alpha(
-  color : @render.Color,
-  alpha : Double,
-) -> @render.Color {
+fn multiply_alpha(color : @render.Color, alpha : Double) -> @render.Color {
   { ..color, a: clamp_alpha(color.a * alpha) }
 }
 
@@ -273,24 +270,22 @@ fn parse_font_family(family : StringView) -> String {
 }
 
 ///|
-fn parse_font(font : String) -> (Double, String) {
-  let font = font.trim().to_string()
-  if font == "" {
-    return (16.0, "Arial")
-  }
-  let mut size : Double = 16.0
-  let mut family : String = font
-  let mut idx = 0
-  for part in font.split("px") {
-    if idx == 0 {
-      size = parse_font_size(part)
-    } else if idx == 1 {
-      family = parse_font_family(part)
-      break
+/// Parse font string([font-weight] <font-size> <font-family>) into size, family and bold.
+fn parse_font(font : String) -> (Double, String, Bool) {
+  match font.trim().split(" ").to_array() {
+    [weight, size, family] => {
+      let bold = weight == "bold" // TODO: support other font weights
+      let size = parse_font_size(size.strip_suffix("px").unwrap_or(size))
+      let family = parse_font_family(family)
+      (size, family, bold)
     }
-    idx += 1
+    [size, family] => {
+      let size = parse_font_size(size.strip_suffix("px").unwrap_or(size))
+      let family = parse_font_family(family)
+      (size, family, false)
+    }
+    _ => (16.0, "Arial", false)
   }
-  (size, family)
 }
 
 ///|
@@ -301,7 +296,7 @@ fn parse_text_style(
   baseline : @math.VAlign,
   font_handle? : @asset.FontHandle? = None,
 ) -> @render2d_types.TextStyle2D {
-  let (size, family) = parse_font(font)
+  let (size, family, bold) = parse_font(font)
   let font = match font_handle {
     Some(handle) => Some(handle)
     None => @asset.font_by_family(family)
@@ -310,6 +305,7 @@ fn parse_text_style(
     font,
     family,
     size,
+    bold,
     color: parse_color(color),
     align,
     baseline,

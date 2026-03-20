@@ -198,6 +198,7 @@ pub fn draw_text(command : @render2d_types.TextDrawCommand2D) -> Unit {
     command.position[Y],
     command.style.family,
     command.style.size,
+    command.style.bold,
     h_align_to_code(command.style.align),
     v_align_to_code(command.style.baseline),
     r,
@@ -212,7 +213,7 @@ pub fn measure_text(
   style : @render2d_types.TextStyle2D,
   text : String,
 ) -> @smath.Vec2D {
-  let measured = webgpu_measure_text(text, style.family, style.size)
+  let measured = webgpu_measure_text(text, style.family, style.size, style.bold)
   if measured.length() >= 2 {
     @smath.Vec2D(measured[0], measured[1])
   } else {
