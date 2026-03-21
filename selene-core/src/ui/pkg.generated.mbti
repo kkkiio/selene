@@ -8,6 +8,7 @@ import {
   "Milky2018/selene/inputs",
   "Milky2018/selene/math",
   "Milky2018/selene/render",
+  "Milky2018/selene/render2d_types",
 }
 
 // Values
@@ -174,6 +175,8 @@ pub fn texts() -> Map[@entity.Entity, Text]
 pub fn transparent() -> @render.Color
 
 pub fn ui_extract_system(Double) -> Unit
+
+pub fn ui_image_regions() -> Map[@entity.Entity, UiImageRegion]
 
 pub fn ui_images() -> Map[@entity.Entity, UiImage]
 
@@ -718,6 +721,13 @@ pub fn UiImage::from_image(@math.Vec2D, @asset_types.ImageHandle, tint? : @rende
 pub fn UiImage::new(@math.Vec2D, String, tint? : @render.Color, fit? : ImageFit) -> Self
 pub impl Eq for UiImage
 pub impl Show for UiImage
+
+pub(all) struct UiImageRegion {
+  region : @render2d_types.ImageRegion2D
+
+  fn new(@render2d_types.ImageRegion2D) -> UiImageRegion
+}
+pub fn UiImageRegion::new(@render2d_types.ImageRegion2D) -> Self
 
 pub(all) struct UiInsets {
   left : Double

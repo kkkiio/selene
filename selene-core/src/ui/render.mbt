@@ -380,10 +380,13 @@ pub fn draw_ui_material_image(
   context : UiMaterialContext,
   image : UiImage,
 ) -> Unit {
+  let source = ui_image_regions()
+  .get(context.entity)
+  .map(fn(it) { it.region })
   @render2d.push_ui_image({
     image: image.image,
     destination: fitted_image_rect(context.rect, image),
-    source: None,
+    source,
     transform: @math.Transform::new(),
     repeat: NoRepeat,
     color: image.tint,
@@ -617,10 +620,11 @@ fn push_image(entity : @entity.Entity) -> Unit {
   guard !material_nodes().contains(entity) else { return }
   guard ui_images().get(entity) is Some(image) else { return }
   guard global_ui_nodes().get(entity) is Some(transform) else { return }
+  let source = ui_image_regions().get(entity).map(fn(it) { it.region })
   @render2d.push_ui_image({
     image: image.image,
     destination: fitted_image_rect(transform.screen_content_rect, image),
-    source: None,
+    source,
     transform: @math.Transform::new(),
     repeat: NoRepeat,
     color: image.tint,

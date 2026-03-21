@@ -518,6 +518,11 @@ fn cleanup_dead_ui_state() -> Unit {
       ui_images().remove(pair.0)
     }
   }
+  for pair in ui_image_regions().to_array() {
+    if !pair.0.is_alive() {
+      ui_image_regions().remove(pair.0)
+    }
+  }
   for pair in texts().to_array() {
     if !pair.0.is_alive() {
       texts().remove(pair.0)

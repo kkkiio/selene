@@ -42,6 +42,7 @@ fn cleanup_test_ui_entity(entity : @entity.Entity) -> Unit {
   underline_colors().remove(entity)
   text_layouts().remove(entity)
   ui_images().remove(entity)
+  ui_image_regions().remove(entity)
   z_indexes().remove(entity)
   global_zindexes().remove(entity)
   override_clips().remove(entity)
@@ -148,6 +149,77 @@ test "ui material assets can render through custom draw callbacks" {
   )
 
   release_ui_material_asset(handle)
+  cleanup_test_ui_entity(entity)
+}
+
+///|
+test "ui images render with source none when region is absent" {
+  @render2d.begin_frame2d_system(0.0)
+  let entity = @entity.Entity::new()
+  let rect = test_rect(4.0, 6.0, 120.0, 80.0)
+  nodes().set(entity, Node::new())
+  global_ui_nodes().set(entity, test_global_node(rect, rect))
+  ui_images().set(
+    entity,
+    UiImage::new(@math.Vec2D(120.0, 80.0), "/assets/test/no-region.png"),
+  )
+  tree_orders().set(entity, 1)
+
+  render_entity(entity)
+
+  let frame = @render2d.get_frame2d()
+  inspect(frame.ui_commands.length(), content="1")
+  inspect(
+    match frame.ui_commands[0] {
+      Image(command) => command.source is None
+      _ => false
+    },
+    content="true",
+  )
+
+  cleanup_test_ui_entity(entity)
+}
+
+///|
+test "ui images render source region when ui image region is set" {
+  @render2d.begin_frame2d_system(0.0)
+  let entity = @entity.Entity::new()
+  let rect = test_rect(4.0, 6.0, 120.0, 80.0)
+  nodes().set(entity, Node::new())
+  global_ui_nodes().set(entity, test_global_node(rect, rect))
+  ui_images().set(
+    entity,
+    UiImage::new(@math.Vec2D(120.0, 80.0), "/assets/test/with-region.png"),
+  )
+  ui_image_regions().set(
+    entity,
+    UiImageRegion::new({
+      position: @math.Vec2D(10.0, 20.0),
+      size: @math.Vec2D(30.0, 40.0),
+    }),
+  )
+  tree_orders().set(entity, 1)
+
+  render_entity(entity)
+
+  let frame = @render2d.get_frame2d()
+  inspect(frame.ui_commands.length(), content="1")
+  inspect(
+    match frame.ui_commands[0] {
+      Image(command) =>
+        match command.source {
+          Some(source) =>
+            source.position[X] == 10.0 &&
+            source.position[Y] == 20.0 &&
+            source.size[X] == 30.0 &&
+            source.size[Y] == 40.0
+          None => false
+        }
+      _ => false
+    },
+    content="true",
+  )
+
   cleanup_test_ui_entity(entity)
 }
 

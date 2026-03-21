@@ -177,6 +177,20 @@ pub fn UiImage::new(
 }
 
 ///|
+pub(all) struct UiImageRegion {
+  region : @render2d_types.ImageRegion2D
+
+  fn new(region : @render2d_types.ImageRegion2D) -> UiImageRegion
+}
+
+///|
+pub fn UiImageRegion::new(
+  region : @render2d_types.ImageRegion2D,
+) -> UiImageRegion {
+  { region, }
+}
+
+///|
 pub(all) struct UiMaterialHandle(UInt) derive(Eq, Show, Hash)
 
 ///|
@@ -503,6 +517,7 @@ priv struct UiVisualWorldStore {
   box_shadows : Map[@entity.Entity, BoxShadow]
   outlines : Map[@entity.Entity, Outline]
   ui_images : Map[@entity.Entity, UiImage]
+  ui_image_regions : Map[@entity.Entity, UiImageRegion]
   material_nodes : Map[@entity.Entity, MaterialNode]
   texts : Map[@entity.Entity, Text]
   text_spans : Map[@entity.Entity, TextSpan]
@@ -528,6 +543,7 @@ fn ui_visual_world_store() -> UiVisualWorldStore {
     box_shadows: Map::new(),
     outlines: Map::new(),
     ui_images: Map::new(),
+    ui_image_regions: Map::new(),
     material_nodes: Map::new(),
     texts: Map::new(),
     text_spans: Map::new(),
@@ -569,6 +585,11 @@ pub fn outlines() -> Map[@entity.Entity, Outline] {
 ///|
 pub fn ui_images() -> Map[@entity.Entity, UiImage] {
   ui_visual_world_store().ui_images
+}
+
+///|
+pub fn ui_image_regions() -> Map[@entity.Entity, UiImageRegion] {
+  ui_visual_world_store().ui_image_regions
 }
 
 ///|
