@@ -1,21 +1,27 @@
-# Selene Main Page 
+# Selene Pages
 
-```shell
-cd examples 
-moon build
+Static output for the published Selene example pages.
 
-cd ..
-python3 publish.py
+## Build
 
-cd page
-python3 -m http.server 8000
-# Or other http servers
+```bash
+moon -C examples-web build --release
+python3 publish_pages.py
 ```
 
-Then access `localhost:8000` with your browser.
+`publish_pages.py` expects the release web artifacts to exist in `_build`.
 
-## Clean 
+## Preview
 
-```shell
-python3 publish.py clean
+```bash
+cd page
+python3 -m http.server 8000
+```
+
+Open `http://localhost:8000`.
+
+## Clean
+
+```bash
+python3 publish_pages.py clean
 ```
