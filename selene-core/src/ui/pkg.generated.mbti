@@ -1,14 +1,14 @@
 // Generated using `moon info`, DON'T EDIT IT
-package "Milky2018/selene/ui"
+package "KKKIIO/selene/ui"
 
 import {
-  "Milky2018/selene/asset_types",
-  "Milky2018/selene/entity",
-  "Milky2018/selene/event",
-  "Milky2018/selene/inputs",
-  "Milky2018/selene/math",
-  "Milky2018/selene/render",
-  "Milky2018/selene/render2d_types",
+  "KKKIIO/selene/asset_types",
+  "KKKIIO/selene/entity",
+  "KKKIIO/selene/event",
+  "KKKIIO/selene/inputs",
+  "KKKIIO/selene/math",
+  "KKKIIO/selene/render",
+  "KKKIIO/selene/render2d_types",
   "moonbitlang/core/debug",
 }
 
@@ -709,3 +709,4 @@ pub fn ZIndex::ZIndex(Int) -> Self
 // Type aliases
 
 // Traits
+

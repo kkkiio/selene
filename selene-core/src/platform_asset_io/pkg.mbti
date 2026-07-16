@@ -1,4 +1,4 @@
-package "Milky2018/selene/platform_asset_io"
+package "KKKIIO/selene/platform_asset_io"
 
 fn set_reader((String) -> Bytes?) -> Unit
 

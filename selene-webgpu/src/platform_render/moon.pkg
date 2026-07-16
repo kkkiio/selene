@@ -1,13 +1,13 @@
 import {
-  "Milky2018/selene/asset",
-  "Milky2018/selene/math",
-  "Milky2018/selene/render2d_types",
-  "Milky2018/selene/render_pipeline",
-  "Milky2018/selene_webgpu" @impl,
+  "KKKIIO/selene/asset",
+  "KKKIIO/selene/math",
+  "KKKIIO/selene/render2d_types",
+  "KKKIIO/selene/render_pipeline",
+  "KKKIIO/selene_webgpu" @impl,
 }
 
 supported_targets = "js"
 
 options(
-  implement: "Milky2018/selene/platform_render",
+  implement: "KKKIIO/selene/platform_render",
 )

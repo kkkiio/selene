@@ -1,12 +1,12 @@
 // Generated using `moon info`, DON'T EDIT IT
-package "Milky2018/selene/app"
+package "KKKIIO/selene/app"
 
 import {
-  "Milky2018/selene/ecs",
-  "Milky2018/selene/event",
-  "Milky2018/selene/runtime_debug",
-  "Milky2018/selene/system",
-  "Milky2018/selene/system_set",
+  "KKKIIO/selene/ecs",
+  "KKKIIO/selene/event",
+  "KKKIIO/selene/runtime_debug",
+  "KKKIIO/selene/system",
+  "KKKIIO/selene/system_set",
 }
 
 // Values

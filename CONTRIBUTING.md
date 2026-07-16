@@ -21,7 +21,7 @@ Selene is an experimental game engine built with MoonBit, designed to encourage 
 1. Read the [README](README.md) and [Selene README](selene-core/README.md) to understand the project goals
 2. Follow the [tutorial](docs/tutorial-en.md) to get familiar with the engine
 3. Explore the [example projects](examples/) to see Selene in action
-4. Check existing [issues](https://github.com/moonbit-community/selene/issues) for ways to contribute
+4. Check existing [issues](https://github.com/kkkiio/selene/issues) for ways to contribute
 
 ## Development Setup
 
@@ -35,7 +35,7 @@ Selene is an experimental game engine built with MoonBit, designed to encourage 
 
 1. Fork and clone the repository:
    ```bash
-   git clone https://github.com/moonbit-community/selene.git
+   git clone https://github.com/kkkiio/selene.git
    cd selene
    ```
 

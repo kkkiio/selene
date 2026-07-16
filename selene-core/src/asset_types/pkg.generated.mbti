@@ -1,5 +1,5 @@
 // Generated using `moon info`, DON'T EDIT IT
-package "Milky2018/selene/asset_types"
+package "KKKIIO/selene/asset_types"
 
 import {
   "moonbitlang/core/debug",

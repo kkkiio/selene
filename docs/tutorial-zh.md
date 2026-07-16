@@ -22,7 +22,7 @@ Selene 有如下特点：
 克隆这个仓库：
 
 ```shell
-git clone https://github.com/moonbit-community/selene.git
+git clone https://github.com/kkkiio/selene.git
 ```
 
 在仓库根目录构建 Web 示例：
@@ -91,36 +91,36 @@ python3 -m http.server 8000
 为项目添加 Selene 依赖：
 
 ```bash
-moon add Milky2018/selene
-moon add Milky2018/selene_webgpu
+moon add KKKIIO/selene
+moon add KKKIIO/selene_webgpu
 ```
 
 如果你需要原生后端，也可以添加：
 
 ```bash
-moon add Milky2018/selene_raylib
+moon add KKKIIO/selene_raylib
 ```
 
 核心逻辑包可按需导入模块。下面是 `examples/pixeladventure/moon.pkg` 的导入示例：
 
 ```moonbit
 import {
-  "Milky2018/selene/app",
-  "Milky2018/selene/animation",
-  "Milky2018/selene/asset",
-  "Milky2018/selene/audio",
-  "Milky2018/selene/editor_bridge",
-  "Milky2018/selene/ecs",
-  "Milky2018/selene/entity",
-  "Milky2018/selene/event",
-  "Milky2018/selene/inputs",
-  "Milky2018/selene/math",
-  "Milky2018/selene/physics2d",
-  "Milky2018/selene/plugins",
-  "Milky2018/selene/sprite",
-  "Milky2018/selene/time",
-  "Milky2018/selene/transform",
-  "Milky2018/selene/ui",
+  "KKKIIO/selene/app",
+  "KKKIIO/selene/animation",
+  "KKKIIO/selene/asset",
+  "KKKIIO/selene/audio",
+  "KKKIIO/selene/editor_bridge",
+  "KKKIIO/selene/ecs",
+  "KKKIIO/selene/entity",
+  "KKKIIO/selene/event",
+  "KKKIIO/selene/inputs",
+  "KKKIIO/selene/math",
+  "KKKIIO/selene/physics2d",
+  "KKKIIO/selene/plugins",
+  "KKKIIO/selene/sprite",
+  "KKKIIO/selene/time",
+  "KKKIIO/selene/transform",
+  "KKKIIO/selene/ui",
   "moonbitlang/core/json",
   "moonbitlang/x/fs",
 }
@@ -138,11 +138,11 @@ supported_targets = "js"
 options(
   "is-main": true,
   overrides: [
-    "Milky2018/selene_webgpu/platform_window",
-    "Milky2018/selene_webgpu/platform_input",
-    "Milky2018/selene_webgpu/platform_render",
-    "Milky2018/selene_webgpu/platform_audio",
-    "Milky2018/selene_webgpu/platform_asset_io",
+    "KKKIIO/selene_webgpu/platform_window",
+    "KKKIIO/selene_webgpu/platform_input",
+    "KKKIIO/selene_webgpu/platform_render",
+    "KKKIIO/selene_webgpu/platform_audio",
+    "KKKIIO/selene_webgpu/platform_asset_io",
   ],
   targets: { "main.mbt": [ "js" ] },
 )
@@ -464,7 +464,7 @@ python3 -m http.server 8000
 
 访问 `http://localhost:8000/examples/pixeladventure/` 即可游玩。
 
-游戏完整源码： [Selene Example](https://github.com/moonbit-community/selene/tree/main/examples/pixeladventure)
+游戏完整源码： [Selene Example](https://github.com/kkkiio/selene/tree/main/examples/pixeladventure)
 
 ## 下一步
 
@@ -472,7 +472,7 @@ python3 -m http.server 8000
 
 - 扩展游戏功能：添加更多关卡、敌人、道具或机制
 - 优化游戏体验：改进角色动画、音效和视觉反馈
-- 参与社区贡献：在 [GitHub](https://github.com/moonbit-community/selene) 上报告问题、提交建议或贡献代码
+- 参与社区贡献：在 [GitHub](https://github.com/kkkiio/selene.git) 上报告问题、提交建议或贡献代码
 - 创作原创游戏：用所学知识开发你自己的游戏项目
 
 Selene 不仅可以用来制作游戏，也可以用于构建需要图形界面的交互应用。发挥你的创意，用 MoonBit 和 Selene 构建出色作品。

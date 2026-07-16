@@ -1,9 +1,9 @@
 // Generated using `moon info`, DON'T EDIT IT
-package "Milky2018/selene/a11y"
+package "KKKIIO/selene/a11y"
 
 import {
+  "KKKIIO/selene/entity",
   "Milky2018/moon_accesskit",
-  "Milky2018/selene/entity",
 }
 
 // Values

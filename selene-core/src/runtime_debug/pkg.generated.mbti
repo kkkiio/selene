@@ -1,19 +1,19 @@
 // Generated using `moon info`, DON'T EDIT IT
-package "Milky2018/selene/runtime_debug"
+package "KKKIIO/selene/runtime_debug"
 
 import {
-  "Milky2018/selene/collision",
-  "Milky2018/selene/ecs",
-  "Milky2018/selene/inputs",
-  "Milky2018/selene/math",
-  "Milky2018/selene/render",
-  "Milky2018/selene/render2d",
-  "Milky2018/selene/render3d_types",
-  "Milky2018/selene/render_pipeline",
-  "Milky2018/selene/sprite",
-  "Milky2018/selene/transform",
-  "Milky2018/selene/velocity",
-  "Milky2018/selene/visibility",
+  "KKKIIO/selene/collision",
+  "KKKIIO/selene/ecs",
+  "KKKIIO/selene/inputs",
+  "KKKIIO/selene/math",
+  "KKKIIO/selene/render",
+  "KKKIIO/selene/render2d",
+  "KKKIIO/selene/render3d_types",
+  "KKKIIO/selene/render_pipeline",
+  "KKKIIO/selene/sprite",
+  "KKKIIO/selene/transform",
+  "KKKIIO/selene/velocity",
+  "KKKIIO/selene/visibility",
   "moonbitlang/core/debug",
 }
 

@@ -1,10 +1,10 @@
 import {
-  "Milky2018/selene/asset",
-  "Milky2018/selene/ecs",
-  "Milky2018/selene/entity",
-  "Milky2018/selene/math",
-  "Milky2018/selene/sprite",
-  "Milky2018/selene/transform",
+  "KKKIIO/selene/asset",
+  "KKKIIO/selene/ecs",
+  "KKKIIO/selene/entity",
+  "KKKIIO/selene/math",
+  "KKKIIO/selene/sprite",
+  "KKKIIO/selene/transform",
   "moonbitlang/core/json",
   "moonbitlang/core/string",
 }

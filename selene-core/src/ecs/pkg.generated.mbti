@@ -1,5 +1,5 @@
 // Generated using `moon info`, DON'T EDIT IT
-package "Milky2018/selene/ecs"
+package "KKKIIO/selene/ecs"
 
 // Values
 pub fn bootstrap_world() -> World

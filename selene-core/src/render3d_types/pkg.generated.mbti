@@ -1,9 +1,9 @@
 // Generated using `moon info`, DON'T EDIT IT
-package "Milky2018/selene/render3d_types"
+package "KKKIIO/selene/render3d_types"
 
 import {
-  "Milky2018/selene/math",
-  "Milky2018/selene/render",
+  "KKKIIO/selene/math",
+  "KKKIIO/selene/render",
   "moonbitlang/core/debug",
 }
 

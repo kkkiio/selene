@@ -1,9 +1,9 @@
 // Generated using `moon info`, DON'T EDIT IT
-package "Milky2018/selene/asset"
+package "KKKIIO/selene/asset"
 
 import {
-  "Milky2018/selene/asset_types",
-  "Milky2018/selene/event",
+  "KKKIIO/selene/asset_types",
+  "KKKIIO/selene/event",
   "moonbitlang/core/debug",
 }
 

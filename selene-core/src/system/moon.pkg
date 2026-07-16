@@ -1,9 +1,9 @@
 import {
-  "Milky2018/selene/ecs",
-  "Milky2018/selene/inputs",
-  "Milky2018/selene/platform_input",
-  "Milky2018/selene/platform_window",
-  "Milky2018/selene/math",
-  "Milky2018/selene/time",
+  "KKKIIO/selene/ecs",
+  "KKKIIO/selene/inputs",
+  "KKKIIO/selene/platform_input",
+  "KKKIIO/selene/platform_window",
+  "KKKIIO/selene/math",
+  "KKKIIO/selene/time",
   "moonbitlang/core/cmp",
 }

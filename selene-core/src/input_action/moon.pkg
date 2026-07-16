@@ -1,5 +1,5 @@
 import {
-  "Milky2018/selene/event",
-  "Milky2018/selene/inputs",
+  "KKKIIO/selene/event",
+  "KKKIIO/selene/inputs",
   "moonbitlang/core/cmp",
 }

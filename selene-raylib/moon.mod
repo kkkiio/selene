@@ -1,16 +1,16 @@
-name = "Milky2018/selene_raylib"
+name = "KKKIIO/selene_raylib"
 
 version = "0.37.0"
 
 import {
-  "Milky2018/selene@0.37.0",
+  "KKKIIO/selene@0.37.0",
   "tonyfettes/raylib@0.4.0",
   "Milky2018/moon_cosmic@0.3.3",
 }
 
 readme = "README.md"
 
-repository = "https://github.com/moonbit-community/selene.git"
+repository = "https://github.com/kkkiio/selene.git"
 
 license = "Apache-2.0"
 

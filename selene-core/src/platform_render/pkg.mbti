@@ -1,9 +1,9 @@
-package "Milky2018/selene/platform_render"
+package "KKKIIO/selene/platform_render"
 
 import {
-  "Milky2018/selene/math",
-  "Milky2018/selene/render2d_types",
-  "Milky2018/selene/render_pipeline",
+  "KKKIIO/selene/math",
+  "KKKIIO/selene/render2d_types",
+  "KKKIIO/selene/render_pipeline",
 }
 
 fn submit_frame(@render_pipeline.RenderFrame) -> Unit

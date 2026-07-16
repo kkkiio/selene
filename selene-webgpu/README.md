@@ -1,11 +1,11 @@
-# Milky2018/selene_webgpu
+# KKKIIO/selene_webgpu
 
 WebGPU backend for Selene web builds.
 
 ## Install
 
 ```bash
-moon add Milky2018/selene_webgpu
+moon add KKKIIO/selene_webgpu
 ```
 
 ## Enable This Backend
@@ -15,11 +15,11 @@ In your web wrapper package:
 ```moonbit
 options(
   overrides: [
-    "Milky2018/selene_webgpu/platform_window",
-    "Milky2018/selene_webgpu/platform_input",
-    "Milky2018/selene_webgpu/platform_render",
-    "Milky2018/selene_webgpu/platform_audio",
-    "Milky2018/selene_webgpu/platform_asset_io",
+    "KKKIIO/selene_webgpu/platform_window",
+    "KKKIIO/selene_webgpu/platform_input",
+    "KKKIIO/selene_webgpu/platform_render",
+    "KKKIIO/selene_webgpu/platform_audio",
+    "KKKIIO/selene_webgpu/platform_asset_io",
   ],
 )
 ```

@@ -2,7 +2,7 @@
 package "Milky2018/selene_editor_shared/preview_bridge"
 
 import {
-  "Milky2018/selene/editor_bridge",
+  "KKKIIO/selene/editor_bridge",
   "Milky2018/selene_editor_shared/shared",
 }
 

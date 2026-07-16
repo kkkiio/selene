@@ -1,4 +1,4 @@
 import {
-  "Milky2018/selene/ecs",
+  "KKKIIO/selene/ecs",
   "moonbitlang/core/cmp",
 }

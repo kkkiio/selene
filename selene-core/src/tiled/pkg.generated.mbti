@@ -1,11 +1,11 @@
 // Generated using `moon info`, DON'T EDIT IT
-package "Milky2018/selene/tiled"
+package "KKKIIO/selene/tiled"
 
 import {
-  "Milky2018/selene/collision",
-  "Milky2018/selene/entity",
-  "Milky2018/selene/event",
-  "Milky2018/selene/math",
+  "KKKIIO/selene/collision",
+  "KKKIIO/selene/entity",
+  "KKKIIO/selene/event",
+  "KKKIIO/selene/math",
 }
 
 // Values

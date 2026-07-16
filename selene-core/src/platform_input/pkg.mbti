@@ -1,7 +1,7 @@
-package "Milky2018/selene/platform_input"
+package "KKKIIO/selene/platform_input"
 
 import {
-  "Milky2018/selene/inputs",
+  "KKKIIO/selene/inputs",
 }
 
 fn poll_input() -> @inputs.InputSnapshot

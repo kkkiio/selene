@@ -1,8 +1,8 @@
 // Generated using `moon info`, DON'T EDIT IT
-package "Milky2018/selene/name"
+package "KKKIIO/selene/name"
 
 import {
-  "Milky2018/selene/entity",
+  "KKKIIO/selene/entity",
   "moonbitlang/core/debug",
 }
 

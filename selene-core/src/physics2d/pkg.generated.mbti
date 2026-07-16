@@ -1,13 +1,13 @@
 // Generated using `moon info`, DON'T EDIT IT
-package "Milky2018/selene/physics2d"
+package "KKKIIO/selene/physics2d"
 
 import {
+  "KKKIIO/selene/entity",
+  "KKKIIO/selene/event",
+  "KKKIIO/selene/inputs",
+  "KKKIIO/selene/math",
+  "KKKIIO/selene/velocity",
   "Milky2018/moon_rapier/dynamics",
-  "Milky2018/selene/entity",
-  "Milky2018/selene/event",
-  "Milky2018/selene/inputs",
-  "Milky2018/selene/math",
-  "Milky2018/selene/velocity",
   "moonbitlang/core/set",
 }
 
@@ -18,7 +18,7 @@ pub fn add_force_at_point(@entity.Entity, @math.Vec2, @math.Vec2, wake_up? : Boo
 
 pub fn add_torque(@entity.Entity, Double, wake_up? : Bool) -> Unit
 
-pub fn all_collision_layers(@Milky2018/selene/collision.CollisionGroup) -> @Milky2018/selene/collision.CollisionFilter
+pub fn all_collision_layers(@KKKIIO/selene/collision.CollisionGroup) -> @KKKIIO/selene/collision.CollisionFilter
 
 pub fn apply_impulse(@entity.Entity, @math.Vec2, wake_up? : Bool) -> Unit
 
@@ -26,41 +26,41 @@ pub fn apply_impulse_at_point(@entity.Entity, @math.Vec2, @math.Vec2, wake_up? :
 
 pub fn apply_torque_impulse(@entity.Entity, Double, wake_up? : Bool) -> Unit
 
-pub fn areas() -> Map[@entity.Entity, @Milky2018/selene/collision.Area]
+pub fn areas() -> Map[@entity.Entity, @KKKIIO/selene/collision.Area]
 
-pub fn collider(@Milky2018/selene/collision.CollisionFilter) -> @Milky2018/selene/collision.Collider
+pub fn collider(@KKKIIO/selene/collision.CollisionFilter) -> @KKKIIO/selene/collision.Collider
 
 pub fn collider_handle(@entity.Entity) -> @Milky2018/moon_rapier/collision.ColliderHandle?
 
-pub fn colliders() -> Map[@entity.Entity, @Milky2018/selene/collision.Collider]
+pub fn colliders() -> Map[@entity.Entity, @KKKIIO/selene/collision.Collider]
 
-pub fn collision_filter(@Milky2018/selene/collision.CollisionGroup, Array[@Milky2018/selene/collision.CollisionGroup]) -> @Milky2018/selene/collision.CollisionFilter
+pub fn collision_filter(@KKKIIO/selene/collision.CollisionGroup, Array[@KKKIIO/selene/collision.CollisionGroup]) -> @KKKIIO/selene/collision.CollisionFilter
 
-pub fn collision_group() -> @Milky2018/selene/collision.CollisionGroup
+pub fn collision_group() -> @KKKIIO/selene/collision.CollisionGroup
 
 pub fn configure_physics(gravity? : @math.Vec2, pixels_per_meter? : Double, max_ccd_substeps? : Int) -> Unit
 
-pub let contact_event_bus : @event.Events[@Milky2018/selene/collision.ContactEvent]
+pub let contact_event_bus : @event.Events[@KKKIIO/selene/collision.ContactEvent]
 
 pub fn debug_colliders_system(Double) -> Unit
 
 pub fn emit_pickable_just_pressed(@entity.Entity, button? : @inputs.MouseButton) -> Unit
 
-pub fn empty_collision_layers(@Milky2018/selene/collision.CollisionGroup) -> @Milky2018/selene/collision.CollisionFilter
+pub fn empty_collision_layers(@KKKIIO/selene/collision.CollisionGroup) -> @KKKIIO/selene/collision.CollisionFilter
 
 pub fn get_contains(@entity.Entity) -> @set.Set[@entity.Entity]
 
 pub fn grounded_entities() -> @set.Set[@entity.Entity]
 
-pub fn intersect_point(@math.Vec2, query_filter? : @Milky2018/selene/collision.SpatialQueryFilter) -> Array[@entity.Entity]
+pub fn intersect_point(@math.Vec2, query_filter? : @KKKIIO/selene/collision.SpatialQueryFilter) -> Array[@entity.Entity]
 
-pub fn intersect_shape(@Milky2018/selene/collision.CollisionShape, @math.Vec2, rotation? : Double, query_filter? : @Milky2018/selene/collision.SpatialQueryFilter) -> Array[@entity.Entity]
+pub fn intersect_shape(@KKKIIO/selene/collision.CollisionShape, @math.Vec2, rotation? : Double, query_filter? : @KKKIIO/selene/collision.SpatialQueryFilter) -> Array[@entity.Entity]
 
 pub fn is_grounded(@entity.Entity) -> Bool
 
 pub fn joint_handle(@entity.Entity) -> @dynamics.ImpulseJointHandle?
 
-pub fn joints() -> Map[@entity.Entity, @Milky2018/selene/collision.Joint]
+pub fn joints() -> Map[@entity.Entity, @KKKIIO/selene/collision.Joint]
 
 pub fn linear_velocities() -> Map[@entity.Entity, @velocity.Velocity]
 
@@ -72,25 +72,25 @@ pub fn move_system(Double) -> Unit
 
 pub fn multibody_joint_handle(@entity.Entity) -> @dynamics.MultibodyJointHandle?
 
-pub fn multibody_joints() -> Map[@entity.Entity, @Milky2018/selene/collision.MultibodyJoint]
+pub fn multibody_joints() -> Map[@entity.Entity, @KKKIIO/selene/collision.MultibodyJoint]
 
 pub fn multibody_link(@entity.Entity) -> @dynamics.MultibodyLinkId?
 
-pub fn new_collision_layers(@Milky2018/selene/collision.CollisionGroup, Array[@Milky2018/selene/collision.CollisionGroup]) -> @Milky2018/selene/collision.CollisionFilter
+pub fn new_collision_layers(@KKKIIO/selene/collision.CollisionGroup, Array[@KKKIIO/selene/collision.CollisionGroup]) -> @KKKIIO/selene/collision.CollisionFilter
 
-pub fn new_sensor(@Milky2018/selene/collision.CollisionFilter) -> @Milky2018/selene/collision.Area
+pub fn new_sensor(@KKKIIO/selene/collision.CollisionFilter) -> @KKKIIO/selene/collision.Area
 
-pub let physics_config : @Milky2018/selene/collision.PhysicsConfig
+pub let physics_config : @KKKIIO/selene/collision.PhysicsConfig
 
 pub fn physics_step_system(Double) -> Unit
 
 pub fn pickable_click_system(Double) -> Unit
 
-pub fn pickables() -> Map[@entity.Entity, @Milky2018/selene/collision.Pickable]
+pub fn pickables() -> Map[@entity.Entity, @KKKIIO/selene/collision.Pickable]
 
-pub let pointer_event_bus : @event.Events[@Milky2018/selene/collision.PointerEvent]
+pub let pointer_event_bus : @event.Events[@KKKIIO/selene/collision.PointerEvent]
 
-pub fn raycast(@math.Vec2, @math.Vec2, max_toi? : Double, solid? : Bool, query_filter? : @Milky2018/selene/collision.SpatialQueryFilter) -> @Milky2018/selene/collision.RaycastHit?
+pub fn raycast(@math.Vec2, @math.Vec2, max_toi? : Double, solid? : Bool, query_filter? : @KKKIIO/selene/collision.SpatialQueryFilter) -> @KKKIIO/selene/collision.RaycastHit?
 
 pub fn reset_forces(@entity.Entity, wake_up? : Bool) -> Unit
 
@@ -98,7 +98,7 @@ pub fn reset_torques(@entity.Entity, wake_up? : Bool) -> Unit
 
 pub fn resolved_velocities() -> Map[@entity.Entity, @velocity.Velocity]
 
-pub fn rigid_bodies() -> Map[@entity.Entity, @Milky2018/selene/collision.RigidBody]
+pub fn rigid_bodies() -> Map[@entity.Entity, @KKKIIO/selene/collision.RigidBody]
 
 pub fn rigid_body_angular_velocity(@entity.Entity) -> Double?
 
@@ -110,9 +110,9 @@ pub fn rigid_body_rotation(@entity.Entity) -> Double?
 
 pub fn rigid_body_translation(@entity.Entity) -> @math.Vec2?
 
-pub fn sensor(@Milky2018/selene/collision.CollisionFilter) -> @Milky2018/selene/collision.Area
+pub fn sensor(@KKKIIO/selene/collision.CollisionFilter) -> @KKKIIO/selene/collision.Area
 
-pub fn sensors() -> Map[@entity.Entity, @Milky2018/selene/collision.Area]
+pub fn sensors() -> Map[@entity.Entity, @KKKIIO/selene/collision.Area]
 
 pub fn set_rigid_body_angular_velocity(@entity.Entity, Double) -> Unit
 
@@ -122,11 +122,11 @@ pub fn set_rigid_body_rotation(@entity.Entity, Double) -> Unit
 
 pub fn set_rigid_body_translation(@entity.Entity, @math.Vec2) -> Unit
 
-pub fn shape_cast(@Milky2018/selene/collision.CollisionShape, @math.Vec2, rotation? : Double, direction? : @math.Vec2, max_toi? : Double, stop_at_penetration? : Bool, query_filter? : @Milky2018/selene/collision.SpatialQueryFilter) -> @Milky2018/selene/collision.ShapeCastHit?
+pub fn shape_cast(@KKKIIO/selene/collision.CollisionShape, @math.Vec2, rotation? : Double, direction? : @math.Vec2, max_toi? : Double, stop_at_penetration? : Bool, query_filter? : @KKKIIO/selene/collision.SpatialQueryFilter) -> @KKKIIO/selene/collision.ShapeCastHit?
 
-pub fn shapes() -> Map[@entity.Entity, @Milky2018/selene/collision.CollisionShape]
+pub fn shapes() -> Map[@entity.Entity, @KKKIIO/selene/collision.CollisionShape]
 
-pub let trigger_event_bus : @event.Events[@Milky2018/selene/collision.TriggerEvent]
+pub let trigger_event_bus : @event.Events[@KKKIIO/selene/collision.TriggerEvent]
 
 pub fn velocities() -> Map[@entity.Entity, @velocity.Velocity]
 
@@ -135,77 +135,77 @@ pub fn velocities() -> Map[@entity.Entity, @velocity.Velocity]
 // Types and methods
 
 // Type aliases
-pub using @Milky2018/selene/collision {type Area}
+pub using @KKKIIO/selene/collision {type Area}
 
-pub using @Milky2018/selene/collision {type Collider}
+pub using @KKKIIO/selene/collision {type Collider}
 
 pub using @Milky2018/moon_rapier/collision {type ColliderHandle}
 
-pub using @Milky2018/selene/collision {type CollisionShape as ColliderShape}
+pub using @KKKIIO/selene/collision {type CollisionShape as ColliderShape}
 
-pub using @Milky2018/selene/collision {type ContactEvent as CollisionEvent}
+pub using @KKKIIO/selene/collision {type ContactEvent as CollisionEvent}
 
-pub using @Milky2018/selene/collision {type CollisionFilter}
+pub using @KKKIIO/selene/collision {type CollisionFilter}
 
-pub using @Milky2018/selene/collision {type CollisionGroup}
+pub using @KKKIIO/selene/collision {type CollisionGroup}
 
-pub using @Milky2018/selene/collision {type CollisionFilter as CollisionLayers}
+pub using @KKKIIO/selene/collision {type CollisionFilter as CollisionLayers}
 
-pub using @Milky2018/selene/collision {type CollisionShape}
+pub using @KKKIIO/selene/collision {type CollisionShape}
 
-pub using @Milky2018/selene/collision {type ContactEvent}
+pub using @KKKIIO/selene/collision {type ContactEvent}
 
-pub using @Milky2018/selene/collision {type Joint}
+pub using @KKKIIO/selene/collision {type Joint}
 
 pub using @dynamics {type ImpulseJointHandle as JointHandle}
 
-pub using @Milky2018/selene/collision {type JointKind}
+pub using @KKKIIO/selene/collision {type JointKind}
 
-pub using @Milky2018/selene/collision {type JointLimits}
+pub using @KKKIIO/selene/collision {type JointLimits}
 
-pub using @Milky2018/selene/collision {type JointMotor}
+pub using @KKKIIO/selene/collision {type JointMotor}
 
-pub using @Milky2018/selene/collision {type JointMotorModel}
+pub using @KKKIIO/selene/collision {type JointMotorModel}
 
-pub using @Milky2018/selene/collision {type JointSoftness}
+pub using @KKKIIO/selene/collision {type JointSoftness}
 
 pub using @velocity {type Velocity as LinearVelocity}
 
-pub using @Milky2018/selene/collision {type MultibodyJoint}
+pub using @KKKIIO/selene/collision {type MultibodyJoint}
 
 pub using @dynamics {type MultibodyJointHandle}
 
-pub using @Milky2018/selene/collision {type MultibodyJointKind}
+pub using @KKKIIO/selene/collision {type MultibodyJointKind}
 
 pub using @dynamics {type MultibodyLinkId}
 
-pub using @Milky2018/selene/collision {type PhysicsConfig}
+pub using @KKKIIO/selene/collision {type PhysicsConfig}
 
-pub using @Milky2018/selene/collision {type Pickable}
+pub using @KKKIIO/selene/collision {type Pickable}
 
-pub using @Milky2018/selene/collision {type PointerEvent}
+pub using @KKKIIO/selene/collision {type PointerEvent}
 
-pub using @Milky2018/selene/collision {type PointerPhase}
+pub using @KKKIIO/selene/collision {type PointerPhase}
 
-pub using @Milky2018/selene/collision {type RaycastHit}
+pub using @KKKIIO/selene/collision {type RaycastHit}
 
-pub using @Milky2018/selene/collision {type RigidBody}
+pub using @KKKIIO/selene/collision {type RigidBody}
 
 pub using @dynamics {type RigidBodyHandle}
 
-pub using @Milky2018/selene/collision {type RigidBodyType}
+pub using @KKKIIO/selene/collision {type RigidBodyType}
 
-pub using @Milky2018/selene/collision {type Area as Sensor}
+pub using @KKKIIO/selene/collision {type Area as Sensor}
 
-pub using @Milky2018/selene/collision {type TriggerEvent as SensorEvent}
+pub using @KKKIIO/selene/collision {type TriggerEvent as SensorEvent}
 
-pub using @Milky2018/selene/collision {type ShapeCastHit}
+pub using @KKKIIO/selene/collision {type ShapeCastHit}
 
-pub using @Milky2018/selene/collision {type SpatialQueryBodyFilter}
+pub using @KKKIIO/selene/collision {type SpatialQueryBodyFilter}
 
-pub using @Milky2018/selene/collision {type SpatialQueryFilter}
+pub using @KKKIIO/selene/collision {type SpatialQueryFilter}
 
-pub using @Milky2018/selene/collision {type TriggerEvent}
+pub using @KKKIIO/selene/collision {type TriggerEvent}
 
 pub using @velocity {type Velocity}
 

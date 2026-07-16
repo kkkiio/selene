@@ -22,7 +22,7 @@ Make sure you have installed the [MoonBit toolchain](https://www.moonbitlang.com
 Clone this repository:
 
 ```shell
-git clone https://github.com/moonbit-community/selene.git
+git clone https://github.com/kkkiio/selene.git
 ```
 
 From the repository root, build the web sample:
@@ -91,36 +91,36 @@ The current example also keeps a Selene project manifest and startup scene besid
 Add Selene dependencies:
 
 ```bash
-moon add Milky2018/selene
-moon add Milky2018/selene_webgpu
+moon add KKKIIO/selene
+moon add KKKIIO/selene_webgpu
 ```
 
 If you also need native backend:
 
 ```bash
-moon add Milky2018/selene_raylib
+moon add KKKIIO/selene_raylib
 ```
 
 Core gameplay package imports are module-based. Example from `examples/pixeladventure/moon.pkg`:
 
 ```moonbit
 import {
-  "Milky2018/selene/app",
-  "Milky2018/selene/animation",
-  "Milky2018/selene/asset",
-  "Milky2018/selene/audio",
-  "Milky2018/selene/editor_bridge",
-  "Milky2018/selene/ecs",
-  "Milky2018/selene/entity",
-  "Milky2018/selene/event",
-  "Milky2018/selene/inputs",
-  "Milky2018/selene/math",
-  "Milky2018/selene/physics2d",
-  "Milky2018/selene/plugins",
-  "Milky2018/selene/sprite",
-  "Milky2018/selene/time",
-  "Milky2018/selene/transform",
-  "Milky2018/selene/ui",
+  "KKKIIO/selene/app",
+  "KKKIIO/selene/animation",
+  "KKKIIO/selene/asset",
+  "KKKIIO/selene/audio",
+  "KKKIIO/selene/editor_bridge",
+  "KKKIIO/selene/ecs",
+  "KKKIIO/selene/entity",
+  "KKKIIO/selene/event",
+  "KKKIIO/selene/inputs",
+  "KKKIIO/selene/math",
+  "KKKIIO/selene/physics2d",
+  "KKKIIO/selene/plugins",
+  "KKKIIO/selene/sprite",
+  "KKKIIO/selene/time",
+  "KKKIIO/selene/transform",
+  "KKKIIO/selene/ui",
   "moonbitlang/core/json",
   "moonbitlang/x/fs",
 }
@@ -138,11 +138,11 @@ supported_targets = "js"
 options(
   "is-main": true,
   overrides: [
-    "Milky2018/selene_webgpu/platform_window",
-    "Milky2018/selene_webgpu/platform_input",
-    "Milky2018/selene_webgpu/platform_render",
-    "Milky2018/selene_webgpu/platform_audio",
-    "Milky2018/selene_webgpu/platform_asset_io",
+    "KKKIIO/selene_webgpu/platform_window",
+    "KKKIIO/selene_webgpu/platform_input",
+    "KKKIIO/selene_webgpu/platform_render",
+    "KKKIIO/selene_webgpu/platform_audio",
+    "KKKIIO/selene_webgpu/platform_asset_io",
   ],
   targets: { "main.mbt": [ "js" ] },
 )
@@ -464,7 +464,7 @@ python3 -m http.server 8000
 
 Open `http://localhost:8000/examples/pixeladventure/` to play.
 
-Complete source: [Selene Example](https://github.com/moonbit-community/selene/tree/main/examples/pixeladventure)
+Complete source: [Selene Example](https://github.com/kkkiio/selene/tree/main/examples/pixeladventure)
 
 ## Next Steps
 
@@ -472,7 +472,7 @@ Congratulations on completing your first Selene game. You now have the core work
 
 - Extend gameplay: add more levels, enemies, items, or mechanics
 - Improve game feel: polish animation, audio, and visual feedback
-- Contribute to the community: report issues or submit improvements on [GitHub](https://github.com/moonbit-community/selene)
+- Contribute to the community: report issues or submit improvements on [GitHub](https://github.com/kkkiio/selene.git)
 - Build original projects: apply this architecture to your own game ideas
 
 Selene can be used not only for games, but also for graphical interactive applications. Build something great with MoonBit and Selene.

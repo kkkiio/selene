@@ -1,10 +1,10 @@
 import {
-  "Milky2018/selene/platform_runtime" @runtime,
-  "Milky2018/selene_webgpu" @impl,
+  "KKKIIO/selene/platform_runtime" @runtime,
+  "KKKIIO/selene_webgpu" @impl,
 }
 
 supported_targets = "js"
 
 options(
-  implement: "Milky2018/selene/platform_window",
+  implement: "KKKIIO/selene/platform_window",
 )

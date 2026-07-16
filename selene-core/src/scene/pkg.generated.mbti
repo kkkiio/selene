@@ -1,12 +1,12 @@
 // Generated using `moon info`, DON'T EDIT IT
-package "Milky2018/selene/scene"
+package "KKKIIO/selene/scene"
 
 import {
-  "Milky2018/selene/entity",
-  "Milky2018/selene/event",
-  "Milky2018/selene/render3d_types",
-  "Milky2018/selene/scene3d",
-  "Milky2018/selene/transform",
+  "KKKIIO/selene/entity",
+  "KKKIIO/selene/event",
+  "KKKIIO/selene/render3d_types",
+  "KKKIIO/selene/scene3d",
+  "KKKIIO/selene/transform",
   "moonbitlang/core/debug",
 }
 

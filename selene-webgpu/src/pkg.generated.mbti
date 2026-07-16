@@ -1,13 +1,13 @@
 // Generated using `moon info`, DON'T EDIT IT
-package "Milky2018/selene_webgpu"
+package "KKKIIO/selene_webgpu"
 
 import {
-  "Milky2018/selene/inputs",
-  "Milky2018/selene/math",
-  "Milky2018/selene/platform_runtime",
-  "Milky2018/selene/render",
-  "Milky2018/selene/render2d_types",
-  "Milky2018/selene/render3d_types",
+  "KKKIIO/selene/inputs",
+  "KKKIIO/selene/math",
+  "KKKIIO/selene/platform_runtime",
+  "KKKIIO/selene/render",
+  "KKKIIO/selene/render2d_types",
+  "KKKIIO/selene/render3d_types",
   "moonbitlang/core/debug",
   "moonbitlang/core/ref",
   "moonbitlang/core/set",

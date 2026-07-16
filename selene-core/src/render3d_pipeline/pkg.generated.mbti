@@ -1,8 +1,8 @@
 // Generated using `moon info`, DON'T EDIT IT
-package "Milky2018/selene/render3d_pipeline"
+package "KKKIIO/selene/render3d_pipeline"
 
 import {
-  "Milky2018/selene/render3d_types",
+  "KKKIIO/selene/render3d_types",
 }
 
 // Values

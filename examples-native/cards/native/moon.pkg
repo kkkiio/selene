@@ -1,5 +1,5 @@
 import {
-  "Milky2018/selene/asset",
+  "KKKIIO/selene/asset",
   "Milky2018/selene-examples/cards" @cards_game,
   "Milky2018/selene-examples-native/support",
 }
@@ -10,11 +10,11 @@ pkgtype(kind: "executable")
 
 options(
   overrides: [
-    "Milky2018/selene_raylib/platform_window",
-    "Milky2018/selene_raylib/platform_input",
-    "Milky2018/selene_raylib/platform_render",
-    "Milky2018/selene_raylib/platform_audio",
-    "Milky2018/selene_raylib/platform_asset_io",
+    "KKKIIO/selene_raylib/platform_window",
+    "KKKIIO/selene_raylib/platform_input",
+    "KKKIIO/selene_raylib/platform_render",
+    "KKKIIO/selene_raylib/platform_audio",
+    "KKKIIO/selene_raylib/platform_asset_io",
   ],
   targets: { "main.mbt": [ "native" ] },
 )

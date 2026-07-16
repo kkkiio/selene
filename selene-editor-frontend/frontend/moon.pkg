@@ -1,5 +1,5 @@
 import {
-  "Milky2018/selene/editor_bridge",
+  "KKKIIO/selene/editor_bridge",
   "Milky2018/selene_editor_frontend/frontend/app",
   "Milky2018/selene_editor_shared/preview_bridge" @bridge,
   "Milky2018/selene_editor_frontend/preview",

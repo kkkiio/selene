@@ -1,10 +1,10 @@
 // Generated using `moon info`, DON'T EDIT IT
-package "Milky2018/selene/autotile2d"
+package "KKKIIO/selene/autotile2d"
 
 import {
-  "Milky2018/selene/entity",
-  "Milky2018/selene/math",
-  "Milky2018/selene/sprite",
+  "KKKIIO/selene/entity",
+  "KKKIIO/selene/math",
+  "KKKIIO/selene/sprite",
   "moonbitlang/core/debug",
   "moonbitlang/core/json",
 }

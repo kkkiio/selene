@@ -1,9 +1,9 @@
 import {
-  "Milky2018/selene/asset",
-  "Milky2018/selene/math",
-  "Milky2018/selene/render2d_types",
-  "Milky2018/selene/render_pipeline",
-  "Milky2018/selene_raylib" @impl,
+  "KKKIIO/selene/asset",
+  "KKKIIO/selene/math",
+  "KKKIIO/selene/render2d_types",
+  "KKKIIO/selene/render_pipeline",
+  "KKKIIO/selene_raylib" @impl,
   "tonyfettes/raylib",
   "moonbitlang/core/cmp",
   "moonbitlang/core/math" @cmath,
@@ -13,5 +13,5 @@ import {
 supported_targets = "native"
 
 options(
-  implement: "Milky2018/selene/platform_render",
+  implement: "KKKIIO/selene/platform_render",
 )

@@ -1,11 +1,11 @@
 // Generated using `moon info`, DON'T EDIT IT
-package "Milky2018/selene/audio"
+package "KKKIIO/selene/audio"
 
 import {
-  "Milky2018/selene/asset_types",
-  "Milky2018/selene/entity",
-  "Milky2018/selene/event",
-  "Milky2018/selene/platform_audio",
+  "KKKIIO/selene/asset_types",
+  "KKKIIO/selene/entity",
+  "KKKIIO/selene/event",
+  "KKKIIO/selene/platform_audio",
   "moonbitlang/core/debug",
 }
 

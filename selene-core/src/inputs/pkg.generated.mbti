@@ -1,9 +1,9 @@
 // Generated using `moon info`, DON'T EDIT IT
-package "Milky2018/selene/inputs"
+package "KKKIIO/selene/inputs"
 
 import {
-  "Milky2018/selene/event",
-  "Milky2018/selene/math",
+  "KKKIIO/selene/event",
+  "KKKIIO/selene/math",
   "moonbitlang/core/debug",
   "moonbitlang/core/set",
 }

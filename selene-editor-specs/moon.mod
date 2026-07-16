@@ -3,7 +3,7 @@ name = "Milky2018/selene_editor_specs"
 version = "0.30.5"
 
 import {
-  "Milky2018/selene@0.34.6",
+  "KKKIIO/selene@0.34.6",
   "Milky2018/selene_editor_shared@0.34.6",
   "Milky2018/selene_editor_frontend@0.34.6",
   "Milky2018/selene_editor_service@0.34.6",
@@ -12,7 +12,7 @@ import {
 
 readme = "README.md"
 
-repository = "https://github.com/moonbit-community/selene.git"
+repository = "https://github.com/kkkiio/selene.git"
 
 license = "Apache-2.0"
 

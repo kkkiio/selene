@@ -1,14 +1,14 @@
 // Generated using `moon info`, DON'T EDIT IT
-package "Milky2018/selene/physics3d"
+package "KKKIIO/selene/physics3d"
 
 import {
+  "KKKIIO/selene/entity",
+  "KKKIIO/selene/event",
+  "KKKIIO/selene/math",
   "Milky2018/moon_rapier/collision",
   "Milky2018/moon_rapier/control",
   "Milky2018/moon_rapier/core",
   "Milky2018/moon_rapier/dynamics",
-  "Milky2018/selene/entity",
-  "Milky2018/selene/event",
-  "Milky2018/selene/math",
   "moonbitlang/core/debug",
 }
 

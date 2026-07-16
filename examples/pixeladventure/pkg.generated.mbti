@@ -2,7 +2,7 @@
 package "Milky2018/selene-examples/pixeladventure"
 
 import {
-  "Milky2018/selene/editor_bridge",
+  "KKKIIO/selene/editor_bridge",
 }
 
 // Values

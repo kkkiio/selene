@@ -1,13 +1,13 @@
 // Generated using `moon info`, DON'T EDIT IT
-package "Milky2018/selene/animation"
+package "KKKIIO/selene/animation"
 
 import {
-  "Milky2018/selene/asset",
-  "Milky2018/selene/entity",
-  "Milky2018/selene/event",
-  "Milky2018/selene/math",
-  "Milky2018/selene/render",
-  "Milky2018/selene/render3d_types",
+  "KKKIIO/selene/asset",
+  "KKKIIO/selene/entity",
+  "KKKIIO/selene/event",
+  "KKKIIO/selene/math",
+  "KKKIIO/selene/render",
+  "KKKIIO/selene/render3d_types",
   "moonbitlang/core/debug",
 }
 

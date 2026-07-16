@@ -1,11 +1,11 @@
 // Generated using `moon info`, DON'T EDIT IT
-package "Milky2018/selene/camera"
+package "KKKIIO/selene/camera"
 
 import {
-  "Milky2018/selene/entity",
-  "Milky2018/selene/math",
-  "Milky2018/selene/render",
-  "Milky2018/selene/transform",
+  "KKKIIO/selene/entity",
+  "KKKIIO/selene/math",
+  "KKKIIO/selene/render",
+  "KKKIIO/selene/transform",
   "moonbitlang/core/debug",
 }
 

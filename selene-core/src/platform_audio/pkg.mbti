@@ -1,4 +1,4 @@
-package "Milky2018/selene/platform_audio"
+package "KKKIIO/selene/platform_audio"
 
 type AudioInstance
 

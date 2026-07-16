@@ -1,5 +1,5 @@
 import {
-  "Milky2018/selene/math",
-  "Milky2018/selene/render",
+  "KKKIIO/selene/math",
+  "KKKIIO/selene/render",
   "moonbitlang/core/math" @cmath,
 }

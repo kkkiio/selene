@@ -6,7 +6,7 @@ ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 TMP_FILE="/tmp/selene-legacy-ui-check.txt"
 
 patterns=(
-  'Milky2018/selene/style'
+  'KKKIIO/selene/style'
   '\bUiSpace\b'
   '\bscreen_root\b'
   '\bvirtual_root\b'

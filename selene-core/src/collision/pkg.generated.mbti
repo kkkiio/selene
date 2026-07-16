@@ -1,13 +1,13 @@
 // Generated using `moon info`, DON'T EDIT IT
-package "Milky2018/selene/collision"
+package "KKKIIO/selene/collision"
 
 import {
+  "KKKIIO/selene/entity",
+  "KKKIIO/selene/event",
+  "KKKIIO/selene/inputs",
+  "KKKIIO/selene/math",
+  "KKKIIO/selene/velocity",
   "Milky2018/moon_rapier/dynamics",
-  "Milky2018/selene/entity",
-  "Milky2018/selene/event",
-  "Milky2018/selene/inputs",
-  "Milky2018/selene/math",
-  "Milky2018/selene/velocity",
   "moonbitlang/core/debug",
   "moonbitlang/core/set",
 }
@@ -305,3 +305,4 @@ pub using @dynamics {type MultibodyLinkId}
 pub using @dynamics {type RigidBodyHandle}
 
 // Traits
+

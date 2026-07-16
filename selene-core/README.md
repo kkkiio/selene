@@ -1,4 +1,4 @@
-# Milky2018/selene
+# KKKIIO/selene
 
 Core ECS/runtime package for Selene.
 
@@ -7,15 +7,15 @@ It includes app/runtime orchestration, ECS data flow, assets, scenes, animation,
 ## Install
 
 ```bash
-moon add Milky2018/selene
+moon add KKKIIO/selene
 ```
 
 ## Backends
 
 Use this package together with:
 
-- `Milky2018/selene_webgpu` for web builds
-- `Milky2018/selene_raylib` for native builds
+- `KKKIIO/selene_webgpu` for web builds
+- `KKKIIO/selene_raylib` for native builds
 
 ## Learn More
 

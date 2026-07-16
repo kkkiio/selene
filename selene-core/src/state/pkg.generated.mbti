@@ -1,5 +1,5 @@
 // Generated using `moon info`, DON'T EDIT IT
-package "Milky2018/selene/state"
+package "KKKIIO/selene/state"
 
 import {
   "moonbitlang/core/ref",

@@ -1,7 +1,7 @@
 import {
-  "Milky2018/selene/asset",
-  "Milky2018/selene/ecs",
-  "Milky2018/selene/entity",
-  "Milky2018/selene/event",
-  "Milky2018/selene/platform_audio",
+  "KKKIIO/selene/asset",
+  "KKKIIO/selene/ecs",
+  "KKKIIO/selene/entity",
+  "KKKIIO/selene/event",
+  "KKKIIO/selene/platform_audio",
 }

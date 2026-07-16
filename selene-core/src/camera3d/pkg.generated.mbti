@@ -1,11 +1,11 @@
 // Generated using `moon info`, DON'T EDIT IT
-package "Milky2018/selene/camera3d"
+package "KKKIIO/selene/camera3d"
 
 import {
-  "Milky2018/selene/entity",
-  "Milky2018/selene/math",
-  "Milky2018/selene/render",
-  "Milky2018/selene/render3d_types",
+  "KKKIIO/selene/entity",
+  "KKKIIO/selene/math",
+  "KKKIIO/selene/render",
+  "KKKIIO/selene/render3d_types",
 }
 
 // Values

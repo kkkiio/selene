@@ -1,5 +1,5 @@
 // Generated using `moon info`, DON'T EDIT IT
-package "Milky2018/selene/system_set"
+package "KKKIIO/selene/system_set"
 
 import {
   "moonbitlang/core/debug",

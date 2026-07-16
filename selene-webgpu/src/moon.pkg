@@ -1,12 +1,12 @@
 import {
   "moonbit-community/rabbita/dom",
   "Milky2018/moon_cosmic" @cosmic,
-  "Milky2018/selene/math" @smath,
-  "Milky2018/selene/platform_runtime" @runtime,
-  "Milky2018/selene/render",
-  "Milky2018/selene/render2d_types",
-  "Milky2018/selene/render3d_types",
-  "Milky2018/selene/inputs",
+  "KKKIIO/selene/math" @smath,
+  "KKKIIO/selene/platform_runtime" @runtime,
+  "KKKIIO/selene/render",
+  "KKKIIO/selene/render2d_types",
+  "KKKIIO/selene/render3d_types",
+  "KKKIIO/selene/inputs",
   "moonbitlang/core/math",
 }
 

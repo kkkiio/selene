@@ -1,11 +1,11 @@
 import {
-  "Milky2018/selene/inputs",
-  "Milky2018/selene/math",
-  "Milky2018/selene_raylib" @impl,
+  "KKKIIO/selene/inputs",
+  "KKKIIO/selene/math",
+  "KKKIIO/selene_raylib" @impl,
 }
 
 supported_targets = "native"
 
 options(
-  implement: "Milky2018/selene/platform_input",
+  implement: "KKKIIO/selene/platform_input",
 )

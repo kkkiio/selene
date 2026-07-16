@@ -1,7 +1,7 @@
-package "Milky2018/selene/platform_window"
+package "KKKIIO/selene/platform_window"
 
 import {
-  "Milky2018/selene/platform_runtime",
+  "KKKIIO/selene/platform_runtime",
 }
 
 fn initialize(@platform_runtime.WindowConfig, @platform_runtime.RunnerCallbacks) -> () -> Unit

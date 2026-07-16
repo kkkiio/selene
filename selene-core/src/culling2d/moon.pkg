@@ -1,6 +1,6 @@
 import {
-  "Milky2018/selene/camera",
-  "Milky2018/selene/math",
-  "Milky2018/selene/visibility",
+  "KKKIIO/selene/camera",
+  "KKKIIO/selene/math",
+  "KKKIIO/selene/visibility",
   "moonbitlang/core/set",
 }

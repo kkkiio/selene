@@ -1,19 +1,19 @@
 import {
-  "Milky2018/selene/camera",
-  "Milky2018/selene/entity",
-  "Milky2018/selene/math",
-  "Milky2018/selene/platform_render",
-  "Milky2018/selene/render",
-  "Milky2018/selene/render2d",
-  "Milky2018/selene/render2d_types",
-  "Milky2018/selene/render3d",
-  "Milky2018/selene/render3d_pipeline",
-  "Milky2018/selene/render_pipeline",
-  "Milky2018/selene/runtime_debug",
-  "Milky2018/selene/system",
+  "KKKIIO/selene/camera",
+  "KKKIIO/selene/entity",
+  "KKKIIO/selene/math",
+  "KKKIIO/selene/platform_render",
+  "KKKIIO/selene/render",
+  "KKKIIO/selene/render2d",
+  "KKKIIO/selene/render2d_types",
+  "KKKIIO/selene/render3d",
+  "KKKIIO/selene/render3d_pipeline",
+  "KKKIIO/selene/render_pipeline",
+  "KKKIIO/selene/runtime_debug",
+  "KKKIIO/selene/system",
 }
 
 import {
-  "Milky2018/selene/ecs",
-  "Milky2018/selene/transform",
+  "KKKIIO/selene/ecs",
+  "KKKIIO/selene/transform",
 } for "wbtest"

@@ -1,12 +1,12 @@
 // Generated using `moon info`, DON'T EDIT IT
-package "Milky2018/selene/editor_bridge"
+package "KKKIIO/selene/editor_bridge"
 
 import {
-  "Milky2018/selene/animation",
-  "Milky2018/selene/entity",
-  "Milky2018/selene/material2d",
-  "Milky2018/selene/mesh2d",
-  "Milky2018/selene/sprite",
+  "KKKIIO/selene/animation",
+  "KKKIIO/selene/entity",
+  "KKKIIO/selene/material2d",
+  "KKKIIO/selene/mesh2d",
+  "KKKIIO/selene/sprite",
   "moonbitlang/core/debug",
   "moonbitlang/core/json",
 }

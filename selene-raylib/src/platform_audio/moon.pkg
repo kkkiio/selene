@@ -1,9 +1,9 @@
 import {
-  "Milky2018/selene_raylib" @impl,
+  "KKKIIO/selene_raylib" @impl,
 }
 
 supported_targets = "native"
 
 options(
-  implement: "Milky2018/selene/platform_audio",
+  implement: "KKKIIO/selene/platform_audio",
 )
