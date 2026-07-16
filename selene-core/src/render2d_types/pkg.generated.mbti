@@ -62,7 +62,7 @@ pub(all) struct ImageDrawCommand2D {
 pub(all) struct ImageRegion2D {
   position : @math.Vec2
   size : @math.Vec2
-}
+} derive(Eq, @debug.Debug)
 
 pub(all) struct RectDrawCommand2D {
   rect : @math.Rect
@@ -122,4 +122,3 @@ pub(all) struct TextStyle2D {
 // Type aliases
 
 // Traits
-

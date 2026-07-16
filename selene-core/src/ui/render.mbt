@@ -2,6 +2,23 @@
 let extracted_ui_entities : Array[@entity.Entity] = []
 
 ///|
+priv struct UiTextRenderCache {
+  measured_fragments : Map[String, @math.Vec2]
+  prepared_lines : Map[String, Array[String]]
+}
+
+///|
+let ui_text_render_caches : Map[UInt, UiTextRenderCache] = Map([])
+
+///|
+fn ui_text_render_cache() -> UiTextRenderCache {
+  let world_id = @ecs.require_current_world().id()
+  ui_text_render_caches.get_or_init(world_id, fn() {
+    { measured_fragments: Map([]), prepared_lines: Map([]) }
+  })
+}
+
+///|
 fn push_ui_rect_fill(
   rect : @math.Rect,
   color : @render.Color,
@@ -439,7 +456,7 @@ pub fn draw_ui_material_image(
   @render2d.push_ui_image_to_camera(context.target_camera_entity_id, {
     image: image.image,
     destination: fitted_image_rect(context.rect, image),
-    source: None,
+    source: image.source,
     transform: Transform(),
     uv_transform: @math.Transform::identity(),
     repeat: NoRepeat,
@@ -701,7 +718,7 @@ fn push_image(
   @render2d.push_ui_image_to_camera(camera_entity_id, {
     image: image.image,
     destination: fitted_image_rect(transform.screen_content_rect, image),
-    source: None,
+    source: image.source,
     transform: Transform(),
     uv_transform: @math.Transform::identity(),
     repeat: NoRepeat,
@@ -712,11 +729,33 @@ fn push_image(
 }
 
 ///|
+fn text_style_cache_key(style : @render2d_types.TextStyle2D) -> String {
+  "\{style.family}|\{style.size}|\{style.color.r}|\{style.color.g}|\{style.color.b}|\{style.color.a}"
+}
+
+///|
+fn measure_text_with_style(
+  style : @render2d_types.TextStyle2D,
+  text : String,
+) -> @math.Vec2 {
+  let key = text_style_cache_key(style) + "|" + text
+  let cache = ui_text_render_cache()
+  match cache.measured_fragments.get(key) {
+    Some(cached) => cached
+    None => {
+      let measured = @platform_render.measure_text(style, text)
+      cache.measured_fragments.set(key, measured)
+      measured
+    }
+  }
+}
+
+///|
 fn measure_text_fragment(
   style : @render2d_types.TextStyle2D,
   text : String,
 ) -> @math.Vec2 {
-  @platform_render.measure_text(style, text)
+  measure_text_with_style(style, text)
 }
 
 ///|
@@ -782,12 +821,95 @@ fn prepared_text_lines(
 ) -> Array[String] {
   guard texts().get(entity) is Some(text) else { return [] }
   guard text_style_for(entity) is Some(style) else { return [] }
-  prepare_text_layout(text.content, style, text_layout(entity), available_width).lines
+  let layout = text_layout(entity)
+  let wrap_key = match layout.wrap {
+    NoWrap => "nowrap"
+    WordWrap => "wordwrap"
+  }
+  let overflow_key = match layout.overflow {
+    Clip => "clip"
+    Ellipsis => "ellipsis"
+  }
+  let width_key = match available_width {
+    AvailDefinite(width) => "definite:\{width}"
+    AvailMinContent => "min-content"
+    AvailMaxContent => "max-content"
+  }
+  let cache_key = "\{text.content}|\{width_key}|\{wrap_key}|\{overflow_key}|\{layout.line_height}|\{text_style_cache_key(style)}"
+  let cache = ui_text_render_cache()
+  match cache.prepared_lines.get(cache_key) {
+    Some(cached) => return cached.copy()
+    None => ()
+  }
+  let lines = prepare_text_layout(
+    text.content,
+    style,
+    layout,
+    available_width,
+  ).lines
+  cache.prepared_lines.set(cache_key, lines.copy())
+  lines
+}
+
+///|
+fn span_style_for_draw(
+  base : @render2d_types.TextStyle2D,
+  span : TextSpan,
+) -> @render2d_types.TextStyle2D {
+  let with_font = match span.font {
+    Some(font) =>
+      { ..base, font: font.font_handle, family: font.family, size: font.size }
+    None => base
+  }
+  match span.color {
+    Some(color) => { ..with_font, color: color.color }
+    None => with_font
+  }
+}
+
+///|
+fn draw_text_run(
+  text : String,
+  position : @math.Vec2,
+  style : @render2d_types.TextStyle2D,
+  bold : Bool,
+  underline : Bool,
+  camera_entity_id? : UInt? = None,
+) -> @math.Vec2 {
+  @render2d.push_ui_text_to_camera(camera_entity_id, {
+    text,
+    position,
+    transform: @math.Transform::identity(),
+    blend_mode: @render.BlendMode2D::Alpha,
+    style,
+  })
+  if bold {
+    @render2d.push_ui_text_to_camera(camera_entity_id, {
+      text,
+      position: @math.Vec2(position[X] + 0.75, position[Y]),
+      transform: @math.Transform::identity(),
+      blend_mode: @render.BlendMode2D::Alpha,
+      style,
+    })
+  }
+  let measured = measure_text_with_style(style, text)
+  if underline {
+    let underline_y = position[Y] + style.size * 0.92
+    push_ui_rect_fill(
+      {
+        position: @math.Vec2(position[X], underline_y),
+        size: @math.Vec2(measured[X], @cmp.maximum(1.0, style.size * 0.08)),
+      },
+      style.color,
+      camera_entity_id~,
+    )
+  }
+  measured
 }
 
 ///|
 fn push_text(entity : @entity.Entity, camera_entity_id? : UInt? = None) -> Unit {
-  guard texts().get(entity) is Some(_) else { return }
+  guard texts().get(entity) is Some(text) else { return }
   guard global_ui_nodes().get(entity) is Some(transform) else { return }
   guard render_text_style(entity) is Some(style) else { return }
   let layout = text_layout(entity)
@@ -825,13 +947,37 @@ fn push_text(entity : @entity.Entity, camera_entity_id? : UInt? = None) -> Unit 
     // `x`/`y` are already fully resolved in UI layout space.
     // Force renderer-local alignment to top-left to avoid applying alignment twice.
     let style_for_draw = { ..style, align: Left, baseline: Top }
-    @render2d.push_ui_text_to_camera(camera_entity_id, {
-      text: line,
-      position: Vec2(x, start_y + index.to_double() * line_height),
-      transform: @math.Transform::identity(),
-      blend_mode: Alpha,
-      style: style_for_draw,
-    })
+    let line_position = Vec2(x, start_y + index.to_double() * line_height)
+    if text.spans.length() > 0 &&
+      lines.length() == 1 &&
+      line == text.content &&
+      !text.content.contains("\n") {
+      let mut cursor_x = line_position[X]
+      for span in text.spans {
+        let span_style = span_style_for_draw(style_for_draw, span)
+        let span_measured = draw_text_run(
+          span.content,
+          Vec2(cursor_x, line_position[Y]),
+          span_style,
+          span.bold || span.font.map(fn(font) { font.bold }).unwrap_or(false),
+          span.underline,
+          camera_entity_id~,
+        )
+        cursor_x += span_measured[X]
+      }
+    } else {
+      let font = text_font(entity)
+      ignore(
+        draw_text_run(
+          line,
+          line_position,
+          style_for_draw,
+          font.bold,
+          false,
+          camera_entity_id~,
+        ),
+      )
+    }
   }
 }
 

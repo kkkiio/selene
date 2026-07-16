@@ -126,6 +126,7 @@ pub(all) struct UiImage {
   image : @asset.ImageHandle
   tint : @render.Color
   fit : ImageFit
+  source : @render2d_types.ImageRegion2D?
 } derive(Eq, Debug)
 
 ///|
@@ -134,8 +135,9 @@ pub fn UiImage::from_image(
   image : @asset.ImageHandle,
   tint? : @render.Color = rgba(255, 255, 255, 1.0),
   fit? : ImageFit = Stretch,
+  source? : @render2d_types.ImageRegion2D? = None,
 ) -> UiImage {
-  { size, image, tint, fit }
+  { size, image, tint, fit, source }
 }
 
 ///|
@@ -144,8 +146,9 @@ pub fn UiImage::UiImage(
   path : String,
   tint? : @render.Color = rgba(255, 255, 255, 1.0),
   fit? : ImageFit = Stretch,
+  source? : @render2d_types.ImageRegion2D? = None,
 ) -> UiImage {
-  UiImage::from_image(size, @asset.load_image(path), tint~, fit~)
+  UiImage::from_image(size, @asset.load_image(path), tint~, fit~, source~)
 }
 
 ///|
@@ -238,8 +241,11 @@ pub fn UiMaterialAsset::from_image(
   image : @asset.ImageHandle,
   tint? : @render.Color = rgba(255, 255, 255, 1.0),
   fit? : ImageFit = Stretch,
+  source? : @render2d_types.ImageRegion2D? = None,
 ) -> UiMaterialAsset {
-  UiMaterialAsset::from_ui_image(UiImage::from_image(size, image, tint~, fit~))
+  UiMaterialAsset::from_ui_image(
+    UiImage::from_image(size, image, tint~, fit~, source~),
+  )
 }
 
 ///|
@@ -248,18 +254,49 @@ pub fn UiMaterialAsset::UiMaterialAsset(
   path : String,
   tint? : @render.Color = rgba(255, 255, 255, 1.0),
   fit? : ImageFit = Stretch,
+  source? : @render2d_types.ImageRegion2D? = None,
 ) -> UiMaterialAsset {
-  UiMaterialAsset::from_ui_image(UiImage(size, path, tint~, fit~))
+  UiMaterialAsset::from_ui_image(UiImage(size, path, tint~, fit~, source~))
+}
+
+///|
+pub(all) struct TextSpan {
+  content : String
+  font : TextFont?
+  color : TextColor?
+  bold : Bool
+  underline : Bool
+}
+
+///|
+pub fn TextSpan::TextSpan(
+  content : String,
+  font? : TextFont? = None,
+  color? : TextColor? = None,
+  bold? : Bool = false,
+  underline? : Bool = false,
+) -> TextSpan {
+  { content, font, color, bold, underline }
 }
 
 ///|
 pub(all) struct Text {
   mut content : String
+  mut spans : Array[TextSpan]
 }
 
 ///|
 pub fn Text::Text(content : String) -> Text {
-  { content, }
+  { content, spans: [] }
+}
+
+///|
+pub fn Text::from_spans(spans : Array[TextSpan]) -> Text {
+  let mut content = ""
+  for span in spans {
+    content = content + span.content
+  }
+  { content, spans }
 }
 
 ///|
@@ -267,23 +304,26 @@ pub(all) struct TextFont {
   mut family : String
   mut size : Double
   mut font_handle : @asset.FontHandle?
+  mut bold : Bool
 }
 
 ///|
 pub fn TextFont::TextFont(
   family? : String = "Arial",
   size? : Double = 16.0,
+  bold? : Bool = false,
 ) -> TextFont {
-  { family, size, font_handle: @asset.font_by_family(family) }
+  { family, size, font_handle: @asset.font_by_family(family), bold }
 }
 
 ///|
 pub fn TextFont::from_font(
   font : @asset.FontHandle,
   size? : Double = 16.0,
+  bold? : Bool = false,
 ) -> TextFont {
   let family = @asset.font_family(font).unwrap_or("Arial")
-  { family, size, font_handle: Some(font) }
+  { family, size, font_handle: Some(font), bold }
 }
 
 ///|
@@ -311,14 +351,20 @@ pub fn TextFont::from_css(font : String) -> TextFont {
   if font == "" {
     return TextFont()
   }
+  let lower = font.to_lower()
+  let bold = lower.contains("bold")
   let parts : Array[StringView] = []
   for part in font.split("px") {
     parts.push(part)
   }
   if parts.length() >= 2 {
-    TextFont(family=parse_font_family(parts[1]), size=parse_font_size(parts[0]))
+    TextFont(
+      family=parse_font_family(parts[1]),
+      size=parse_font_size(parts[0]),
+      bold~,
+    )
   } else {
-    TextFont(family=font)
+    TextFont(family=font, bold~)
   }
 }
 

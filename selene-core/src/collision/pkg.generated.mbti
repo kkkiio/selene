@@ -49,6 +49,8 @@ pub fn intersect_shape(CollisionShape, @math.Vec2, rotation? : Double, query_fil
 
 pub fn is_grounded(@entity.Entity) -> Bool
 
+pub fn is_hover(@entity.Entity) -> Bool
+
 pub fn joint_handle(@entity.Entity) -> @dynamics.ImpulseJointHandle?
 
 pub fn joints() -> Map[@entity.Entity, Joint]
@@ -303,4 +305,3 @@ pub using @dynamics {type MultibodyLinkId}
 pub using @dynamics {type RigidBodyHandle}
 
 // Traits
-

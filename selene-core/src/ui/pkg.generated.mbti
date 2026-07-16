@@ -526,8 +526,10 @@ pub fn TabIndex::TabIndex(Int) -> Self
 
 pub(all) struct Text {
   mut content : String
+  mut spans : Array[TextSpan]
 }
 pub fn Text::Text(String) -> Self
+pub fn Text::from_spans(Array[TextSpan]) -> Self
 
 pub(all) struct TextColor {
   mut color : @render.Color
@@ -539,10 +541,11 @@ pub(all) struct TextFont {
   mut family : String
   mut size : Double
   mut font_handle : @asset_types.FontHandle?
+  mut bold : Bool
 }
-pub fn TextFont::TextFont(family? : String, size? : Double) -> Self
+pub fn TextFont::TextFont(family? : String, size? : Double, bold? : Bool) -> Self
 pub fn TextFont::from_css(String) -> Self
-pub fn TextFont::from_font(@asset_types.FontHandle, size? : Double) -> Self
+pub fn TextFont::from_font(@asset_types.FontHandle, size? : Double, bold? : Bool) -> Self
 
 pub(all) struct TextLayout {
   mut align : @math.HAlign
@@ -557,6 +560,15 @@ pub(all) enum TextOverflow {
   Clip
   Ellipsis
 } derive(Eq, @debug.Debug)
+
+pub(all) struct TextSpan {
+  content : String
+  font : TextFont?
+  color : TextColor?
+  bold : Bool
+  underline : Bool
+}
+pub fn TextSpan::TextSpan(String, font? : TextFont?, color? : TextColor?, bold? : Bool, underline? : Bool) -> Self
 
 pub(all) enum TextWrap {
   NoWrap
@@ -587,9 +599,10 @@ pub(all) struct UiImage {
   image : @asset_types.ImageHandle
   tint : @render.Color
   fit : ImageFit
+  source : @render2d_types.ImageRegion2D?
 } derive(Eq, @debug.Debug)
-pub fn UiImage::UiImage(@math.Vec2, String, tint? : @render.Color, fit? : ImageFit) -> Self
-pub fn UiImage::from_image(@math.Vec2, @asset_types.ImageHandle, tint? : @render.Color, fit? : ImageFit) -> Self
+pub fn UiImage::UiImage(@math.Vec2, String, tint? : @render.Color, fit? : ImageFit, source? : @render2d_types.ImageRegion2D?) -> Self
+pub fn UiImage::from_image(@math.Vec2, @asset_types.ImageHandle, tint? : @render.Color, fit? : ImageFit, source? : @render2d_types.ImageRegion2D?) -> Self
 
 pub(all) struct UiInsets {
   left : Double
@@ -608,9 +621,9 @@ pub fn UiLayoutSpace::UiLayoutSpace(@math.Rect, target_camera? : @entity.Entity?
 pub(all) struct UiMaterialAsset {
   draw : (UiMaterialContext) -> Unit
 }
-pub fn UiMaterialAsset::UiMaterialAsset(@math.Vec2, String, tint? : @render.Color, fit? : ImageFit) -> Self
+pub fn UiMaterialAsset::UiMaterialAsset(@math.Vec2, String, tint? : @render.Color, fit? : ImageFit, source? : @render2d_types.ImageRegion2D?) -> Self
 pub fn UiMaterialAsset::from_draw((UiMaterialContext) -> Unit) -> Self
-pub fn UiMaterialAsset::from_image(@math.Vec2, @asset_types.ImageHandle, tint? : @render.Color, fit? : ImageFit) -> Self
+pub fn UiMaterialAsset::from_image(@math.Vec2, @asset_types.ImageHandle, tint? : @render.Color, fit? : ImageFit, source? : @render2d_types.ImageRegion2D?) -> Self
 pub fn UiMaterialAsset::from_ui_image(UiImage) -> Self
 pub fn UiMaterialAsset::gradient(@render.Color, @render.Color) -> Self
 pub fn UiMaterialAsset::solid(@render.Color) -> Self
@@ -696,4 +709,3 @@ pub fn ZIndex::ZIndex(Int) -> Self
 // Type aliases
 
 // Traits
-

@@ -141,3 +141,30 @@ test "pickable click supports ball shapes" {
     )
   })
 }
+
+///|
+test "pickable hover query tracks latest hit-test result" {
+  with_pickable_test_world(fn() raise {
+    reset_pickable_test_input()
+    @system.configure_display(100.0, 100.0, 1.0)
+    ignore(
+      spawn_pickable_camera(
+        { position: @math.Vec2::zero(), size: @math.Vec2(100.0, 100.0) },
+        0,
+        @visibility.layer(0U),
+      ),
+    )
+    let entity = spawn_pickable_shape(
+      @math.Vec2(40.0, 40.0),
+      Rect(size=@math.Vec2(20.0, 20.0), offset=@math.Vec2(-10.0, -10.0)),
+    )
+
+    @inputs.mouse.pos = @math.Vec2(40.0, 40.0)
+    pickable_click_system(0.0)
+    inspect(is_hover(entity), content="true")
+
+    @inputs.mouse.pos = @math.Vec2(90.0, 90.0)
+    pickable_click_system(0.0)
+    inspect(is_hover(entity), content="false")
+  })
+}

@@ -26,6 +26,7 @@ pub fn Pickable::Pickable() -> Pickable {
 ///|
 priv struct PickableWorldStore {
   pickables : Map[@entity.Entity, Pickable]
+  hovered_entities : @set.Set[@entity.Entity]
 }
 
 ///|
@@ -34,13 +35,21 @@ let pickable_world_stores : Map[UInt, PickableWorldStore] = Map([])
 ///|
 fn pickable_world_store() -> PickableWorldStore {
   let world_id = @ecs.require_current_world().id()
-  pickable_world_stores.get_or_init(world_id, () => { pickables: Map([]) })
+  pickable_world_stores.get_or_init(world_id, () => {
+    pickables: Map([]),
+    hovered_entities: @set.Set([]),
+  })
 }
 
 ///|
 /// All pickable components.
 pub fn pickables() -> Map[@entity.Entity, Pickable] {
   pickable_world_store().pickables
+}
+
+///|
+pub fn is_hover(entity : @entity.Entity) -> Bool {
+  pickable_world_store().hovered_entities.contains(entity)
 }
 
 ///|
@@ -298,6 +307,8 @@ fn dispatch_pointer_events(entity : @entity.Entity) -> Unit {
 
 ///|
 pub fn pickable_click_system(_delta : Double) -> Unit {
+  let store = pickable_world_store()
+  store.hovered_entities.clear()
   let mouse_screen = @inputs.mouse.pos
   let camera_view = @camera.camera2d_view_for_screen_point(mouse_screen)
   let mouse_world = match camera_view {
@@ -313,6 +324,7 @@ pub fn pickable_click_system(_delta : Double) -> Unit {
     if hit_test_pickable(
         entity, mouse_screen, mouse_world, mouse_virtual, camera_view,
       ) {
+      store.hovered_entities.add(entity)
       dispatch_pointer_events(entity)
     }
   }

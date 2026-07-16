@@ -2,7 +2,7 @@
 pub(all) struct ImageRegion2D {
   position : @math.Vec2
   size : @math.Vec2
-}
+} derive(Eq, Debug)
 
 ///|
 pub(all) struct ImageDrawCommand2D {

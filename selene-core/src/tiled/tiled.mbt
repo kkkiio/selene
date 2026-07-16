@@ -297,7 +297,6 @@ pub fn empty_tiled_map() -> TiledMap {
   }
 }
 
-///|
 pub fn load_tiled_map(path : String) -> TiledMap {
   guard load_tiled_text_document(path) is Some(source) else {
     return empty_tiled_map()

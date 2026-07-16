@@ -378,3 +378,76 @@ test "ui stacking sorts by global z before local z and tree order" {
   cleanup_test_ui_entity(back)
   cleanup_test_ui_entity(front)
 }
+
+///|
+test "ui image source region is forwarded to render command" {
+  @render2d.begin_frame2d_system(0.0)
+  let entity = @entity.Entity()
+  let rect = test_rect(10.0, 20.0, 80.0, 40.0)
+  nodes().set(entity, Node())
+  global_ui_nodes().set(entity, test_global_node(rect, rect))
+  ui_images().set(
+    entity,
+    UiImage(
+      @math.Vec2(80.0, 40.0),
+      "assets/survivors/icon/powerup_speed.png",
+      source=Some({
+        position: @math.Vec2(4.0, 8.0),
+        size: @math.Vec2(16.0, 12.0),
+      }),
+    ),
+  )
+
+  render_entity(entity)
+
+  let frame = @render2d.get_frame2d()
+  inspect(frame.ui_commands.length(), content="1")
+  inspect(
+    match frame.ui_commands[0] {
+      Image(command) =>
+        command.source is Some(source) &&
+        source.position[X] == 4.0 &&
+        source.position[Y] == 8.0 &&
+        source.size[X] == 16.0 &&
+        source.size[Y] == 12.0
+      _ => false
+    },
+    content="true",
+  )
+
+  cleanup_test_ui_entity(entity)
+}
+
+///|
+test "ui text spans support bold and underline in single-line render" {
+  @render2d.begin_frame2d_system(0.0)
+  let entity = @entity.Entity()
+  let rect = test_rect(0.0, 0.0, 220.0, 60.0)
+  nodes().set(entity, Node())
+  global_ui_nodes().set(entity, test_global_node(rect, rect))
+  texts().set(
+    entity,
+    Text::from_spans([
+      TextSpan("Hi", bold=true, underline=true),
+      TextSpan(" there"),
+    ]),
+  )
+  text_fonts().set(entity, TextFont(size=20.0))
+
+  render_entity(entity)
+
+  let frame = @render2d.get_frame2d()
+  let mut text_commands = 0
+  let mut rect_commands = 0
+  for command in frame.ui_commands {
+    match command {
+      Text(_) => text_commands += 1
+      Rect(_) => rect_commands += 1
+      _ => ()
+    }
+  }
+  inspect(text_commands, content="3")
+  inspect(rect_commands, content="1")
+
+  cleanup_test_ui_entity(entity)
+}
