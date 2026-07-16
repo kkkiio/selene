@@ -947,7 +947,14 @@ fn push_text(entity : @entity.Entity, camera_entity_id? : UInt? = None) -> Unit 
     // `x`/`y` are already fully resolved in UI layout space.
     // Force renderer-local alignment to top-left to avoid applying alignment twice.
     let style_for_draw = { ..style, align: Left, baseline: Top }
-    let line_position = Vec2(x, start_y + index.to_double() * line_height)
+    let line_y = start_y + index.to_double() * line_height
+    let line_position = if effective_layout_roundings()
+      .get(entity)
+      .unwrap_or(true) {
+      @math.Vec2(x.round(), line_y.round())
+    } else {
+      @math.Vec2(x, line_y)
+    }
     if text.spans.length() > 0 &&
       lines.length() == 1 &&
       line == text.content &&

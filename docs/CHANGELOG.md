@@ -25,6 +25,7 @@
 - Fixed editor project file discovery and path assertions on Windows.
 - Fixed wrapped UI text measurement so automatic heights include every rendered line.
 - Fixed UI scroll positions exceeding their content bounds or retaining stale offsets after layout changes.
+- Fixed UI text alignment by applying inherited layout rounding to final text positions.
 
 ### Removed
 

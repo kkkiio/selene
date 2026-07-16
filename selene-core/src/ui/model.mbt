@@ -756,6 +756,7 @@ priv struct UiModelWorldStore {
   ui_target_cameras : Map[@entity.Entity, UiTargetCamera]
   calculated_clips : Map[@entity.Entity, CalculatedClip]
   layout_configs : Map[@entity.Entity, LayoutConfig]
+  effective_layout_roundings : Map[@entity.Entity, Bool]
   z_indexes : Map[@entity.Entity, ZIndex]
   global_zindexes : Map[@entity.Entity, GlobalZIndex]
   scroll_positions : Map[@entity.Entity, ScrollPosition]
@@ -781,6 +782,7 @@ fn ui_model_world_store() -> UiModelWorldStore {
     ui_target_cameras: Map([]),
     calculated_clips: Map([]),
     layout_configs: Map([]),
+    effective_layout_roundings: Map([]),
     z_indexes: Map([]),
     global_zindexes: Map([]),
     scroll_positions: Map([]),
@@ -822,6 +824,11 @@ pub fn calculated_clips() -> Map[@entity.Entity, CalculatedClip] {
 ///|
 pub fn layout_configs() -> Map[@entity.Entity, LayoutConfig] {
   ui_model_world_store().layout_configs
+}
+
+///|
+fn effective_layout_roundings() -> Map[@entity.Entity, Bool] {
+  ui_model_world_store().effective_layout_roundings
 }
 
 ///|

@@ -591,6 +591,11 @@ fn cleanup_dead_ui_state() -> Unit {
       layout_configs().remove(pair.0)
     }
   }
+  for pair in effective_layout_roundings().to_array() {
+    if !pair.0.is_alive() {
+      effective_layout_roundings().remove(pair.0)
+    }
+  }
   for pair in tree_orders().to_array() {
     if !pair.0.is_alive() {
       tree_orders().remove(pair.0)
@@ -620,6 +625,7 @@ fn apply_layout_recursive(
     .get(entity)
     .map(fn(config) { config.use_rounding })
     .unwrap_or(inherited_use_rounding)
+  effective_layout_roundings().set(entity, use_rounding)
   let layout = chicle.layout(node_id) catch { _ => return }
 
   let logical_pos = parent_layout_origin +
@@ -740,6 +746,7 @@ pub fn ui_layout_system(_delta : Double) -> Unit {
   computed_ui_nodes().clear()
   global_ui_nodes().clear()
   calculated_clips().clear()
+  effective_layout_roundings().clear()
   tree_orders().clear()
 
   let order_counter : Ref[Int] = Ref(0)

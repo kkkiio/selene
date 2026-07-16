@@ -31,6 +31,7 @@ fn cleanup_test_ui_entity(entity : @entity.Entity) -> Unit {
   ui_target_cameras().remove(entity)
   calculated_clips().remove(entity)
   layout_configs().remove(entity)
+  effective_layout_roundings().remove(entity)
   background_colors().remove(entity)
   border_colors().remove(entity)
   border_radii().remove(entity)
@@ -450,4 +451,39 @@ test "ui text spans support bold and underline in single-line render" {
   inspect(rect_commands, content="1")
 
   cleanup_test_ui_entity(entity)
+}
+
+///|
+test "ui text positions follow inherited layout rounding" {
+  @render2d.begin_frame2d_system(0.0)
+  let rounded = @entity.Entity()
+  let fractional = @entity.Entity()
+  let rect = test_rect(0.25, 0.75, 100.0, 20.0)
+  for entity in [rounded, fractional] {
+    nodes().set(entity, Node())
+    global_ui_nodes().set(entity, test_global_node(rect, rect))
+    texts().set(entity, Text("Hi"))
+    text_fonts().set(entity, TextFont(size=12.0))
+  }
+  effective_layout_roundings().set(rounded, true)
+  effective_layout_roundings().set(fractional, false)
+
+  render_entity(rounded)
+  render_entity(fractional)
+
+  let frame = @render2d.get_frame2d()
+  inspect(
+    match (frame.ui_commands[0], frame.ui_commands[1]) {
+      (Text(a), Text(b)) =>
+        a.position[X] == 0.0 &&
+        a.position[Y] == 1.0 &&
+        b.position[X] == 0.25 &&
+        b.position[Y] == 0.75
+      _ => false
+    },
+    content="true",
+  )
+
+  cleanup_test_ui_entity(rounded)
+  cleanup_test_ui_entity(fractional)
 }
