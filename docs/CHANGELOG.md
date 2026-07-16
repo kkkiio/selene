@@ -5,6 +5,7 @@
 ### Added
 
 ### Changed
+- Clarified fork maintenance, upstream contribution, toolchain, and runtime-only release rules.
 
 ### Fixed
 

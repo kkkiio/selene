@@ -1,0 +1,4 @@
+interface:
+  display_name: "Contribute Upstream"
+  short_description: "Verify and publish focused upstream contributions"
+  default_prompt: "Use $contribute-upstream to verify this fork change against the latest upstream branch and prepare a concise issue or pull request as requested."
