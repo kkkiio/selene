@@ -414,10 +414,19 @@ test "load_tiled_world parses pattern map dimensions defaults" {
     ),
   )
   with_fake_asset_io(files, fn() raise {
-    let world = load_tiled_world("worlds/patterns.world")
+    let world = load_tiled_world("worlds/patterns.world", pattern_files=[
+      "notes.txt", "a2b3.tmj", "a1b4.tmj",
+    ])
     inspect(world.patterns.length(), content="1")
     inspect(world.patterns[0].map_width, content="320")
     inspect(world.patterns[0].map_height, content="160")
+    let expanded = tiled_world_collect_maps(world).map(fn(map) {
+      "\{map.file_name}@\{map.x},\{map.y}"
+    })
+    inspect(
+      string_array_matches(expanded, ["a1b4.tmj@320,640", "a2b3.tmj@640,480"]),
+      content="true",
+    )
   })
 }
 

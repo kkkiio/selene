@@ -59,7 +59,7 @@ fn read_tiled_xml_root(
   reader : @xml.Reader,
 ) -> TiledXmlNode? raise @xml.XmlError {
   while true {
-    match reader.read_event() {
+    match reader.read_event().kind {
       Start(element) => return Some(read_tiled_xml_node(reader, element))
       Empty(element) =>
         return Some(tiled_xml_node(element.name, element.attributes))
@@ -84,7 +84,7 @@ fn read_tiled_xml_node(
   let children : Array[TiledXmlNode] = []
   let text = StringBuilder::new()
   while true {
-    match reader.read_event() {
+    match reader.read_event().kind {
       Start(child) => children.push(read_tiled_xml_node(reader, child))
       Empty(child) =>
         children.push(tiled_xml_node(child.name, child.attributes))
@@ -95,12 +95,12 @@ fn read_tiled_xml_node(
       Decl(..) => ()
       DocType(_) => ()
       End(_) =>
-        return {
-          name: element.name,
-          attributes: element.attributes,
-          children,
-          text: text.to_string(),
-        }
+        return tiled_xml_node(
+          element.name,
+          element.attributes,
+          children~,
+          text=text.to_string(),
+        )
       Eof =>
         return tiled_xml_node(
           element.name,
@@ -116,11 +116,18 @@ fn read_tiled_xml_node(
 ///|
 fn tiled_xml_node(
   name : String,
-  attributes : Array[(String, String)],
+  attributes : Array[@xml.XmlAttribute],
   children? : Array[TiledXmlNode] = [],
   text? : String = "",
 ) -> TiledXmlNode {
-  { name, attributes, children, text }
+  {
+    name,
+    attributes: attributes.map(fn(attribute) {
+      (attribute.name, attribute.value)
+    }),
+    children,
+    text,
+  }
 }
 
 ///|

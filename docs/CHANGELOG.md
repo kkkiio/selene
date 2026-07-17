@@ -26,6 +26,7 @@
 - Fixed wrapped UI text measurement so automatic heights include every rendered line.
 - Fixed UI scroll positions exceeding their content bounds or retaining stale offsets after layout changes.
 - Fixed UI text alignment by applying inherited layout rounding to final text positions.
+- Fixed browser Tiled builds by isolating XML and directory file-system adapters from cross-platform parsing packages.
 
 ### Removed
 

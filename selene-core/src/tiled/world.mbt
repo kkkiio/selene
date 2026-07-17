@@ -43,6 +43,7 @@ pub struct TiledWorld {
   maps : Array[TiledWorldMap]
   patterns : Array[TiledWorldPattern]
   source_path : String?
+  pattern_files : Array[String]
 }
 
 ///|
@@ -111,7 +112,13 @@ pub fn tiled_world_map_instances() -> Map[@entity.Entity, TiledWorldMapInstance]
 
 ///|
 pub fn empty_tiled_world() -> TiledWorld {
-  { only_show_adjacent_maps: false, maps: [], patterns: [], source_path: None }
+  {
+    only_show_adjacent_maps: false,
+    maps: [],
+    patterns: [],
+    source_path: None,
+    pattern_files: [],
+  }
 }
 
 ///|
@@ -128,7 +135,14 @@ pub fn default_tiled_world_spawn_settings() -> TiledWorldSpawnSettings {
 }
 
 ///|
-pub fn load_tiled_world(path : String) -> TiledWorld {
+/// Load a Tiled world through the configured asset backend.
+///
+/// `pattern_files` supplies directory entries for expanding Tiled world
+/// patterns without coupling the cross-platform runtime to a file system.
+pub fn load_tiled_world(
+  path : String,
+  pattern_files? : Array[String] = [],
+) -> TiledWorld {
   guard load_tiled_text_document(path) is Some(source) else {
     return empty_tiled_world()
   }
@@ -145,6 +159,7 @@ pub fn load_tiled_world(path : String) -> TiledWorld {
     maps: parse_tiled_world_maps(field_json(root_object, "maps")),
     patterns: parse_tiled_world_patterns(field_json(root_object, "patterns")),
     source_path: Some(path),
+    pattern_files,
   }
 }
 
@@ -531,42 +546,9 @@ fn tiled_world_expand_pattern(
 
 ///|
 fn tiled_world_scan_directory_files(world : TiledWorld) -> Array[String] {
-  guard world.source_path is Some(source_path) else { return [] }
-  let directory = tiled_world_directory_path(source_path)
-  let entries = @fs.read_dir(directory) catch { _ => return [] }
-  let file_names : Array[String] = []
-  for entry in entries {
-    let resolved = world.resolve_map_path(entry)
-    if (@fs.is_file(resolved) catch { _ => false }) {
-      file_names.push(entry)
-    }
-  }
+  let file_names = world.pattern_files.copy()
   file_names.sort()
   file_names
-}
-
-///|
-fn tiled_world_directory_path(source_path : String) -> String {
-  let last_slash = source_path.rev_find("/")
-  let last_backslash = source_path.rev_find("\\")
-  let last_sep = match (last_slash, last_backslash) {
-    (Some(slash), Some(backslash)) =>
-      if slash > backslash {
-        slash
-      } else {
-        backslash
-      }
-    (Some(slash), None) => slash
-    (None, Some(backslash)) => backslash
-    (None, None) => -1
-  }
-  if last_sep < 0 {
-    "."
-  } else if last_sep == 0 {
-    source_path.unsafe_substring(start=0, end=1)
-  } else {
-    source_path.unsafe_substring(start=0, end=last_sep)
-  }
 }
 
 ///|

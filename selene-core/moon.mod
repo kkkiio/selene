@@ -5,7 +5,7 @@ version = "0.37.0"
 import {
   "Milky2018/moon_rapier@0.5.1",
   "Milky2018/moon_accesskit@0.3.0",
-  "Milky2018/xml@0.2.0",
+  "Milky2018/xml@0.4.0",
   "gmlewis/base64@0.16.10",
   "moonbitlang/x@0.4.45",
   "gmlewis/gzip@0.34.9",

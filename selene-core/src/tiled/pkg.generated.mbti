@@ -37,7 +37,7 @@ pub fn load_and_spawn_tiled_world(String, settings? : TiledWorldSpawnSettings) -
 
 pub fn load_tiled_map(String) -> TiledMap
 
-pub fn load_tiled_world(String) -> TiledWorld
+pub fn load_tiled_world(String, pattern_files? : Array[String]) -> TiledWorld
 
 pub fn respawn_tiled_map_into_entity(@entity.Entity, TiledMap, settings? : TiledSpawnSettings) -> Unit
 
@@ -458,6 +458,7 @@ pub struct TiledWorld {
   maps : Array[TiledWorldMap]
   patterns : Array[TiledWorldPattern]
   source_path : String?
+  pattern_files : Array[String]
 }
 pub fn TiledWorld::map(Self, String) -> TiledWorldMap?
 pub fn TiledWorld::resolve_map_path(Self, String) -> String
