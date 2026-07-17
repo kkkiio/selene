@@ -49,6 +49,12 @@ pub fn gamepad_right_stick(Gamepad) -> @math.Vec2
 
 pub fn gamepad_triggers(Gamepad) -> @math.Vec2
 
+pub fn is_any_gamepad_button_just_pressed(GamepadButton) -> Bool
+
+pub fn is_any_gamepad_button_just_released(GamepadButton) -> Bool
+
+pub fn is_any_gamepad_button_pressed(GamepadButton) -> Bool
+
 pub fn is_gamepad_button_just_pressed(Gamepad, GamepadButton) -> Bool
 
 pub fn is_gamepad_button_just_released(Gamepad, GamepadButton) -> Bool

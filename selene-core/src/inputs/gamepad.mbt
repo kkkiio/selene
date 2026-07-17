@@ -240,6 +240,17 @@ pub fn is_gamepad_button_pressed(
 }
 
 ///|
+/// Whether `button` is pressed on any connected gamepad.
+pub fn is_any_gamepad_button_pressed(button : GamepadButton) -> Bool {
+  for input in pressed_gamepad_buttons() {
+    if input.button == button && connected_gamepads().contains(input.gamepad) {
+      return true
+    }
+  }
+  false
+}
+
+///|
 pub fn is_gamepad_button_released(
   gamepad : Gamepad,
   button : GamepadButton,
@@ -256,11 +267,35 @@ pub fn is_gamepad_button_just_pressed(
 }
 
 ///|
+/// Whether `button` transitioned to pressed on any connected gamepad this
+/// frame.
+pub fn is_any_gamepad_button_just_pressed(button : GamepadButton) -> Bool {
+  for input in just_pressed_gamepad_buttons() {
+    if input.button == button && connected_gamepads().contains(input.gamepad) {
+      return true
+    }
+  }
+  false
+}
+
+///|
 pub fn is_gamepad_button_just_released(
   gamepad : Gamepad,
   button : GamepadButton,
 ) -> Bool {
   just_released_gamepad_buttons().contains(GamepadButtonInput(gamepad, button))
+}
+
+///|
+/// Whether `button` transitioned to released on any connected gamepad this
+/// frame.
+pub fn is_any_gamepad_button_just_released(button : GamepadButton) -> Bool {
+  for input in just_released_gamepad_buttons() {
+    if input.button == button && connected_gamepads().contains(input.gamepad) {
+      return true
+    }
+  }
+  false
 }
 
 ///|

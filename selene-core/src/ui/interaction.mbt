@@ -793,7 +793,7 @@ pub fn ui_interaction_system(_delta : Double) -> Unit {
     })
   }
   if @inputs.is_just_pressed(ArrowLeft) ||
-    @inputs.is_gamepad_button_just_pressed(Gamepad(0), DPadLeft) {
+    @inputs.is_any_gamepad_button_just_pressed(DPadLeft) {
     move_focus(Left)
     navigation_event_bus.send({
       entity: runtime.focused_entity,
@@ -801,7 +801,7 @@ pub fn ui_interaction_system(_delta : Double) -> Unit {
     })
   }
   if @inputs.is_just_pressed(ArrowRight) ||
-    @inputs.is_gamepad_button_just_pressed(Gamepad(0), DPadRight) {
+    @inputs.is_any_gamepad_button_just_pressed(DPadRight) {
     move_focus(Right)
     navigation_event_bus.send({
       entity: runtime.focused_entity,
@@ -809,12 +809,12 @@ pub fn ui_interaction_system(_delta : Double) -> Unit {
     })
   }
   if @inputs.is_just_pressed(ArrowUp) ||
-    @inputs.is_gamepad_button_just_pressed(Gamepad(0), DPadUp) {
+    @inputs.is_any_gamepad_button_just_pressed(DPadUp) {
     move_focus(Up)
     navigation_event_bus.send({ entity: runtime.focused_entity, direction: Up })
   }
   if @inputs.is_just_pressed(ArrowDown) ||
-    @inputs.is_gamepad_button_just_pressed(Gamepad(0), DPadDown) {
+    @inputs.is_any_gamepad_button_just_pressed(DPadDown) {
     move_focus(Down)
     navigation_event_bus.send({
       entity: runtime.focused_entity,
@@ -822,7 +822,7 @@ pub fn ui_interaction_system(_delta : Double) -> Unit {
     })
   }
   if @inputs.is_just_pressed(Escape) ||
-    @inputs.is_gamepad_button_just_pressed(Gamepad(0), East) {
+    @inputs.is_any_gamepad_button_just_pressed(East) {
     navigation_event_bus.send({
       entity: runtime.focused_entity,
       direction: Cancel,
@@ -831,7 +831,7 @@ pub fn ui_interaction_system(_delta : Double) -> Unit {
   if (
       @inputs.is_just_pressed(Enter) ||
       @inputs.is_just_pressed(Space) ||
-      @inputs.is_gamepad_button_just_pressed(Gamepad(0), South)
+      @inputs.is_any_gamepad_button_just_pressed(South)
     ) &&
     runtime.focused_entity is Some(target) &&
     is_interactive(target) {

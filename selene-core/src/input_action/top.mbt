@@ -21,6 +21,12 @@ pub(all) enum InputBinding {
     mut dead_zone~ : Double,
     mut positive~ : Bool
   )
+  AnyGamepadButton(@inputs.GamepadButton)
+  AnyGamepadAxis(
+    @inputs.GamepadAxis,
+    mut dead_zone~ : Double,
+    mut positive~ : Bool
+  )
 }
 
 ///|
@@ -142,6 +148,26 @@ fn binding_value(binding : InputBinding) -> Double {
         dead_zone,
         positive,
       )
+    AnyGamepadButton(button) =>
+      if @inputs.is_any_gamepad_button_pressed(button) {
+        1.0
+      } else {
+        0.0
+      }
+    AnyGamepadAxis(axis, dead_zone~, positive~) => {
+      let mut value = 0.0
+      for gamepad in @inputs.connected_gamepads() {
+        value = @cmp.maximum(
+          value,
+          axis_value_with_dead_zone(
+            @inputs.gamepad_axis_value(gamepad, axis),
+            dead_zone,
+            positive,
+          ),
+        )
+      }
+      value
+    }
   }
 }
 

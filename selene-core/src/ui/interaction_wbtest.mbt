@@ -65,6 +65,9 @@ fn reset_interaction_test_state() -> Unit {
   pointer_enter_event_bus.clear()
   pointer_leave_event_bus.clear()
   click_event_bus.clear()
+  navigation_event_bus.clear()
+  focus_in_event_bus.clear()
+  focus_out_event_bus.clear()
 }
 
 ///|
@@ -580,4 +583,35 @@ test "ui relative cursor positions keep normalized values outside calculated cli
 
   cleanup_interaction_test_entity(entity)
   reset_interaction_test_state()
+}
+
+///|
+test "ui gamepad navigation includes nonzero device indexes" {
+  with_ui_interaction_test_world(fn() raise {
+    reset_interaction_test_state()
+    let left = spawn_interaction_test_node({
+      position: @math.Vec2(10.0, 10.0),
+      size: @math.Vec2(40.0, 40.0),
+    })
+    let right = spawn_interaction_test_node({
+      position: @math.Vec2(70.0, 10.0),
+      size: @math.Vec2(40.0, 40.0),
+    })
+    focus(left)
+    let gamepad = @inputs.Gamepad(1)
+    let snapshot = @inputs.empty_input_snapshot()
+    snapshot.connected_gamepads.add(gamepad)
+    snapshot.pressed_gamepad_buttons.add(
+      @inputs.GamepadButtonInput(gamepad, @inputs.DPadRight),
+    )
+
+    @inputs.apply_input_snapshot(snapshot)
+    @inputs.advanced_gamepad_system(0.0)
+    ui_interaction_system(0.0)
+
+    inspect(focused_entity() == Some(right), content="true")
+    cleanup_interaction_test_entity(left)
+    cleanup_interaction_test_entity(right)
+    reset_interaction_test_state()
+  })
 }
