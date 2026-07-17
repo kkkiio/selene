@@ -26,6 +26,7 @@
 - Fixed editor project file discovery and path assertions on Windows.
 - Fixed wrapped UI text measurement so automatic heights include every rendered line.
 - Fixed UI scroll positions exceeding their content bounds or retaining stale offsets after layout changes.
+- Fixed input-action bindings and edge state leaking across ECS worlds.
 - Fixed UI navigation so gamepads at nonzero device indexes can navigate, activate, and cancel controls.
 - Fixed UI text alignment by applying inherited layout rounding to final text positions.
 - Fixed browser Tiled builds by isolating XML and directory file-system adapters from cross-platform parsing packages.

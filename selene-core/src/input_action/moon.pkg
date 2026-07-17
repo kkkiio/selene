@@ -1,4 +1,5 @@
 import {
+  "KKKIIO/selene/ecs",
   "KKKIIO/selene/event",
   "KKKIIO/selene/inputs",
   "moonbitlang/core/cmp",

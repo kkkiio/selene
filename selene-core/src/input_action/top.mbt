@@ -52,10 +52,22 @@ pub(all) struct ActionEvent {
 } derive(Eq, Debug)
 
 ///|
-let input_bindings : Map[InputAction, Array[InputBinding]] = Map([])
+priv struct InputActionWorldStore {
+  input_bindings : Map[InputAction, Array[InputBinding]]
+  action_states : Map[InputAction, ActionState]
+}
 
 ///|
-let action_states : Map[InputAction, ActionState] = Map([])
+let input_action_world_stores : Map[UInt, InputActionWorldStore] = Map([])
+
+///|
+fn input_action_world_store() -> InputActionWorldStore {
+  let world_id = @ecs.require_current_world().id()
+  input_action_world_stores.get_or_init(world_id, () => {
+    input_bindings: Map([]),
+    action_states: Map([]),
+  })
+}
 
 ///|
 pub let input_action_event_bus : @event.Events[ActionEvent] = Events()
@@ -67,11 +79,12 @@ pub fn InputAction::InputAction(name : String) -> InputAction {
 
 ///|
 pub fn bind_action(action : InputAction, binding : InputBinding) -> Unit {
-  let bindings = input_bindings.get(action).unwrap_or([])
+  let store = input_action_world_store()
+  let bindings = store.input_bindings.get(action).unwrap_or([])
   bindings.push(binding)
-  input_bindings.set(action, bindings)
-  if !action_states.contains(action) {
-    action_states.set(action, {
+  store.input_bindings.set(action, bindings)
+  if !store.action_states.contains(action) {
+    store.action_states.set(action, {
       pressed: false,
       just_pressed: false,
       just_released: false,
@@ -82,24 +95,29 @@ pub fn bind_action(action : InputAction, binding : InputBinding) -> Unit {
 
 ///|
 pub fn clear_action_bindings(action : InputAction) -> Unit {
-  input_bindings.remove(action)
-  action_states.remove(action)
+  let store = input_action_world_store()
+  store.input_bindings.remove(action)
+  store.action_states.remove(action)
 }
 
 ///|
 pub fn clear_all_action_bindings() -> Unit {
-  input_bindings.clear()
-  action_states.clear()
+  let store = input_action_world_store()
+  store.input_bindings.clear()
+  store.action_states.clear()
 }
 
 ///|
 pub fn action_pressed(action : InputAction) -> Bool {
-  action_states.get(action).map(fn(state) { state.pressed }).unwrap_or(false)
+  input_action_world_store().action_states
+  .get(action)
+  .map(fn(state) { state.pressed })
+  .unwrap_or(false)
 }
 
 ///|
 pub fn action_just_pressed(action : InputAction) -> Bool {
-  action_states
+  input_action_world_store().action_states
   .get(action)
   .map(fn(state) { state.just_pressed })
   .unwrap_or(false)
@@ -107,7 +125,7 @@ pub fn action_just_pressed(action : InputAction) -> Bool {
 
 ///|
 pub fn action_just_released(action : InputAction) -> Bool {
-  action_states
+  input_action_world_store().action_states
   .get(action)
   .map(fn(state) { state.just_released })
   .unwrap_or(false)
@@ -115,7 +133,10 @@ pub fn action_just_released(action : InputAction) -> Bool {
 
 ///|
 pub fn action_value(action : InputAction) -> Double {
-  action_states.get(action).map(fn(state) { state.value }).unwrap_or(0.0)
+  input_action_world_store().action_states
+  .get(action)
+  .map(fn(state) { state.value })
+  .unwrap_or(0.0)
 }
 
 ///|
@@ -189,8 +210,9 @@ fn axis_value_with_dead_zone(
 
 ///|
 pub fn input_action_system(_delta : Double) -> Unit {
-  for action, bindings in input_bindings {
-    let previous = action_states
+  let store = input_action_world_store()
+  for action, bindings in store.input_bindings {
+    let previous = store.action_states
       .get(action)
       .unwrap_or({
         pressed: false,
@@ -211,7 +233,7 @@ pub fn input_action_system(_delta : Double) -> Unit {
       just_released,
       value,
     }
-    action_states.set(action, next_state)
+    store.action_states.set(action, next_state)
     if just_pressed {
       input_action_event_bus.send({ action, kind: Pressed, value })
     }
