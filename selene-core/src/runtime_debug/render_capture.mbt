@@ -245,6 +245,7 @@ pub fn capture_last_frame_with_metadata(
     fixed_step_index: metadata.fixed_step_index,
     file_stem,
     png: bytes,
+    metadata,
     metadata_json: metadata.to_json().stringify(indent~),
   })
 }

@@ -27,6 +27,17 @@
 
 ### Removed
 
+## [0.36.1] - 2026-07-18
+
+### Added
+- Added structured `FrameCaptureMetadata` directly to frame capture artifacts while retaining the JSON export.
+
+### Changed
+
+### Fixed
+
+### Removed
+
 ## [0.36.0] - 2026-07-18
 
 ### Added

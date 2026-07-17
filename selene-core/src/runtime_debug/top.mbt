@@ -208,6 +208,7 @@ pub(all) struct FrameCaptureArtifact {
   fixed_step_index : UInt
   file_stem : String
   png : Bytes
+  metadata : FrameCaptureMetadata
   metadata_json : String
 } derive(Debug)
 
