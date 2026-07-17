@@ -248,6 +248,40 @@ test "load_tiled_map resolves external TSX tilesets" {
 }
 
 ///|
+test "load_tiled_map reads TSX image collection sub-images" {
+  let files : Map[String, Bytes] = Map([])
+  let demo_tmx =
+    #|<?xml version="1.0" encoding="UTF-8"?>
+    #|<map orientation="orthogonal" width="1" height="1" tilewidth="12" tileheight="20">
+    #|  <tileset firstgid="1" source="tiles/objects.tsx"/>
+    #|</map>
+    #|
+  let objects_tsx =
+    #|<?xml version="1.0" encoding="UTF-8"?>
+    #|<tileset name="objects" tilewidth="12" tileheight="20" tilecount="1" columns="0">
+    #|  <tile id="0" x="32" y="24" width="12" height="20">
+    #|    <image source="atlas.png" width="128" height="96"/>
+    #|  </tile>
+    #|</tileset>
+    #|
+  files.set("maps/demo.tmx", ascii_bytes(demo_tmx))
+  files.set("maps/tiles/objects.tsx", ascii_bytes(objects_tsx))
+  files.set("maps/tiles/atlas.png", ascii_bytes("png"))
+  with_fake_asset_io(files, fn() raise {
+    let map = load_tiled_map("maps/demo.tmx")
+    let tile = map.tilesets[0].tile_definition(0).unwrap()
+    debug_inspect(tile.image, content="Some(\"atlas.png\")")
+    debug_inspect(tile.image_width, content="Some(128)")
+    debug_inspect(tile.image_height, content="Some(96)")
+    let rect = tile.image_rect.unwrap()
+    debug_inspect(
+      [rect.x, rect.y, rect.width, rect.height],
+      content="[32, 24, 12, 20]",
+    )
+  })
+}
+
+///|
 test "load_tiled_map decodes JSON base64 tile layer data" {
   let files : Map[String, Bytes] = Map([])
   files.set(
@@ -1320,6 +1354,40 @@ test "spawn_tiled_map expands tiled animated tiles into frame timelines" {
         }
       None => inspect("not-atlas", content="not-atlas")
     }
+  })
+}
+
+///|
+test "spawn_tiled_map renders image collection sub-images from an atlas" {
+  let files : Map[String, Bytes] = Map([])
+  files.set(
+    "maps/atlas.tmj",
+    ascii_bytes(
+      "{\"width\":1,\"height\":1,\"tilewidth\":12,\"tileheight\":20,\"layers\":[{\"id\":1,\"name\":\"Ground\",\"type\":\"tilelayer\",\"width\":1,\"height\":1,\"data\":[1]}],\"tilesets\":[{\"firstgid\":1,\"name\":\"objects\",\"tilewidth\":12,\"tileheight\":20,\"tilecount\":1,\"columns\":0,\"tiles\":[{\"id\":0,\"image\":\"atlas.png\",\"imagewidth\":128,\"imageheight\":96,\"x\":32,\"y\":24,\"width\":12,\"height\":20}]}]}",
+    ),
+  )
+  files.set("maps/atlas.png", ascii_bytes("png"))
+  with_fake_asset_io(files, fn() raise {
+    let root = load_and_spawn_tiled_map("maps/atlas.tmj")
+    defer cleanup_spawned_tiled_tree(root)
+    let tile_entity = tiled_tile_instances()
+      .to_array()
+      .filter(fn(pair) { pair.1.map_entity == root })[0].0
+    guard @sprite.sprites().get(tile_entity) is Some(sprite) else {
+      inspect("missing-sprite", content="missing-sprite")
+      return
+    }
+    guard sprite.texture_atlas is Some(atlas) else {
+      inspect("missing-atlas", content="missing-atlas")
+      return
+    }
+    guard @sprite.texture_atlas_layout(atlas.layout) is Some(layout) else {
+      inspect("missing-layout", content="missing-layout")
+      return
+    }
+    inspect(vec2_snapshot(layout.size), content="128,96")
+    inspect(vec2_snapshot(layout.rects[0].position), content="32,24")
+    inspect(vec2_snapshot(layout.rects[0].size), content="12,20")
   })
 }
 

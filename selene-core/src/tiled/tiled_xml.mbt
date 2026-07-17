@@ -401,11 +401,25 @@ fn parse_tiled_xml_tileset(
 
 ///|
 fn parse_tiled_xml_tile_definition(node : TiledXmlNode) -> TiledTileDefinition {
+  let image = xml_child(node, "image")
   {
     id: xml_int_attr(node, "id").unwrap_or(0),
     object_type: xml_attr(node, "type"),
     class_name: xml_attr(node, "class"),
-    image: xml_child(node, "image").bind(fn(img) { xml_attr(img, "source") }),
+    image: image.bind(fn(img) { xml_attr(img, "source") }),
+    image_width: image.bind(fn(img) { xml_int_attr(img, "width") }),
+    image_height: image.bind(fn(img) { xml_int_attr(img, "height") }),
+    image_rect: match
+      (xml_int_attr(node, "width"), xml_int_attr(node, "height")) {
+      (Some(width), Some(height)) =>
+        Some({
+          x: xml_int_attr(node, "x").unwrap_or(0),
+          y: xml_int_attr(node, "y").unwrap_or(0),
+          width,
+          height,
+        })
+      _ => None
+    },
     probability: xml_double_attr(node, "probability"),
     animation: parse_tiled_xml_tile_animation_frames(node),
     properties: parse_tiled_xml_properties(node),

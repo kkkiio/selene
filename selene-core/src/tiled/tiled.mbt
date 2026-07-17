@@ -148,11 +148,22 @@ pub struct TiledAnimationFrame {
 }
 
 ///|
+pub struct TiledImageRect {
+  x : Int
+  y : Int
+  width : Int
+  height : Int
+}
+
+///|
 pub struct TiledTileDefinition {
   id : Int
   object_type : String?
   class_name : String?
   image : String?
+  image_width : Int?
+  image_height : Int?
+  image_rect : TiledImageRect?
   probability : Double?
   animation : Array[TiledAnimationFrame]
   properties : Array[TiledProperty]
@@ -1062,6 +1073,19 @@ fn parse_tile_definitions(tiles_json : Json?) -> Array[TiledTileDefinition] {
       object_type: field_string(tile_object, "type"),
       class_name: field_string(tile_object, "class"),
       image: field_string(tile_object, "image"),
+      image_width: field_int(tile_object, "imagewidth"),
+      image_height: field_int(tile_object, "imageheight"),
+      image_rect: match
+        (field_int(tile_object, "width"), field_int(tile_object, "height")) {
+        (Some(width), Some(height)) =>
+          Some({
+            x: field_int(tile_object, "x").unwrap_or(0),
+            y: field_int(tile_object, "y").unwrap_or(0),
+            width,
+            height,
+          })
+        _ => None
+      },
       probability: field_number(tile_object, "probability"),
       animation: parse_tile_animation_frames(
         field_json(tile_object, "animation"),

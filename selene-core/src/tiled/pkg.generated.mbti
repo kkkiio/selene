@@ -176,6 +176,13 @@ pub struct TiledImageLayerSpawnedEvent {
   resolved_image_path : String?
 }
 
+pub struct TiledImageRect {
+  x : Int
+  y : Int
+  width : Int
+  height : Int
+}
+
 pub struct TiledLayer {
   id : Int
   name : String
@@ -394,6 +401,9 @@ pub struct TiledTileDefinition {
   object_type : String?
   class_name : String?
   image : String?
+  image_width : Int?
+  image_height : Int?
+  image_rect : TiledImageRect?
   probability : Double?
   animation : Array[TiledAnimationFrame]
   properties : Array[TiledProperty]

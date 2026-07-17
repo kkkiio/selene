@@ -693,7 +693,7 @@ fn build_tiled_tile_animation(
   }
   if tileset.tile_definition(local_id) is Some(tile) &&
     tile.animation.length() > 0 {
-    let (image, rects, fps) = tiled_animation_frames_from_definition(
+    let (image, rects, image_size, fps) = tiled_animation_frames_from_definition(
       map,
       tileset,
       tile.animation,
@@ -703,7 +703,7 @@ fn build_tiled_tile_animation(
       return Some({
         image,
         layout: @sprite.register_texture_atlas_layout({
-          size: tiled_layout_size(rects),
+          size: image_size,
           rects,
         }),
         fps,
@@ -724,7 +724,7 @@ fn build_tiled_tile_animation(
   Some({
     image: first.0,
     layout: @sprite.register_texture_atlas_layout({
-      size: tiled_layout_size([first.1]),
+      size: first.2,
       rects: [first.1],
     }),
     fps: 0.0,
@@ -741,8 +741,8 @@ fn tiled_animation_frames_from_definition(
   tileset : TiledTileset,
   animation : Array[TiledAnimationFrame],
   frame_size : @math.Vec2,
-) -> (@asset.ImageHandle?, Array[@math.Rect], Double) {
-  let visuals : Array[(@asset.ImageHandle, @math.Rect)] = []
+) -> (@asset.ImageHandle?, Array[@math.Rect], @math.Vec2, Double) {
+  let visuals : Array[(@asset.ImageHandle, @math.Rect, @math.Vec2)] = []
   let step_ms = tiled_animation_step_ms(animation)
   for animated_frame in animation {
     let duration_ms = if animated_frame.duration_ms > 0 {
@@ -770,7 +770,7 @@ fn tiled_animation_frames_from_definition(
     }
   }
   if visuals.length() == 0 {
-    return (None, [], 1000.0 / step_ms.to_double())
+    return (None, [], @math.Vec2::zero(), 1000.0 / step_ms.to_double())
   }
   let first_image = visuals[0].0
   let rects : Array[@math.Rect] = []
@@ -778,11 +778,11 @@ fn tiled_animation_frames_from_definition(
     if visual.0 != first_image {
       rects.clear()
       rects.push(visuals[0].1)
-      return (Some(first_image), rects, 0.0)
+      return (Some(first_image), rects, visuals[0].2, 0.0)
     }
     rects.push(visual.1)
   }
-  (Some(first_image), rects, 1000.0 / step_ms.to_double())
+  (Some(first_image), rects, visuals[0].2, 1000.0 / step_ms.to_double())
 }
 
 ///|
@@ -825,17 +825,29 @@ fn tiled_visual_regions_for_local_tile(
   tileset : TiledTileset,
   local_id : Int,
   frame_size : @math.Vec2,
-) -> Array[(@asset.ImageHandle, @math.Rect)] {
+) -> Array[(@asset.ImageHandle, @math.Rect, @math.Vec2)] {
   if local_id < 0 || frame_size[X] <= 0.0 || frame_size[Y] <= 0.0 {
     return []
   }
   if tileset.tile_definition(local_id) is Some(tile) {
     if tile.image is Some(image_path) {
       let resolved_path = map.resolve_tileset_asset_path(tileset, image_path)
+      let rect : @math.Rect = match tile.image_rect {
+        Some(rect) =>
+          {
+            position: @math.Vec2(rect.x.to_double(), rect.y.to_double()),
+            size: @math.Vec2(rect.width.to_double(), rect.height.to_double()),
+          }
+        None => { position: @math.Vec2::zero(), size: frame_size }
+      }
       return [
         (
           load_tiled_image(resolved_path),
-          { position: @math.Vec2::zero(), size: frame_size },
+          rect,
+          @math.Vec2(
+            tile.image_width.unwrap_or(rect.size[X].to_int()).to_double(),
+            tile.image_height.unwrap_or(rect.size[Y].to_int()).to_double(),
+          ),
         ),
       ]
     }
@@ -850,28 +862,14 @@ fn tiled_visual_regions_for_local_tile(
     (
       load_tiled_image(resolved_path),
       { position: source_offset, size: frame_size },
+      @math.Vec2(
+        tileset.image_width.unwrap_or(frame_size[X].to_int()).to_double(),
+        tileset.image_height.unwrap_or(frame_size[Y].to_int()).to_double(),
+      ),
     ),
   ]
 }
 
-///|
-fn tiled_layout_size(rects : Array[@math.Rect]) -> @math.Vec2 {
-  let mut max_x = 0.0
-  let mut max_y = 0.0
-  for rect in rects {
-    let right = rect.position[X] + rect.size[X]
-    let bottom = rect.position[Y] + rect.size[Y]
-    if right > max_x {
-      max_x = right
-    }
-    if bottom > max_y {
-      max_y = bottom
-    }
-  }
-  Vec2(max_x, max_y)
-}
-
-///|
 fn tiled_tileset_source_offset(
   map : TiledMap,
   tileset : TiledTileset,

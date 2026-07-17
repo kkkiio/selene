@@ -4,6 +4,7 @@
 
 ### Added
 - Added any-gamepad button queries and input-action bindings for controller-agnostic gameplay.
+- Added Tiled 1.9 image-collection sub-image parsing and rendering for packed texture atlases.
 
 ### Changed
 - Clarified fork maintenance, upstream contribution, toolchain, and runtime-only release rules.
