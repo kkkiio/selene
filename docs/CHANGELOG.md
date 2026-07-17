@@ -3,11 +3,8 @@
 ## [Unreleased]
 
 ### Added
-- Added any-gamepad button queries and input-action bindings for controller-agnostic gameplay.
-- Added Tiled 1.9 image-collection sub-image parsing and rendering for packed texture atlases.
 
 ### Changed
-- Clarified fork maintenance, upstream contribution, toolchain, and runtime-only release rules.
 
 ### Fixed
 
@@ -27,25 +24,24 @@
 - Fixed editor project file discovery and path assertions on Windows.
 - Fixed wrapped UI text measurement so automatic heights include every rendered line.
 - Fixed UI scroll positions exceeding their content bounds or retaining stale offsets after layout changes.
-- Fixed input-action bindings and edge state leaking across ECS worlds.
-- Fixed UI navigation so gamepads at nonzero device indexes can navigate, activate, and cancel controls.
-- Fixed UI text alignment by applying inherited layout rounding to final text positions.
-- Fixed browser Tiled builds by isolating XML and directory file-system adapters from cross-platform parsing packages.
 
 ### Removed
 
-## [0.36.0] - 2026-07-16
+## [0.36.0] - 2026-07-18
 
 ### Added
 - Added 3D collider wireframe debug rendering through the debug plugin and render3d pipeline.
 - Added `capture_frame_indexes` to `App::run_frames_capture` so tests can capture selected frames.
 - Added `collision/is_hover`, rich UI text spans, and UI image source regions for Maple runtime integration.
+- Added any-gamepad button queries and input-action bindings for controller-agnostic gameplay.
+- Added Tiled 1.9 image-collection sub-image parsing and rendering for packed texture atlases.
 
 ### Changed
 - Changed embedded shader/source strings to use MoonBit multiline string syntax instead of `\n` string concatenation.
 - Changed redundant qualifiers and ambiguous empty-map literals to satisfy the current MoonBit nightly warning checks.
 - Changed UI pointer interaction and capture to consume one normalized mouse/touch/pen event stream.
 - Changed runtime module ownership to the `KKKIIO` namespace and limited fork releases to `selene`, `selene_webgpu`, and `selene_raylib`.
+- Clarified fork maintenance, upstream contribution, toolchain, and runtime-only release rules.
 
 ### Fixed
 - Fixed core and example tests to use in-memory asset fixtures without emitting false missing-asset diagnostics.
@@ -56,6 +52,35 @@
 - Fixed Tiled map, physics, and world spawn settings so external packages can configure hooks and options with record updates.
 - Fixed Tiled and LDtk loading to decode asset bytes as UTF-8 before parsing text map sources.
 - Fixed Tiled parallax origins and image-layer dimensions across TMJ/TMX loading, spawning, and per-camera rendering.
+- Fixed input-action bindings and edge state leaking across ECS worlds.
+- Fixed UI navigation so gamepads at nonzero device indexes can navigate, activate, and cancel controls.
+- Fixed UI text alignment by applying inherited layout rounding to final text positions.
+- Fixed browser Tiled builds by isolating XML and directory file-system adapters from cross-platform parsing packages.
+
+### Removed
+
+## [0.35.1] - 2026-07-16
+
+### Added
+- Added 3D collider wireframe debug rendering through the debug plugin and render3d pipeline.
+- Added `capture_frame_indexes` to `App::run_frames_capture` so tests can capture selected frames.
+- Added strict offscreen graphics capture test APIs with async artifact waiting and multi-shot frame sequences.
+- Added render-ready asset waiting with backend preload/status hooks for graphics tests.
+- Added `collision/is_hover`, rich UI text spans, UI image source regions, and explicit Tiled source-path assignment for Maple runtime integration.
+
+### Changed
+- Changed embedded shader/source strings to use MoonBit multiline string syntax instead of `\n` string concatenation.
+- Changed strict offscreen graphics capture to use unnamed 0-based absolute frame indexes.
+- Changed frame capture artifacts to carry structured metadata alongside the existing JSON export.
+- Changed WebGPU offscreen capture to render the supplied frame at the requested capture size.
+- Changed runtime module ownership to the `KKKIIO` namespace and limited fork releases to `selene`, `selene_webgpu`, and `selene_raylib`.
+
+### Fixed
+- Fixed Tiled and LDtk loading to decode asset bytes as UTF-8 before parsing text map sources.
+- Fixed Tiled map spawning to preserve map parallax origins and image-layer dimensions from TMJ/TMX files.
+- Fixed raylib offscreen render captures so exported PNGs match the rendered vertical orientation.
+- Fixed `TiledSpawnSettings` so external packages can configure Tiled spawn hooks with record updates.
+- Fixed ambiguous empty-Map literals so runtime release checks stay warning-free on current MoonBit toolchains.
 
 ### Removed
 
