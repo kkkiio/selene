@@ -496,6 +496,11 @@ fn cleanup_dead_ui_state() -> Unit {
       tab_indexes().remove(pair.0)
     }
   }
+  for pair in navigation_links().to_array() {
+    if !pair.0.is_alive() {
+      navigation_links().remove(pair.0)
+    }
+  }
   for pair in focus_policies().to_array() {
     if !pair.0.is_alive() {
       focus_policies().remove(pair.0)

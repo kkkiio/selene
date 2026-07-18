@@ -418,11 +418,15 @@ pub fn TextLayout::TextLayout(
 ///|
 pub(all) struct Button {
   enabled : Bool
+  focusable : Bool
 } derive(Eq, Debug)
 
 ///|
-pub fn Button::Button(enabled? : Bool = true) -> Button {
-  { enabled, }
+pub fn Button::Button(
+  enabled? : Bool = true,
+  focusable? : Bool = true,
+) -> Button {
+  { enabled, focusable }
 }
 
 ///|

@@ -147,6 +147,8 @@ pub fn material_nodes() -> Map[@entity.Entity, MaterialNode]
 
 pub let navigation_event_bus : @event.Events[UiNavigationEvent]
 
+pub fn navigation_links() -> Map[@entity.Entity, UiNavigationLinks]
+
 pub fn nodes() -> Map[@entity.Entity, Node]
 
 pub fn outlines() -> Map[@entity.Entity, Outline]
@@ -273,8 +275,9 @@ pub fn BoxShadow::single(@render.Color, x_offset? : Val, y_offset? : Val, spread
 
 pub(all) struct Button {
   enabled : Bool
+  focusable : Bool
 } derive(Eq, @debug.Debug)
-pub fn Button::Button(enabled? : Bool) -> Self
+pub fn Button::Button(enabled? : Bool, focusable? : Bool) -> Self
 
 pub(all) struct CalculatedClip {
   clip : @math.Rect
@@ -652,6 +655,20 @@ pub(all) struct UiNavigationEvent {
   entity : @entity.Entity?
   direction : UiNavigationDirection
 }
+
+pub(all) struct UiNavigationLinks {
+  up : UiNavigationRule
+  down : UiNavigationRule
+  left : UiNavigationRule
+  right : UiNavigationRule
+} derive(Eq, @debug.Debug)
+pub fn UiNavigationLinks::UiNavigationLinks(up? : UiNavigationRule, down? : UiNavigationRule, left? : UiNavigationRule, right? : UiNavigationRule) -> Self
+
+pub(all) enum UiNavigationRule {
+  Auto
+  Stop
+  Explicit(@entity.Entity)
+} derive(Eq, @debug.Debug)
 
 pub(all) struct UiPointerDownEvent {
   entity : @entity.Entity

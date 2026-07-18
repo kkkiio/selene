@@ -224,10 +224,9 @@ fn is_interactive(entity : @entity.Entity) -> Bool {
 
 ///|
 fn is_focusable(entity : @entity.Entity) -> Bool {
-  if is_interactive(entity) {
-    true
-  } else {
-    focusables().contains(entity)
+  match buttons().get(entity) {
+    Some(button) => button.enabled && button.focusable
+    None => focusables().contains(entity)
   }
 }
 
@@ -336,6 +335,31 @@ fn move_focus(direction : UiNavigationDirection) -> Unit {
   if !global_ui_nodes().contains(current) {
     focus(entities[0])
     return
+  }
+  match navigation_links().get(current) {
+    Some(links) => {
+      let rule = match direction {
+        Up => links.up
+        Down => links.down
+        Left => links.left
+        Right => links.right
+        Activate | Cancel => Auto
+      }
+      match rule {
+        Stop => return
+        Explicit(target) => {
+          if target.is_alive() &&
+            global_ui_nodes().contains(target) &&
+            is_focusable(target) &&
+            @visibility.is_visible(target) {
+            focus(target)
+          }
+          return
+        }
+        Auto => ()
+      }
+    }
+    None => ()
   }
   let current_center = rect_center(
     global_ui_nodes().get(current).unwrap().screen_rect,

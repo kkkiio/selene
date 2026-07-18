@@ -19,6 +19,7 @@ fn cleanup_interaction_test_entity(entity : @entity.Entity) -> Unit {
   global_zindexes().remove(entity)
   scroll_positions().remove(entity)
   tab_indexes().remove(entity)
+  navigation_links().remove(entity)
   focus_policies().remove(entity)
   focusables().remove(entity)
   focuseds().remove(entity)
@@ -218,6 +219,67 @@ test "ui mouse click uses the unified pointer event stream" {
       interactions().get(entity).unwrap_or(None) == Hovered,
       content="true",
     )
+
+    cleanup_interaction_test_entity(entity)
+    reset_interaction_test_state()
+  })
+}
+
+///|
+test "ui pointer ignores clipped descendants outside a scroll viewport" {
+  with_ui_interaction_test_world(fn() raise {
+    reset_interaction_test_state()
+    let viewport = @entity.Entity()
+    let child = viewport.spawn_child()
+    nodes().set(
+      viewport,
+      Node::absolute(
+        Vec2(0.0, 0.0),
+        size=Vec2(100.0, 100.0),
+        overflow_x=Hidden,
+        overflow_y=Scroll,
+      ),
+    )
+    nodes().set(child, Node::absolute(Vec2(0.0, 80.0), size=Vec2(100.0, 40.0)))
+    buttons().set(child, Button())
+    ui_layout_system(0.0)
+    let outside_viewport = @math.Vec2(20.0, 110.0)
+    let click_reader : @event.EventReader[UiClickEvent] = EventReader()
+
+    apply_ui_mouse_frame(outside_viewport, true)
+    ui_interaction_system(0.0)
+    apply_ui_mouse_frame(outside_viewport, false)
+    ui_interaction_system(0.0)
+
+    inspect(calculated_clips().contains(child), content="true")
+    inspect(click_event_bus.read(click_reader).length(), content="0")
+    inspect(focused_entity() is None, content="true")
+
+    cleanup_interaction_test_entity(child)
+    cleanup_interaction_test_entity(viewport)
+    reset_interaction_test_state()
+  })
+}
+
+///|
+test "ui pointer-only button clicks without taking focus" {
+  with_ui_interaction_test_world(fn() raise {
+    reset_interaction_test_state()
+    let entity = spawn_interaction_test_node({
+      position: Vec2(100.0, 50.0),
+      size: Vec2(80.0, 40.0),
+    })
+    buttons().set(entity, Button(focusable=false))
+    let position = @math.Vec2(120.0, 70.0)
+    let click_reader : @event.EventReader[UiClickEvent] = EventReader()
+
+    apply_ui_mouse_frame(position, true)
+    ui_interaction_system(0.0)
+    apply_ui_mouse_frame(position, false)
+    ui_interaction_system(0.0)
+
+    inspect(click_event_bus.read(click_reader).length(), content="1")
+    inspect(focused_entity() is None, content="true")
 
     cleanup_interaction_test_entity(entity)
     reset_interaction_test_state()
@@ -612,6 +674,53 @@ test "ui gamepad navigation includes nonzero device indexes" {
     inspect(focused_entity() == Some(right), content="true")
     cleanup_interaction_test_entity(left)
     cleanup_interaction_test_entity(right)
+    reset_interaction_test_state()
+  })
+}
+
+///|
+test "ui directional navigation supports explicit stop and auto rules" {
+  with_ui_interaction_test_world(fn() raise {
+    reset_interaction_test_state()
+    let current = spawn_interaction_test_node({
+      position: @math.Vec2(10.0, 10.0),
+      size: @math.Vec2(40.0, 40.0),
+    })
+    let automatic = spawn_interaction_test_node({
+      position: @math.Vec2(10.0, 70.0),
+      size: @math.Vec2(40.0, 40.0),
+    })
+    let explicit = spawn_interaction_test_node({
+      position: @math.Vec2(200.0, 200.0),
+      size: @math.Vec2(40.0, 40.0),
+    })
+
+    focus(current)
+    navigation_links().set(current, UiNavigationLinks(down=Explicit(explicit)))
+    move_focus(Down)
+    inspect(focused_entity() == Some(explicit), content="true")
+
+    focus(current)
+    navigation_links().set(current, UiNavigationLinks(down=Stop))
+    move_focus(Down)
+    inspect(focused_entity() == Some(current), content="true")
+
+    focus(current)
+    navigation_links().set(current, UiNavigationLinks())
+    move_focus(Down)
+    inspect(focused_entity() == Some(automatic), content="true")
+
+    tab_indexes().set(current, TabIndex(0))
+    tab_indexes().set(automatic, TabIndex(1))
+    tab_indexes().set(explicit, TabIndex(2))
+    focus(current)
+    navigation_links().set(current, UiNavigationLinks(right=Stop))
+    move_focus_by_tab(false)
+    inspect(focused_entity() == Some(automatic), content="true")
+
+    cleanup_interaction_test_entity(current)
+    cleanup_interaction_test_entity(automatic)
+    cleanup_interaction_test_entity(explicit)
     reset_interaction_test_state()
   })
 }

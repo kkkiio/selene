@@ -695,6 +695,37 @@ pub fn TabIndex::TabIndex(value : Int) -> TabIndex {
 }
 
 ///|
+/// Describes how focus moves from one UI entity in a cardinal direction.
+/// `Auto` keeps geometric navigation, `Stop` holds focus, and `Explicit`
+/// targets a specific entity.
+pub(all) enum UiNavigationRule {
+  Auto
+  Stop
+  Explicit(@entity.Entity)
+} derive(Eq, Debug)
+
+///|
+/// Defines optional cardinal focus rules for one UI entity.
+pub(all) struct UiNavigationLinks {
+  up : UiNavigationRule
+  down : UiNavigationRule
+  left : UiNavigationRule
+  right : UiNavigationRule
+} derive(Eq, Debug)
+
+///|
+/// Creates cardinal focus rules, defaulting each unconfigured direction to
+/// geometric navigation.
+pub fn UiNavigationLinks::UiNavigationLinks(
+  up? : UiNavigationRule = Auto,
+  down? : UiNavigationRule = Auto,
+  left? : UiNavigationRule = Auto,
+  right? : UiNavigationRule = Auto,
+) -> UiNavigationLinks {
+  { up, down, left, right }
+}
+
+///|
 pub(all) enum FocusPolicy {
   Block
   Pass
@@ -761,6 +792,7 @@ priv struct UiModelWorldStore {
   global_zindexes : Map[@entity.Entity, GlobalZIndex]
   scroll_positions : Map[@entity.Entity, ScrollPosition]
   tab_indexes : Map[@entity.Entity, TabIndex]
+  navigation_links : Map[@entity.Entity, UiNavigationLinks]
   focus_policies : Map[@entity.Entity, FocusPolicy]
   focusables : Map[@entity.Entity, Focusable]
   focuseds : Map[@entity.Entity, Focused]
@@ -787,6 +819,7 @@ fn ui_model_world_store() -> UiModelWorldStore {
     global_zindexes: Map([]),
     scroll_positions: Map([]),
     tab_indexes: Map([]),
+    navigation_links: Map([]),
     focus_policies: Map([]),
     focusables: Map([]),
     focuseds: Map([]),
@@ -849,6 +882,12 @@ pub fn scroll_positions() -> Map[@entity.Entity, ScrollPosition] {
 ///|
 pub fn tab_indexes() -> Map[@entity.Entity, TabIndex] {
   ui_model_world_store().tab_indexes
+}
+
+///|
+/// Returns cardinal focus rules keyed by their source UI entity.
+pub fn navigation_links() -> Map[@entity.Entity, UiNavigationLinks] {
+  ui_model_world_store().navigation_links
 }
 
 ///|

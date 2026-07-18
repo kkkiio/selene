@@ -870,6 +870,7 @@ fn tiled_visual_regions_for_local_tile(
   ]
 }
 
+///|
 fn tiled_tileset_source_offset(
   map : TiledMap,
   tileset : TiledTileset,
