@@ -10,6 +10,18 @@
 
 ### Removed
 
+## [0.37.2] - 2026-07-22
+
+### Added
+
+### Changed
+- Changed the fork runtime packages to use the `Milky2018/chicle@0.6.0` UI
+  layout backend shipped by upstream 0.37.0.
+
+### Fixed
+
+### Removed
+
 ## [0.37.1] - 2026-07-22
 
 ### Added
