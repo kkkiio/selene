@@ -4,6 +4,7 @@ package "KKKIIO/selene/asset"
 import {
   "KKKIIO/selene/asset_types",
   "KKKIIO/selene/event",
+  "KKKIIO/selene/math",
   "moonbitlang/core/debug",
 }
 
@@ -27,6 +28,8 @@ pub fn font_path(@asset_types.FontHandle) -> String?
 pub let image_asset_events : @event.Events[AssetEvent[@asset_types.ImageHandle]]
 
 pub fn image_load_state(@asset_types.ImageHandle) -> LoadState
+
+pub fn image_metadata(@asset_types.ImageHandle) -> ImageMetadata?
 
 pub fn image_path(@asset_types.ImageHandle) -> String?
 
@@ -66,6 +69,10 @@ pub(all) enum AssetEventKind {
   Removed
   Loaded
   Failed(String)
+} derive(Eq, @debug.Debug)
+
+pub(all) struct ImageMetadata {
+  size : @math.Vec2
 } derive(Eq, @debug.Debug)
 
 pub(all) enum LoadState {

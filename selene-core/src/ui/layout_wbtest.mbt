@@ -32,6 +32,17 @@ fn cleanup_layout_test_entity(entity : @entity.Entity) -> Unit {
 }
 
 ///|
+fn layout_test_png_bytes(width : UInt, height : UInt) -> Bytes {
+  let buffer = @buffer.Buffer()
+  buffer.write_bytes(b"\x89PNG\r\n\x1a\n")
+  buffer.write_uint_be(13U)
+  buffer.write_bytes(b"IHDR")
+  buffer.write_uint_be(width)
+  buffer.write_uint_be(height)
+  buffer.contents()
+}
+
+///|
 test "ui nodes map flex wrap and align content into wrapped layout" {
   let chicle : @tree.ChicleTree[Unit] = ChicleTree()
   let mk_child = fn() {
@@ -166,6 +177,170 @@ test "ui layout uses wrapped text height in the computed node" {
     content="Vec2(60, 32)",
   )
   cleanup_layout_test_entity(entity)
+}
+
+///|
+test "ui image measurement uses metadata source regions and aspect ratio" {
+  let source = Ref(layout_test_png_bytes(80U, 40U))
+  @asset.set_io(fn(path : String) -> Bytes? {
+    if path == "assets/ui-intrinsic.png" {
+      Some(source.val)
+    } else {
+      None
+    }
+  })
+  let handle = @asset.load_image("assets/ui-intrinsic.png")
+  let entity = @entity.Entity()
+  ui_images().set(entity, UiImage::from_image(handle))
+  let max_content : @geometry.Size[@geometry.AvailableSpace] = Size(
+    width=@style_helpers.max_content(),
+    height=@style_helpers.max_content(),
+  )
+
+  let automatic = measure_node(
+    Size(width=None, height=None),
+    max_content,
+    0,
+    Some(entity),
+    node_to_chicle_style(Node()),
+  )
+
+  let width_only = measure_node(
+    Size(width=Some(120.0), height=None),
+    max_content,
+    0,
+    Some(entity),
+    node_to_chicle_style(Node(width=Val::px(120.0))),
+  )
+
+  let width_with_padding = measure_node(
+    Size(width=Some(120.0), height=None),
+    max_content,
+    0,
+    Some(entity),
+    node_to_chicle_style(
+      Node(
+        width=Val::px(120.0),
+        padding=UiRectValues::px(left=10.0, right=10.0),
+      ),
+    ),
+  )
+
+  let height_only = measure_node(
+    Size(width=None, height=Some(30.0)),
+    max_content,
+    0,
+    Some(entity),
+    node_to_chicle_style(Node(height=Val::px(30.0))),
+  )
+
+  let explicit_ratio = measure_node(
+    Size(width=Some(120.0), height=None),
+    max_content,
+    0,
+    Some(entity),
+    node_to_chicle_style(Node(width=Val::px(120.0), aspect_ratio=Some(4.0))),
+  )
+  debug_inspect(
+    [
+      @math.Vec2(automatic.width, automatic.height),
+      @math.Vec2(width_only.width, width_only.height),
+      @math.Vec2(width_with_padding.width, width_with_padding.height),
+      @math.Vec2(height_only.width, height_only.height),
+      @math.Vec2(explicit_ratio.width, explicit_ratio.height),
+    ],
+    content=(
+      #|[
+      #|  Vec2(80, 40),
+      #|  Vec2(120, 60),
+      #|  Vec2(120, 50),
+      #|  Vec2(60, 30),
+      #|  Vec2(120, 30),
+      #|]
+    ),
+  )
+
+  ui_images().set(
+    entity,
+    UiImage::from_image(
+      handle,
+      source=Some({ position: @math.Vec2::zero(), size: @math.Vec2(16.0, 12.0) }),
+    ),
+  )
+  let region = measure_node(
+    Size(width=None, height=None),
+    max_content,
+    0,
+    Some(entity),
+    node_to_chicle_style(Node()),
+  )
+  debug_inspect(@math.Vec2(region.width, region.height), content="Vec2(16, 12)")
+
+  ui_images().set(entity, UiImage::from_image(handle))
+  source.val = layout_test_png_bytes(40U, 80U)
+  @asset.reload_image(handle)
+  let reloaded = measure_node(
+    Size(width=None, height=None),
+    max_content,
+    0,
+    Some(entity),
+    node_to_chicle_style(Node()),
+  )
+
+  nodes().set(
+    entity,
+    Node(
+      width=Val::px(120.0),
+      position_type=Absolute,
+      left=Val::px(0.0),
+      top=Val::px(0.0),
+    ),
+  )
+  ui_layout_system(0.0)
+  debug_inspect(
+    [
+      @math.Vec2(reloaded.width, reloaded.height),
+      computed_ui_nodes().get(entity).unwrap().size,
+    ],
+    content="[Vec2(40, 80), Vec2(120, 240)]",
+  )
+
+  cleanup_layout_test_entity(entity)
+  @asset.remove_image(handle)
+  @asset.set_io(fn(_path : String) -> Bytes? { None })
+}
+
+///|
+test "failed ui image has a stable zero intrinsic size" {
+  @asset.set_io(fn(_path : String) -> Bytes? { None })
+  let handle = @asset.load_image("assets/ui-intrinsic-missing.png")
+  let entity = @entity.Entity()
+  ui_images().set(entity, UiImage::from_image(handle))
+  let measured = measure_node(
+    Size(width=None, height=None),
+    Size(
+      width=@style_helpers.max_content(),
+      height=@style_helpers.max_content(),
+    ),
+    0,
+    Some(entity),
+    node_to_chicle_style(Node()),
+  )
+
+  debug_inspect(
+    (
+      @asset.image_load_state(handle),
+      @math.Vec2(measured.width, measured.height),
+    ),
+    content=(
+      #|(
+      #|  Failed("Missing image asset: assets/ui-intrinsic-missing.png"),
+      #|  Vec2(0, 0),
+      #|)
+    ),
+  )
+  cleanup_layout_test_entity(entity)
+  @asset.remove_image(handle)
 }
 
 ///|

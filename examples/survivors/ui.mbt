@@ -185,14 +185,7 @@ fn set_button_enabled(entity : @entity.Entity, enabled : Bool) -> Unit {
 
 ///|
 fn set_icon_image(entity : @entity.Entity, path : String) -> Unit {
-  @ui.ui_images().set(
-    entity,
-    UiImage(
-      Vec2(LEVELUP_BUTTON_ICON_SIZE, LEVELUP_BUTTON_ICON_SIZE),
-      path,
-      fit=Contain,
-    ),
-  )
+  @ui.ui_images().set(entity, UiImage(path, fit=Contain))
 }
 
 ///|

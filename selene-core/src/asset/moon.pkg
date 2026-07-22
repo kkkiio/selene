@@ -1,7 +1,12 @@
 import {
   "KKKIIO/selene/asset_types",
   "KKKIIO/selene/event",
+  "KKKIIO/selene/math",
   "KKKIIO/selene/platform_audio",
   "KKKIIO/selene/platform_asset_io",
   "KKKIIO/selene/platform_render",
 }
+
+import {
+  "moonbitlang/core/buffer",
+} for "wbtest"

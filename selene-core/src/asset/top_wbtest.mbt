@@ -17,6 +17,17 @@ fn asset_test_bytes() -> Bytes {
 }
 
 ///|
+fn asset_test_png_bytes(width : UInt, height : UInt) -> Bytes {
+  let buffer = @buffer.Buffer()
+  buffer.write_bytes(b"\x89PNG\r\n\x1a\n")
+  buffer.write_uint_be(13U)
+  buffer.write_bytes(b"IHDR")
+  buffer.write_uint_be(width)
+  buffer.write_uint_be(height)
+  buffer.contents()
+}
+
+///|
 fn asset_test_load_state_is_loaded(state : LoadState) -> Bool {
   match state {
     Loaded => true
@@ -145,6 +156,48 @@ test "reload_image emits modified and remove_image resets load state" {
     inspect(
       asset_test_load_state_is_not_loaded(image_load_state(handle)),
       content="true",
+    )
+  })
+}
+
+///|
+test "image metadata follows image load reload and removal" {
+  with_asset_test_world(fn() raise {
+    let source = Ref(asset_test_png_bytes(80U, 40U))
+    set_io(fn(path : String) -> Bytes? {
+      if path == "assets/metadata.png" {
+        Some(source.val)
+      } else {
+        None
+      }
+    })
+    let handle = load_image("assets/metadata.png")
+    debug_inspect(
+      image_metadata(handle),
+      content="Some({ size: Vec2(80, 40) })",
+    )
+
+    source.val = asset_test_png_bytes(24U, 48U)
+    reload_image(handle)
+    debug_inspect(
+      image_metadata(handle),
+      content="Some({ size: Vec2(24, 48) })",
+    )
+
+    source.val = asset_test_bytes()
+    reload_image(handle)
+    debug_inspect(
+      (image_load_state(handle), image_metadata(handle)),
+      content="(Loaded, None)",
+    )
+
+    source.val = asset_test_png_bytes(12U, 6U)
+    reload_image(handle)
+    debug_inspect(image_metadata(handle), content="Some({ size: Vec2(12, 6) })")
+    remove_image(handle)
+    debug_inspect(
+      (image_load_state(handle), image_metadata(handle)),
+      content="(NotLoaded, None)",
     )
   })
 }

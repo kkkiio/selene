@@ -390,8 +390,8 @@ test "ui image source region is forwarded to render command" {
   ui_images().set(
     entity,
     UiImage(
-      @math.Vec2(80.0, 40.0),
       "assets/survivors/icon/powerup_speed.png",
+      fit=Contain,
       source=Some({
         position: @math.Vec2(4.0, 8.0),
         size: @math.Vec2(16.0, 12.0),
@@ -410,7 +410,9 @@ test "ui image source region is forwarded to render command" {
         source.position[X] == 4.0 &&
         source.position[Y] == 8.0 &&
         source.size[X] == 16.0 &&
-        source.size[Y] == 12.0
+        source.size[Y] == 12.0 &&
+        command.destination.size[X] < rect.size[X] &&
+        command.destination.size[Y] == rect.size[Y]
       _ => false
     },
     content="true",

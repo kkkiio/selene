@@ -3,6 +3,8 @@
 ## [Unreleased]
 
 ### Added
+- Added intrinsic sizing for UI images from loaded image metadata and source
+  regions, including aspect-ratio-preserving single-axis layout.
 - Added explicit and stopping cardinal focus-navigation rules for complex UI layouts.
 - Added pointer-only UI buttons that can receive clicks without joining keyboard
   or gamepad focus navigation.

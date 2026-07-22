@@ -657,23 +657,27 @@ fn push_outline(
 
 ///|
 fn fitted_image_rect(container : @math.Rect, image : UiImage) -> @math.Rect {
+  let intrinsic_size = image.intrinsic_size()
   match image.fit {
     Stretch => container
-    None => { position: container.position, size: image.size }
+    None => { position: container.position, size: intrinsic_size }
     Contain => {
       let scale = @cmp.minimum(
-        if image.size[X] <= 0.0 {
+        if intrinsic_size[X] <= 0.0 {
           1.0
         } else {
-          container.size[X] / image.size[X]
+          container.size[X] / intrinsic_size[X]
         },
-        if image.size[Y] <= 0.0 {
+        if intrinsic_size[Y] <= 0.0 {
           1.0
         } else {
-          container.size[Y] / image.size[Y]
+          container.size[Y] / intrinsic_size[Y]
         },
       )
-      let size = @math.Vec2(image.size[X] * scale, image.size[Y] * scale)
+      let size = @math.Vec2(
+        intrinsic_size[X] * scale,
+        intrinsic_size[Y] * scale,
+      )
       {
         position: Vec2(
           container.position[X] + (container.size[X] - size[X]) / 2.0,
@@ -684,18 +688,21 @@ fn fitted_image_rect(container : @math.Rect, image : UiImage) -> @math.Rect {
     }
     Cover => {
       let scale = @cmp.maximum(
-        if image.size[X] <= 0.0 {
+        if intrinsic_size[X] <= 0.0 {
           1.0
         } else {
-          container.size[X] / image.size[X]
+          container.size[X] / intrinsic_size[X]
         },
-        if image.size[Y] <= 0.0 {
+        if intrinsic_size[Y] <= 0.0 {
           1.0
         } else {
-          container.size[Y] / image.size[Y]
+          container.size[Y] / intrinsic_size[Y]
         },
       )
-      let size = @math.Vec2(image.size[X] * scale, image.size[Y] * scale)
+      let size = @math.Vec2(
+        intrinsic_size[X] * scale,
+        intrinsic_size[Y] * scale,
+      )
       {
         position: Vec2(
           container.position[X] + (container.size[X] - size[X]) / 2.0,

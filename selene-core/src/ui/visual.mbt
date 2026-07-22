@@ -122,7 +122,6 @@ pub(all) enum ImageFit {
 
 ///|
 pub(all) struct UiImage {
-  size : @math.Vec2
   image : @asset.ImageHandle
   tint : @render.Color
   fit : ImageFit
@@ -131,24 +130,35 @@ pub(all) struct UiImage {
 
 ///|
 pub fn UiImage::from_image(
-  size : @math.Vec2,
   image : @asset.ImageHandle,
   tint? : @render.Color = rgba(255, 255, 255, 1.0),
   fit? : ImageFit = Stretch,
   source? : @render2d_types.ImageRegion2D? = None,
 ) -> UiImage {
-  { size, image, tint, fit, source }
+  { image, tint, fit, source }
 }
 
 ///|
 pub fn UiImage::UiImage(
-  size : @math.Vec2,
   path : String,
   tint? : @render.Color = rgba(255, 255, 255, 1.0),
   fit? : ImageFit = Stretch,
   source? : @render2d_types.ImageRegion2D? = None,
 ) -> UiImage {
-  UiImage::from_image(size, @asset.load_image(path), tint~, fit~, source~)
+  UiImage::from_image(@asset.load_image(path), tint~, fit~, source~)
+}
+
+///|
+pub fn UiImage::intrinsic_size(self : UiImage) -> @math.Vec2 {
+  let size = match self.source {
+    Some(source) => source.size
+    None =>
+      match @asset.image_metadata(self.image) {
+        Some(metadata) => metadata.size
+        None => @math.Vec2::zero()
+      }
+  }
+  @math.Vec2(@cmp.maximum(0.0, size[X]), @cmp.maximum(0.0, size[Y]))
 }
 
 ///|
@@ -237,26 +247,24 @@ pub fn UiMaterialAsset::from_ui_image(image : UiImage) -> UiMaterialAsset {
 
 ///|
 pub fn UiMaterialAsset::from_image(
-  size : @math.Vec2,
   image : @asset.ImageHandle,
   tint? : @render.Color = rgba(255, 255, 255, 1.0),
   fit? : ImageFit = Stretch,
   source? : @render2d_types.ImageRegion2D? = None,
 ) -> UiMaterialAsset {
   UiMaterialAsset::from_ui_image(
-    UiImage::from_image(size, image, tint~, fit~, source~),
+    UiImage::from_image(image, tint~, fit~, source~),
   )
 }
 
 ///|
 pub fn UiMaterialAsset::UiMaterialAsset(
-  size : @math.Vec2,
   path : String,
   tint? : @render.Color = rgba(255, 255, 255, 1.0),
   fit? : ImageFit = Stretch,
   source? : @render2d_types.ImageRegion2D? = None,
 ) -> UiMaterialAsset {
-  UiMaterialAsset::from_ui_image(UiImage(size, path, tint~, fit~, source~))
+  UiMaterialAsset::from_ui_image(UiImage(path, tint~, fit~, source~))
 }
 
 ///|

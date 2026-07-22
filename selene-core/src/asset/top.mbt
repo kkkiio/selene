@@ -8,6 +8,11 @@ pub type AudioHandle = @asset_types.AudioHandle
 pub type FontHandle = @asset_types.FontHandle
 
 ///|
+pub(all) struct ImageMetadata {
+  size : @math.Vec2
+} derive(Eq, Debug)
+
+///|
 pub(all) enum LoadState {
   NotLoaded
   Loading
@@ -67,6 +72,9 @@ let font_path_by_handle : Map[FontHandle, String] = Map([])
 let image_states : Map[ImageHandle, LoadState] = Map([])
 
 ///|
+let image_metadata_by_handle : Map[ImageHandle, ImageMetadata] = Map([])
+
+///|
 let audio_states : Map[AudioHandle, LoadState] = Map([])
 
 ///|
@@ -115,6 +123,22 @@ fn ensure_image_handle(path : String) -> ImageHandle {
 }
 
 ///|
+fn decode_image_metadata(bytes : Bytes) -> ImageMetadata? {
+  match bytes {
+    [
+      .. b"\x89PNG\r\n\x1a\n",
+      u32be(13),
+      .. b"IHDR",
+      u32be(width),
+      u32be(height),
+      ..,
+    ] if width > 0U && height > 0U =>
+      Some({ size: @math.Vec2(width.to_double(), height.to_double()) })
+    _ => None
+  }
+}
+
+///|
 fn ensure_audio_handle(path : String) -> AudioHandle {
   if audios_by_path.get(path) is Some(handle) {
     return handle
@@ -152,7 +176,11 @@ pub fn load_image(path : String) -> ImageHandle {
     image_asset_events.send({ handle, kind: Added })
   }
   image_states.set(handle, Loading)
-  if read_bytes(path) is Some(_) {
+  image_metadata_by_handle.remove(handle)
+  if read_bytes(path) is Some(bytes) {
+    if decode_image_metadata(bytes) is Some(metadata) {
+      image_metadata_by_handle.set(handle, metadata)
+    }
     image_states.set(handle, Loaded)
     image_asset_events.send({ handle, kind: Loaded })
   } else {
@@ -161,6 +189,11 @@ pub fn load_image(path : String) -> ImageHandle {
     image_asset_events.send({ handle, kind: Failed(reason) })
   }
   handle
+}
+
+///|
+pub fn image_metadata(handle : ImageHandle) -> ImageMetadata? {
+  image_metadata_by_handle.get(handle)
 }
 
 ///|
@@ -254,7 +287,11 @@ pub fn reload_image(handle : ImageHandle) -> Unit {
   match image_path(handle) {
     Some(path) => {
       image_states.set(handle, Loading)
-      if read_bytes(path) is Some(_) {
+      image_metadata_by_handle.remove(handle)
+      if read_bytes(path) is Some(bytes) {
+        if decode_image_metadata(bytes) is Some(metadata) {
+          image_metadata_by_handle.set(handle, metadata)
+        }
         image_states.set(handle, Loaded)
         image_asset_events.send({ handle, kind: Modified })
       } else {
@@ -308,6 +345,7 @@ pub fn reload_font(handle : FontHandle) -> Unit {
 pub fn remove_image(handle : ImageHandle) -> Unit {
   if image_states.get(handle) is Some(_) {
     image_states.remove(handle)
+    image_metadata_by_handle.remove(handle)
     image_asset_events.send({ handle, kind: Removed })
   }
 }

@@ -598,14 +598,14 @@ pub(all) struct UiGradient {
 pub fn UiGradient::UiGradient(@render.Color, @render.Color) -> Self
 
 pub(all) struct UiImage {
-  size : @math.Vec2
   image : @asset_types.ImageHandle
   tint : @render.Color
   fit : ImageFit
   source : @render2d_types.ImageRegion2D?
 } derive(Eq, @debug.Debug)
-pub fn UiImage::UiImage(@math.Vec2, String, tint? : @render.Color, fit? : ImageFit, source? : @render2d_types.ImageRegion2D?) -> Self
-pub fn UiImage::from_image(@math.Vec2, @asset_types.ImageHandle, tint? : @render.Color, fit? : ImageFit, source? : @render2d_types.ImageRegion2D?) -> Self
+pub fn UiImage::UiImage(String, tint? : @render.Color, fit? : ImageFit, source? : @render2d_types.ImageRegion2D?) -> Self
+pub fn UiImage::from_image(@asset_types.ImageHandle, tint? : @render.Color, fit? : ImageFit, source? : @render2d_types.ImageRegion2D?) -> Self
+pub fn UiImage::intrinsic_size(Self) -> @math.Vec2
 
 pub(all) struct UiInsets {
   left : Double
@@ -624,9 +624,9 @@ pub fn UiLayoutSpace::UiLayoutSpace(@math.Rect, target_camera? : @entity.Entity?
 pub(all) struct UiMaterialAsset {
   draw : (UiMaterialContext) -> Unit
 }
-pub fn UiMaterialAsset::UiMaterialAsset(@math.Vec2, String, tint? : @render.Color, fit? : ImageFit, source? : @render2d_types.ImageRegion2D?) -> Self
+pub fn UiMaterialAsset::UiMaterialAsset(String, tint? : @render.Color, fit? : ImageFit, source? : @render2d_types.ImageRegion2D?) -> Self
 pub fn UiMaterialAsset::from_draw((UiMaterialContext) -> Unit) -> Self
-pub fn UiMaterialAsset::from_image(@math.Vec2, @asset_types.ImageHandle, tint? : @render.Color, fit? : ImageFit, source? : @render2d_types.ImageRegion2D?) -> Self
+pub fn UiMaterialAsset::from_image(@asset_types.ImageHandle, tint? : @render.Color, fit? : ImageFit, source? : @render2d_types.ImageRegion2D?) -> Self
 pub fn UiMaterialAsset::from_ui_image(UiImage) -> Self
 pub fn UiMaterialAsset::gradient(@render.Color, @render.Color) -> Self
 pub fn UiMaterialAsset::solid(@render.Color) -> Self

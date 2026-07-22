@@ -300,20 +300,12 @@ fn hurt_sound() -> @audio.AudioHandle {
 
 ///|
 fn volume_on_ui_image() -> @ui.UiImage {
-  UiImage(
-    Vec2(21.0, 22.0),
-    "assets/pixeladventure/Menu/Buttons/Volume.png",
-    fit=Contain,
-  )
+  UiImage("assets/pixeladventure/Menu/Buttons/Volume.png", fit=Contain)
 }
 
 ///|
 fn volume_off_ui_image() -> @ui.UiImage {
-  UiImage(
-    Vec2(21.0, 22.0),
-    "assets/pixeladventure/Menu/Buttons/VolumeOff.png",
-    fit=Contain,
-  )
+  UiImage("assets/pixeladventure/Menu/Buttons/VolumeOff.png", fit=Contain)
 }
 
 ///|

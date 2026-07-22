@@ -336,7 +336,44 @@ fn measure_node(
     )
     (prepared.width, prepared.height)
   } else if ui_images().get(entity) is Some(image) {
-    (image.size[X], image.size[Y])
+    let intrinsic = image.intrinsic_size()
+    let width_basis = known_dimensions.width.unwrap_or(
+      match available.width {
+        AvailDefinite(width) => width
+        _ => 0.0
+      },
+    )
+    let horizontal_inset = @util.resolve_dimension_width_basis(
+        style.padding.left,
+        width_basis,
+      ) +
+      @util.resolve_dimension_width_basis(style.padding.right, width_basis) +
+      @util.resolve_dimension_width_basis(style.border.left, width_basis) +
+      @util.resolve_dimension_width_basis(style.border.right, width_basis)
+    let vertical_inset = @util.resolve_dimension_width_basis(
+        style.padding.top,
+        width_basis,
+      ) +
+      @util.resolve_dimension_width_basis(style.padding.bottom, width_basis) +
+      @util.resolve_dimension_width_basis(style.border.top, width_basis) +
+      @util.resolve_dimension_width_basis(style.border.bottom, width_basis)
+    let known_content_width = known_dimensions.width.map(fn(width) {
+      @cmp.maximum(0.0, width - horizontal_inset)
+    })
+    let known_content_height = known_dimensions.height.map(fn(height) {
+      @cmp.maximum(0.0, height - vertical_inset)
+    })
+    let aspect_ratio = match style.aspect_ratio {
+      Some(ratio) if ratio > 0.0 => Some(ratio)
+      _ if intrinsic[X] > 0.0 && intrinsic[Y] > 0.0 =>
+        Some(intrinsic[X] / intrinsic[Y])
+      _ => None
+    }
+    match (known_content_width, known_content_height, aspect_ratio) {
+      (Some(width), None, Some(ratio)) => (width, width / ratio)
+      (None, Some(height), Some(ratio)) => (height * ratio, height)
+      _ => (intrinsic[X], intrinsic[Y])
+    }
   } else {
     (0.0, 0.0)
   }
