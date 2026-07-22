@@ -3,6 +3,16 @@
 ## [Unreleased]
 
 ### Added
+
+### Changed
+
+### Fixed
+
+### Removed
+
+## [0.37.1] - 2026-07-22
+
+### Added
 - Added intrinsic sizing for UI images from loaded image metadata and source
   regions, including aspect-ratio-preserving single-axis layout.
 - Added explicit and stopping cardinal focus-navigation rules for complex UI layouts.
