@@ -1,9 +1,9 @@
 name = "KKKIIO/selene_webgpu"
 
-version = "0.37.1"
+version = "0.37.2"
 
 import {
-  "KKKIIO/selene@0.37.1",
+  "KKKIIO/selene@0.37.2",
   "Milky2018/moon_cosmic@0.3.3",
   "moonbit-community/js-ffi@0.4.2",
   "moonbit-community/rabbita@0.12.4",

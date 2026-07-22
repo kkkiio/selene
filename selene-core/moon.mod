@@ -1,6 +1,6 @@
 name = "KKKIIO/selene"
 
-version = "0.37.1"
+version = "0.37.2"
 
 import {
   "Milky2018/moon_rapier@0.5.1",
