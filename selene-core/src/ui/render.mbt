@@ -848,12 +848,7 @@ fn prepared_text_lines(
     Some(cached) => return cached.copy()
     None => ()
   }
-  let lines = prepare_text_layout(
-    text.content,
-    style,
-    layout,
-    available_width,
-  ).lines
+  let lines = prepare_text_layout(text.content, style, layout, available_width).lines
   cache.prepared_lines.set(cache_key, lines.copy())
   lines
 }
