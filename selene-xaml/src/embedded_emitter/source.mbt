@@ -251,7 +251,7 @@ fn emit_view_source(
     $|  DeadEntity
     $|  DuplicateKey(String, String)
     $|  InvalidPatch(String)
-    $|  Host(@ui_host.HostError)
+    $|  Host(@ui_view.HostError)
     $|} derive(Eq, Debug)
     $|
     $|///|
@@ -280,7 +280,7 @@ fn emit_view_source(
   emit_view_runtime(output, plan, analysis)
   let specs_signature = "fn generated_specs(state : " +
     analysis.state.name +
-    ") -> Array[@ui_host.NodeSpec] raise " +
+    ") -> Array[@ui_view.NodeSpec] raise " +
     plan.identity.view_name +
     "Error {"
   if specs_signature.length() <= 81 {
@@ -290,10 +290,10 @@ fn emit_view_source(
       $|///|
       $|fn generated_specs(
       $|  state : \{analysis.state.name},
-      $|) -> Array[@ui_host.NodeSpec] raise \{plan.identity.view_name}Error {
+      $|) -> Array[@ui_view.NodeSpec] raise \{plan.identity.view_name}Error {
       $|
   }
-  output <+ "  let nodes : Array[@ui_host.NodeSpec] = []\n"
+  output <+ "  let nodes : Array[@ui_view.NodeSpec] = []\n"
   let serial = [0]
   emit_plan_specs(
     output,
@@ -351,7 +351,7 @@ fn emit_view_runtime(
     $|}
     $|
     $|///|
-    $|fn generated_contains(specs : Array[@ui_host.NodeSpec], key : String) -> Bool {
+    $|fn generated_contains(specs : Array[@ui_view.NodeSpec], key : String) -> Bool {
     $|  for spec in specs {
     $|    if spec.key == key {
     $|      return true
@@ -362,7 +362,7 @@ fn emit_view_runtime(
     $|
     $|///|
     $|fn generated_parent_index(
-    $|  specs : Array[@ui_host.NodeSpec],
+    $|  specs : Array[@ui_view.NodeSpec],
     $|  parent : String?,
     $|  key : String,
     $|) -> Int {
@@ -380,21 +380,21 @@ fn emit_view_runtime(
     $|
     $|///|
     $|fn generated_diff(
-    $|  previous : Array[@ui_host.NodeSpec],
-    $|  desired : Array[@ui_host.NodeSpec],
-    $|) -> Array[@ui_host.TreeMutation] {
+    $|  previous : Array[@ui_view.NodeSpec],
+    $|  desired : Array[@ui_view.NodeSpec],
+    $|) -> Array[@ui_view.TreeMutation] {
     $|  if previous == desired {
     $|    return []
     $|  }
-    $|  let previous_by_key : Map[String, @ui_host.NodeSpec] = Map([])
-    $|  let desired_by_key : Map[String, @ui_host.NodeSpec] = Map([])
+    $|  let previous_by_key : Map[String, @ui_view.NodeSpec] = Map([])
+    $|  let desired_by_key : Map[String, @ui_view.NodeSpec] = Map([])
     $|  for spec in previous {
     $|    previous_by_key[spec.key] = spec
     $|  }
     $|  for spec in desired {
     $|    desired_by_key[spec.key] = spec
     $|  }
-    $|  let mutations : Array[@ui_host.TreeMutation] = []
+    $|  let mutations : Array[@ui_view.TreeMutation] = []
     $|  for spec in previous {
     $|    if !desired_by_key.contains(spec.key) {
     $|      let removed_root = match spec.parent {
@@ -402,18 +402,18 @@ fn emit_view_runtime(
     $|        None => true
     $|      }
     $|      if removed_root {
-    $|        mutations.push(@ui_host.TreeMutation::Remove(spec.key))
+    $|        mutations.push(@ui_view.TreeMutation::Remove(spec.key))
     $|      }
     $|    }
     $|  }
     $|  for spec in desired {
     $|    match previous_by_key.get(spec.key) {
     $|      None => {
-    $|        mutations.push(@ui_host.TreeMutation::Mount(spec))
+    $|        mutations.push(@ui_view.TreeMutation::Mount(spec))
     $|        match spec.parent {
     $|          Some(parent) =>
     $|            mutations.push(
-    $|              @ui_host.TreeMutation::Move(
+    $|              @ui_view.TreeMutation::Move(
     $|                spec.key,
     $|                parent,
     $|                generated_parent_index(desired, spec.parent, spec.key),
@@ -429,7 +429,7 @@ fn emit_view_runtime(
     $|        match spec.parent {
     $|          Some(parent) if moved =>
     $|            mutations.push(
-    $|              @ui_host.TreeMutation::Move(
+    $|              @ui_view.TreeMutation::Move(
     $|                spec.key,
     $|                parent,
     $|                generated_parent_index(desired, spec.parent, spec.key),
@@ -451,25 +451,25 @@ fn emit_view_runtime(
     $|          },
     $|        }
     $|        if precise_old != spec {
-    $|          mutations.push(@ui_host.TreeMutation::Update(spec))
+    $|          mutations.push(@ui_view.TreeMutation::Update(spec))
     $|        } else {
     $|          if old.text != spec.text {
-    $|            mutations.push(@ui_host.TreeMutation::SetText(spec.key, spec.text))
+    $|            mutations.push(@ui_view.TreeMutation::SetText(spec.key, spec.text))
     $|          }
     $|          if old.source != spec.source {
-    $|            mutations.push(@ui_host.TreeMutation::SetSource(spec.key, spec.source))
+    $|            mutations.push(@ui_view.TreeMutation::SetSource(spec.key, spec.source))
     $|          }
     $|          if old.style.background != spec.style.background {
-    $|            mutations.push(@ui_host.TreeMutation::SetBackground(spec.key, spec.style.background))
+    $|            mutations.push(@ui_view.TreeMutation::SetBackground(spec.key, spec.style.background))
     $|          }
     $|          if old.active != spec.active {
-    $|            mutations.push(@ui_host.TreeMutation::SetActive(spec.key, spec.active))
+    $|            mutations.push(@ui_view.TreeMutation::SetActive(spec.key, spec.active))
     $|          }
     $|          if old.enabled != spec.enabled {
-    $|            mutations.push(@ui_host.TreeMutation::SetEnabled(spec.key, spec.enabled))
+    $|            mutations.push(@ui_view.TreeMutation::SetEnabled(spec.key, spec.enabled))
     $|          }
     $|          if old.style.top != spec.style.top {
-    $|            mutations.push(@ui_host.TreeMutation::SetTop(spec.key, spec.style.top))
+    $|            mutations.push(@ui_view.TreeMutation::SetTop(spec.key, spec.style.top))
     $|          }
     $|        }
     $|      }
@@ -486,7 +486,7 @@ fn emit_view_runtime(
     $|priv struct GeneratedViewRecord {
     $|  mut model : \{analysis.model_type.type_name}
     $|  mut view_model : \{analysis.view_model_type.type_name}
-    $|  mut specs : Array[@ui_host.NodeSpec]
+    $|  mut specs : Array[@ui_view.NodeSpec]
     $|}
     $|
     $|///|
@@ -503,7 +503,7 @@ fn emit_view_runtime(
     $|
     $|///|
     $|let generated_event_reader : @event.EventReader[
-    $|  @component_host.UiComponentEvent,
+    $|  @ui_view.UiViewEvent,
     $|] = @event.EventReader()
     $|
     $|
@@ -592,7 +592,7 @@ fn emit_plan_specs(
         }
         None => output <+ "\{padding}  parent: None,\n"
       }
-      output <+ "\{padding}  kind: @ui_host.NodeKind::\{kind},\n"
+      output <+ "\{padding}  kind: @ui_view.NodeKind::\{kind},\n"
       output <+ "\{padding}  text: "
       emit_typed_value(
         output,
@@ -842,7 +842,7 @@ fn emit_plan_specs(
             "generated property does not support Binding: Align", span,
           )
       }
-      output <+ ",\n\{padding}    align: @ui_host.TextAlign::\{align},\n"
+      output <+ ",\n\{padding}    align: @ui_view.TextAlign::\{align},\n"
       let wrap = match property_map.get("Wrap") {
         None => false
         Some(Literal(@viewir.IRConstant::EnumValue("NoWrap"), _)) => false
@@ -881,7 +881,7 @@ fn emit_plan_specs(
             "generated property does not support Binding: Fit", span,
           )
       }
-      output <+ ",\n\{padding}    fit: @ui_host.ImageFit::\{fit},\n"
+      output <+ ",\n\{padding}    fit: @ui_view.ImageFit::\{fit},\n"
       let direction = match property_map.get("Direction") {
         None | Some(Literal(@viewir.IRConstant::EnumValue("Column"), _)) =>
           "Column"
@@ -900,7 +900,7 @@ fn emit_plan_specs(
           )
       }
       output <+
-        "\{padding}    direction: @ui_host.FlexDirection::\{direction},\n"
+        "\{padding}    direction: @ui_view.FlexDirection::\{direction},\n"
       output <+ "\{padding}    flex_basis: "
       emit_layout_value(
         output,
@@ -1234,14 +1234,14 @@ fn emit_embedded_visual_state_groups(
             }
             match target_type {
               "String" => {
-                output <+ "@ui_host.VisualStateValue::StringValue("
+                output <+ "@ui_view.VisualStateValue::StringValue("
                 emit_mapped_binding(
                   output, mappings, analysis, scope_type, receiver, id, span, "string",
                 )
                 output <+ ")"
               }
               "Bool" => {
-                output <+ "@ui_host.VisualStateValue::BoolValue("
+                output <+ "@ui_view.VisualStateValue::BoolValue("
                 emit_mapped_binding(
                   output, mappings, analysis, scope_type, receiver, id, span, "bool",
                 )
@@ -1249,21 +1249,21 @@ fn emit_embedded_visual_state_groups(
               }
               "LayoutValue" => {
                 output <+
-                  "@ui_host.VisualStateValue::LayoutValueValue(@ui_host.LayoutValue::Px("
+                  "@ui_view.VisualStateValue::LayoutValueValue(@ui_view.LayoutValue::Px("
                 emit_mapped_binding(
                   output, mappings, analysis, scope_type, receiver, id, span, "number",
                 )
                 output <+ "))"
               }
               "Int" => {
-                output <+ "@ui_host.VisualStateValue::IntValue("
+                output <+ "@ui_view.VisualStateValue::IntValue("
                 emit_mapped_binding(
                   output, mappings, analysis, scope_type, receiver, id, span, "int",
                 )
                 output <+ ")"
               }
               _ => {
-                output <+ "@ui_host.VisualStateValue::DoubleValue("
+                output <+ "@ui_view.VisualStateValue::DoubleValue("
                 emit_mapped_binding(
                   output, mappings, analysis, scope_type, receiver, id, span, "number",
                 )
@@ -1275,28 +1275,28 @@ fn emit_embedded_visual_state_groups(
             match constant {
               @viewir.IRConstant::StringValue(value) =>
                 output <+
-                  "@ui_host.VisualStateValue::StringValue(\{value.escape()})"
+                  "@ui_view.VisualStateValue::StringValue(\{value.escape()})"
               @viewir.IRConstant::BoolValue(value) =>
-                output <+ "@ui_host.VisualStateValue::BoolValue(\{value})"
+                output <+ "@ui_view.VisualStateValue::BoolValue(\{value})"
               @viewir.IRConstant::DoubleValue(value) =>
-                output <+ "@ui_host.VisualStateValue::DoubleValue(\{value})"
+                output <+ "@ui_view.VisualStateValue::DoubleValue(\{value})"
               @viewir.IRConstant::IntValue(value) =>
-                output <+ "@ui_host.VisualStateValue::IntValue(\{value})"
+                output <+ "@ui_view.VisualStateValue::IntValue(\{value})"
               @viewir.IRConstant::LayoutValue(value) => {
-                output <+ "@ui_host.VisualStateValue::LayoutValueValue("
+                output <+ "@ui_view.VisualStateValue::LayoutValueValue("
                 match value {
                   @viewir.IRLayoutValue::Auto =>
-                    output <+ "@ui_host.LayoutValue::Auto"
+                    output <+ "@ui_view.LayoutValue::Auto"
                   @viewir.IRLayoutValue::Px(number) =>
-                    output <+ "@ui_host.LayoutValue::Px(\{number})"
+                    output <+ "@ui_view.LayoutValue::Px(\{number})"
                   @viewir.IRLayoutValue::Percent(number) =>
-                    output <+ "@ui_host.LayoutValue::Percent(\{number})"
+                    output <+ "@ui_view.LayoutValue::Percent(\{number})"
                 }
                 output <+ ")"
               }
               @viewir.IRConstant::EnumValue(value) =>
                 output <+
-                  "@ui_host.VisualStateValue::StringValue(\{value.escape()})"
+                  "@ui_view.VisualStateValue::StringValue(\{value.escape()})"
               @viewir.IRConstant::RectValue(_, _, _, _) =>
                 raise @viewir.ViewIRError::Unsupported(
                   "VisualState does not support Rect setter values",
@@ -1344,21 +1344,21 @@ fn emit_layout_value(
   value : EmbeddedValue?,
 ) -> Unit raise @viewir.ViewIRError {
   match value {
-    None => output <+ "@ui_host.LayoutValue::Auto"
+    None => output <+ "@ui_view.LayoutValue::Auto"
     Some(Literal(@viewir.IRConstant::LayoutValue(layout), _)) =>
       match layout {
-        @viewir.IRLayoutValue::Auto => output <+ "@ui_host.LayoutValue::Auto"
+        @viewir.IRLayoutValue::Auto => output <+ "@ui_view.LayoutValue::Auto"
         @viewir.IRLayoutValue::Px(value) =>
-          output <+ "@ui_host.LayoutValue::Px(\{value})"
+          output <+ "@ui_view.LayoutValue::Px(\{value})"
         @viewir.IRLayoutValue::Percent(value) =>
-          output <+ "@ui_host.LayoutValue::Percent(\{value})"
+          output <+ "@ui_view.LayoutValue::Percent(\{value})"
       }
     Some(Literal(_, span)) =>
       raise @viewir.ViewIRError::Unsupported(
         "layout property requires a typed layout constant", span,
       )
     Some(Binding(path, span)) => {
-      output <+ "@ui_host.LayoutValue::Px("
+      output <+ "@ui_view.LayoutValue::Px("
       emit_mapped_binding(
         output, mappings, schema, scope_type, receiver, path, span, "number",
       )
@@ -1561,7 +1561,7 @@ fn emit_view_methods(
     #|  }
     #|  let view_model = generated_compute_view_model(model)
     #|  let desired = generated_specs(view_model)
-    #|  let host = @component_host.SeleneHost::new()
+    #|  let host = @ui_view.ViewHost::new()
     #|  host.mount(entity, desired) catch {
     #|    error => raise Host(error)
     #|  }
@@ -1600,7 +1600,7 @@ fn emit_view_methods(
     #|  let desired = generated_specs(view_model)
     #|  let mutations = generated_diff(record.specs, desired)
     #|  if mutations.length() > 0 {
-    #|    let host = @component_host.SeleneHost::new()
+    #|    let host = @ui_view.ViewHost::new()
     #|    host.apply(entity, mutations) catch {
     #|      error => raise Host(error)
     #|    }
@@ -1615,7 +1615,7 @@ fn emit_view_methods(
     Some(patch) => emit_apply_method(output, plan, analysis, patch)
     None => ()
   }
-  let event_signature = "fn generated_handle_event(record : GeneratedViewRecord, event : @ui_host.UiEvent) -> " +
+  let event_signature = "fn generated_handle_event(record : GeneratedViewRecord, event : @ui_view.UiEvent) -> " +
     plan.identity.view_name +
     "Action? {"
   if event_signature.length() <= 81 {
@@ -1625,7 +1625,7 @@ fn emit_view_methods(
       $|///|
       $|fn generated_handle_event(
       $|  record : GeneratedViewRecord,
-      $|  event : @ui_host.UiEvent,
+      $|  event : @ui_view.UiEvent,
       $|) -> \{plan.identity.view_name}Action? {
       $|
   }
@@ -1636,7 +1636,7 @@ fn emit_view_methods(
     #|
   for route in routes {
     output.write_string(
-      "  if event.kind == @ui_host.UiEventKind::" + route.event_kind + " {\n",
+      "  if event.kind == @ui_view.UiEventKind::" + route.event_kind + " {\n",
     )
     match route.collection_path {
       Some(path) => {
@@ -1735,7 +1735,7 @@ fn emit_view_methods(
     $|  for entity in dead {
     $|    generated_view_records.remove(entity)
     $|  }
-    $|  for raw in generated_event_reader.read(@component_host.component_event_bus) {
+    $|  for raw in generated_event_reader.read(@ui_view.view_event_bus) {
     $|    match generated_view_records.get(raw.entity) {
     $|      Some(record) =>
     $|        match generated_handle_event(record, raw.event) {
@@ -1750,7 +1750,7 @@ fn emit_view_methods(
     $|///|
     $|pub fn plugin(app : @app.App) -> @app.App {
     $|  app
-    $|  .add_plugin(@component_host.plugin)
+    $|  .add_plugin(@ui_view.plugin)
     $|  .add_message(action_event_bus)
     $|  .add_system(
     $|    @system.PostUpdate,

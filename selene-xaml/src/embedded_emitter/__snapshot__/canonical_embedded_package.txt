@@ -6,8 +6,7 @@ import {
   "KKKIIO/selene/entity",
   "KKKIIO/selene/event",
   "KKKIIO/selene/system",
-  "KKKIIO/selene_xaml_runtime/component_host",
-  "KKKIIO/selene_xaml_runtime/ui_host",
+  "KKKIIO/selene/ui_view",
   "moonbitlang/core/string",
 }
 
@@ -38,7 +37,7 @@ pub(all) suberror DemoViewError {
   DeadEntity
   DuplicateKey(String, String)
   InvalidPatch(String)
-  Host(@ui_host.HostError)
+  Host(@ui_view.HostError)
 } derive(Eq, Debug)
 
 ///|
@@ -89,7 +88,7 @@ fn generated_rect_component(
 }
 
 ///|
-fn generated_contains(specs : Array[@ui_host.NodeSpec], key : String) -> Bool {
+fn generated_contains(specs : Array[@ui_view.NodeSpec], key : String) -> Bool {
   for spec in specs {
     if spec.key == key {
       return true
@@ -100,7 +99,7 @@ fn generated_contains(specs : Array[@ui_host.NodeSpec], key : String) -> Bool {
 
 ///|
 fn generated_parent_index(
-  specs : Array[@ui_host.NodeSpec],
+  specs : Array[@ui_view.NodeSpec],
   parent : String?,
   key : String,
 ) -> Int {
@@ -118,21 +117,21 @@ fn generated_parent_index(
 
 ///|
 fn generated_diff(
-  previous : Array[@ui_host.NodeSpec],
-  desired : Array[@ui_host.NodeSpec],
-) -> Array[@ui_host.TreeMutation] {
+  previous : Array[@ui_view.NodeSpec],
+  desired : Array[@ui_view.NodeSpec],
+) -> Array[@ui_view.TreeMutation] {
   if previous == desired {
     return []
   }
-  let previous_by_key : Map[String, @ui_host.NodeSpec] = Map([])
-  let desired_by_key : Map[String, @ui_host.NodeSpec] = Map([])
+  let previous_by_key : Map[String, @ui_view.NodeSpec] = Map([])
+  let desired_by_key : Map[String, @ui_view.NodeSpec] = Map([])
   for spec in previous {
     previous_by_key[spec.key] = spec
   }
   for spec in desired {
     desired_by_key[spec.key] = spec
   }
-  let mutations : Array[@ui_host.TreeMutation] = []
+  let mutations : Array[@ui_view.TreeMutation] = []
   for spec in previous {
     if !desired_by_key.contains(spec.key) {
       let removed_root = match spec.parent {
@@ -140,18 +139,18 @@ fn generated_diff(
         None => true
       }
       if removed_root {
-        mutations.push(@ui_host.TreeMutation::Remove(spec.key))
+        mutations.push(@ui_view.TreeMutation::Remove(spec.key))
       }
     }
   }
   for spec in desired {
     match previous_by_key.get(spec.key) {
       None => {
-        mutations.push(@ui_host.TreeMutation::Mount(spec))
+        mutations.push(@ui_view.TreeMutation::Mount(spec))
         match spec.parent {
           Some(parent) =>
             mutations.push(
-              @ui_host.TreeMutation::Move(
+              @ui_view.TreeMutation::Move(
                 spec.key,
                 parent,
                 generated_parent_index(desired, spec.parent, spec.key),
@@ -167,7 +166,7 @@ fn generated_diff(
         match spec.parent {
           Some(parent) if moved =>
             mutations.push(
-              @ui_host.TreeMutation::Move(
+              @ui_view.TreeMutation::Move(
                 spec.key,
                 parent,
                 generated_parent_index(desired, spec.parent, spec.key),
@@ -189,19 +188,19 @@ fn generated_diff(
           },
         }
         if precise_old != spec {
-          mutations.push(@ui_host.TreeMutation::Update(spec))
+          mutations.push(@ui_view.TreeMutation::Update(spec))
         } else {
           if old.text != spec.text {
-            mutations.push(@ui_host.TreeMutation::SetText(spec.key, spec.text))
+            mutations.push(@ui_view.TreeMutation::SetText(spec.key, spec.text))
           }
           if old.source != spec.source {
             mutations.push(
-              @ui_host.TreeMutation::SetSource(spec.key, spec.source),
+              @ui_view.TreeMutation::SetSource(spec.key, spec.source),
             )
           }
           if old.style.background != spec.style.background {
             mutations.push(
-              @ui_host.TreeMutation::SetBackground(
+              @ui_view.TreeMutation::SetBackground(
                 spec.key,
                 spec.style.background,
               ),
@@ -209,17 +208,17 @@ fn generated_diff(
           }
           if old.active != spec.active {
             mutations.push(
-              @ui_host.TreeMutation::SetActive(spec.key, spec.active),
+              @ui_view.TreeMutation::SetActive(spec.key, spec.active),
             )
           }
           if old.enabled != spec.enabled {
             mutations.push(
-              @ui_host.TreeMutation::SetEnabled(spec.key, spec.enabled),
+              @ui_view.TreeMutation::SetEnabled(spec.key, spec.enabled),
             )
           }
           if old.style.top != spec.style.top {
             mutations.push(
-              @ui_host.TreeMutation::SetTop(spec.key, spec.style.top),
+              @ui_view.TreeMutation::SetTop(spec.key, spec.style.top),
             )
           }
         }
@@ -237,7 +236,7 @@ pub struct DemoView {}
 priv struct GeneratedViewRecord {
   mut model : DemoState
   mut view_model : DemoState
-  mut specs : Array[@ui_host.NodeSpec]
+  mut specs : Array[@ui_view.NodeSpec]
 }
 
 ///|
@@ -253,19 +252,17 @@ pub(all) struct DemoViewActionEvent {
 pub let action_event_bus : @event.Events[DemoViewActionEvent] = @event.Events()
 
 ///|
-let generated_event_reader : @event.EventReader[
-  @component_host.UiComponentEvent,
-] = @event.EventReader()
+let generated_event_reader : @event.EventReader[@ui_view.UiViewEvent] = @event.EventReader()
 
 ///|
 fn generated_specs(
   state : DemoState,
-) -> Array[@ui_host.NodeSpec] raise DemoViewError {
-  let nodes : Array[@ui_host.NodeSpec] = []
+) -> Array[@ui_view.NodeSpec] raise DemoViewError {
+  let nodes : Array[@ui_view.NodeSpec] = []
   nodes.push({
     key: "root",
     parent: None,
-    kind: @ui_host.NodeKind::View,
+    kind: @ui_view.NodeKind::View,
     text: "",
     source: "",
     active: true,
@@ -275,8 +272,8 @@ fn generated_specs(
       absolute: false,
       left: 0.0,
       top: 0.0,
-      width: @ui_host.LayoutValue::Auto,
-      height: @ui_host.LayoutValue::Auto,
+      width: @ui_view.LayoutValue::Auto,
+      height: @ui_view.LayoutValue::Auto,
       margin_left: 0.0,
       margin_top: 0.0,
       margin_right: 0.0,
@@ -296,12 +293,12 @@ fn generated_specs(
       font_family: "",
       font_size: 0.0,
       bold: false,
-      align: @ui_host.TextAlign::Left,
+      align: @ui_view.TextAlign::Left,
       wrap: false,
       z_index: 0,
-      fit: @ui_host.ImageFit::Fill,
-      direction: @ui_host.FlexDirection::Column,
-      flex_basis: @ui_host.LayoutValue::Auto,
+      fit: @ui_view.ImageFit::Fill,
+      direction: @ui_view.FlexDirection::Column,
+      flex_basis: @ui_view.LayoutValue::Auto,
       flex_grow: 0.0,
       flex_shrink: 1.0,
       row_gap: 0.0,
@@ -315,7 +312,7 @@ fn generated_specs(
   nodes.push({
     key: "node-root-0-text",
     parent: Some("root"),
-    kind: @ui_host.NodeKind::Text,
+    kind: @ui_view.NodeKind::Text,
     text: state.title,
     source: "",
     active: true,
@@ -325,8 +322,8 @@ fn generated_specs(
       absolute: false,
       left: 0.0,
       top: 0.0,
-      width: @ui_host.LayoutValue::Auto,
-      height: @ui_host.LayoutValue::Auto,
+      width: @ui_view.LayoutValue::Auto,
+      height: @ui_view.LayoutValue::Auto,
       margin_left: 0.0,
       margin_top: 0.0,
       margin_right: 0.0,
@@ -346,12 +343,12 @@ fn generated_specs(
       font_family: "",
       font_size: 0.0,
       bold: false,
-      align: @ui_host.TextAlign::Left,
+      align: @ui_view.TextAlign::Left,
       wrap: false,
       z_index: 0,
-      fit: @ui_host.ImageFit::Fill,
-      direction: @ui_host.FlexDirection::Column,
-      flex_basis: @ui_host.LayoutValue::Auto,
+      fit: @ui_view.ImageFit::Fill,
+      direction: @ui_view.FlexDirection::Column,
+      flex_basis: @ui_view.LayoutValue::Auto,
       flex_grow: 0.0,
       flex_shrink: 1.0,
       row_gap: 0.0,
@@ -378,7 +375,7 @@ pub fn DemoView::mount(
   }
   let view_model = generated_compute_view_model(model)
   let desired = generated_specs(view_model)
-  let host = @component_host.SeleneHost::new()
+  let host = @ui_view.ViewHost::new()
   host.mount(entity, desired) catch {
     error => raise Host(error)
   }
@@ -402,7 +399,7 @@ pub fn DemoView::replace(
   let desired = generated_specs(view_model)
   let mutations = generated_diff(record.specs, desired)
   if mutations.length() > 0 {
-    let host = @component_host.SeleneHost::new()
+    let host = @ui_view.ViewHost::new()
     host.apply(entity, mutations) catch {
       error => raise Host(error)
     }
@@ -415,7 +412,7 @@ pub fn DemoView::replace(
 ///|
 fn generated_handle_event(
   record : GeneratedViewRecord,
-  event : @ui_host.UiEvent,
+  event : @ui_view.UiEvent,
 ) -> DemoViewAction? {
   if !generated_contains(record.specs, event.key) {
     return None
@@ -434,7 +431,7 @@ fn generated_route_events(_world : @ecs.World) -> Unit {
   for entity in dead {
     generated_view_records.remove(entity)
   }
-  for raw in generated_event_reader.read(@component_host.component_event_bus) {
+  for raw in generated_event_reader.read(@ui_view.view_event_bus) {
     match generated_view_records.get(raw.entity) {
       Some(record) =>
         match generated_handle_event(record, raw.event) {
@@ -449,7 +446,7 @@ fn generated_route_events(_world : @ecs.World) -> Unit {
 ///|
 pub fn plugin(app : @app.App) -> @app.App {
   app
-  .add_plugin(@component_host.plugin)
+  .add_plugin(@ui_view.plugin)
   .add_message(action_event_bus)
   .add_system(
     @system.PostUpdate,
@@ -464,7 +461,7 @@ pub fn plugin(app : @app.App) -> @app.App {
     {
       "source": "fixtures/demo.xaml",
       "original_offset": 212,
-      "generated_offset": 7693,
+      "generated_offset": 7676,
       "length": 11
     }
   ]
@@ -484,12 +481,12 @@ pub fn plugin(app : @app.App) -> @app.App {
   "output_naming": { "package_directory": ".", "state": "state.generated.mbt", "view": "view.generated.mbt", "source_map": "view.generated.mbt.map.json", "lock": "selene-xaml.lock.json" },
   "package_alias": { "alias": "model", "package": "example/demo/model" },
   "imported_sidecars": [],
-  "host_capability": { "package": "KKKIIO/selene_xaml_runtime/ui_host", "contract": "component-host", "version": "0.1.0", "operations": ["mount", "apply"] },
-  "abi_fingerprint": "sha256:1ae44b27bc9a2cdcc9cf344c96ea16e1f015f38f0ec59570650d99d21791efe9",
-  "outputs": [    { "owner": "selene-xaml", "path": "moon.pkg", "sha256": "69c7bb0bc761d67b9fd23bb5d39b433576cdef8e0f06fe3faed96247cf73d75e" },
+  "host_capability": { "package": "KKKIIO/selene/ui_view", "contract": "ui-view", "version": "0.1.0", "operations": ["mount", "apply"] },
+  "abi_fingerprint": "sha256:784dedf3d1ce8a9664dd5bc3bae0113d94ba0962287363369358e473341e8ffb",
+  "outputs": [    { "owner": "selene-xaml", "path": "moon.pkg", "sha256": "65bf9d9886f14503dea848f3076b39f9eadef813b21aefd5bcf367e20f1acff6" },
     { "owner": "selene-xaml", "path": "state.generated.mbt", "sha256": "3c9ff55c322e0f9d5338ed7bc5ffad07c11d040726f1239335f616736430ebaf" },
-    { "owner": "selene-xaml", "path": "view.generated.mbt", "sha256": "9b758158e0cf5ebb1de3e1c9f37bc1c237f774cd767ecc4448d045813907e6ed" },
-    { "owner": "selene-xaml", "path": "view.generated.mbt.map.json", "sha256": "3473e6ddcae0bb9ddfa6123d1c6ef4bbd3307e5a71ba109553a40944a49c2149" }
+    { "owner": "selene-xaml", "path": "view.generated.mbt", "sha256": "90da26110deb1af825108350274cb9d9c0adb9ce3dd10e26faff88f7f92bda52" },
+    { "owner": "selene-xaml", "path": "view.generated.mbt.map.json", "sha256": "5da71b1e191c290cdc66b53961400ceb50feca9b9514b615f150b6ee14d2f200" }
   ],
   "lock_path": "selene-xaml.lock.json"
 }

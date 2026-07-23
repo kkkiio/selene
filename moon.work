@@ -7,6 +7,7 @@ members = [
   "./selene-editor-frontend",
   "./selene-editor-service",
   "./selene-editor-specs",
+  "./selene-xaml",
   "./examples",
   "./examples-web",
   "./examples-native",

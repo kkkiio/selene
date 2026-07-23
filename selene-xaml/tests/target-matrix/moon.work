@@ -1,8 +1,7 @@
 members = [
   ".",
-  "../../runtime",
-  "../../examples/inventory",
   "../../examples/survivors",
+  "../../examples/inventory",
   "../../../selene-core",
   "../../../selene-webgpu",
 ]

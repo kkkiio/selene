@@ -53,8 +53,7 @@ Host rejection 可以完整回滚。
 ## Generator input
 
 用户通过 `.mbti` 向 generator 提供 Model schema。Generator 读取公开 type、field、collection
-item 和 enum shape，生成 typed View input 与 native/component adapter。Adapter 负责跨 package
-或 WIT nominal type 的转换，不改变 Model 语义。
+item 和 enum shape，生成 typed View input，并通过静态 import 引用业务 package 的 nominal type。
 
 没有自定义展示计算时，默认 ViewModel 与 Model 具有相同的数据 shape，直接字段 binding
 不需要额外 boilerplate。自定义计算不扩张 Model contract。
@@ -75,51 +74,16 @@ apply(Patch)
 计算、校验或 UI mutation 失败时，View 保留上一次 committed snapshot；View record 持有的 Model
 不受影响。
 
-## Wasm Component memory
+## State ownership
 
-WIT record、list 和 variant 是按值传递的 interface type；Canonical ABI 将小值展平，较大的值
-通过 linear-memory pointer lowering。它们不提供跨独立 component memory 的长期 object sharing。
-WIT `resource` 才使用间接 handle 与明确 lifetime。参见
-[Canonical ABI](https://component-model.bytecodealliance.org/advanced/canonical-abi.html) 和
-[WIT resource](https://github.com/WebAssembly/component-model/blob/main/design/mvp/WIT.md#item-resource)。
-
-因此，immutable Model 本身不能消除 full Model 跨 WIT boundary 时的 lift、adapter conversion
-和 guest allocation。它的内存收益来自 guest 内部省去 defensive copy，以及后续 snapshot 的
-结构共享。
-
-Component view 使用以下更新策略：
-
-```text
-mount(full Model)         initial snapshot
-apply(small typed Patch)  normal update path
-replace(full Model)       explicit resync path
-```
-
-Guest 在 Model/ViewModel 层只长期保存 committed snapshot，另行保存必要的 reconciliation
-state。Patch 构造共享旧数据的 candidate；Selene UI Host 接受 mutation batch 后立即提交 candidate 并释放
-旧引用。默认 `ViewModel = Model` 时，两者共享同一 guest value，不保存重复的物化数据。
-
-Full replacement 的瞬时内存包含 old/new Model、old/candidate ViewModel 和 MutationPlan。Typed
-Patch 可以把 ABI payload 和 candidate Model 的额外内存限制在变化路径。Candidate ViewModel
-只有采用结构共享或 scoped computation 时才获得同样收益；每次完整重建仍需要 `O(ViewModel)`
-瞬时内存。Typed Patch 是大 Model 的默认更新方式。
-
-## Artifact replacement
-
-业务侧保留 authoritative Model。替换 artifact 时先 unmount 并卸载旧 Component instance，再加载
-新 artifact，用该 Model 重新 mount。
-
-Guest linear memory 和 reconciliation state 不跨 instance 迁移。新 View 需要 Model 中不存在的
-业务事实或新的 Action case 时，业务 WIT、Host integration 与 Guest 一起升级。
-
-需要跨更新保留的状态按以下规则放置：
+业务侧始终保留 authoritative Model。需要跨 View 重建保留的状态按以下规则放置：
 
 | 状态 | owner |
 | --- | --- |
 | 业务事实、存档和用户设置 | Model |
 | 物化展示值 | Computed ViewModel，可重新计算 |
-| focus、scroll、输入光标 | 当前不跨 replacement 保留 |
-| Entity、branch 和 keyed item identity | 卸载时释放，新 instance 重建 |
+| focus、scroll、输入光标 | View Host，可按 stable key 在 View swap 时恢复 |
+| Entity、branch 和 keyed item identity | View record，卸载时释放 |
 
 ## Considered Alternatives
 
@@ -131,16 +95,9 @@ copy。选定 contract 使用 immutable snapshot。
 
 ### 每次传入完整 Model
 
-Full replacement 的 API 最简单，也能作为丢失 Patch 后的 resync。日常更新采用它会让 WIT
-value、adapter 和 guest 每次处理完整数据，并在 transaction 中同时保留 old/new snapshot。
-选定方案保留 `replace` 作为显式 resync，常规更新使用 typed Patch。
-
-### Host-owned Model resource
-
-把 Model 暴露成 WIT `resource` 可以让 guest 只保存 handle。ViewModel computation 随后需要大量
-Host getter call，或仍然请求一份 bulk snapshot；前者增加 ABI 往返并削弱 snapshot consistency，
-后者重新引入完整 value transfer。选定方案让 guest 持有 immutable value snapshot；Entity identity
-以绑定 World 内的 `u32` 传递，lifetime 仍由 Host 验证。
+Full replacement 的 API 最简单，也能作为丢失 Patch 后的 resync。日常更新采用它会让
+transaction 同时保留 old/new snapshot，并对完整 Model 重新计算。选定方案保留 `replace`
+作为显式 resync，常规更新使用 typed Patch。
 
 ### 在 View boundary 深拷贝 mutable input
 
@@ -152,4 +109,3 @@ copy 只属于具体 adapter 的必要 value conversion。
 
 - 用户计算代码、物化 ViewModel 与 diff：[Computed ViewModel](computed-view-model.md)
 - View 的私有调和状态：[View State System](view-state-system.md)
-- Component memory 与 replacement：[Wasm Component Guest Package](wasm-component-guest-package.md)

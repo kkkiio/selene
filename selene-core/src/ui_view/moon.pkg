@@ -8,7 +8,6 @@ import {
   "KKKIIO/selene/system",
   "KKKIIO/selene/time",
   "KKKIIO/selene/ui",
-  "KKKIIO/selene_xaml_runtime/ui_host",
   "moonbitlang/core/json",
 }
 
@@ -19,4 +18,4 @@ import {
   "moonbitlang/core/encoding/utf8",
 } for "test"
 
-supported_targets = "native+js"
+supported_targets = "all"

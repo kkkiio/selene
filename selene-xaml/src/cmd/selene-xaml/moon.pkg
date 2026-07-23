@@ -1,6 +1,5 @@
 import {
-  "KKKIIO/selene_xaml/codegen",
-  "KKKIIO/selene_xaml/generator_io",
+  "KKKIIO/selene_xaml/embedded_emitter",
   "moonbitlang/async",
   "moonbitlang/async/fs",
   "moonbitlang/async/io",

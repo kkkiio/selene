@@ -9,16 +9,12 @@ names the automated test or fixture that exercises the behavior; `-` marks an
 intentional exclusion.
 
 Profile parsing produces an Infoset, then the compiler combines it with an
-`.mbti` or WIT business contract and seals a typed `ViewIR`. The Embedded
-emitter generates Entity-based APIs and static calls to the concrete Selene
-UI Host. The Component emitter independently generates a WIT Guest keyed by
-the Host-provided Entity `u32`. Component Host binds each instance to one
-World, owns Entity lifetime, and forwards Guest UI mutations to the same
-Selene UI Host. Successful batches commit incrementally; automated coverage
-is `CH-INCREMENTAL-01`. Visual states seal typed namescope targets and
-bindings into ViewIR, then the Host applies ordered state overlays and
-transitions to retained Entities; coverage is `VI-IR-04` and
-`CH-VISUAL-STATE-01`.
+`.mbti` business contract and seals a typed `ViewIR`. The Embedded emitter
+generates Entity-based APIs and static calls to `selene/ui_view`.
+Successful batches commit incrementally; automated coverage is
+`VH-INCREMENTAL-01`. Visual states seal typed namescope targets and bindings
+into ViewIR, then the Host applies ordered state overlays and transitions to
+retained Entities; coverage is `VI-IR-04` and `VH-VISUAL-STATE-01`.
 
 ## Section 4 - Information Set Type System
 

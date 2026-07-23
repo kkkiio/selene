@@ -25,7 +25,7 @@ test "CG-VIEW-01 emits typed Embedded view source and mappings" {
     #|  ItemRemove(String)
     #|  ItemMove((String, UInt))
     #|}
-  let generated = @codegen.generate_embedded_view_package(
+  let generated = @embedded_emitter.generate_embedded_view_package(
     "fixtures/demo.xaml", xaml, "fixtures/model.mbti", mbti,
   )
   let mut view = ""
@@ -44,7 +44,7 @@ test "CG-VIEW-01 emits typed Embedded view source and mappings" {
       view.contains("state.items"),
       view.contains("generated_item_1.display_label()"),
       view.contains("DemoViewAction::SelectItem(generated_action_key)"),
-      view.contains("@ui_host.TreeMutation::Move"),
+      view.contains("@ui_view.TreeMutation::Move"),
       view.contains("parent: Some(\"root\")"),
       view.contains("host.mount(entity, desired)"),
       !view.contains("_worlds"),
@@ -64,17 +64,14 @@ test "CG-RUNTIME-01 fixes Embedded Views to the KKKIIO Selene module" {
   let mbti =
     #|package "example/demo/model"
     #|pub(all) struct DemoState { title : String }
-  let generated = @codegen.generate_embedded_view_package(
+  let generated = @embedded_emitter.generate_embedded_view_package(
     "ui/demo.xaml", xaml, "model/demo.mbti", mbti,
   )
   let manifest = generated.files[0].content
   let lock = generated.files.last().unwrap().content
   assert_eq(manifest.contains("\"KKKIIO/selene/app\""), true)
   assert_eq(manifest.contains("\"KKKIIO/selene/entity\""), true)
-  assert_eq(
-    manifest.contains("\"KKKIIO/selene_xaml_runtime/component_host\""),
-    true,
-  )
+  assert_eq(manifest.contains("\"KKKIIO/selene/ui_view\""), true)
   assert_eq(lock.contains("\"runtime\": \"KKKIIO/selene\""), true)
 }
 
@@ -89,7 +86,7 @@ test "CG-RECT-01 rect values follow CSS order and reject three components" {
     #|pub(all) struct DemoState {
     #|  title : String
     #|}
-  let generated = @codegen.generate_embedded_view_package(
+  let generated = @embedded_emitter.generate_embedded_view_package(
     "fixtures/rect.xaml", xaml, "fixtures/model.mbti", mbti,
   )
   let view = generated.files[2].content
@@ -108,7 +105,7 @@ test "CG-RECT-01 rect values follow CSS order and reject three components" {
   )
   let invalid = xaml.replace(old="10 20 30 40", new="10 20 30")
   try
-    @codegen.generate_embedded_view_package(
+    @embedded_emitter.generate_embedded_view_package(
       "fixtures/rect.xaml", invalid, "fixtures/model.mbti", mbti,
     )
   catch {
@@ -155,7 +152,7 @@ test "CG-PATCH-01 patch families are field-prefixed and shape-exact" {
     #|  SecondaryItemRemove(String)
     #|  SecondaryItemMove((String, UInt))
     #|}
-  let generated = @codegen.generate_embedded_view_package(
+  let generated = @embedded_emitter.generate_embedded_view_package(
     "fixtures/patch.xaml", xaml, "fixtures/model.mbti", mbti,
   )
   let view = generated.files[2].content
@@ -180,7 +177,7 @@ test "CG-PATCH-01 patch families are field-prefixed and shape-exact" {
   for shape in invalid_shapes {
     let (valid, invalid) = shape
     try
-      @codegen.generate_embedded_view_package(
+      @embedded_emitter.generate_embedded_view_package(
         "fixtures/patch.xaml",
         xaml,
         "fixtures/model.mbti",
@@ -236,7 +233,7 @@ test "CG-PATCH-02 one patch variant cannot serve two collections" {
     #|  ItemMove((String, UInt))
     #|}
   try
-    @codegen.generate_embedded_view_package(
+    @embedded_emitter.generate_embedded_view_package(
       "fixtures/patch-conflict.xaml", xaml, "fixtures/model.mbti", mbti,
     )
   catch {
@@ -266,16 +263,16 @@ test "CG-PROPERTY-01 generated properties reject silent degradation" {
     #|pub(all) struct DemoState {
     #|  title : String
     #|}
-  let generated = @codegen.generate_embedded_view_package(
+  let generated = @embedded_emitter.generate_embedded_view_package(
     "fixtures/properties.xaml", xaml, "fixtures/model.mbti", mbti,
   )
   let view = generated.files[2].content
   debug_inspect(
     (
-      view.contains("align: @ui_host.TextAlign::Center"),
+      view.contains("align: @ui_view.TextAlign::Center"),
       view.contains("wrap: true"),
-      view.contains("fit: @ui_host.ImageFit::Fill"),
-      view.contains("direction: @ui_host.FlexDirection::RowReverse"),
+      view.contains("fit: @ui_view.ImageFit::Fill"),
+      view.contains("direction: @ui_view.FlexDirection::RowReverse"),
     ),
     content="(true, true, true, true)",
   )
@@ -295,7 +292,7 @@ test "CG-PROPERTY-01 generated properties reject silent degradation" {
   for literal_case in invalid_literals {
     let (valid, invalid, expected) = literal_case
     try
-      @codegen.generate_embedded_view_package(
+      @embedded_emitter.generate_embedded_view_package(
         "fixtures/properties.xaml",
         xaml.replace(old=valid, new=invalid),
         "fixtures/model.mbti",
@@ -334,7 +331,7 @@ test "CG-PROPERTY-01 generated properties reject silent degradation" {
   for binding_case in binding_properties {
     let (literal, binding, property) = binding_case
     try
-      @codegen.generate_embedded_view_package(
+      @embedded_emitter.generate_embedded_view_package(
         "fixtures/properties.xaml",
         xaml.replace(old=literal, new=binding),
         "fixtures/model.mbti",
@@ -369,7 +366,7 @@ test "CG-PROPERTY-01 generated properties reject silent degradation" {
     new="x:Name=\"root\" MinWidth=\"320\"",
   )
   try
-    @codegen.generate_embedded_view_package(
+    @embedded_emitter.generate_embedded_view_package(
       "fixtures/properties.xaml", unsupported, "fixtures/model.mbti", mbti,
     )
   catch {
@@ -399,7 +396,7 @@ test "CG-PROPERTY-02 Position is literal-only and Button defaults remain overrid
     #|pub(all) struct DemoState {
     #|  flag : Bool
     #|}
-  let generated = @codegen.generate_embedded_view_package(
+  let generated = @embedded_emitter.generate_embedded_view_package(
     "fixtures/position.xaml", xaml, "fixtures/model.mbti", mbti,
   )
   let view = generated.files[2].content
@@ -427,7 +424,7 @@ test "CG-PROPERTY-02 Position is literal-only and Button defaults remain overrid
   for position_case in invalid_positions {
     let (valid, invalid, expected) = position_case
     try
-      @codegen.generate_embedded_view_package(
+      @embedded_emitter.generate_embedded_view_package(
         "fixtures/position.xaml",
         xaml.replace(old=valid, new=invalid),
         "fixtures/model.mbti",
@@ -467,26 +464,26 @@ test "CG-LAYOUT-01 emits auto, pixel, percent, and flex sizing semantics" {
     #|pub(all) struct LayoutState {
     #|  label_width : Double
     #|}
-  let generated = @codegen.generate_embedded_view_package(
+  let generated = @embedded_emitter.generate_embedded_view_package(
     "fixtures/layout.xaml", xaml, "fixtures/layout.mbti", mbti,
   )
   let view = generated.files[2].content
   debug_inspect(
     (
-      view.contains("width: @ui_host.LayoutValue::Percent(1)"),
-      view.contains("height: @ui_host.LayoutValue::Auto"),
-      view.contains("flex_basis: @ui_host.LayoutValue::Percent(0.25)"),
+      view.contains("width: @ui_view.LayoutValue::Percent(1)"),
+      view.contains("height: @ui_view.LayoutValue::Auto"),
+      view.contains("flex_basis: @ui_view.LayoutValue::Percent(0.25)"),
       view.contains("flex_grow: 1"),
       view.contains("flex_shrink: 0"),
-      view.contains("width: @ui_host.LayoutValue::Px(state.label_width)"),
-      view.contains("height: @ui_host.LayoutValue::Px(24)"),
+      view.contains("width: @ui_view.LayoutValue::Px(state.label_width)"),
+      view.contains("height: @ui_view.LayoutValue::Px(24)"),
     ),
     content="(true, true, true, true, true, true, true)",
   )
   let messages : Array[String] = []
   for invalid in ["Wide", "10%%"] {
     try
-      @codegen.generate_embedded_view_package(
+      @embedded_emitter.generate_embedded_view_package(
         "fixtures/layout.xaml",
         xaml.replace(old="Height=\"Auto\"", new="Height=\"" + invalid + "\""),
         "fixtures/layout.mbti",
@@ -571,7 +568,7 @@ test "CG-MBTI-01 emits the reachable alias and model surface only" {
     #|pub(all) struct UnusedStruct {
     #|  value : UnusedAlias
     #|}
-  let generated = @codegen.generate_embedded_view_package(
+  let generated = @embedded_emitter.generate_embedded_view_package(
     "fixtures/aliases.xaml", xaml, "fixtures/model.mbti", mbti,
   )
   let state = generated.files[1].content
@@ -590,7 +587,7 @@ test "CG-MBTI-01 emits the reachable alias and model surface only" {
       !state.contains("UnusedStruct"),
       !state.contains("UnusedAlias"),
       view.contains("state.score.to_string()"),
-      view.contains("width: @ui_host.LayoutValue::Px(state.ratio)"),
+      view.contains("width: @ui_view.LayoutValue::Px(state.ratio)"),
       view.contains("DemoViewAction::SelectItem(generated_action_key)"),
       (state + view).split("pub(all) enum DemoViewAction {").collect().length(),
     ),
@@ -628,10 +625,10 @@ test "CG-GENERATE-01 output set, source map, and lock are deterministic" {
     #|pub(all) struct DemoState {
     #|  title : String
     #|}
-  let first = @codegen.generate_embedded_view_package(
+  let first = @embedded_emitter.generate_embedded_view_package(
     "ui/demo.xaml", xaml, "model/demo.mbti", mbti,
   )
-  let second = @codegen.generate_embedded_view_package(
+  let second = @embedded_emitter.generate_embedded_view_package(
     "ui/demo.xaml", xaml, "model/demo.mbti", mbti,
   )
   let paths = first.files.map(file => file.path)
@@ -730,13 +727,13 @@ test "CG-ABI-01 action ABI changes participate in the lock fingerprint" {
     new="OnClick=\"archive\"",
   )
   let changed_literal = xaml.replace(old="Text=\"Save\"", new="Text=\"Store\"")
-  let base = @codegen.generate_embedded_view_package(
+  let base = @embedded_emitter.generate_embedded_view_package(
     "ui/demo.xaml", xaml, "model/demo.mbti", mbti,
   )
-  let renamed = @codegen.generate_embedded_view_package(
+  let renamed = @embedded_emitter.generate_embedded_view_package(
     "ui/demo.xaml", renamed_action, "model/demo.mbti", mbti,
   )
-  let literal = @codegen.generate_embedded_view_package(
+  let literal = @embedded_emitter.generate_embedded_view_package(
     "ui/demo.xaml", changed_literal, "model/demo.mbti", mbti,
   )
   let marker = "\"abi_fingerprint\": \"sha256:"
@@ -771,7 +768,7 @@ test "CG-PATH-01 generator paths are canonical repository artifacts" {
     #|pub(all) struct DemoState {
     #|  title : String
     #|}
-  let generated = @codegen.generate_embedded_view_package(
+  let generated = @embedded_emitter.generate_embedded_view_package(
     "./ui/sections/../demo.xaml", xaml, "contracts/../model/./demo.mbti", mbti,
   )
   let state = generated.files[1].content
@@ -794,7 +791,7 @@ test "CG-PATH-01 generator paths are canonical repository artifacts" {
   let messages : Array[String] = []
   for path in invalid_paths {
     try
-      @codegen.generate_embedded_view_package(
+      @embedded_emitter.generate_embedded_view_package(
         path, xaml, "model/demo.mbti", mbti,
       )
     catch {
@@ -853,8 +850,8 @@ async test "CG-FORMAT-01 snapshots canonical moonfmt output" (t : @test.Test) {
     #|  ItemRemove(String)
     #|  ItemMove((String, UInt))
     #|}
-  let generated = @generator_io.format_generated_package(
-    @codegen.generate_embedded_view_package(
+  let generated = @embedded_emitter.format_generated_package(
+    @embedded_emitter.generate_embedded_view_package(
       "fixtures/formatting/acceptance-view.xaml", xaml, "fixtures/formatting/canonical-model.mbti",
       mbti,
     ),
@@ -899,5 +896,5 @@ async test "CG-FORMAT-01 snapshots canonical moonfmt output" (t : @test.Test) {
     }
     t.writeln("")
   }
-  t.snapshot(filename="canonical_embedded_package.txt")
+  t.snapshot(filename="canonical_generated_package.txt")
 }

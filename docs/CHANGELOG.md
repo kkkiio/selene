@@ -12,9 +12,21 @@
 
 ### Changed
 
+- Moved the Embedded View host, mutation values, Visual State runtime, and
+  focus/scroll preservation into `selene/ui_view`, eliminating the separate
+  `selene_xaml_runtime` module.
+
 ### Fixed
 
 ### Removed
+
+- Removed the redundant Selene XAML `codegen` and `generator_io` packages by
+  consolidating compilation, emission, formatting, ownership validation, and
+  atomic output commits in `embedded_emitter`.
+
+- Removed the WebAssembly Component guest/host path from Selene XAML, including
+  WIT generation, loaders, runtime bridges, examples, and build tooling, to
+  concentrate the project on Embedded Views.
 
 ## [0.37.2] - 2026-07-22
 

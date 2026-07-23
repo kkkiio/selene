@@ -10,8 +10,8 @@ The exact Profile 1 surface and deviations are recorded in
 
 ## Installation
 
-The native compiler CLI and the generated View runtime are separate MoonBit
-modules. Install the CLI from this source checkout:
+The generated View runtime is part of `KKKIIO/selene`. Install the native
+compiler CLI from this source checkout:
 
 ```bash
 git clone https://github.com/kkkiio/selene_xaml.git
@@ -19,19 +19,13 @@ cd selene_xaml
 moon install ./src/cmd/selene-xaml
 ```
 
-Add the runtime and the upstream Selene module to the consuming application's
-`moon.mod`:
+Add Selene to the consuming application's `moon.mod`:
 
 ```moonbit
 import {
   "KKKIIO/selene@0.37.3",
-  "KKKIIO/selene_xaml_runtime@0.1.0",
 }
 ```
-
-Until `KKKIIO/selene_xaml_runtime` is published, include this checkout's
-`runtime` module in the application's `moon.work`, as the repository examples
-do.
 
 ## Usage
 
@@ -80,18 +74,4 @@ entity.destroy()
 
 The generated package exposes `mount`, `replace`, `apply`, and a typed
 `action_event_bus`. [`examples/inventory`](examples/inventory) is a complete
-WebGPU demo with responsive layout, items lists, and equipment slots.
-
-### WebAssembly Component Guests
-
-Pass a WIT file instead of `.mbti` for a standalone `.component.wasm`:
-
-```bash
-selene-xaml generate \
-  your_game/component_ui.xaml \
-  --wit your_game/wit \
-  --out-dir your_game/src/component_view
-```
-
-The Component Guest uses Host-provided Entity `u32` keys and exports `handle-event`; it does not
-import Selene Entity or the Embedded EventBus.
+WebGPU demo with responsive layout, item lists, and equipment slots.

@@ -1,11 +1,11 @@
 ///|
-pub struct SeleneHost {
+pub struct ViewHost {
   world_id : UInt
 } derive(Eq, Hash, Debug)
 
 ///|
 pub struct MountedView {
-  host : SeleneHost
+  host : ViewHost
   entity : @entity.Entity
   mut mounted : Bool
 } derive(Eq, Debug)
@@ -24,15 +24,15 @@ struct ViewSnapshot {
 } derive(Eq, Debug)
 
 ///|
-pub(all) struct UiComponentEvent {
+pub(all) struct UiViewEvent {
   entity : @entity.Entity
-  event : @ui_host.UiEvent
+  event : UiEvent
 } derive(Eq, Debug)
 
 ///|
 priv struct HostNode {
-  spec : @ui_host.NodeSpec
-  effective_spec : @ui_host.NodeSpec
+  spec : NodeSpec
+  effective_spec : NodeSpec
   children : Array[String]
 }
 
@@ -40,8 +40,8 @@ priv struct HostNode {
 priv struct ActiveVisualTransition {
   target : String
   property : String
-  from : @ui_host.VisualStateValue
-  to : @ui_host.VisualStateValue
+  from : VisualStateValue
+  to : VisualStateValue
   start : Double
   duration : Double
   delay : Double
@@ -69,7 +69,7 @@ priv struct HostWorldStore {
 let host_world_stores : Map[UInt, HostWorldStore] = Map([])
 
 ///|
-pub let component_event_bus : @event.Events[UiComponentEvent] = @event.Events()
+pub let view_event_bus : @event.Events[UiViewEvent] = @event.Events()
 
 ///|
-let component_click_reader : @event.EventReader[@ui.UiClickEvent] = @event.EventReader()
+let view_click_reader : @event.EventReader[@ui.UiClickEvent] = @event.EventReader()

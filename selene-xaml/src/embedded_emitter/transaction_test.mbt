@@ -58,7 +58,7 @@ async test "CG-FORMAT-02 snapshots relocated generated package" (t : @test.Test)
     $|  "lock_path": "selene-xaml.lock.json"
     $|}
     $|
-  let formatted = @generator_io.format_generated_package({
+  let formatted = @embedded_emitter.format_generated_package({
     files: [
       { path: "view.generated.mbt", content: source },
       { path: "view.generated.mbt.map.json", content: source_map },
@@ -186,14 +186,14 @@ async test "CG-GENERATE-03 overwrites edited owned outputs and preserves user fi
       #|  ],
       #|  "lock_path": "selene-xaml.lock.json"
       #|}
-    let generated : @generator_io.GeneratedPackage = {
+    let generated : @embedded_emitter.GeneratedPackage = {
       files: [
         { path: "moon.pkg", content: "generated package" },
         { path: "view.generated.mbt", content: "new view" },
         { path: "selene-xaml.lock.json", content: next_lock },
       ],
     }
-    @generator_io.commit_generated_package(output, generated)
+    @embedded_emitter.commit_generated_package(output, generated)
     debug_inspect(
       (
         @fs.read_file(output + "/view_model.mbt").text(),
@@ -243,17 +243,17 @@ async test "CG-GENERATE-04 rejects unowned collisions without mutation" {
       #|  ],
       #|  "lock_path": "selene-xaml.lock.json"
       #|}
-    let generated : @generator_io.GeneratedPackage = {
+    let generated : @embedded_emitter.GeneratedPackage = {
       files: [
         { path: "view.generated.mbt", content: "generated source" },
         { path: "selene-xaml.lock.json", content: next_lock },
       ],
     }
     let result = try {
-      @generator_io.commit_generated_package(output, generated)
+      @embedded_emitter.commit_generated_package(output, generated)
       "committed"
     } catch {
-      @generator_io.GeneratedPackageWriteError::UnownedOutput(path) =>
+      @embedded_emitter.GeneratedPackageWriteError::UnownedOutput(path) =>
         "unowned:" + path
       error => raise error
     }
@@ -295,7 +295,7 @@ async test "CG-GENERATE-05 rejects forged previous ownership locks" {
       #|  ],
       #|  "lock_path": "selene-xaml.lock.json"
       #|}
-    let generated : @generator_io.GeneratedPackage = {
+    let generated : @embedded_emitter.GeneratedPackage = {
       files: [
         { path: "view.generated.mbt", content: "generated source" },
         { path: "selene-xaml.lock.json", content: next_lock },
@@ -342,16 +342,16 @@ async test "CG-GENERATE-05 rejects forged previous ownership locks" {
         create_mode=CreateOrTruncate,
       )
       let result = try {
-        @generator_io.commit_generated_package(output, generated)
+        @embedded_emitter.commit_generated_package(output, generated)
         "committed"
       } catch {
-        @generator_io.GeneratedPackageWriteError::InvalidOwnershipLock(_) =>
+        @embedded_emitter.GeneratedPackageWriteError::InvalidOwnershipLock(_) =>
           "invalid"
         error => raise error
       }
       results.push(label + ":" + result)
     }
-    let invalid_generated : @generator_io.GeneratedPackage = {
+    let invalid_generated : @embedded_emitter.GeneratedPackage = {
       files: [
         { path: "view.generated.mbt", content: "generated source" },
         {
@@ -363,15 +363,15 @@ async test "CG-GENERATE-05 rejects forged previous ownership locks" {
       ],
     }
     let invalid_generated_result = try {
-      @generator_io.commit_generated_package(output, invalid_generated)
+      @embedded_emitter.commit_generated_package(output, invalid_generated)
       "committed"
     } catch {
-      @generator_io.GeneratedPackageWriteError::InvalidGeneratedPackage(_) =>
+      @embedded_emitter.GeneratedPackageWriteError::InvalidGeneratedPackage(_) =>
         "invalid"
       error => raise error
     }
     let fresh_output = temporary + "/fresh-view"
-    let foreign_generated : @generator_io.GeneratedPackage = {
+    let foreign_generated : @embedded_emitter.GeneratedPackage = {
       files: [
         { path: "view.generated.mbt", content: "generated source" },
         {
@@ -383,10 +383,12 @@ async test "CG-GENERATE-05 rejects forged previous ownership locks" {
       ],
     }
     let foreign_generated_result = try {
-      @generator_io.commit_generated_package(fresh_output, foreign_generated)
+      @embedded_emitter.commit_generated_package(
+        fresh_output, foreign_generated,
+      )
       "committed"
     } catch {
-      @generator_io.GeneratedPackageWriteError::InvalidGeneratedPackage(_) =>
+      @embedded_emitter.GeneratedPackageWriteError::InvalidGeneratedPackage(_) =>
         "invalid"
       error => raise error
     }

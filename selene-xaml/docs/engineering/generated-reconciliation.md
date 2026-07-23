@@ -12,7 +12,7 @@ committed ViewModel + candidate ViewModel + reconciliation state
                               │
                               ▼
                     validated MutationPlan
-                              │ Selene UI Host.apply
+                              │ ui_view.ViewHost::apply
                               ▼
               committed ViewModel + reconciliation state
 ```
@@ -154,10 +154,10 @@ Planner 先生成完整 `MutationPlan`，再按依赖关系排序：
 4. remove 只提交 maximal removed root，并在所有 outgoing move 后执行；
 5. property mutation 在 target identity 建立后执行。
 
-Selene UI Host 在应用前使用私有 planned state 验证整个 batch。验证成功后按 mutation 顺序增量
+`ViewHost` 在应用前使用私有 planned state 验证整个 batch。验证成功后按 mutation 顺序增量
 提交：精确属性 mutation 只写目标组件，`Move` 只修改涉及的父子关系，`Mount`/`Remove` 只处理
 指定子树；retained 且未变化的 UI component object 保持原 identity。成功后 View 才替换
-committed Model、ViewModel、NodeSpec、branch/item state 和 action routes。UI Host 拒绝 batch 时，
+committed Model、ViewModel、NodeSpec、branch/item state 和 action routes。`ViewHost` 拒绝 batch 时，
 全部 committed state 和 Selene UI stores 保持不变。
 
 ## Mutation minimality

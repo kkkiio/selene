@@ -6,10 +6,8 @@
 Selene 进程和 World 中使用它。它可以直接依赖 Selene 引擎公开 API，包括 Entity、App、Plugin、
 Events、UI components 和 UI stores。
 
-Embedded View package 与 WebAssembly Component Guest package 是两个独立生成产物。两者读取
-同一个 ViewIR 并遵守相同的 View 语义，但不共享生成后的 MoonBit runtime source。
 Embedded View 与游戏在同一个进程和 World 中，generated code 直接把 UI mutation 提交给
-Selene UI Host。
+`selene/ui_view`。
 
 ## 边界
 
@@ -22,7 +20,7 @@ game Model + XAML
         ▼
 Embedded View package ────── import ────── game package
         │                                      │
-        ├── Selene UI Host                      ├── mount / replace / apply
+        ├── selene/ui_view ViewHost              ├── mount / replace / apply
         ├── private View records                └── read typed action EventBus
         └── generated Plugin and EventBus
 ```
@@ -38,13 +36,12 @@ Embedded View package 可以静态 import：
 - `KKKIIO/selene/entity`；
 - `KKKIIO/selene/event`；
 - `KKKIIO/selene/app`、`ecs` 和 `system`；
-- `KKKIIO/selene_xaml_runtime/component_host` 与 `ui_host`；
+- `KKKIIO/selene/ui_view`；
 - Selene 的稳定 UI component、store 和 hierarchy API；
 - generator 生成的 typed node、mutation 和 reconciliation code。
 
-所有依赖在 MoonBit 编译期确定。Embedded View 不经过 Wasm、WIT、Component Host 或运行时 Host
-registry。Selene UI Host 以 concrete MoonBit API 提供 UI mutation 提交能力，generated code
-静态调用 `mount` 和 `apply`。
+所有依赖在 MoonBit 编译期确定。`ViewHost` 以 concrete MoonBit API 提供 UI mutation 提交能力，
+generated code 静态调用 `mount` 和 `apply`。
 
 ## Generated package
 
@@ -99,7 +96,7 @@ pub let action_event_bus : @event.Events[InventoryActionEvent]
 1. 验证 Entity 属于当前 World、处于 alive 状态，并且尚未挂载该 View；
 2. 计算完整 candidate ViewModel；
 3. 生成并验证初始 UI mutation plan；
-4. 通过 Selene UI Host 创建 Entity hierarchy 并写入 UI stores；
+4. 通过 `ViewHost` 创建 Entity hierarchy 并写入 UI stores；
 5. 以根 Entity 为 key 提交私有 View record；
 6. 成功返回 `Unit`。
 
@@ -108,8 +105,8 @@ pub let action_event_bus : @event.Events[InventoryActionEvent]
 ### replace
 
 `replace(entity, model)` 接收新的 immutable Model snapshot。Generated code 计算 candidate
-ViewModel，与 committed ViewModel 调和，验证完整 mutation plan，然后交给 Selene UI Host 原子
-提交。UI Host 只写 mutation 指定的组件和受影响层级；提交成功后才替换私有 record 中的
+ViewModel，与 committed ViewModel 调和，验证完整 mutation plan，然后交给 `ViewHost` 原子
+提交。`ViewHost` 只写 mutation 指定的组件和受影响层级；提交成功后才替换私有 record 中的
 committed Model、ViewModel 和 reconciliation state。
 
 ### apply
@@ -222,12 +219,3 @@ descriptor walker，也不通过字符串 registry 查找 component 或 property
 - Selene UI mutation transaction rejection。
 
 错误不会改变上一次成功提交的 Model、ViewModel、tree identity、action routes 或 EventBus 内容。
-
-## 与 Component 交付方式的关系
-
-[WebAssembly Component Guest Package](wasm-component-guest-package.md) 由 Component emitter 独立
-生成。它没有 Selene Entity object 和 Selene EventBus，在 Guest Map 中以 Entity UInt 保存状态。
-
-[WebAssembly Component Host](wasm-component-host.md) 绑定 Component instance 与 Selene World，负责
-Entity lifetime 和 UI Host WIT import。Embedded View package 不参与 Component 的构建、加载或
-消息转发。

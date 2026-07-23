@@ -22,10 +22,9 @@ moon run src/cmd/selene-xaml --target native -- <command>
 
 | Command | Purpose |
 | --- | --- |
-| [`generate`](generate.md) | Generate an Embedded View package from `.mbti`, or a Component Guest package from WIT. |
+| [`generate`](generate.md) | Generate an Embedded View package from `.mbti`. |
 
-The current CLI exposes only `generate`. Its two contract modes share the same
-XAML compilation pipeline and must use separate output directories.
+The current CLI exposes only `generate`.
 
 ## Global options
 
@@ -41,7 +40,7 @@ Usage: selene-xaml <command>
 Compile Selene XAML into typed MoonBit View packages.
 
 Commands:
-  generate  Generate an Embedded View or Component Guest package.
+  generate  Generate an Embedded View package.
 
 Options:
   -h, --help     Show help information.
@@ -63,7 +62,7 @@ Usage: selene-xaml <command>
 Compile Selene XAML into typed MoonBit View packages.
 
 Commands:
-  generate  Generate an Embedded View or Component Guest package.
+  generate  Generate an Embedded View package.
 
 Options:
   -h, --help     Show help information.

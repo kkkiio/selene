@@ -4,7 +4,7 @@ test "INVENTORY-01 Embedded View uses Entity identity and typed transactions" {
   let world = @ecs.World()
   @ecs.set_current_world(world)
   defer @ecs.set_current_world(previous_world)
-  let host = @component_host.SeleneHost::new()
+  let host = @ui_view.ViewHost::new()
   let entity = @entity.Entity()
   let map_item : @view.InventoryItem = {
     id: "map",
@@ -76,7 +76,7 @@ test "INVENTORY-01 Embedded View uses Entity identity and typed transactions" {
       @ui.texts()[host
       .entity(entity, "item-scroll/items:map/item-count")
       .unwrap()].content,
-      @ui.texts()[host.entity(entity, "selected-name").unwrap()].content
+      @ui.texts()[host.entity(entity, "selected-name").unwrap()].content,
     ),
     content=(
       #|("1", "Ashen Coast Map")
@@ -101,8 +101,8 @@ test "INVENTORY-01 Embedded View uses Entity identity and typed transactions" {
       host.entity(entity, "inventory-header/tabs:equip/tab-icon") ==
       Some(equip_icon),
       @ui.background_colors()[host
-        .entity(entity, "inventory-header/tabs:setup/tab-button")
-        .unwrap()].color,
+      .entity(entity, "inventory-header/tabs:setup/tab-button")
+      .unwrap()].color,
     ),
     content=(
       #|(true, true, { r: 107, g: 61, b: 38, a: 1 })

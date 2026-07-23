@@ -9,8 +9,6 @@ import {
 // Values
 pub fn compile(String, String, String) -> ViewIR raise ViewIRError
 
-pub fn compile_wit(String, String, String, String) -> (ViewIR, IRComponentTarget) raise ViewIRError
-
 // Errors
 pub(all) suberror ViewIRError {
   Xaml(@infoset.XamlError)
@@ -78,6 +76,7 @@ pub(all) enum IRCapability {
   KeyedCollection
   TypedPatch
   ActionRouting
+  VisualState
 } derive(Eq, @debug.Debug)
 
 pub(all) struct IRCollection {
@@ -89,12 +88,6 @@ pub(all) struct IRCollection {
   patch_upsert : String?
   patch_remove : String?
   patch_move : String?
-} derive(Eq, @debug.Debug)
-
-pub(all) struct IRComponentTarget {
-  event_type : String
-  action_type : String
-  tree_package : String
 } derive(Eq, @debug.Debug)
 
 pub(all) enum IRConstant {
@@ -194,6 +187,37 @@ pub(all) enum IRViewModelProjection {
   Compute(String)
 } derive(Eq, @debug.Debug)
 
+pub(all) struct IRVisualState {
+  name : String
+  setters : Array[IRVisualStateSetter]
+  span : @infoset.XamlSourceSpan
+} derive(Eq, @debug.Debug)
+
+pub(all) struct IRVisualStateGroup {
+  owner_node : String
+  name : String
+  current : IRValue?
+  states : Array[IRVisualState]
+  transitions : Array[IRVisualTransition]
+  span : @infoset.XamlSourceSpan
+} derive(Eq, @debug.Debug)
+
+pub(all) struct IRVisualStateSetter {
+  target_node : String
+  property : String
+  value : IRValue
+  span : @infoset.XamlSourceSpan
+} derive(Eq, @debug.Debug)
+
+pub(all) struct IRVisualTransition {
+  from : String?
+  to : String?
+  duration : Double
+  delay : Double
+  easing : String
+  span : @infoset.XamlSourceSpan
+} derive(Eq, @debug.Debug)
+
 pub(all) struct ViewIR {
   identity : IRViewIdentity
   contract : IRBusinessContract
@@ -201,6 +225,7 @@ pub(all) struct ViewIR {
   data_scopes : Array[IRDataScope]
   bindings : Array[IRBinding]
   action_routes : Array[IRActionRoute]
+  visual_state_groups : Array[IRVisualStateGroup]
   required_capabilities : Array[IRCapability]
 } derive(Eq, @debug.Debug)
 

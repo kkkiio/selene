@@ -251,13 +251,6 @@ pub(all) struct ViewIR {
 } derive(Eq, Debug)
 
 ///|
-pub(all) struct IRComponentTarget {
-  event_type : String
-  action_type : String
-  tree_package : String
-} derive(Eq, Debug)
-
-///|
 priv struct ParsedContract {
   package_path : String
   structs : Map[String, IRStruct]

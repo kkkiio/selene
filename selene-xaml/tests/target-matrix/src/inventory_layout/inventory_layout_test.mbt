@@ -9,7 +9,7 @@ test "INVENTORY-LAYOUT-01 wide and narrow content stays inside symmetric insets"
       width=@ui.Val::Px(960.0),
       height=@ui.Val::Px(540.0),
     )
-    let host = @component_host.SeleneHost::new()
+    let host = @ui_view.ViewHost::new()
     let layout_item : @inventory_view.InventoryItem = {
       id: "map",
       category: "setup",
@@ -118,7 +118,6 @@ test "INVENTORY-LAYOUT-01 wide and narrow content stays inside symmetric insets"
         #|  (Vec2(584, 94), Vec2(356, 432)),
         #|  (Vec2(598, 434), Vec2(328, 64)),
         #|)
-
       ),
     )
 
@@ -174,7 +173,6 @@ test "INVENTORY-LAYOUT-01 wide and narrow content stays inside symmetric insets"
         #|  (Vec2(34, 236), Vec2(652, 206)),
         #|  (Vec2(34, 450), Vec2(652, 58)),
         #|)
-
       ),
     )
     host.unmount(parent)

@@ -213,10 +213,10 @@ pub(all) suberror HostError {
 pub impl Show for HostError with fn output(self, logger) {
   match self {
     InvalidMutation(code, message) => logger.write_string(code + ": " + message)
-    Released => logger.write_string("component host is released")
+    Released => logger.write_string("view host is released")
     WrongWorld(expected, actual) =>
       logger.write_string(
-        "component host belongs to world " +
+        "view host belongs to world " +
         expected.to_string() +
         ", current world is " +
         actual.to_string(),

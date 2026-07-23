@@ -32,14 +32,6 @@ try {
       marker: "__seleneSurvivorsExample",
       state: "mounted",
     },
-    {
-      name: "wasm-component",
-      path: "/examples/wasm-component/web/",
-      width: 960,
-      height: 540,
-      marker: "__seleneWasmExample",
-      state: "ready",
-    },
   ];
   for (const testCase of cases) {
     const failures = [];

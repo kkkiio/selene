@@ -7,7 +7,7 @@ measure/arrange。它不是完整的 CSS 实现，但在能力范围内尽量采
 XAML infoset 映射、markup extension、组件化和状态系统见
 [Selene XAML Vocabulary 指南](selene-xaml-vocabulary.md)。
 
-- **Implemented**：generated View、embedded Host 和 Component Host 已贯通，并有自动化回归。
+- **Implemented**：generated View 和 Embedded View Host 已贯通，并有自动化回归。
 - **Partial**：部分值或部分 target 生效，不能按完整 contract 使用。
 - **Planned**：名称和语义已确定，代码尚未实现。
 - **Excluded**：当前 vocabulary 有意不公开；Selene 底层存在同名能力也不改变此状态。
@@ -152,8 +152,8 @@ desired size。左右同时指定且 `Width="Auto"` 时由两侧 inset 决定宽
 
 显著 viewport 变化使用 visual state 思路：应用把明确的 viewport class 或宽度输入
 ViewModel，由 `VisualStateGroup` 或 `If` 选择对应布局。当前 generated View 只贯通 `If`。
-layout query、size-changed event 和 adaptive trigger 在 embedded 与 Component Host
-提供一致 transaction 语义后才进入 vocabulary。
+layout query、size-changed event 和 adaptive trigger 在 Embedded View Host 提供完整 transaction
+语义后才进入 vocabulary。
 
 ## 布局实现覆盖
 

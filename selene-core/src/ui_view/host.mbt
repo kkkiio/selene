@@ -8,21 +8,21 @@ fn current_store() -> HostWorldStore {
 
 ///|
 fn require_record(
-  host : SeleneHost,
+  host : ViewHost,
   entity : @entity.Entity,
-) -> ViewRecord raise @ui_host.HostError {
+) -> ViewRecord raise HostError {
   let actual = @ecs.require_current_world().id()
   if actual != host.world_id {
-    raise @ui_host.HostError::WrongWorld(host.world_id, actual)
+    raise HostError::WrongWorld(host.world_id, actual)
   }
   match current_store().views.get(entity) {
     Some(record) => record
-    None => raise @ui_host.HostError::Released
+    None => raise HostError::Released
   }
 }
 
 ///|
-pub fn SeleneHost::new() -> SeleneHost {
+pub fn ViewHost::new() -> ViewHost {
   { world_id: @ecs.require_current_world().id() }
 }
 
@@ -30,25 +30,25 @@ pub fn SeleneHost::new() -> SeleneHost {
 pub fn MountedView::new() -> MountedView {
   let entity = @entity.Entity()
   @ui.nodes()[entity] = @ui.Node(active=false)
-  { host: SeleneHost::new(), entity, mounted: false }
+  { host: ViewHost::new(), entity, mounted: false }
 }
 
 ///|
 pub fn MountedView::apply(
   self : MountedView,
-  mutations : Array[@ui_host.TreeMutation],
-) -> Unit raise @ui_host.HostError {
+  mutations : Array[TreeMutation],
+) -> Unit raise HostError {
   if self.mounted {
     self.host.apply(self.entity, mutations)
     return
   }
-  let specs : Array[@ui_host.NodeSpec] = []
+  let specs : Array[NodeSpec] = []
   for mutation in mutations {
     match mutation {
       Mount(spec) => specs.push(spec)
       _ =>
-        raise @ui_host.HostError::InvalidMutation(
-          "SH1018", "the first component batch must contain only Mount operations",
+        raise HostError::InvalidMutation(
+          "SH1018", "the first view batch must contain only Mount operations",
         )
     }
   }
@@ -60,7 +60,7 @@ pub fn MountedView::apply(
 pub fn MountedView::entity(
   self : MountedView,
   key : String,
-) -> @entity.Entity? raise @ui_host.HostError {
+) -> @entity.Entity? raise HostError {
   self.host.entity(self.entity, key)
 }
 
@@ -73,10 +73,10 @@ pub fn MountedView::container(self : MountedView) -> @entity.Entity {
 pub fn MountedView::activate(
   self : MountedView,
   parent : @entity.Entity,
-) -> Unit raise @ui_host.HostError {
+) -> Unit raise HostError {
   if !self.mounted {
-    raise @ui_host.HostError::InvalidMutation(
-      "SH1019", "component view must mount before activation",
+    raise HostError::InvalidMutation(
+      "SH1019", "view must mount before activation",
     )
   }
   self.entity.set_parent(parent)
@@ -85,9 +85,7 @@ pub fn MountedView::activate(
 }
 
 ///|
-pub fn MountedView::release(
-  self : MountedView,
-) -> Unit raise @ui_host.HostError {
+pub fn MountedView::release(self : MountedView) -> Unit raise HostError {
   if self.mounted {
     self.host.unmount(self.entity)
   }
@@ -102,7 +100,7 @@ pub fn MountedView::release(
 pub fn MountedView::swap(
   self : MountedView,
   staged : MountedView,
-) -> Unit raise @ui_host.HostError {
+) -> Unit raise HostError {
   self.host.swap(self.entity, staged.entity)
   remove_ui_components(self.entity)
   if self.entity.is_alive() {
@@ -112,19 +110,19 @@ pub fn MountedView::swap(
 }
 
 ///|
-pub fn SeleneHost::entity(
-  self : SeleneHost,
+pub fn ViewHost::entity(
+  self : ViewHost,
   root : @entity.Entity,
   key : String,
-) -> @entity.Entity? raise @ui_host.HostError {
+) -> @entity.Entity? raise HostError {
   require_record(self, root).entities.get(key)
 }
 
 ///|
-fn SeleneHost::snapshot(
-  self : SeleneHost,
+fn ViewHost::snapshot(
+  self : ViewHost,
   root : @entity.Entity,
-) -> ViewSnapshot raise @ui_host.HostError {
+) -> ViewSnapshot raise HostError {
   let record = require_record(self, root)
   let mut focus_key : String? = None
   match @ui.focused_entity() {
@@ -142,11 +140,11 @@ fn SeleneHost::snapshot(
 }
 
 ///|
-fn SeleneHost::restore(
-  self : SeleneHost,
+fn ViewHost::restore(
+  self : ViewHost,
   root : @entity.Entity,
   saved : ViewSnapshot,
-) -> Unit raise @ui_host.HostError {
+) -> Unit raise HostError {
   let record = require_record(self, root)
   for position in saved.scroll {
     match record.entities.get(position.key) {
@@ -166,13 +164,13 @@ fn SeleneHost::restore(
 }
 
 ///|
-pub fn SeleneHost::swap(
-  self : SeleneHost,
+pub fn ViewHost::swap(
+  self : ViewHost,
   live : @entity.Entity,
   staged : @entity.Entity,
-) -> Unit raise @ui_host.HostError {
+) -> Unit raise HostError {
   if live == staged {
-    raise @ui_host.HostError::InvalidMutation(
+    raise HostError::InvalidMutation(
       "SH2002", "live and staged view entities must be distinct",
     )
   }
@@ -181,9 +179,7 @@ pub fn SeleneHost::swap(
   let parent = match live.get_parent() {
     Some(value) => value
     None =>
-      raise @ui_host.HostError::InvalidMutation(
-        "SH2001", "live view has no host parent",
-      )
+      raise HostError::InvalidMutation("SH2001", "live view has no host parent")
   }
   let saved = self.snapshot(live)
   let focused_before = @ui.focused_entity()
@@ -217,10 +213,10 @@ pub fn SeleneHost::swap(
 }
 
 ///|
-pub fn SeleneHost::unmount(
-  self : SeleneHost,
+pub fn ViewHost::unmount(
+  self : ViewHost,
   entity : @entity.Entity,
-) -> Unit raise @ui_host.HostError {
+) -> Unit raise HostError {
   let record = require_record(self, entity)
   let store = current_store()
   match @ui.focused_entity() {
@@ -251,19 +247,14 @@ pub fn SeleneHost::unmount(
 }
 
 ///|
-pub fn SeleneHost::mount(
-  self : SeleneHost,
+pub fn ViewHost::mount(
+  self : ViewHost,
   entity : @entity.Entity,
-  specs : Array[@ui_host.NodeSpec],
-) -> Unit raise @ui_host.HostError {
+  specs : Array[NodeSpec],
+) -> Unit raise HostError {
   let store = current_store()
-  if store.views.length() >= 64 {
-    raise @ui_host.HostError::InvalidMutation(
-      "SH1012", "Selene UI component view limit exceeded",
-    )
-  }
   if !entity.is_alive() || store.views.contains(entity) {
-    raise @ui_host.HostError::InvalidMutation(
+    raise HostError::InvalidMutation(
       "SH1017", "mount entity must be alive and unused",
     )
   }
@@ -276,7 +267,7 @@ pub fn SeleneHost::mount(
     visual_states: Map([]),
     visual_transitions: Map([]),
   }
-  self.apply(entity, specs.map(spec => @ui_host.TreeMutation::Mount(spec))) catch {
+  self.apply(entity, specs.map(spec => TreeMutation::Mount(spec))) catch {
     error => {
       store.views.remove(entity)
       raise error
@@ -285,17 +276,12 @@ pub fn SeleneHost::mount(
 }
 
 ///|
-pub fn SeleneHost::apply(
-  self : SeleneHost,
+pub fn ViewHost::apply(
+  self : ViewHost,
   entity : @entity.Entity,
-  mutations : Array[@ui_host.TreeMutation],
-) -> Unit raise @ui_host.HostError {
+  mutations : Array[TreeMutation],
+) -> Unit raise HostError {
   let record = require_record(self, entity)
-  if mutations.length() > 512 {
-    raise @ui_host.HostError::InvalidMutation(
-      "SH1010", "mutation batch exceeds the 512 operation limit",
-    )
-  }
   let planned_nodes : Map[String, HostNode] = Map([])
   for key, node in record.nodes {
     planned_nodes[key] = {
@@ -310,7 +296,7 @@ pub fn SeleneHost::apply(
     match mutation {
       Mount(spec) => {
         if spec.key == "" || planned_nodes.contains(spec.key) {
-          raise @ui_host.HostError::InvalidMutation(
+          raise HostError::InvalidMutation(
             "SH1001",
             "mount key must be unique and non-empty: " + spec.key,
           )
@@ -320,7 +306,7 @@ pub fn SeleneHost::apply(
             match planned_nodes.get(parent) {
               Some(parent_node) => parent_node.children.push(spec.key)
               None =>
-                raise @ui_host.HostError::InvalidMutation(
+                raise HostError::InvalidMutation(
                   "SH1002",
                   "mount parent does not exist: " + parent,
                 )
@@ -334,13 +320,13 @@ pub fn SeleneHost::apply(
         let previous = match planned_nodes.get(spec.key) {
           Some(value) => value
           None =>
-            raise @ui_host.HostError::InvalidMutation(
+            raise HostError::InvalidMutation(
               "SH1003",
               "update target does not exist: " + spec.key,
             )
         }
         if previous.spec.parent != spec.parent {
-          raise @ui_host.HostError::InvalidMutation(
+          raise HostError::InvalidMutation(
             "SH1013",
             "Update cannot change a node parent: " + spec.key,
           )
@@ -356,12 +342,12 @@ pub fn SeleneHost::apply(
         let node = match planned_nodes.get(key) {
           Some(current) if current.spec.kind == Text => current
           Some(_) =>
-            raise @ui_host.HostError::InvalidMutation(
+            raise HostError::InvalidMutation(
               "SH1014",
               "set-text target is not a Text node: " + key,
             )
           None =>
-            raise @ui_host.HostError::InvalidMutation(
+            raise HostError::InvalidMutation(
               "SH1003",
               "mutation target does not exist: " + key,
             )
@@ -372,12 +358,12 @@ pub fn SeleneHost::apply(
         let node = match planned_nodes.get(key) {
           Some(current) if current.spec.kind == Image => current
           Some(_) =>
-            raise @ui_host.HostError::InvalidMutation(
+            raise HostError::InvalidMutation(
               "SH1015",
               "set-source target is not an Image node: " + key,
             )
           None =>
-            raise @ui_host.HostError::InvalidMutation(
+            raise HostError::InvalidMutation(
               "SH1003",
               "mutation target does not exist: " + key,
             )
@@ -388,7 +374,7 @@ pub fn SeleneHost::apply(
         let node = match planned_nodes.get(key) {
           Some(current) => current
           None =>
-            raise @ui_host.HostError::InvalidMutation(
+            raise HostError::InvalidMutation(
               "SH1003",
               "mutation target does not exist: " + key,
             )
@@ -403,7 +389,7 @@ pub fn SeleneHost::apply(
         let node = match planned_nodes.get(key) {
           Some(current) => current
           None =>
-            raise @ui_host.HostError::InvalidMutation(
+            raise HostError::InvalidMutation(
               "SH1003",
               "mutation target does not exist: " + key,
             )
@@ -414,12 +400,12 @@ pub fn SeleneHost::apply(
         let node = match planned_nodes.get(key) {
           Some(current) if current.spec.kind == Button => current
           Some(_) =>
-            raise @ui_host.HostError::InvalidMutation(
+            raise HostError::InvalidMutation(
               "SH1016",
               "set-enabled target is not a Button node: " + key,
             )
           None =>
-            raise @ui_host.HostError::InvalidMutation(
+            raise HostError::InvalidMutation(
               "SH1003",
               "mutation target does not exist: " + key,
             )
@@ -430,7 +416,7 @@ pub fn SeleneHost::apply(
         let node = match planned_nodes.get(key) {
           Some(current) => current
           None =>
-            raise @ui_host.HostError::InvalidMutation(
+            raise HostError::InvalidMutation(
               "SH1003",
               "mutation target does not exist: " + key,
             )
@@ -444,7 +430,7 @@ pub fn SeleneHost::apply(
         let node = match planned_nodes.get(key) {
           Some(value) => value
           None =>
-            raise @ui_host.HostError::InvalidMutation(
+            raise HostError::InvalidMutation(
               "SH1004",
               "move target does not exist: " + key,
             )
@@ -452,7 +438,7 @@ pub fn SeleneHost::apply(
         let new_parent = match planned_nodes.get(parent) {
           Some(value) => value
           None =>
-            raise @ui_host.HostError::InvalidMutation(
+            raise HostError::InvalidMutation(
               "SH1005",
               "move parent does not exist: " + parent,
             )
@@ -460,7 +446,7 @@ pub fn SeleneHost::apply(
         let mut ancestor : String? = Some(parent)
         while ancestor is Some(value) {
           if value == key {
-            raise @ui_host.HostError::InvalidMutation(
+            raise HostError::InvalidMutation(
               "SH1006",
               "move would create a cycle: " + key,
             )
@@ -484,7 +470,7 @@ pub fn SeleneHost::apply(
             }
         }
         if index < 0 || index > new_parent.children.length() {
-          raise @ui_host.HostError::InvalidMutation(
+          raise HostError::InvalidMutation(
             "SH1007",
             "move index is out of range: " + index.to_string(),
           )
@@ -499,7 +485,7 @@ pub fn SeleneHost::apply(
         let node = match planned_nodes.get(key) {
           Some(value) => value
           None =>
-            raise @ui_host.HostError::InvalidMutation(
+            raise HostError::InvalidMutation(
               "SH1008",
               "remove target does not exist: " + key,
             )
@@ -531,11 +517,6 @@ pub fn SeleneHost::apply(
       }
     }
   }
-  if planned_nodes.length() > 256 {
-    raise @ui_host.HostError::InvalidMutation(
-      "SH1011", "component view exceeds the 256 node limit",
-    )
-  }
   for key, _ in style_keys_to_validate {
     guard planned_nodes.get(key) is Some(node) else { continue }
     let spec = node.spec
@@ -556,21 +537,20 @@ pub fn SeleneHost::apply(
   for _, node in planned_nodes {
     if node.spec.kind == Image && node.spec.source.contains("#") {
       ignore(@atlas.resolve_texture_atlas_region(node.spec.source)) catch {
-        error =>
-          raise @ui_host.HostError::InvalidMutation("SH1022", error.to_string())
+        error => raise HostError::InvalidMutation("SH1022", error.to_string())
       }
     }
     for group in node.spec.visual_state_groups {
       for state in group.states {
         for setter in state.setters {
           if !planned_nodes.contains(setter.target) {
-            raise @ui_host.HostError::InvalidMutation(
+            raise HostError::InvalidMutation(
               "SH1020",
               "visual-state target does not exist: " + setter.target,
             )
           }
           if !visual_state_setter_is_valid(setter) {
-            raise @ui_host.HostError::InvalidMutation(
+            raise HostError::InvalidMutation(
               "SH1021",
               "visual-state setter has an incompatible property/value: " +
               setter.property,
@@ -581,10 +561,7 @@ pub fn SeleneHost::apply(
               source.contains("#") =>
               ignore(@atlas.resolve_texture_atlas_region(source)) catch {
                 error =>
-                  raise @ui_host.HostError::InvalidMutation(
-                    "SH1022",
-                    error.to_string(),
-                  )
+                  raise HostError::InvalidMutation("SH1022", error.to_string())
               }
             _ => ()
           }
@@ -616,7 +593,7 @@ pub fn SeleneHost::apply(
 }
 
 ///|
-fn visual_state_setter_is_valid(setter : @ui_host.VisualStateSetter) -> Bool {
+fn visual_state_setter_is_valid(setter : VisualStateSetter) -> Bool {
   match (setter.property, setter.value) {
     (
       "Source"
@@ -644,9 +621,9 @@ fn visual_state_setter_is_valid(setter : @ui_host.VisualStateSetter) -> Bool {
 
 ///|
 fn apply_visual_state_setter(
-  spec : @ui_host.NodeSpec,
-  setter : @ui_host.VisualStateSetter,
-) -> @ui_host.NodeSpec {
+  spec : NodeSpec,
+  setter : VisualStateSetter,
+) -> NodeSpec {
   match (setter.property, setter.value) {
     ("Source", StringValue(value)) => { ..spec, source: value }
     ("Background", StringValue(value)) =>
@@ -682,10 +659,7 @@ fn apply_visual_state_setter(
 }
 
 ///|
-fn visual_state_exists(
-  group : @ui_host.VisualStateGroup,
-  name : String,
-) -> Bool {
+fn visual_state_exists(group : VisualStateGroup, name : String) -> Bool {
   group.states.any(state => state.name == name)
 }
 
@@ -693,7 +667,7 @@ fn visual_state_exists(
 fn effective_visual_state(
   record : ViewRecord,
   owner : String,
-  group : @ui_host.VisualStateGroup,
+  group : VisualStateGroup,
 ) -> String {
   if !group.interaction {
     if group.current != "" && visual_state_exists(group, group.current) {
@@ -729,10 +703,7 @@ fn effective_visual_state(
 }
 
 ///|
-fn visual_state_value(
-  spec : @ui_host.NodeSpec,
-  property : String,
-) -> @ui_host.VisualStateValue? {
+fn visual_state_value(spec : NodeSpec, property : String) -> VisualStateValue? {
   let style = spec.style
   match property {
     "Source" => Some(StringValue(spec.source))
@@ -757,11 +728,11 @@ fn visual_state_value(
 ///|
 fn interpolate_visual_state_value(
   property : String,
-  from : @ui_host.VisualStateValue,
-  to : @ui_host.VisualStateValue,
+  from : VisualStateValue,
+  to : VisualStateValue,
   progress : Double,
   easing : String,
-) -> @ui_host.VisualStateValue? {
+) -> VisualStateValue? {
   let linear = if progress < 0.0 {
     0.0
   } else if progress > 1.0 {
@@ -825,8 +796,8 @@ fn interpolate_visual_state_value(
 
 ///|
 fn refresh_visual_states(record : ViewRecord) -> Unit {
-  let effective : Map[String, @ui_host.NodeSpec] = Map([])
-  let groups : Array[(Int, String, @ui_host.VisualStateGroup)] = []
+  let effective : Map[String, NodeSpec] = Map([])
+  let groups : Array[(Int, String, VisualStateGroup)] = []
   for key, node in record.nodes {
     effective[key] = node.spec
     for group in node.spec.visual_state_groups {
@@ -848,7 +819,7 @@ fn refresh_visual_states(record : ViewRecord) -> Unit {
     let state_key = owner + "\u{1f}" + group.name
     match record.visual_states.get(state_key) {
       Some(previous) if previous != current => {
-        let mut selected_transition : @ui_host.VisualTransition? = None
+        let mut selected_transition : VisualTransition? = None
         let mut selected_score = -1
         for transition in group.transitions {
           let from_matches = transition.from is None ||
@@ -980,8 +951,8 @@ fn refresh_visual_states(record : ViewRecord) -> Unit {
 ///|
 fn write_visual_state_delta(
   target : @entity.Entity,
-  previous : @ui_host.NodeSpec,
-  current : @ui_host.NodeSpec,
+  previous : NodeSpec,
+  current : NodeSpec,
 ) -> Unit {
   let before = previous.style
   let after = current.style
@@ -1093,7 +1064,7 @@ fn ui_image_from_source(source : String, fit : @ui.ImageFit) -> @ui.UiImage {
 ///|
 fn commit_validated_mutations(
   record : ViewRecord,
-  mutations : Array[@ui_host.TreeMutation],
+  mutations : Array[TreeMutation],
 ) -> Unit {
   for mutation in mutations {
     match mutation {
@@ -1267,10 +1238,7 @@ fn commit_validated_mutations(
 }
 
 ///|
-fn write_node_components(
-  target : @entity.Entity,
-  spec : @ui_host.NodeSpec,
-) -> Unit {
+fn write_node_components(target : @entity.Entity, spec : NodeSpec) -> Unit {
   let style = spec.style
   @ui.nodes()[target] = @ui.Node(
     width=match style.width {
@@ -1422,7 +1390,7 @@ fn remove_ui_components(target : @entity.Entity) -> Unit {
 }
 
 ///|
-fn route_component_events(_world : @ecs.World) -> Unit {
+fn route_view_events(_world : @ecs.World) -> Unit {
   let store = current_store()
   let dead_views : Array[@entity.Entity] = []
   for entity, _ in store.views {
@@ -1433,11 +1401,11 @@ fn route_component_events(_world : @ecs.World) -> Unit {
   for entity in dead_views {
     store.views.remove(entity)
   }
-  for click in component_click_reader.read(@ui.click_event_bus) {
+  for click in view_click_reader.read(@ui.click_event_bus) {
     for entity, view in store.views {
       match view.entity_keys.get(click.entity) {
         Some(key) =>
-          component_event_bus.send({ entity, event: { kind: Click, key } })
+          view_event_bus.send({ entity, event: { kind: Click, key } })
         None => ()
       }
     }
@@ -1450,7 +1418,7 @@ fn route_component_events(_world : @ecs.World) -> Unit {
         for entity, view in store.views {
           match view.entity_keys.get(target) {
             Some(key) =>
-              component_event_bus.send({ entity, event: { kind: Focus, key } })
+              view_event_bus.send({ entity, event: { kind: Focus, key } })
             None => ()
           }
         }
@@ -1460,7 +1428,7 @@ fn route_component_events(_world : @ecs.World) -> Unit {
 }
 
 ///|
-fn refresh_component_visual_states(_world : @ecs.World) -> Unit {
+fn refresh_view_visual_states(_world : @ecs.World) -> Unit {
   for _, record in current_store().views {
     refresh_visual_states(record)
   }
@@ -1469,15 +1437,15 @@ fn refresh_component_visual_states(_world : @ecs.World) -> Unit {
 ///|
 pub fn plugin(app : @app.App) -> @app.App {
   app
-  .add_message(component_event_bus)
+  .add_message(view_event_bus)
   .add_system(
     @system.PostUpdate,
-    refresh_component_visual_states,
+    refresh_view_visual_states,
     system_name="selene_ui_visual_states",
   )
   .add_system(
     @system.PostUpdate,
-    route_component_events,
-    system_name="selene_ui_component_events",
+    route_view_events,
+    system_name="selene_ui_view_events",
   )
 }

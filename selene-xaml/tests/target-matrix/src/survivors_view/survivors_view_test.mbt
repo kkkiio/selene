@@ -24,7 +24,7 @@ test "SURVIVORS-01 generated view preserves local identity and routes typed acti
       { key: "speed", label: "Speed", icon: "speed.png", background: "blue" },
     ],
   }
-  let host = @component_host.SeleneHost::new()
+  let host = @ui_view.ViewHost::new()
   @view.SurvivorsView::mount(parent, initial)
   let speed = host
     .entity(parent, "selection-list/selections:speed/selection-button")

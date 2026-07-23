@@ -1,6 +1,0 @@
-import {
-  "KKKIIO/selene_xaml/component_emitter_fixture/tree",
-  "moonbitlang/core/string",
-}
-
-supported_targets = "native"

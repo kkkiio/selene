@@ -11,7 +11,7 @@ async test "EE-01 snapshots the formatted Embedded package" (t : @test.Test) {
     #|package "example/demo/model"
     #|pub(all) struct DemoState { title : String }
   let ir = @viewir.compile("fixtures/demo.xaml", xaml, contract)
-  let generated = @generator_io.format_generated_package(
+  let generated = @embedded_emitter.format_generated_package(
     @embedded_emitter.emit(
       ir, "fixtures/demo.xaml", xaml, "fixtures/model.mbti", contract,
     ),
@@ -29,7 +29,7 @@ async test "EE-01 snapshots the formatted Embedded package" (t : @test.Test) {
   assert_eq(view.contains("pub let action_event_bus"), true)
   assert_eq(view.contains("pub fn plugin(app : @app.App)"), true)
   assert_eq(view.contains("pub fn DemoView::handle_event"), false)
-  assert_eq(view.contains("@ui_host.component_host()"), false)
+  assert_eq(view.contains("@ui_view.ViewHost::new()"), true)
   for file in generated.files {
     let header =
       $|===== \{file.path} =====

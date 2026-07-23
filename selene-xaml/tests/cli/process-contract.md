@@ -1,18 +1,16 @@
 # CLI process contract
 
-`CG-GENERATE-02` verifies that the CLI definition exposes one required,
-exclusive business-contract group.
+`CG-GENERATE-02` verifies that the CLI definition requires an Embedded View
+business contract.
 
 ```mooncram {output_stream: stderr}
 $ selene-xaml generate your_game/ui/inventory.xaml \
->   --mbti your_game/src/model/pkg.generated.mbti \
->   --wit your_game/wit \
 >   --out-dir your_game/src/view
-error: group conflict contract
+error: the following required argument was not provided: 'mbti'
 
-Usage: selene-xaml generate --out-dir <out-dir> [options] <view>
+Usage: selene-xaml generate --mbti <mbti> --out-dir <out-dir> [options] <view>
 
-Generate an Embedded View or Component Guest package.
+Generate an Embedded View package.
 
 Arguments:
   view  XAML document to compile.
@@ -21,11 +19,7 @@ Options:
   -h, --help           Show help information.
   --dry-run            Generate and format without writing files.
   --mbti <mbti>        Use a MoonBit public interface contract.
-  --wit <wit>          Use a WIT file or directory contract.
   --out-dir <out-dir>  Set the generated package directory.
-
-Groups:
-  contract [required] [exclusive]  --mbti <mbti>, --wit <wit>
 [1]
 ```
 

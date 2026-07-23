@@ -6,8 +6,7 @@ import {
   "KKKIIO/selene/entity",
   "KKKIIO/selene/event",
   "KKKIIO/selene/system",
-  "KKKIIO/selene_xaml_runtime/component_host",
-  "KKKIIO/selene_xaml_runtime/ui_host",
+  "KKKIIO/selene/ui_view",
   "moonbitlang/core/string",
 }
 
@@ -46,7 +45,7 @@ pub(all) suberror CanonicalFormattingViewError {
   DeadEntity
   DuplicateKey(String, String)
   InvalidPatch(String)
-  Host(@ui_host.HostError)
+  Host(@ui_view.HostError)
 } derive(Eq, Debug)
 
 ///|
@@ -99,7 +98,7 @@ fn generated_rect_component(
 }
 
 ///|
-fn generated_contains(specs : Array[@ui_host.NodeSpec], key : String) -> Bool {
+fn generated_contains(specs : Array[@ui_view.NodeSpec], key : String) -> Bool {
   for spec in specs {
     if spec.key == key {
       return true
@@ -110,7 +109,7 @@ fn generated_contains(specs : Array[@ui_host.NodeSpec], key : String) -> Bool {
 
 ///|
 fn generated_parent_index(
-  specs : Array[@ui_host.NodeSpec],
+  specs : Array[@ui_view.NodeSpec],
   parent : String?,
   key : String,
 ) -> Int {
@@ -128,21 +127,21 @@ fn generated_parent_index(
 
 ///|
 fn generated_diff(
-  previous : Array[@ui_host.NodeSpec],
-  desired : Array[@ui_host.NodeSpec],
-) -> Array[@ui_host.TreeMutation] {
+  previous : Array[@ui_view.NodeSpec],
+  desired : Array[@ui_view.NodeSpec],
+) -> Array[@ui_view.TreeMutation] {
   if previous == desired {
     return []
   }
-  let previous_by_key : Map[String, @ui_host.NodeSpec] = Map([])
-  let desired_by_key : Map[String, @ui_host.NodeSpec] = Map([])
+  let previous_by_key : Map[String, @ui_view.NodeSpec] = Map([])
+  let desired_by_key : Map[String, @ui_view.NodeSpec] = Map([])
   for spec in previous {
     previous_by_key[spec.key] = spec
   }
   for spec in desired {
     desired_by_key[spec.key] = spec
   }
-  let mutations : Array[@ui_host.TreeMutation] = []
+  let mutations : Array[@ui_view.TreeMutation] = []
   for spec in previous {
     if !desired_by_key.contains(spec.key) {
       let removed_root = match spec.parent {
@@ -150,18 +149,18 @@ fn generated_diff(
         None => true
       }
       if removed_root {
-        mutations.push(@ui_host.TreeMutation::Remove(spec.key))
+        mutations.push(@ui_view.TreeMutation::Remove(spec.key))
       }
     }
   }
   for spec in desired {
     match previous_by_key.get(spec.key) {
       None => {
-        mutations.push(@ui_host.TreeMutation::Mount(spec))
+        mutations.push(@ui_view.TreeMutation::Mount(spec))
         match spec.parent {
           Some(parent) =>
             mutations.push(
-              @ui_host.TreeMutation::Move(
+              @ui_view.TreeMutation::Move(
                 spec.key,
                 parent,
                 generated_parent_index(desired, spec.parent, spec.key),
@@ -177,7 +176,7 @@ fn generated_diff(
         match spec.parent {
           Some(parent) if moved =>
             mutations.push(
-              @ui_host.TreeMutation::Move(
+              @ui_view.TreeMutation::Move(
                 spec.key,
                 parent,
                 generated_parent_index(desired, spec.parent, spec.key),
@@ -199,19 +198,19 @@ fn generated_diff(
           },
         }
         if precise_old != spec {
-          mutations.push(@ui_host.TreeMutation::Update(spec))
+          mutations.push(@ui_view.TreeMutation::Update(spec))
         } else {
           if old.text != spec.text {
-            mutations.push(@ui_host.TreeMutation::SetText(spec.key, spec.text))
+            mutations.push(@ui_view.TreeMutation::SetText(spec.key, spec.text))
           }
           if old.source != spec.source {
             mutations.push(
-              @ui_host.TreeMutation::SetSource(spec.key, spec.source),
+              @ui_view.TreeMutation::SetSource(spec.key, spec.source),
             )
           }
           if old.style.background != spec.style.background {
             mutations.push(
-              @ui_host.TreeMutation::SetBackground(
+              @ui_view.TreeMutation::SetBackground(
                 spec.key,
                 spec.style.background,
               ),
@@ -219,17 +218,17 @@ fn generated_diff(
           }
           if old.active != spec.active {
             mutations.push(
-              @ui_host.TreeMutation::SetActive(spec.key, spec.active),
+              @ui_view.TreeMutation::SetActive(spec.key, spec.active),
             )
           }
           if old.enabled != spec.enabled {
             mutations.push(
-              @ui_host.TreeMutation::SetEnabled(spec.key, spec.enabled),
+              @ui_view.TreeMutation::SetEnabled(spec.key, spec.enabled),
             )
           }
           if old.style.top != spec.style.top {
             mutations.push(
-              @ui_host.TreeMutation::SetTop(spec.key, spec.style.top),
+              @ui_view.TreeMutation::SetTop(spec.key, spec.style.top),
             )
           }
         }
@@ -247,7 +246,7 @@ pub struct CanonicalFormattingView {}
 priv struct GeneratedViewRecord {
   mut model : CanonicalFormattingState
   mut view_model : CanonicalFormattingState
-  mut specs : Array[@ui_host.NodeSpec]
+  mut specs : Array[@ui_view.NodeSpec]
 }
 
 ///|
@@ -263,19 +262,17 @@ pub(all) struct CanonicalFormattingViewActionEvent {
 pub let action_event_bus : @event.Events[CanonicalFormattingViewActionEvent] = @event.Events()
 
 ///|
-let generated_event_reader : @event.EventReader[
-  @component_host.UiComponentEvent,
-] = @event.EventReader()
+let generated_event_reader : @event.EventReader[@ui_view.UiViewEvent] = @event.EventReader()
 
 ///|
 fn generated_specs(
   state : CanonicalFormattingState,
-) -> Array[@ui_host.NodeSpec] raise CanonicalFormattingViewError {
-  let nodes : Array[@ui_host.NodeSpec] = []
+) -> Array[@ui_view.NodeSpec] raise CanonicalFormattingViewError {
+  let nodes : Array[@ui_view.NodeSpec] = []
   nodes.push({
     key: "extraordinarily-long-formatting-acceptance-root",
     parent: None,
-    kind: @ui_host.NodeKind::View,
+    kind: @ui_view.NodeKind::View,
     text: "",
     source: "",
     active: true,
@@ -285,8 +282,8 @@ fn generated_specs(
       absolute: false,
       left: 0.0,
       top: 0.0,
-      width: @ui_host.LayoutValue::Auto,
-      height: @ui_host.LayoutValue::Auto,
+      width: @ui_view.LayoutValue::Auto,
+      height: @ui_view.LayoutValue::Auto,
       margin_left: 0.0,
       margin_top: 0.0,
       margin_right: 0.0,
@@ -306,12 +303,12 @@ fn generated_specs(
       font_family: "",
       font_size: 0.0,
       bold: false,
-      align: @ui_host.TextAlign::Left,
+      align: @ui_view.TextAlign::Left,
       wrap: false,
       z_index: 0,
-      fit: @ui_host.ImageFit::Fill,
-      direction: @ui_host.FlexDirection::Column,
-      flex_basis: @ui_host.LayoutValue::Auto,
+      fit: @ui_view.ImageFit::Fill,
+      direction: @ui_view.FlexDirection::Column,
+      flex_basis: @ui_view.LayoutValue::Auto,
       flex_grow: 0.0,
       flex_shrink: 1.0,
       row_gap: 0.0,
@@ -333,7 +330,7 @@ fn generated_specs(
     nodes.push({
       key: "extraordinarily-long-formatting-acceptance-root/items:\{generated_item_key_1}/extraordinarily-long-formatting-acceptance-button",
       parent: Some("extraordinarily-long-formatting-acceptance-root"),
-      kind: @ui_host.NodeKind::Button,
+      kind: @ui_view.NodeKind::Button,
       text: "",
       source: "",
       active: true,
@@ -343,8 +340,8 @@ fn generated_specs(
         absolute: false,
         left: 0.0,
         top: 0.0,
-        width: @ui_host.LayoutValue::Auto,
-        height: @ui_host.LayoutValue::Auto,
+        width: @ui_view.LayoutValue::Auto,
+        height: @ui_view.LayoutValue::Auto,
         margin_left: 4,
         margin_top: 1,
         margin_right: 2,
@@ -364,12 +361,12 @@ fn generated_specs(
         font_family: "",
         font_size: 0.0,
         bold: false,
-        align: @ui_host.TextAlign::Left,
+        align: @ui_view.TextAlign::Left,
         wrap: false,
         z_index: 0,
-        fit: @ui_host.ImageFit::Fill,
-        direction: @ui_host.FlexDirection::Column,
-        flex_basis: @ui_host.LayoutValue::Auto,
+        fit: @ui_view.ImageFit::Fill,
+        direction: @ui_view.FlexDirection::Column,
+        flex_basis: @ui_view.LayoutValue::Auto,
         flex_grow: 0.0,
         flex_shrink: 1.0,
         row_gap: 0.0,
@@ -385,7 +382,7 @@ fn generated_specs(
       parent: Some(
         "extraordinarily-long-formatting-acceptance-root/items:\{generated_item_key_1}/extraordinarily-long-formatting-acceptance-button",
       ),
-      kind: @ui_host.NodeKind::Text,
+      kind: @ui_view.NodeKind::Text,
       text: generated_item_1.label,
       source: "",
       active: true,
@@ -395,8 +392,8 @@ fn generated_specs(
         absolute: false,
         left: 0.0,
         top: 0.0,
-        width: @ui_host.LayoutValue::Auto,
-        height: @ui_host.LayoutValue::Auto,
+        width: @ui_view.LayoutValue::Auto,
+        height: @ui_view.LayoutValue::Auto,
         margin_left: 0.0,
         margin_top: 0.0,
         margin_right: 0.0,
@@ -416,12 +413,12 @@ fn generated_specs(
         font_family: "",
         font_size: 0.0,
         bold: false,
-        align: @ui_host.TextAlign::Left,
+        align: @ui_view.TextAlign::Left,
         wrap: false,
         z_index: 0,
-        fit: @ui_host.ImageFit::Fill,
-        direction: @ui_host.FlexDirection::Column,
-        flex_basis: @ui_host.LayoutValue::Auto,
+        fit: @ui_view.ImageFit::Fill,
+        direction: @ui_view.FlexDirection::Column,
+        flex_basis: @ui_view.LayoutValue::Auto,
         flex_grow: 0.0,
         flex_shrink: 1.0,
         row_gap: 0.0,
@@ -449,7 +446,7 @@ pub fn CanonicalFormattingView::mount(
   }
   let view_model = generated_compute_view_model(model)
   let desired = generated_specs(view_model)
-  let host = @component_host.SeleneHost::new()
+  let host = @ui_view.ViewHost::new()
   host.mount(entity, desired) catch {
     error => raise Host(error)
   }
@@ -473,7 +470,7 @@ pub fn CanonicalFormattingView::replace(
   let desired = generated_specs(view_model)
   let mutations = generated_diff(record.specs, desired)
   if mutations.length() > 0 {
-    let host = @component_host.SeleneHost::new()
+    let host = @ui_view.ViewHost::new()
     host.apply(entity, mutations) catch {
       error => raise Host(error)
     }
@@ -554,12 +551,12 @@ pub fn CanonicalFormattingView::apply(
 ///|
 fn generated_handle_event(
   record : GeneratedViewRecord,
-  event : @ui_host.UiEvent,
+  event : @ui_view.UiEvent,
 ) -> CanonicalFormattingViewAction? {
   if !generated_contains(record.specs, event.key) {
     return None
   }
-  if event.kind == @ui_host.UiEventKind::Click {
+  if event.kind == @ui_view.UiEventKind::Click {
     for generated_action_item in record.view_model.items {
       let generated_action_key = generated_action_item.id
       let generated_action_node_key = "extraordinarily-long-formatting-acceptance-root/items:\{generated_action_key}/extraordinarily-long-formatting-acceptance-button"
@@ -584,7 +581,7 @@ fn generated_route_events(_world : @ecs.World) -> Unit {
   for entity in dead {
     generated_view_records.remove(entity)
   }
-  for raw in generated_event_reader.read(@component_host.component_event_bus) {
+  for raw in generated_event_reader.read(@ui_view.view_event_bus) {
     match generated_view_records.get(raw.entity) {
       Some(record) =>
         match generated_handle_event(record, raw.event) {
@@ -599,7 +596,7 @@ fn generated_route_events(_world : @ecs.World) -> Unit {
 ///|
 pub fn plugin(app : @app.App) -> @app.App {
   app
-  .add_plugin(@component_host.plugin)
+  .add_plugin(@ui_view.plugin)
   .add_message(action_event_bus)
   .add_system(
     @system.PostUpdate,
@@ -614,19 +611,19 @@ pub fn plugin(app : @app.App) -> @app.App {
     {
       "source": "fixtures/formatting/acceptance-view.xaml",
       "original_offset": 349,
-      "generated_offset": 7980,
+      "generated_offset": 7963,
       "length": 11
     },
     {
       "source": "fixtures/formatting/acceptance-view.xaml",
       "original_offset": 387,
-      "generated_offset": 8025,
+      "generated_offset": 8008,
       "length": 19
     },
     {
       "source": "fixtures/formatting/acceptance-view.xaml",
       "original_offset": 671,
-      "generated_offset": 10088,
+      "generated_offset": 10071,
       "length": 22
     }
   ]
@@ -646,12 +643,12 @@ pub fn plugin(app : @app.App) -> @app.App {
   "output_naming": { "package_directory": ".", "state": "state.generated.mbt", "view": "view.generated.mbt", "source_map": "view.generated.mbt.map.json", "lock": "selene-xaml.lock.json" },
   "package_alias": { "alias": "model", "package": "example/canonical/model" },
   "imported_sidecars": [],
-  "host_capability": { "package": "KKKIIO/selene_xaml_runtime/ui_host", "contract": "component-host", "version": "0.1.0", "operations": ["mount", "apply"] },
-  "abi_fingerprint": "sha256:3926e00c85c6436f1362617aba7dff05e55621bb60cf2ac656a167dc9ae36e19",
-  "outputs": [    { "owner": "selene-xaml", "path": "moon.pkg", "sha256": "2f9636b78ec981118d3378de09e6005d1ce617f850cd42228da26d32c6d4b6a9" },
+  "host_capability": { "package": "KKKIIO/selene/ui_view", "contract": "ui-view", "version": "0.1.0", "operations": ["mount", "apply"] },
+  "abi_fingerprint": "sha256:c4902cab8247473c114b7362f45197905831236c1ec514c3d05ff2b24adb0618",
+  "outputs": [    { "owner": "selene-xaml", "path": "moon.pkg", "sha256": "81f0c024a87c60032cd7ba7ba9a7d57ff1e8e9688a0feaee408de49178ca99f7" },
     { "owner": "selene-xaml", "path": "state.generated.mbt", "sha256": "51f9793c93aa8c2c12777050eee1c8f57be44b4cbcf42f00b48247a47fb8bba3" },
-    { "owner": "selene-xaml", "path": "view.generated.mbt", "sha256": "62cb1ded34d3994502af5b30b0970210b34b63d7aa49e39e28c5d3a0a20176d8" },
-    { "owner": "selene-xaml", "path": "view.generated.mbt.map.json", "sha256": "f8642a9b1b66ffda104c90a6850a6b6130872cfc15daaa799503ec1c0465dbab" }
+    { "owner": "selene-xaml", "path": "view.generated.mbt", "sha256": "bbff0cb211da0b1ef9008fb36c343c4b40e7214449db43696231ae40beb2cab2" },
+    { "owner": "selene-xaml", "path": "view.generated.mbt.map.json", "sha256": "12c5faea9770ab011ea2d7fc2ab0ef181e74bba6c3f0122a7f496b1d8af7e03f" }
   ],
   "lock_path": "selene-xaml.lock.json"
 }

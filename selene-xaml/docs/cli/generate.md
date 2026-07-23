@@ -1,8 +1,7 @@
 # `selene-xaml generate`
 
 `generate` compiles one XAML document and one typed business contract into a
-MoonBit package. The selected contract determines whether the output is an
-Embedded View package or a WebAssembly Component Guest package.
+MoonBit Embedded View package.
 
 ## Embedded View package
 
@@ -35,38 +34,11 @@ view.generated.mbt.map.json
 The generated package references the nominal business types declared by the
 `.mbti`; it does not copy those types into the View package.
 
-## Component Guest package
-
-Pass either one WIT file or a directory containing `.wit` files:
-
-```mooncram
-$ selene-xaml generate your_game/ui/component.xaml \
->   --wit your_game/wit \
->   --out-dir your_game/src/inventory_component
-generated 3 Component Guest files in your_game/src/inventory_component
-```
-
-When `--wit` names a directory, `generate` reads its direct `.wit` children in
-filename order. An empty WIT directory is rejected.
-
-On success, the generator-owned output is:
-
-```mooncram
-$ LC_ALL=C ls -1 your_game/src/inventory_component
-guest.generated.mbt
-guest.generated.mbt.map.json
-selene-xaml.lock.json
-```
-
-The Component project owns `moon.pkg`, generated WIT bindings, and the final
-`.component.wasm`. `selene-xaml generate` does not run `wit-bindgen`, Moon
-builds, `wasm-tools`, or `jco`.
-
 ## Arguments
 
 ```text
 selene-xaml generate <view.xaml>
-  (--mbti <contract.mbti> | --wit <wit-file-or-directory>)
+  --mbti <contract.mbti>
   --out-dir <package-directory>
   [--dry-run]
 ```
@@ -74,14 +46,12 @@ selene-xaml generate <view.xaml>
 | Argument | Meaning |
 | --- | --- |
 | `<view.xaml>` | The single XAML document to compile. |
-| `--mbti <path>` | Generate an Embedded View package using a MoonBit public interface as the business contract. |
-| `--wit <path>` | Generate a Component Guest package using one WIT file or a directory of WIT files. |
+| `--mbti <path>` | MoonBit public interface used as the business contract. |
 | `--out-dir <path>` | Directory containing the generated package and its ownership lock. |
 | `--dry-run` | Run parsing, lowering, emission, and formatting, then print the output plan without writing files. |
 
-Exactly one of `--mbti` and `--wit` is required. Each option may appear only
-once and requires a value. Embedded View packages import `KKKIIO/selene`
-directly.
+`--mbti` is required, may appear only once, and requires a value. Embedded View
+packages import `KKKIIO/selene` directly.
 
 ## Preview without writing
 

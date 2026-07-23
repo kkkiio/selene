@@ -65,7 +65,7 @@ jobs:
           cd selene-core
           moon update
           moon check --deny-warn
-          moon test src/animation src/app src/asset src/autotile2d src/collision src/editor_bridge src/entity src/event src/input_action src/inputs src/ldtk src/math src/physics3d src/render2d src/render3d src/render_submit src/runtime_debug src/scene3d src/sprite src/text2d src/tiled src/touch_controls src/transform src/ui --target native --release --deny-warn
+          moon test src/animation src/app src/asset src/autotile2d src/collision src/editor_bridge src/entity src/event src/input_action src/inputs src/ldtk src/math src/physics3d src/render2d src/render3d src/render_submit src/runtime_debug src/scene3d src/sprite src/text2d src/tiled src/touch_controls src/transform src/ui src/ui_view --target native --release --deny-warn
           moon build
 
       - name: selene-raylib
@@ -129,3 +129,35 @@ jobs:
           cd examples-web
           moon update
           moon check --target js --deny-warn
+
+  selene-xaml:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install MoonBit
+        run: |
+          curl -fsSL https://cli.moonbitlang.com/install/unix.sh | bash
+          echo "$HOME/.moon/bin" >> "$GITHUB_PATH"
+
+      - name: Install build tools
+        uses: taiki-e/install-action@v2
+        with:
+          tool: just@1.46.0
+
+      - name: Resolve MoonBit dependencies
+        working-directory: selene-xaml
+        run: |
+          moon update
+          moon -C ../selene-core update
+          moon -C examples/inventory update
+          moon -C examples/survivors update
+          moon -C tests/target-matrix update
+
+      - name: Run semantic tests
+        working-directory: selene-xaml
+        run: just test
+
+      - name: Compile examples
+        working-directory: selene-xaml
+        run: just build-examples

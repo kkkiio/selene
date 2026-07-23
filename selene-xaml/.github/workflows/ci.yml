@@ -22,13 +22,6 @@ jobs:
       - name: Check out repository
         uses: actions/checkout@v7
 
-      - name: Set up Node.js
-        uses: actions/setup-node@v7
-        with:
-          node-version: 24
-          cache: npm
-          cache-dependency-path: examples/wasm-component/component/package-lock.json
-
       - name: Install MoonBit
         run: |
           curl -fsSL https://cli.moonbitlang.com/install/unix.sh | bash
@@ -37,15 +30,14 @@ jobs:
       - name: Install build tools
         uses: taiki-e/install-action@v2
         with:
-          tool: just@1.46.0,wasm-tools@1.253.0
+          tool: just@1.46.0
 
       - name: Resolve MoonBit dependencies
         run: |
           moon update
-          moon -C runtime update
+          moon -C ../selene-core update
           moon -C examples/inventory update
           moon -C examples/survivors update
-          moon -C examples/wasm-component/host update
           moon -C tests/target-matrix update
 
       - name: Run semantic tests

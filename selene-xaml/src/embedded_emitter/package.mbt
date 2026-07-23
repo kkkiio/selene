@@ -17,7 +17,7 @@ pub fn emit(
   source : String,
   contract_uri : String,
   contract_source : String,
-) -> @generator_io.GeneratedPackage raise {
+) -> GeneratedPackage raise {
   let normalized_source = normalize_artifact_path(source_uri)
   let normalized_contract = normalize_artifact_path(contract_uri)
   let source_hash = sha256_text(source)
@@ -49,8 +49,7 @@ pub fn emit(
     $|  "KKKIIO/selene/entity",
     $|  "KKKIIO/selene/event",
     $|  "KKKIIO/selene/system",
-    $|  "KKKIIO/selene_xaml_runtime/component_host",
-    $|  "KKKIIO/selene_xaml_runtime/ui_host",
+    $|  "KKKIIO/selene/ui_view",
     $|  "moonbitlang/core/string",
     $|}
     $|
@@ -66,7 +65,7 @@ pub fn emit(
   let state_source = emit_state_source(schema, analysis, generated_header)
   let emitted_view = emit_view_source(plan, generated_header)
   let source_map = emit_source_map(normalized_source, emitted_view.mappings)
-  let owned : Array[@generator_io.GeneratedFile] = [
+  let owned : Array[GeneratedFile] = [
     { path: "moon.pkg", content: moon_pkg },
     { path: "state.generated.mbt", content: state_source },
     { path: "view.generated.mbt", content: emitted_view.source },
@@ -80,7 +79,7 @@ pub fn emit(
       $|\{plan.contract.model_type.package_path}
       $|\{contract_source}
       $|\{public_action_abi}
-      $|selene-ui-host@0.1.0
+      $|selene-ui-view@0.1.0
       $|mount
       $|apply
       $|
@@ -265,7 +264,7 @@ fn emit_lock(
   plan : @viewir.ViewIR,
   schema : @viewir.IRBusinessContract,
   abi_fingerprint : String,
-  files : Array[@generator_io.GeneratedFile],
+  files : Array[GeneratedFile],
 ) -> String {
   let output = StringBuilder::new()
   output <+
@@ -282,7 +281,7 @@ fn emit_lock(
     $|  "output_naming": { "package_directory": ".", "state": "state.generated.mbt", "view": "view.generated.mbt", "source_map": "view.generated.mbt.map.json", "lock": "selene-xaml.lock.json" },
     $|  "package_alias": { "alias": \{plan.contract.model_type.package_alias.escape()}, "package": \{plan.contract.model_type.package_path.escape()} },
     $|  "imported_sidecars": [],
-    $|  "host_capability": { "package": "KKKIIO/selene_xaml_runtime/ui_host", "contract": "component-host", "version": "0.1.0", "operations": ["mount", "apply"] },
+    $|  "host_capability": { "package": "KKKIIO/selene/ui_view", "contract": "ui-view", "version": "0.1.0", "operations": ["mount", "apply"] },
     $|  "abi_fingerprint": "sha256:\{abi_fingerprint}",
     $|  "outputs": [
   for index, file in files {

@@ -1,8 +1,0 @@
-<View xmlns="urn:selene:xaml:ui"
-      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-      xmlns:model="moonbit:KKKIIO/selene_xaml/component_emitter_fixture/api"
-      x:Class="DemoView" DataType="model:DemoModel" x:Name="root">
-  <Button x:Name="submit" OnClick="submit" Width="120" Height="40">
-    <Text Text="Submit" />
-  </Button>
-</View>

@@ -1,5 +1,5 @@
 ///|
-fn with_component_host_world(action : () -> Unit raise) -> Unit raise {
+fn with_view_host_world(action : () -> Unit raise) -> Unit raise {
   let previous = @ecs.current_world().unwrap_or(@ecs.bootstrap_world())
   let world = @ecs.World()
   @ecs.set_current_world(world)
@@ -13,11 +13,11 @@ fn with_component_host_world(action : () -> Unit raise) -> Unit raise {
 }
 
 ///|
-test "CH-SEMANTICS-01 projects Update style and behavior into Selene stores" {
-  with_component_host_world(fn() raise {
-    let host = @component_host.MountedView::new()
-    let base = @ui_host.NodeStyle::default()
-    let title : @ui_host.NodeSpec = {
+test "VH-SEMANTICS-01 projects Update style and behavior into Selene stores" {
+  with_view_host_world(fn() raise {
+    let host = @ui_view.MountedView::new()
+    let base = @ui_view.NodeStyle::default()
+    let title : @ui_view.NodeSpec = {
       key: "title",
       parent: Some("root"),
       kind: Text,
@@ -29,7 +29,7 @@ test "CH-SEMANTICS-01 projects Update style and behavior into Selene stores" {
       visual_state_groups: [],
       style: { ..base, color: "white", font_size: 20.0 },
     }
-    let action_spec : @ui_host.NodeSpec = {
+    let action_spec : @ui_view.NodeSpec = {
       key: "action",
       parent: Some("root"),
       kind: Button,
@@ -54,10 +54,10 @@ test "CH-SEMANTICS-01 projects Update style and behavior into Selene stores" {
         visual_state_groups: [],
         style: {
           ..base,
-          width: @ui_host.LayoutValue::Percent(1.0),
-          height: @ui_host.LayoutValue::Px(320.0),
+          width: @ui_view.LayoutValue::Percent(1.0),
+          height: @ui_view.LayoutValue::Px(320.0),
           direction: Row,
-          flex_basis: @ui_host.LayoutValue::Percent(0.5),
+          flex_basis: @ui_view.LayoutValue::Percent(0.5),
           flex_grow: 2.0,
           flex_shrink: 0.0,
           row_gap: 8.0,
@@ -168,11 +168,11 @@ test "CH-SEMANTICS-01 projects Update style and behavior into Selene stores" {
 }
 
 ///|
-test "CH-ATOMIC-01 validates the full batch before retaining final identities" {
-  with_component_host_world(fn() raise {
-    let host = @component_host.MountedView::new()
-    let base = @ui_host.NodeStyle::default()
-    let title : @ui_host.NodeSpec = {
+test "VH-ATOMIC-01 validates the full batch before retaining final identities" {
+  with_view_host_world(fn() raise {
+    let host = @ui_view.MountedView::new()
+    let base = @ui_view.NodeStyle::default()
+    let title : @ui_view.NodeSpec = {
       key: "title",
       parent: Some("root"),
       kind: Text,
@@ -206,7 +206,7 @@ test "CH-ATOMIC-01 validates the full batch before retaining final identities" {
         SetSource("title", "invalid.png"),
       ])
     catch {
-      @ui_host.HostError::InvalidMutation(code, _) =>
+      @ui_view.HostError::InvalidMutation(code, _) =>
         inspect(code, content="SH1015")
       error => raise error
     } noraise {
@@ -257,10 +257,10 @@ test "CH-ATOMIC-01 validates the full batch before retaining final identities" {
 }
 
 ///|
-test "CH-INCREMENTAL-01 commits only mutation targets and affected hierarchy" {
-  with_component_host_world(fn() raise {
-    let host = @component_host.MountedView::new()
-    let base = @ui_host.NodeStyle::default()
+test "VH-INCREMENTAL-01 commits only mutation targets and affected hierarchy" {
+  with_view_host_world(fn() raise {
+    let host = @ui_view.MountedView::new()
+    let base = @ui_view.NodeStyle::default()
     host.apply([
       Mount({
         key: "root",
@@ -346,129 +346,16 @@ test "CH-INCREMENTAL-01 commits only mutation targets and affected hierarchy" {
 }
 
 ///|
-test "CH-LIMIT-01 enforces mutation and node limits atomically" {
-  with_component_host_world(fn() raise {
-    let base = @ui_host.NodeStyle::default()
-    let accepted = @component_host.MountedView::new()
-    let accepted_batch : Array[@ui_host.TreeMutation] = [
-      Mount({
-        key: "root",
-        parent: None,
-        kind: View,
-        text: "",
-        source: "",
-        active: true,
-        enabled: true,
-        focusable: false,
-        visual_state_groups: [],
-        style: base,
-      }),
-    ]
-    for index = 0; index < 128; index = index + 1 {
-      accepted_batch.push(
-        Mount({
-          key: "child-" + index.to_string(),
-          parent: Some("root"),
-          kind: View,
-          text: "",
-          source: "",
-          active: true,
-          enabled: true,
-          focusable: false,
-          visual_state_groups: [],
-          style: base,
-        }),
-      )
-    }
-    accepted.apply(accepted_batch)
-    debug_inspect(
-      (
-        accepted.entity("root") is Some(_),
-        accepted.entity("child-127") is Some(_),
-      ),
-      content="(true, true)",
-    )
-    let maximum_mutations : Array[@ui_host.TreeMutation] = []
-    for index = 0; index < 512; index = index + 1 {
-      maximum_mutations.push(SetActive("root", index % 2 == 0))
-    }
-    accepted.apply(maximum_mutations)
-    let root = accepted.entity("root").unwrap()
-    inspect(@ui.nodes()[root].active, content="false")
-    let oversized_mutations = maximum_mutations.copy()
-    oversized_mutations.push(SetActive("root", true))
-    try accepted.apply(oversized_mutations) catch {
-      @ui_host.HostError::InvalidMutation(code, message) =>
-        debug_inspect(
-          (code, message),
-          content="(\"SH1010\", \"mutation batch exceeds the 512 operation limit\")",
-        )
-      error => raise error
-    } noraise {
-      _ => fail("513 mutations must exceed the component limit")
-    }
-    debug_inspect(
-      (accepted.entity("root") == Some(root), @ui.nodes()[root].active),
-      content="(true, false)",
-    )
-    let rejected = @component_host.MountedView::new()
-    let rejected_batch : Array[@ui_host.TreeMutation] = [
-      Mount({
-        key: "root",
-        parent: None,
-        kind: View,
-        text: "",
-        source: "",
-        active: true,
-        enabled: true,
-        focusable: false,
-        visual_state_groups: [],
-        style: base,
-      }),
-    ]
-    for index = 0; index < 256; index = index + 1 {
-      rejected_batch.push(
-        Mount({
-          key: "child-" + index.to_string(),
-          parent: Some("root"),
-          kind: View,
-          text: "",
-          source: "",
-          active: true,
-          enabled: true,
-          focusable: false,
-          visual_state_groups: [],
-          style: base,
-        }),
-      )
-    }
-    try rejected.apply(rejected_batch) catch {
-      @ui_host.HostError::InvalidMutation(code, message) =>
-        debug_inspect(
-          (code, message),
-          content="(\"SH1011\", \"component view exceeds the 256 node limit\")",
-        )
-      error => raise error
-    } noraise {
-      _ => fail("257 live nodes must exceed the component limit")
-    }
-    debug_inspect(rejected.container().get_children(), content="[]")
-    accepted.release()
-    rejected.release()
-  })
-}
-
-///|
-test "CH-RELOAD-01 swap restores focus and scroll by stable key" {
-  with_component_host_world(fn() raise {
+test "VH-RELOAD-01 swap restores focus and scroll by stable key" {
+  with_view_host_world(fn() raise {
     let parent = @entity.Entity()
-    let base = @ui_host.NodeStyle::default()
+    let base = @ui_view.NodeStyle::default()
     let app = @app.App()
       .with_world(@ecs.require_current_world())
       .add_message(@ui.click_event_bus)
-      .add_plugin(@component_host.plugin)
-    let focus_reader : @event.EventReader[@component_host.UiComponentEvent] = @event.EventReader()
-    let live = @component_host.MountedView::new()
+      .add_plugin(@ui_view.plugin)
+    let focus_reader : @event.EventReader[@ui_view.UiViewEvent] = @event.EventReader()
+    let live = @ui_view.MountedView::new()
     live.apply([
       Mount({
         key: "root",
@@ -494,8 +381,8 @@ test "CH-RELOAD-01 swap restores focus and scroll by stable key" {
         visual_state_groups: [],
         style: {
           ..base,
-          width: @ui_host.LayoutValue::Px(200.0),
-          height: @ui_host.LayoutValue::Px(100.0),
+          width: @ui_view.LayoutValue::Px(200.0),
+          height: @ui_view.LayoutValue::Px(100.0),
         },
       }),
       Mount({
@@ -518,20 +405,18 @@ test "CH-RELOAD-01 swap restores focus and scroll by stable key" {
     @ui.focus(old_play)
     app.run_frames(1)
     debug_inspect(
-      focus_reader
-      .read(@component_host.component_event_bus)
-      .map(event => event.event),
+      focus_reader.read(@ui_view.view_event_bus).map(event => event.event),
       content="[{ kind: Focus, key: \"play\" }]",
     )
     try live.swap(live) catch {
-      @ui_host.HostError::InvalidMutation(code, message) =>
+      @ui_view.HostError::InvalidMutation(code, message) =>
         debug_inspect(
           (code, message),
           content="(\"SH2002\", \"live and staged view entities must be distinct\")",
         )
       error => raise error
     } noraise {
-      _ => fail("a component host cannot be swapped with itself")
+      _ => fail("a view host cannot be swapped with itself")
     }
     debug_inspect(
       (
@@ -541,7 +426,7 @@ test "CH-RELOAD-01 swap restores focus and scroll by stable key" {
       ),
       content="(true, true, true)",
     )
-    let staged = @component_host.MountedView::new()
+    let staged = @ui_view.MountedView::new()
     staged.apply([
       Mount({
         key: "root",
@@ -567,8 +452,8 @@ test "CH-RELOAD-01 swap restores focus and scroll by stable key" {
         visual_state_groups: [],
         style: {
           ..base,
-          width: @ui_host.LayoutValue::Px(240.0),
-          height: @ui_host.LayoutValue::Px(120.0),
+          width: @ui_view.LayoutValue::Px(240.0),
+          height: @ui_view.LayoutValue::Px(120.0),
         },
       }),
       Mount({
@@ -598,12 +483,10 @@ test "CH-RELOAD-01 swap restores focus and scroll by stable key" {
       content="(false, { x: 3, y: 87 }, true, true)",
     )
     debug_inspect(
-      focus_reader
-      .read(@component_host.component_event_bus)
-      .map(event => event.event),
+      focus_reader.read(@ui_view.view_event_bus).map(event => event.event),
       content="[]",
     )
-    let disabled = @component_host.MountedView::new()
+    let disabled = @ui_view.MountedView::new()
     disabled.apply([
       Mount({
         key: "root",
@@ -643,9 +526,7 @@ test "CH-RELOAD-01 swap restores focus and scroll by stable key" {
       content="(false, false, None, true)",
     )
     debug_inspect(
-      focus_reader
-      .read(@component_host.component_event_bus)
-      .map(event => event.event),
+      focus_reader.read(@ui_view.view_event_bus).map(event => event.event),
       content="[]",
     )
     disabled.release()
@@ -653,10 +534,10 @@ test "CH-RELOAD-01 swap restores focus and scroll by stable key" {
 }
 
 ///|
-test "CH-EVENT-01 plugin routes click and focus to typed stable-key events" {
-  with_component_host_world(fn() raise {
-    let host = @component_host.MountedView::new()
-    let style = @ui_host.NodeStyle::default()
+test "VH-EVENT-01 plugin routes click and focus to typed stable-key events" {
+  with_view_host_world(fn() raise {
+    let host = @ui_view.MountedView::new()
+    let style = @ui_view.NodeStyle::default()
     host.apply([
       Mount({
         key: "root",
@@ -686,20 +567,20 @@ test "CH-EVENT-01 plugin routes click and focus to typed stable-key events" {
     let app = @app.App()
       .with_world(@ecs.require_current_world())
       .add_message(@ui.click_event_bus)
-      .add_plugin(@component_host.plugin)
-    let reader : @event.EventReader[@component_host.UiComponentEvent] = @event.EventReader()
+      .add_plugin(@ui_view.plugin)
+    let reader : @event.EventReader[@ui_view.UiViewEvent] = @event.EventReader()
     app.run_frames(1)
     let restart = host.entity("restart").unwrap()
     @ui.click_event_bus.send({ entity: restart, button: @inputs.Left })
     app.run_frames(1)
     debug_inspect(
-      reader.read(@component_host.component_event_bus).map(value => value.event),
+      reader.read(@ui_view.view_event_bus).map(value => value.event),
       content="[{ kind: Click, key: \"restart\" }]",
     )
     @ui.focus(restart)
     app.run_frames(1)
     debug_inspect(
-      reader.read(@component_host.component_event_bus).map(value => value.event),
+      reader.read(@ui_view.view_event_bus).map(value => value.event),
       content="[{ kind: Focus, key: \"restart\" }]",
     )
     host.release()
@@ -707,8 +588,8 @@ test "CH-EVENT-01 plugin routes click and focus to typed stable-key events" {
 }
 
 ///|
-test "CH-VISUAL-STATE-01 overlays selection and interaction on retained atlas nodes" {
-  with_component_host_world(fn() raise {
+test "VH-VISUAL-STATE-01 overlays selection and interaction on retained atlas nodes" {
+  with_view_host_world(fn() raise {
     @atlas.clear_texture_atlas_cache()
     @asset.set_io(fn(path) {
       match path {
@@ -736,8 +617,8 @@ test "CH-VISUAL-STATE-01 overlays selection and interaction on retained atlas no
         _ => None
       }
     })
-    let base = @ui_host.NodeStyle::default()
-    let selection : @ui_host.VisualStateGroup = {
+    let base = @ui_view.NodeStyle::default()
+    let selection : @ui_view.VisualStateGroup = {
       order: 0,
       name: "SelectionStates",
       current: "Selected",
@@ -749,7 +630,7 @@ test "CH-VISUAL-STATE-01 overlays selection and interaction on retained atlas no
             {
               target: "icon",
               property: "Source",
-              value: @ui_host.VisualStateValue::StringValue(
+              value: @ui_view.VisualStateValue::StringValue(
                 "assets/tabs.atlas.json#equip.normal",
               ),
             },
@@ -761,26 +642,26 @@ test "CH-VISUAL-STATE-01 overlays selection and interaction on retained atlas no
             {
               target: "tab",
               property: "Background",
-              value: @ui_host.VisualStateValue::StringValue("#6b3d26"),
+              value: @ui_view.VisualStateValue::StringValue("#6b3d26"),
             },
             {
               target: "icon",
               property: "Source",
-              value: @ui_host.VisualStateValue::StringValue(
+              value: @ui_view.VisualStateValue::StringValue(
                 "assets/tabs.atlas.json#equip.selected",
               ),
             },
             {
               target: "label",
               property: "Bold",
-              value: @ui_host.VisualStateValue::BoolValue(true),
+              value: @ui_view.VisualStateValue::BoolValue(true),
             },
           ],
         },
       ],
       transitions: [],
     }
-    let interaction : @ui_host.VisualStateGroup = {
+    let interaction : @ui_view.VisualStateGroup = {
       order: 1,
       name: "InteractionStates",
       current: "",
@@ -793,12 +674,12 @@ test "CH-VISUAL-STATE-01 overlays selection and interaction on retained atlas no
             {
               target: "tab",
               property: "OutlineColor",
-              value: @ui_host.VisualStateValue::StringValue("#ffd779"),
+              value: @ui_view.VisualStateValue::StringValue("#ffd779"),
             },
             {
               target: "tab",
               property: "OutlineWidth",
-              value: @ui_host.VisualStateValue::DoubleValue(2.0),
+              value: @ui_view.VisualStateValue::DoubleValue(2.0),
             },
           ],
         },
@@ -808,14 +689,14 @@ test "CH-VISUAL-STATE-01 overlays selection and interaction on retained atlas no
             {
               target: "tab",
               property: "Background",
-              value: @ui_host.VisualStateValue::StringValue("#4d2a1c"),
+              value: @ui_view.VisualStateValue::StringValue("#4d2a1c"),
             },
           ],
         },
       ],
       transitions: [],
     }
-    let tab_spec : @ui_host.NodeSpec = {
+    let tab_spec : @ui_view.NodeSpec = {
       key: "tab",
       parent: None,
       kind: Button,
@@ -827,7 +708,7 @@ test "CH-VISUAL-STATE-01 overlays selection and interaction on retained atlas no
       visual_state_groups: [selection, interaction],
       style: { ..base, background: "#3a281f" },
     }
-    let host = @component_host.MountedView::new()
+    let host = @ui_view.MountedView::new()
     host.apply([
       Mount(tab_spec),
       Mount({
@@ -869,7 +750,7 @@ test "CH-VISUAL-STATE-01 overlays selection and interaction on retained atlas no
     )
     let app = @app.App()
       .with_world(@ecs.require_current_world())
-      .add_plugin(@component_host.plugin)
+      .add_plugin(@ui_view.plugin)
     @ui.interactions()[tab] = @ui.Interaction::Pressed
     app.run_frames(1)
     debug_inspect(
@@ -913,10 +794,10 @@ test "CH-VISUAL-STATE-01 overlays selection and interaction on retained atlas no
 }
 
 ///|
-test "CH-VISUAL-STATE-02 transitions colors without replacing the target Entity" {
-  with_component_host_world(fn() raise {
-    let base = @ui_host.NodeStyle::default()
-    let normal_group : @ui_host.VisualStateGroup = {
+test "VH-VISUAL-STATE-02 transitions colors without replacing the target Entity" {
+  with_view_host_world(fn() raise {
+    let base = @ui_view.NodeStyle::default()
+    let normal_group : @ui_view.VisualStateGroup = {
       order: 0,
       name: "SelectionStates",
       current: "Normal",
@@ -928,7 +809,7 @@ test "CH-VISUAL-STATE-02 transitions colors without replacing the target Entity"
             {
               target: "tab",
               property: "Background",
-              value: @ui_host.VisualStateValue::StringValue("#000000"),
+              value: @ui_view.VisualStateValue::StringValue("#000000"),
             },
           ],
         },
@@ -938,7 +819,7 @@ test "CH-VISUAL-STATE-02 transitions colors without replacing the target Entity"
             {
               target: "tab",
               property: "Background",
-              value: @ui_host.VisualStateValue::StringValue("#ffffff"),
+              value: @ui_view.VisualStateValue::StringValue("#ffffff"),
             },
           ],
         },
@@ -953,7 +834,7 @@ test "CH-VISUAL-STATE-02 transitions colors without replacing the target Entity"
         },
       ],
     }
-    let tab_spec : @ui_host.NodeSpec = {
+    let tab_spec : @ui_view.NodeSpec = {
       key: "tab",
       parent: None,
       kind: Button,
@@ -965,12 +846,12 @@ test "CH-VISUAL-STATE-02 transitions colors without replacing the target Entity"
       visual_state_groups: [normal_group],
       style: base,
     }
-    let host = @component_host.MountedView::new()
+    let host = @ui_view.MountedView::new()
     host.apply([Mount(tab_spec)])
     let tab = host.entity("tab").unwrap()
     let app = @app.App()
       .with_world(@ecs.require_current_world())
-      .add_plugin(@component_host.plugin)
+      .add_plugin(@ui_view.plugin)
     host.apply([
       Update({
         ..tab_spec,
