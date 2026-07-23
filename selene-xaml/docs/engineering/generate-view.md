@@ -122,10 +122,9 @@ Generator 必须保证：
 ## Diagnostic source mapping
 
 Moon 工具链支持与 generated `.mbt` 同目录的 `.mbt.map.json`，该位置用于 Moon
-自动发现。Selene 仓库 tracking `../examples/inventory/view` 与
-`examples/survivors/src/view` 中的 map 作为第一方回归快照；下游应用可按自身
-generated artifact policy tracking 或忽略它。generator 只为仍可能产生 Moon
-compiler diagnostic 的业务表达式生成 mapping：
+自动发现。Selene 仓库 tracking `../examples/inventory/view` 中的 map 作为第一方
+回归快照；下游应用可按自身 generated artifact policy tracking 或忽略它。generator
+只为仍可能产生 Moon compiler diagnostic 的业务表达式生成 mapping：
 
 - collection 与 property binding member access -> `Path` token；
 - item key expression -> `KeyPath`；

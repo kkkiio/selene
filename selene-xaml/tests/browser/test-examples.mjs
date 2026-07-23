@@ -24,14 +24,6 @@ try {
       marker: "__seleneInventoryExample",
       state: "mounted",
     },
-    {
-      name: "survivors",
-      path: "/selene-xaml/examples/survivors/web/",
-      width: 960,
-      height: 640,
-      marker: "__seleneSurvivorsExample",
-      state: "mounted",
-    },
   ];
   for (const testCase of cases) {
     const failures = [];

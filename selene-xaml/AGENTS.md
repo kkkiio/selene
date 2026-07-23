@@ -67,8 +67,6 @@
 │   ├── ms-xaml-conformance.md        # Profile 1 规范覆盖与测试 ID
 │   └── selene-xaml-vocabulary.md     # Selene vocabulary 定义
 ├── fixtures/                         # XAML conformance 与 emitter fixtures
-├── examples/
-│   └── survivors/                    # Survivors Embedded View showcase
 ├── tests/
 │   ├── browser/                      # Embedded View examples 的 Playwright readiness harness
 │   ├── cli/                          # CLI process contract
@@ -103,7 +101,7 @@ just check
 just test
 ```
 
-编译 Inventory 与 Survivors Embedded View examples：
+编译 Inventory Embedded View example：
 
 ```bash
 just build-examples
@@ -117,7 +115,7 @@ just test-all
 
 ### Generate a View Package
 
-重新生成 `../examples/inventory/view` 和 `examples/survivors/src/view`：
+重新生成 `../examples/inventory/view`：
 
 ```bash
 just generate-examples

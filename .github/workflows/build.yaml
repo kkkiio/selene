@@ -152,13 +152,12 @@ jobs:
           moon -C ../selene-core update
           moon -C ../examples update
           moon -C ../examples-web update
-          moon -C examples/survivors update
           moon -C tests/target-matrix update
 
       - name: Run semantic tests
         working-directory: selene-xaml
         run: just test
 
-      - name: Compile examples
+      - name: Compile Inventory example
         working-directory: selene-xaml
         run: just build-examples

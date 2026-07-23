@@ -23,6 +23,10 @@
 
 ### Removed
 
+- Removed the standalone Selene XAML Survivors example and its dedicated target
+  matrix/browser coverage, leaving the shared Inventory example as the single
+  end-to-end Embedded View showcase.
+
 - Removed the redundant Selene XAML `codegen` and `generator_io` packages by
   consolidating compilation, emission, formatting, ownership validation, and
   atomic output commits in `embedded_emitter`.

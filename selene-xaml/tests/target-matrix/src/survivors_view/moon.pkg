@@ -1,9 +1,0 @@
-import {
-  "KKKIIO/selene/ecs",
-  "KKKIIO/selene/entity",
-  "KKKIIO/selene/ui",
-  "KKKIIO/selene-xaml-survivors-example/view",
-  "KKKIIO/selene/ui_view",
-} for "test"
-
-supported_targets = "native+js"

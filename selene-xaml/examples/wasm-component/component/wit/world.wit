@@ -1,6 +1,0 @@
-package selene:survivors-ui@0.1.0;
-
-world survivors-ui {
-  import selene:ui-host/tree@0.1.0;
-  export survivors-ui-api;
-}

@@ -1,1 +1,0 @@
-Game-owned state, patch, and action ABI for the Survivors UI package.
