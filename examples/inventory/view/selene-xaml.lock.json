@@ -1,6 +1,6 @@
 {
   "format_version": 1,
-  "generator": "selene-xaml@0.1.0",
+  "generator": "selene-xaml@0.37.3",
   "runtime": "KKKIIO/selene",
   "inputs": [
     { "owner": "user", "path": "examples/inventory/inventory.xaml", "sha256": "2f5455179948e3db117dc6a15d3e40680f0f46d80fb038410e64b88283727b78" },

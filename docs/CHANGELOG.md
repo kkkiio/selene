@@ -53,6 +53,9 @@
 
 ### Changed
 
+- Changed the fork release scope to publish `KKKIIO/selene_xaml` with the same
+  version as the Selene runtime modules.
+
 - Changed generated Embedded View packages to delegate reconciliation to
   `ui_view`, which uses linear sibling indexing and LIS-based keyed move
   planning, and added an atomic constant-time View Host fast path for

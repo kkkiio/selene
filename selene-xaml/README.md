@@ -14,8 +14,8 @@ The generated View runtime is part of `KKKIIO/selene`. Install the native
 compiler CLI from this source checkout:
 
 ```bash
-git clone https://github.com/kkkiio/selene_xaml.git
-cd selene_xaml
+git clone https://github.com/kkkiio/selene.git
+cd selene/selene-xaml
 moon install ./src/cmd/selene-xaml
 ```
 

@@ -16,7 +16,7 @@ async fn main {
     let command = @argparse.Command(
       "selene-xaml",
       about="Compile Selene XAML into typed MoonBit View packages.",
-      version="selene-xaml 0.1.0",
+      version="selene-xaml 0.37.3",
       subcommand_required=true,
       disable_help_subcommand=true,
       subcommands=[

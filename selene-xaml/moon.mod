@@ -1,6 +1,6 @@
 name = "KKKIIO/selene_xaml"
 
-version = "0.1.0"
+version = "0.37.3"
 
 import {
   "Milky2018/xml@0.4.0",
@@ -14,7 +14,7 @@ preferred_target = "native"
 
 readme = "README.md"
 
-repository = "https://github.com/kkkiio/selene_xaml.git"
+repository = "https://github.com/kkkiio/selene.git"
 
 license = "Apache-2.0"
 

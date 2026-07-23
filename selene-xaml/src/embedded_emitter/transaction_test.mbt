@@ -49,7 +49,7 @@ async test "CG-FORMAT-02 snapshots relocated generated package" (t : @test.Test)
   let lock =
     $|{
     $|  "format_version": 1,
-    $|  "generator": "selene-xaml@0.1.0",
+    $|  "generator": "selene-xaml@0.37.3",
     $|  "inputs": [{}],
     $|  "outputs": [
     $|    { "owner": "selene-xaml", "path": "view.generated.mbt", "sha256": "\{source_hash}" },
@@ -145,7 +145,7 @@ async test "CG-GENERATE-03 overwrites edited owned outputs and preserves user fi
     let previous_lock =
       #|{
       #|  "format_version": 1,
-      #|  "generator": "selene-xaml@0.1.0",
+      #|  "generator": "selene-xaml@0.37.3",
       #|  "inputs": [{}],
       #|  "outputs": [
       #|    { "owner": "selene-xaml", "path": "view.generated.mbt", "sha256": "b68aac6c503e31d251313d5cd88bf7debd83d89770b4c0db26ccb34312bbdfcf" },
@@ -178,7 +178,7 @@ async test "CG-GENERATE-03 overwrites edited owned outputs and preserves user fi
     let next_lock =
       #|{
       #|  "format_version": 1,
-      #|  "generator": "selene-xaml@0.1.0",
+      #|  "generator": "selene-xaml@0.37.3",
       #|  "inputs": [{}],
       #|  "outputs": [
       #|    { "owner": "selene-xaml", "path": "moon.pkg", "sha256": "ed0ce439ed72bd0de7c1bfd2a0763918d9ffebfcf6499f5931646ff253a25ef3" },
@@ -236,7 +236,7 @@ async test "CG-GENERATE-04 rejects unowned collisions without mutation" {
     let next_lock =
       #|{
       #|  "format_version": 1,
-      #|  "generator": "selene-xaml@0.1.0",
+      #|  "generator": "selene-xaml@0.37.3",
       #|  "inputs": [{}],
       #|  "outputs": [
       #|    { "owner": "selene-xaml", "path": "view.generated.mbt", "sha256": "18fdd58e1597c70435f9c6063cd401fc3fb9e7b3a888c85434e4befffb78f0f1" }
@@ -288,7 +288,7 @@ async test "CG-GENERATE-05 rejects forged previous ownership locks" {
     let next_lock =
       #|{
       #|  "format_version": 1,
-      #|  "generator": "selene-xaml@0.1.0",
+      #|  "generator": "selene-xaml@0.37.3",
       #|  "inputs": [{}],
       #|  "outputs": [
       #|    { "owner": "selene-xaml", "path": "view.generated.mbt", "sha256": "18fdd58e1597c70435f9c6063cd401fc3fb9e7b3a888c85434e4befffb78f0f1" }
@@ -311,25 +311,25 @@ async test "CG-GENERATE-05 rejects forged previous ownership locks" {
       (
         "empty inputs",
         (
-          #|{"format_version":1,"generator":"selene-xaml@0.1.0","inputs":[],"outputs":[{"owner":"selene-xaml","path":"view.generated.mbt","sha256":"old"}],"lock_path":"selene-xaml.lock.json"}
+          #|{"format_version":1,"generator":"selene-xaml@0.37.3","inputs":[],"outputs":[{"owner":"selene-xaml","path":"view.generated.mbt","sha256":"old"}],"lock_path":"selene-xaml.lock.json"}
         ),
       ),
       (
         "unsafe path",
         (
-          #|{"format_version":1,"generator":"selene-xaml@0.1.0","inputs":[{}],"outputs":[{"owner":"selene-xaml","path":"../view.generated.mbt","sha256":"old"}],"lock_path":"selene-xaml.lock.json"}
+          #|{"format_version":1,"generator":"selene-xaml@0.37.3","inputs":[{}],"outputs":[{"owner":"selene-xaml","path":"../view.generated.mbt","sha256":"old"}],"lock_path":"selene-xaml.lock.json"}
         ),
       ),
       (
         "empty hash",
         (
-          #|{"format_version":1,"generator":"selene-xaml@0.1.0","inputs":[{}],"outputs":[{"owner":"selene-xaml","path":"view.generated.mbt","sha256":""}],"lock_path":"selene-xaml.lock.json"}
+          #|{"format_version":1,"generator":"selene-xaml@0.37.3","inputs":[{}],"outputs":[{"owner":"selene-xaml","path":"view.generated.mbt","sha256":""}],"lock_path":"selene-xaml.lock.json"}
         ),
       ),
       (
         "duplicate path",
         (
-          #|{"format_version":1,"generator":"selene-xaml@0.1.0","inputs":[{}],"outputs":[{"owner":"selene-xaml","path":"view.generated.mbt","sha256":"b7bb79bdab6100398cb821facefb1bcca60c88bb5f5e6355a9c5985cb40d44be"},{"owner":"selene-xaml","path":"view.generated.mbt","sha256":"b7bb79bdab6100398cb821facefb1bcca60c88bb5f5e6355a9c5985cb40d44be"}],"lock_path":"selene-xaml.lock.json"}
+          #|{"format_version":1,"generator":"selene-xaml@0.37.3","inputs":[{}],"outputs":[{"owner":"selene-xaml","path":"view.generated.mbt","sha256":"b7bb79bdab6100398cb821facefb1bcca60c88bb5f5e6355a9c5985cb40d44be"},{"owner":"selene-xaml","path":"view.generated.mbt","sha256":"b7bb79bdab6100398cb821facefb1bcca60c88bb5f5e6355a9c5985cb40d44be"}],"lock_path":"selene-xaml.lock.json"}
         ),
       ),
     ]
@@ -357,7 +357,7 @@ async test "CG-GENERATE-05 rejects forged previous ownership locks" {
         {
           path: "selene-xaml.lock.json",
           content: (
-            #|{"format_version":1,"generator":"selene-xaml@0.1.0","inputs":[{}],"outputs":[{"owner":"selene-xaml","path":"view.generated.mbt","sha256":"0000000000000000000000000000000000000000000000000000000000000000"}],"lock_path":"selene-xaml.lock.json"},
+            #|{"format_version":1,"generator":"selene-xaml@0.37.3","inputs":[{}],"outputs":[{"owner":"selene-xaml","path":"view.generated.mbt","sha256":"0000000000000000000000000000000000000000000000000000000000000000"}],"lock_path":"selene-xaml.lock.json"},
           ),
         },
       ],

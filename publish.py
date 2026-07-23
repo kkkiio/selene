@@ -21,6 +21,7 @@ CHANGELOG_PATH = ROOT_DIR / CHANGELOG_REL_PATH
 VERSION_RE = re.compile(r"^\d+\.\d+\.\d+(?:[-+][0-9A-Za-z.-]+)?$")
 INTERNAL_MODULES = {
     "KKKIIO/selene",
+    "KKKIIO/selene_xaml",
     "KKKIIO/selene_webgpu",
     "KKKIIO/selene_raylib",
 }
@@ -34,12 +35,14 @@ class ModuleConfig:
 
 RELEASE_MODULES = [
     ModuleConfig("selene-core", ROOT_DIR / "selene-core"),
+    ModuleConfig("selene-xaml", ROOT_DIR / "selene-xaml"),
     ModuleConfig("selene-webgpu", ROOT_DIR / "selene-webgpu"),
     ModuleConfig("selene-raylib", ROOT_DIR / "selene-raylib"),
 ]
 
 PUBLISH_ORDER = [
     "selene-core",
+    "selene-xaml",
     "selene-webgpu",
     "selene-raylib",
 ]
@@ -152,6 +155,17 @@ def module_info_entries(module: ModuleConfig) -> list[tuple[str, str]]:
             (str(module.path / "src"), "js"),
             (str(module.path / "src"), "native"),
         ]
+    if module.name == "selene-xaml":
+        return [
+            (str(module.path / "src" / "infoset"), "js"),
+            (str(module.path / "src" / "infoset"), "native"),
+            (str(module.path / "src" / "parser"), "js"),
+            (str(module.path / "src" / "parser"), "native"),
+            (str(module.path / "src" / "viewir"), "js"),
+            (str(module.path / "src" / "viewir"), "native"),
+            (str(module.path / "src" / "embedded_emitter"), "native"),
+            (str(module.path / "src" / "cmd" / "selene-xaml"), "native"),
+        ]
     if module.name == "selene-webgpu":
         return [(str(module.path / "src"), "js")]
     if module.name == "selene-raylib":
@@ -189,7 +203,7 @@ def run_module_quality_checks(module: ModuleConfig):
             fail_on_warning=True,
         )
 
-    if module.name == "selene-core":
+    if module.name == "selene-core" or module.name == "selene-xaml":
         check_targets = ["js", "native"]
     elif module.name == "selene-webgpu":
         check_targets = ["js"]

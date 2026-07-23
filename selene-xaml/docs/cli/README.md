@@ -30,7 +30,7 @@ The current CLI exposes only `generate`.
 
 ```mooncram
 $ selene-xaml --version
-selene-xaml 0.1.0
+selene-xaml 0.37.3
 ```
 
 ```mooncram

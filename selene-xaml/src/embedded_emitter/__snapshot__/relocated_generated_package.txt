@@ -19,7 +19,7 @@ fn answer(model : Model) -> Int {
 ===== selene-xaml.lock.json =====
 {
   "format_version": 1,
-  "generator": "selene-xaml@0.1.0",
+  "generator": "selene-xaml@0.37.3",
   "inputs": [{}],
   "outputs": [
     { "owner": "selene-xaml", "path": "view.generated.mbt", "sha256": "b0e25df6659c991914d016a7cd455a9f51df54ca24df312495ee42472ae42b9d" },
