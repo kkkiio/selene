@@ -203,6 +203,8 @@ pub fn selene_xaml_schemas() -> XamlSchemaRegistry raise XamlError {
     XamlMemberDefinition("Watch", EntityReference),
     XamlMemberDefinition("TabIndex", Int),
     XamlMemberDefinition("Focusable", Bool),
+    XamlMemberDefinition("FocusScope", Bool),
+    XamlMemberDefinition("AutoFocus", Bool),
     XamlMemberDefinition("Enabled", Bool),
     XamlMemberDefinition("OnClick", String),
     XamlMemberDefinition("OnPointerDown", String),
@@ -248,6 +250,14 @@ pub fn selene_xaml_schemas() -> XamlSchemaRegistry raise XamlError {
       XamlTypeDefinition(name, content_member=Some("Children"), members~),
     )
   }
+  builder.add_type(
+    XamlTypeDefinition("Navigation", members=[
+      XamlMemberDefinition("Up", String, is_attached=true),
+      XamlMemberDefinition("Down", String, is_attached=true),
+      XamlMemberDefinition("Left", String, is_attached=true),
+      XamlMemberDefinition("Right", String, is_attached=true),
+    ]),
+  )
   builder.add_type(
     XamlTypeDefinition(
       "Text",

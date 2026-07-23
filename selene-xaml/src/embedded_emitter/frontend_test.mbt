@@ -866,11 +866,14 @@ async test "CG-FORMAT-01 snapshots canonical moonfmt output" (t : @test.Test) {
   let xaml =
     #|<ui:View xmlns:ui="urn:selene:xaml:ui" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     #| xmlns:model="moonbit:example/canonical/model" x:Class="CanonicalFormattingView"
-    #| ui:DataType="model:CanonicalFormattingState" x:Name="extraordinarilyLongFormattingAcceptanceRoot">
+    #| ui:DataType="model:CanonicalFormattingState" x:Name="extraordinarilyLongFormattingAcceptanceRoot"
+    #| FocusScope="true">
     #| <ui:ItemsControl x:Name="extraordinarilyLongFormattingAcceptanceItems"
     #|  ItemsSource="{ui:Binding Path=items}" KeyPath="id"><ui:ItemsControl.ItemTemplate>
     #|  <ui:DataTemplate ui:DataType="model:CanonicalFormattingItem">
-    #|   <ui:Button x:Name="extraordinarilyLongFormattingAcceptanceButton" OnClick="select_item" Margin="1 2 3 4">
+    #|   <ui:Button x:Name="extraordinarilyLongFormattingAcceptanceButton"
+    #|    OnClick="select_item" AutoFocus="true" TabIndex="10"
+    #|    ui:Navigation.Down="Stop" Margin="1 2 3 4">
     #|    <ui:Text x:Name="extraordinarilyLongFormattingAcceptanceLabel" Text="{ui:Binding Path=label}" />
     #|   </ui:Button>
     #|  </ui:DataTemplate>

@@ -41,7 +41,6 @@ pub fn InventoryItem::narrow_label_width(Self) -> Double
 pub(all) struct InventoryTab {
   id : String
   icon : String
-  selected_icon : String
   selected : Bool
   layout_width : Double
 } derive(Eq, @debug.Debug)

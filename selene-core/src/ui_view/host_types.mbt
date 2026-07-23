@@ -55,6 +55,7 @@ priv struct ViewRecord {
   entities : Map[String, @entity.Entity]
   entity_keys : Map[@entity.Entity, String]
   roots : Array[String]
+  active_focus_scopes : Array[@entity.Entity]
   visual_states : Map[String, String]
   visual_transitions : Map[String, ActiveVisualTransition]
 }

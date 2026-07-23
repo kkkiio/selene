@@ -2,7 +2,6 @@
 pub(all) struct InventoryTab {
   id : String
   icon : String
-  selected_icon : String
   selected : Bool
   layout_width : Double
 } derive(Eq, Debug)

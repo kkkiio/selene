@@ -4,8 +4,10 @@ async test "EE-01 snapshots the formatted Embedded package" (t : @test.Test) {
     #|<ui:View xmlns:ui="urn:selene:xaml:ui"
     #| xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     #| xmlns:model="moonbit:example/demo/model"
-    #| x:Class="DemoView" ui:DataType="model:DemoState" x:Name="root">
-    #| <ui:Text Text="{ui:Binding Path=title}" />
+    #| x:Class="DemoView" ui:DataType="model:DemoState" x:Name="root"
+    #| FocusScope="true">
+    #| <ui:Text Text="{ui:Binding Path=title}" Focusable="true"
+    #|  AutoFocus="true" TabIndex="4" ui:Navigation.Right="Stop" />
     #|</ui:View>
   let contract =
     #|package "example/demo/model"

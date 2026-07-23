@@ -947,10 +947,12 @@ fn property_target_type(
 ) -> String raise ViewIRError {
   if [
       "Text", "Source", "Background", "BorderColor", "OutlineColor", "Color", "FontFamily",
+      "Navigation.Up", "Navigation.Down", "Navigation.Left", "Navigation.Right",
     ].contains(property) {
     "String"
   } else if [
-      "Active", "Enabled", "Focusable", "Bold", "HorizontalScroll", "VerticalScroll",
+      "Active", "Enabled", "Focusable", "FocusScope", "AutoFocus", "Bold", "HorizontalScroll",
+      "VerticalScroll",
     ].contains(property) {
     "Bool"
   } else if [
@@ -958,7 +960,7 @@ fn property_target_type(
       "Gap", "ColumnGap", "ScrollbarWidth", "OutlineWidth", "OutlineOffset",
     ].contains(property) {
     "Double"
-  } else if property == "ZIndex" {
+  } else if property == "ZIndex" || property == "TabIndex" {
     "Int"
   } else if ["Grid.Row", "Grid.Column", "Grid.RowSpan", "Grid.ColumnSpan"].contains(
       property,

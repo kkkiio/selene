@@ -26,7 +26,6 @@ fn to_view_state(
       let projected : @inventory_view.InventoryTab = {
         id: tab.id,
         icon: tab.icon,
-        selected_icon: tab.selected_icon,
         selected: tab.selected,
         layout_width: tab.layout_width,
       }

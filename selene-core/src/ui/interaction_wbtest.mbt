@@ -49,8 +49,13 @@ fn reset_interaction_test_state() -> Unit {
   runtime.pressed_entity = None
   runtime.pressed_pointer = None
   runtime.focused_entity = None
+  runtime.observed_focus_scopes = []
+  runtime.base_focus = None
+  runtime.scope_focus_history.clear()
+  runtime.navigation_handlers.clear()
   runtime.pointer_captures.clear()
   runtime.consumed_pointers.clear()
+  focus_scopes().clear()
   @inputs.apply_input_snapshot(@inputs.empty_input_snapshot())
   @inputs.just_pressed_mouse.left_button = false
   @inputs.just_pressed_mouse.right_button = false
@@ -697,17 +702,17 @@ test "ui directional navigation supports explicit stop and auto rules" {
 
     focus(current)
     navigation_links().set(current, UiNavigationLinks(down=Explicit(explicit)))
-    move_focus(Down)
+    ignore(move_focus(Down))
     inspect(focused_entity() == Some(explicit), content="true")
 
     focus(current)
     navigation_links().set(current, UiNavigationLinks(down=Stop))
-    move_focus(Down)
+    ignore(move_focus(Down))
     inspect(focused_entity() == Some(current), content="true")
 
     focus(current)
     navigation_links().set(current, UiNavigationLinks())
-    move_focus(Down)
+    ignore(move_focus(Down))
     inspect(focused_entity() == Some(automatic), content="true")
 
     tab_indexes().set(current, TabIndex(0))
@@ -715,7 +720,7 @@ test "ui directional navigation supports explicit stop and auto rules" {
     tab_indexes().set(explicit, TabIndex(2))
     focus(current)
     navigation_links().set(current, UiNavigationLinks(right=Stop))
-    move_focus_by_tab(false)
+    ignore(move_focus_by_tab(false))
     inspect(focused_entity() == Some(automatic), content="true")
 
     cleanup_interaction_test_entity(current)

@@ -84,21 +84,18 @@ pub fn showcase_state(viewport_width : Double) -> InventoryUiState {
       {
         id: "equip",
         icon: "assets/ui/inventory-tabs.atlas.json#equip.normal",
-        selected_icon: "assets/ui/inventory-tabs.atlas.json#equip.selected",
         selected: true,
         layout_width: tab_width,
       },
       {
         id: "use",
         icon: "assets/ui/inventory-tabs.atlas.json#use.normal",
-        selected_icon: "assets/ui/inventory-tabs.atlas.json#use.selected",
         selected: false,
         layout_width: tab_width,
       },
       {
         id: "setup",
         icon: "assets/ui/inventory-tabs.atlas.json#setup.normal",
-        selected_icon: "assets/ui/inventory-tabs.atlas.json#setup.selected",
         selected: false,
         layout_width: tab_width,
       },

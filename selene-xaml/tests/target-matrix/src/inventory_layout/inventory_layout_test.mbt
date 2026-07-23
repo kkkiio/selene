@@ -32,27 +32,9 @@ test "INVENTORY-LAYOUT-01 wide and narrow content stays inside symmetric insets"
       viewport_width: 960.0,
       capacity: 24,
       tabs: [
-        {
-          id: "equip",
-          icon: "equip.png",
-          selected_icon: "equip-selected.png",
-          selected: true,
-          layout_width: 60.0,
-        },
-        {
-          id: "use",
-          icon: "use.png",
-          selected_icon: "use-selected.png",
-          selected: false,
-          layout_width: 60.0,
-        },
-        {
-          id: "setup",
-          icon: "setup.png",
-          selected_icon: "setup-selected.png",
-          selected: false,
-          layout_width: 60.0,
-        },
+        { id: "equip", icon: "equip.png", selected: true, layout_width: 60.0 },
+        { id: "use", icon: "use.png", selected: false, layout_width: 60.0 },
+        { id: "setup", icon: "setup.png", selected: false, layout_width: 60.0 },
       ],
       all_items: [layout_item, layout_item2],
       items: [layout_item, layout_item2],
@@ -212,6 +194,66 @@ test "INVENTORY-LAYOUT-01 wide and narrow content stays inside symmetric insets"
         #|)
       ),
     )
+    let first_tab = host
+      .entity(parent, "inventory-header/tabs:equip/tab-button")
+      .unwrap()
+    let second_tab = host
+      .entity(parent, "inventory-header/tabs:use/tab-button")
+      .unwrap()
+    let last_tab = host
+      .entity(parent, "inventory-header/tabs:setup/tab-button")
+      .unwrap()
+    let first_item = host
+      .entity(parent, "pack-grid-narrow/items:map/item-button-narrow")
+      .unwrap()
+    let second_item = host
+      .entity(parent, "pack-grid-narrow/items:key/item-button-narrow")
+      .unwrap()
+    assert_eq(@ui.focus_scopes().length(), 1)
+    assert_eq(
+      @ui.focus_scopes()[0].root,
+      host.entity(parent, "inventory-root").unwrap(),
+    )
+    assert_eq(@ui.tab_indexes()[first_tab], @ui.TabIndex(0))
+    assert_eq(@ui.tab_indexes()[first_item], @ui.TabIndex(10))
+    @ui.focus(first_tab)
+    assert_eq(@ui.navigate(Next), true)
+    assert_eq(@ui.focused_entity(), Some(second_tab))
+    @ui.focus(last_tab)
+    assert_eq(@ui.navigate(Next), true)
+    assert_eq(@ui.focused_entity(), Some(first_item))
+    assert_eq(@ui.navigate(Move(Right)), true)
+    assert_eq(@ui.focused_entity(), Some(second_item))
+
+    let grid_items = [
+      layout_item,
+      layout_item2,
+      { ..layout_item, id: "third", selected: false },
+      { ..layout_item, id: "fourth", selected: false },
+      { ..layout_item, id: "fifth", selected: false },
+      { ..layout_item, id: "sixth", selected: false },
+    ]
+    @inventory_view.InventoryView::replace(parent, {
+      ..wide_state,
+      viewport_width: 720.0,
+      tabs: [
+        { ..wide_state.tabs[0], layout_width: 52.0 },
+        { ..wide_state.tabs[1], layout_width: 52.0 },
+        { ..wide_state.tabs[2], layout_width: 52.0 },
+      ],
+      all_items: grid_items,
+      items: grid_items,
+    })
+    @ui.ui_layout_system(0.0)
+    let grid_first = host
+      .entity(parent, "pack-grid-narrow/items:map/item-button-narrow")
+      .unwrap()
+    let grid_sixth = host
+      .entity(parent, "pack-grid-narrow/items:sixth/item-button-narrow")
+      .unwrap()
+    @ui.focus(grid_first)
+    assert_eq(@ui.navigate(Move(Down)), true)
+    assert_eq(@ui.focused_entity(), Some(grid_sixth))
     host.unmount(parent)
     parent.destroy()
   } catch {

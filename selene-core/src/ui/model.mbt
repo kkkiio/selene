@@ -726,6 +726,22 @@ pub fn UiNavigationLinks::UiNavigationLinks(
 }
 
 ///|
+/// Defines one active focus boundary. The last value in `focus_scopes()` is
+/// used by focus traversal.
+pub(all) struct FocusScope {
+  root : @entity.Entity
+  initial_focus : @entity.Entity?
+} derive(Eq, Debug)
+
+///|
+pub fn FocusScope::FocusScope(
+  root : @entity.Entity,
+  initial_focus? : @entity.Entity? = None,
+) -> FocusScope {
+  { root, initial_focus }
+}
+
+///|
 pub(all) enum FocusPolicy {
   Block
   Pass
@@ -793,6 +809,7 @@ priv struct UiModelWorldStore {
   scroll_positions : Map[@entity.Entity, ScrollPosition]
   tab_indexes : Map[@entity.Entity, TabIndex]
   navigation_links : Map[@entity.Entity, UiNavigationLinks]
+  focus_scopes : Array[FocusScope]
   focus_policies : Map[@entity.Entity, FocusPolicy]
   focusables : Map[@entity.Entity, Focusable]
   focuseds : Map[@entity.Entity, Focused]
@@ -820,6 +837,7 @@ fn ui_model_world_store() -> UiModelWorldStore {
     scroll_positions: Map([]),
     tab_indexes: Map([]),
     navigation_links: Map([]),
+    focus_scopes: [],
     focus_policies: Map([]),
     focusables: Map([]),
     focuseds: Map([]),
@@ -888,6 +906,13 @@ pub fn tab_indexes() -> Map[@entity.Entity, TabIndex] {
 /// Returns cardinal focus rules keyed by their source UI entity.
 pub fn navigation_links() -> Map[@entity.Entity, UiNavigationLinks] {
   ui_model_world_store().navigation_links
+}
+
+///|
+/// Returns the per-world stack of active focus boundaries. The last entry is
+/// active and callers mutate the stack directly.
+pub fn focus_scopes() -> Array[FocusScope] {
+  ui_model_world_store().focus_scopes
 }
 
 ///|

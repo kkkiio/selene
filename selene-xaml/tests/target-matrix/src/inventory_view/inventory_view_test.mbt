@@ -32,20 +32,8 @@ test "INVENTORY-01 Embedded View uses Entity identity and typed transactions" {
     viewport_width: 960.0,
     capacity: 24,
     tabs: [
-      {
-        id: "equip",
-        icon: "equip.png",
-        selected_icon: "equip-selected.png",
-        selected: true,
-        layout_width: 60.0,
-      },
-      {
-        id: "setup",
-        icon: "setup.png",
-        selected_icon: "setup-selected.png",
-        selected: false,
-        layout_width: 60.0,
-      },
+      { id: "equip", icon: "equip.png", selected: true, layout_width: 60.0 },
+      { id: "setup", icon: "setup.png", selected: false, layout_width: 60.0 },
     ],
     all_items: [map_item, key_item],
     items: [map_item, key_item],

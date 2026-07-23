@@ -7,6 +7,13 @@
 - Added typed Selene XAML `Grid` generation with CSS-style tracks, auto-flow,
   attached row and column placement, and spans.
 
+- Added per-world Selene UI focus-scope stacks and device-independent
+  `navigate` actions with synchronous focused-entity propagation.
+
+- Added Selene XAML `FocusScope`, `AutoFocus`, `TabIndex`, and attached
+  directional navigation members, demonstrated by Tab and Grid navigation in
+  the Inventory example.
+
 - Added `selene/atlas` loading for canonical Selene, Aseprite, and TexturePacker
   JSON atlases, including named `#region` resolution for UI and sprite assets.
 

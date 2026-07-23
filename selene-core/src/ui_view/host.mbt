@@ -219,6 +219,15 @@ pub fn ViewHost::unmount(
 ) -> Unit raise HostError {
   let record = require_record(self, entity)
   let store = current_store()
+  let scopes = @ui.focus_scopes()
+  let mut scope_index = scopes.length() - 1
+  while scope_index >= 0 {
+    if record.active_focus_scopes.contains(scopes[scope_index].root) {
+      ignore(scopes.remove(scope_index))
+    }
+    scope_index = scope_index - 1
+  }
+  record.active_focus_scopes.clear()
   match @ui.focused_entity() {
     Some(target) =>
       if target == record.container || record.entity_keys.contains(target) {
@@ -264,6 +273,7 @@ pub fn ViewHost::mount(
     entities: Map([]),
     entity_keys: Map([]),
     roots: [],
+    active_focus_scopes: [],
     visual_states: Map([]),
     visual_transitions: Map([]),
   }
@@ -535,6 +545,23 @@ pub fn ViewHost::apply(
     }
   }
   for _, node in planned_nodes {
+    for
+      target in [
+        node.spec.navigation_up,
+        node.spec.navigation_down,
+        node.spec.navigation_left,
+        node.spec.navigation_right,
+      ] {
+      if target != "" &&
+        target != "Auto" &&
+        target != "Stop" &&
+        !planned_nodes.contains(target) {
+        raise HostError::InvalidMutation(
+          "SH1023",
+          "navigation target does not exist: " + target,
+        )
+      }
+    }
     if node.spec.kind == Image && node.spec.source.contains("#") {
       ignore(@atlas.resolve_texture_atlas_region(node.spec.source)) catch {
         error => raise HostError::InvalidMutation("SH1022", error.to_string())
@@ -585,6 +612,7 @@ pub fn ViewHost::apply(
     None => false
   }
   commit_validated_mutations(record, mutations)
+  synchronize_focus_metadata(record)
   refresh_visual_states(record)
   if clear_focused_node {
     @ui.blur()
@@ -1062,6 +1090,102 @@ fn ui_image_from_source(source : String, fit : @ui.ImageFit) -> @ui.UiImage {
 }
 
 ///|
+fn synchronize_focus_metadata(record : ViewRecord) -> Unit {
+  let ordered_keys : Array[String] = []
+  let pending : Array[String] = []
+  for index = record.roots.length() - 1; index >= 0; index = index - 1 {
+    pending.push(record.roots[index])
+  }
+  while !pending.is_empty() {
+    let key = pending.pop().unwrap()
+    ordered_keys.push(key)
+    let children = record.nodes[key].children
+    for index = children.length() - 1; index >= 0; index = index - 1 {
+      pending.push(children[index])
+    }
+  }
+  let resolve_rule = fn(value : String) {
+    if value == "" || value == "Auto" {
+      @ui.UiNavigationRule::Auto
+    } else if value == "Stop" {
+      @ui.UiNavigationRule::Stop
+    } else {
+      @ui.UiNavigationRule::Explicit(record.entities[value])
+    }
+  }
+  for key in ordered_keys {
+    let spec = record.nodes[key].spec
+    let target = record.entities[key]
+    if spec.navigation_up == "" &&
+      spec.navigation_down == "" &&
+      spec.navigation_left == "" &&
+      spec.navigation_right == "" {
+      @ui.navigation_links().remove(target)
+    } else {
+      @ui.navigation_links()[target] = @ui.UiNavigationLinks(
+        up=resolve_rule(spec.navigation_up),
+        down=resolve_rule(spec.navigation_down),
+        left=resolve_rule(spec.navigation_left),
+        right=resolve_rule(spec.navigation_right),
+      )
+    }
+  }
+  let desired_scopes : Array[@ui.FocusScope] = []
+  for scope_key in ordered_keys {
+    let scope_node = record.nodes[scope_key]
+    guard scope_node.spec.focus_scope && scope_node.spec.active else {
+      continue
+    }
+    let mut initial_focus : @entity.Entity? = None
+    for candidate_key in ordered_keys {
+      let candidate = record.nodes[candidate_key]
+      guard candidate.spec.auto_focus &&
+        candidate.spec.focusable &&
+        candidate.spec.active else {
+        continue
+      }
+      let mut ancestor : String? = Some(candidate_key)
+      while ancestor is Some(key) {
+        if key == scope_key {
+          initial_focus = Some(record.entities[candidate_key])
+          break
+        }
+        if key != candidate_key && record.nodes[key].spec.focus_scope {
+          break
+        }
+        ancestor = record.nodes[key].spec.parent
+      }
+      if initial_focus is Some(_) {
+        break
+      }
+    }
+    desired_scopes.push(
+      @ui.FocusScope(record.entities[scope_key], initial_focus~),
+    )
+  }
+  let scopes = @ui.focus_scopes()
+  let mut insertion_index = scopes.length()
+  let mut index = scopes.length() - 1
+  while index >= 0 {
+    if record.active_focus_scopes.contains(scopes[index].root) {
+      insertion_index = index
+      ignore(scopes.remove(index))
+    }
+    index = index - 1
+  }
+  if insertion_index > scopes.length() {
+    insertion_index = scopes.length()
+  }
+  for offset, scope in desired_scopes {
+    scopes.insert(insertion_index + offset, scope)
+  }
+  record.active_focus_scopes.clear()
+  for scope in desired_scopes {
+    record.active_focus_scopes.push(scope.root)
+  }
+}
+
+///|
 fn commit_validated_mutations(
   record : ViewRecord,
   mutations : Array[TreeMutation],
@@ -1132,8 +1256,10 @@ fn commit_validated_mutations(
           value &&
           (node.spec.kind != Button || node.spec.enabled) {
           @ui.focusables()[target] = @ui.Focusable()
+          @ui.tab_indexes()[target] = @ui.TabIndex(node.spec.tab_index)
         } else {
           @ui.focusables().remove(target)
+          @ui.tab_indexes().remove(target)
         }
       }
       SetEnabled(key, value) => {
@@ -1143,8 +1269,10 @@ fn commit_validated_mutations(
         @ui.buttons()[target] = @ui.Button(enabled=value)
         if node.spec.focusable && node.spec.active && value {
           @ui.focusables()[target] = @ui.Focusable()
+          @ui.tab_indexes()[target] = @ui.TabIndex(node.spec.tab_index)
         } else {
           @ui.focusables().remove(target)
+          @ui.tab_indexes().remove(target)
         }
       }
       SetTop(key, value) => {
@@ -1427,6 +1555,9 @@ fn write_node_components(target : @entity.Entity, spec : NodeSpec) -> Unit {
   }
   if spec.focusable && spec.active && (spec.kind != Button || spec.enabled) {
     @ui.focusables()[target] = @ui.Focusable()
+    @ui.tab_indexes()[target] = @ui.TabIndex(spec.tab_index)
+  } else {
+    @ui.tab_indexes().remove(target)
   }
 }
 
@@ -1446,6 +1577,8 @@ fn remove_ui_components(target : @entity.Entity) -> Unit {
   @ui.buttons().remove(target)
   @ui.focusables().remove(target)
   @ui.focuseds().remove(target)
+  @ui.tab_indexes().remove(target)
+  @ui.navigation_links().remove(target)
   @ui.scroll_positions().remove(target)
 }
 

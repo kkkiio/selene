@@ -77,6 +77,8 @@ pub let focus_out_event_bus : @event.Events[UiFocusOutEvent]
 
 pub fn focus_policies() -> Map[@entity.Entity, FocusPolicy]
 
+pub fn focus_scopes() -> Array[FocusScope]
+
 pub fn focusables() -> Map[@entity.Entity, Focusable]
 
 pub fn focused_entity() -> @entity.Entity?
@@ -145,7 +147,11 @@ pub fn logical_to_screen_size(@math.Vec2, UiLayoutSpace) -> @math.Vec2
 
 pub fn material_nodes() -> Map[@entity.Entity, MaterialNode]
 
+pub fn navigate(UiNavigationAction) -> Bool
+
 pub let navigation_event_bus : @event.Events[UiNavigationEvent]
+
+pub fn navigation_handlers() -> Map[@entity.Entity, (UiNavigationAction) -> Bool]
 
 pub fn navigation_links() -> Map[@entity.Entity, UiNavigationLinks]
 
@@ -318,6 +324,12 @@ pub(all) enum FocusPolicy {
   Block
   Pass
 } derive(Eq, @debug.Debug)
+
+pub(all) struct FocusScope {
+  root : @entity.Entity
+  initial_focus : @entity.Entity?
+} derive(Eq, @debug.Debug)
+pub fn FocusScope::FocusScope(@entity.Entity, initial_focus? : @entity.Entity?) -> Self
 
 pub(all) struct Focusable {
   _tag : Unit
@@ -642,18 +654,25 @@ pub fn UiMaterialContext::UiMaterialContext(@entity.Entity, @math.Rect, content_
 
 pub(all) struct UiMaterialHandle(UInt) derive(Eq, Hash, @debug.Debug)
 
+pub(all) enum UiNavigationAction {
+  Move(UiNavigationDirection)
+  Next
+  Previous
+  Activate
+  Cancel
+} derive(Eq, @debug.Debug)
+
 pub(all) enum UiNavigationDirection {
   Up
   Down
   Left
   Right
-  Activate
-  Cancel
 } derive(Eq, @debug.Debug)
 
 pub(all) struct UiNavigationEvent {
   entity : @entity.Entity?
-  direction : UiNavigationDirection
+  action : UiNavigationAction
+  handled : Bool
 }
 
 pub(all) struct UiNavigationLinks {

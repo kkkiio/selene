@@ -2,236 +2,224 @@
   "mappings": [
     {
       "source": "examples/inventory/inventory.xaml",
-      "original_offset": 278,
-      "generated_offset": 6863,
+      "original_offset": 305,
+      "generated_offset": 7026,
       "length": 20
     },
     {
       "source": "examples/inventory/inventory.xaml",
-      "original_offset": 615,
-      "generated_offset": 9500,
+      "original_offset": 642,
+      "generated_offset": 9827,
       "length": 10
     },
     {
       "source": "examples/inventory/inventory.xaml",
-      "original_offset": 649,
-      "generated_offset": 9544,
+      "original_offset": 676,
+      "generated_offset": 9871,
       "length": 19
     },
     {
       "source": "examples/inventory/inventory.xaml",
-      "original_offset": 837,
-      "generated_offset": 10150,
+      "original_offset": 917,
+      "generated_offset": 10654,
       "length": 28
     },
     {
       "source": "examples/inventory/inventory.xaml",
-      "original_offset": 1312,
-      "generated_offset": 11462,
+      "original_offset": 1392,
+      "generated_offset": 11966,
       "length": 25
     },
     {
       "source": "examples/inventory/inventory.xaml",
-      "original_offset": 1460,
-      "generated_offset": 11910,
+      "original_offset": 1219,
+      "generated_offset": 15612,
       "length": 21
     },
     {
       "source": "examples/inventory/inventory.xaml",
-      "original_offset": 1778,
-      "generated_offset": 12784,
-      "length": 30
-    },
-    {
-      "source": "examples/inventory/inventory.xaml",
-      "original_offset": 1139,
-      "generated_offset": 15749,
-      "length": 21
-    },
-    {
-      "source": "examples/inventory/inventory.xaml",
-      "original_offset": 1051,
-      "generated_offset": 15890,
+      "original_offset": 1131,
+      "generated_offset": 15931,
       "length": 32
     },
     {
       "source": "examples/inventory/inventory.xaml",
-      "original_offset": 4069,
-      "generated_offset": 27316,
+      "original_offset": 3914,
+      "generated_offset": 28505,
       "length": 22
     },
     {
       "source": "examples/inventory/inventory.xaml",
-      "original_offset": 4217,
-      "generated_offset": 28646,
+      "original_offset": 4062,
+      "generated_offset": 29999,
       "length": 19
     },
     {
       "source": "examples/inventory/inventory.xaml",
-      "original_offset": 5160,
-      "generated_offset": 38211,
+      "original_offset": 4988,
+      "generated_offset": 40633,
       "length": 11
     },
     {
       "source": "examples/inventory/inventory.xaml",
-      "original_offset": 5195,
-      "generated_offset": 38258,
+      "original_offset": 5023,
+      "generated_offset": 40680,
       "length": 19
     },
     {
       "source": "examples/inventory/inventory.xaml",
-      "original_offset": 5477,
-      "generated_offset": 39208,
+      "original_offset": 5352,
+      "generated_offset": 41823,
       "length": 34
     },
     {
       "source": "examples/inventory/inventory.xaml",
-      "original_offset": 5813,
-      "generated_offset": 42269,
+      "original_offset": 5688,
+      "generated_offset": 45076,
       "length": 22
     },
     {
       "source": "examples/inventory/inventory.xaml",
-      "original_offset": 6043,
-      "generated_offset": 44000,
+      "original_offset": 5918,
+      "generated_offset": 46999,
       "length": 30
     },
     {
       "source": "examples/inventory/inventory.xaml",
-      "original_offset": 6308,
-      "generated_offset": 45770,
+      "original_offset": 6183,
+      "generated_offset": 48961,
       "length": 21
     },
     {
       "source": "examples/inventory/inventory.xaml",
-      "original_offset": 6996,
-      "generated_offset": 50491,
+      "original_offset": 6871,
+      "generated_offset": 54230,
       "length": 15
     },
     {
       "source": "examples/inventory/inventory.xaml",
-      "original_offset": 7035,
-      "generated_offset": 50542,
+      "original_offset": 6910,
+      "generated_offset": 54281,
       "length": 21
     },
     {
       "source": "examples/inventory/inventory.xaml",
-      "original_offset": 7290,
-      "generated_offset": 51499,
+      "original_offset": 7208,
+      "generated_offset": 55431,
       "length": 39
     },
     {
       "source": "examples/inventory/inventory.xaml",
-      "original_offset": 7630,
-      "generated_offset": 54543,
+      "original_offset": 7548,
+      "generated_offset": 58667,
       "length": 22
     },
     {
       "source": "examples/inventory/inventory.xaml",
-      "original_offset": 7905,
-      "generated_offset": 56312,
+      "original_offset": 7823,
+      "generated_offset": 60628,
       "length": 21
     },
     {
       "source": "examples/inventory/inventory.xaml",
-      "original_offset": 8462,
-      "generated_offset": 61126,
+      "original_offset": 8380,
+      "generated_offset": 65990,
       "length": 22
     },
     {
       "source": "examples/inventory/inventory.xaml",
-      "original_offset": 8744,
-      "generated_offset": 64234,
+      "original_offset": 8662,
+      "generated_offset": 69454,
       "length": 21
     },
     {
       "source": "examples/inventory/inventory.xaml",
-      "original_offset": 8960,
-      "generated_offset": 65809,
+      "original_offset": 8878,
+      "generated_offset": 71207,
       "length": 23
     },
     {
       "source": "examples/inventory/inventory.xaml",
-      "original_offset": 9201,
-      "generated_offset": 67370,
+      "original_offset": 9119,
+      "generated_offset": 72946,
       "length": 28
     },
     {
       "source": "examples/inventory/inventory.xaml",
-      "original_offset": 9574,
-      "generated_offset": 70435,
+      "original_offset": 9492,
+      "generated_offset": 76367,
       "length": 15
     },
     {
       "source": "examples/inventory/inventory.xaml",
-      "original_offset": 9613,
-      "generated_offset": 70486,
+      "original_offset": 9531,
+      "generated_offset": 76418,
       "length": 21
     },
     {
       "source": "examples/inventory/inventory.xaml",
-      "original_offset": 9890,
-      "generated_offset": 71458,
+      "original_offset": 9849,
+      "generated_offset": 77583,
       "length": 39
     },
     {
       "source": "examples/inventory/inventory.xaml",
-      "original_offset": 10113,
-      "generated_offset": 72772,
+      "original_offset": 10072,
+      "generated_offset": 78897,
       "length": 22
     },
     {
       "source": "examples/inventory/inventory.xaml",
-      "original_offset": 10342,
-      "generated_offset": 74550,
+      "original_offset": 10301,
+      "generated_offset": 80867,
       "length": 21
     },
     {
       "source": "examples/inventory/inventory.xaml",
-      "original_offset": 10290,
-      "generated_offset": 74788,
+      "original_offset": 10249,
+      "generated_offset": 81297,
       "length": 37
     },
     {
       "source": "examples/inventory/inventory.xaml",
-      "original_offset": 10903,
-      "generated_offset": 79527,
+      "original_offset": 10862,
+      "generated_offset": 86392,
       "length": 11
     },
     {
       "source": "examples/inventory/inventory.xaml",
-      "original_offset": 10938,
-      "generated_offset": 79574,
+      "original_offset": 10897,
+      "generated_offset": 86439,
       "length": 19
     },
     {
       "source": "examples/inventory/inventory.xaml",
-      "original_offset": 11244,
-      "generated_offset": 80539,
+      "original_offset": 11248,
+      "generated_offset": 87597,
       "length": 34
     },
     {
       "source": "examples/inventory/inventory.xaml",
-      "original_offset": 11540,
-      "generated_offset": 83729,
+      "original_offset": 11544,
+      "generated_offset": 90979,
       "length": 22
     },
     {
       "source": "examples/inventory/inventory.xaml",
-      "original_offset": 11687,
-      "generated_offset": 85549,
+      "original_offset": 11691,
+      "generated_offset": 92991,
       "length": 30
     },
     {
       "source": "examples/inventory/inventory.xaml",
-      "original_offset": 11940,
-      "generated_offset": 87373,
+      "original_offset": 11944,
+      "generated_offset": 95007,
       "length": 21
     },
     {
       "source": "examples/inventory/inventory.xaml",
-      "original_offset": 12355,
-      "generated_offset": 89063,
+      "original_offset": 12359,
+      "generated_offset": 96889,
       "length": 28
     }
   ]

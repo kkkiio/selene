@@ -545,14 +545,15 @@ fn emit_plan_specs(
       let property_map : Map[String, EmbeddedValue] = Map([])
       for property in properties {
         if ![
-            "Text", "Source", "Active", "Enabled", "Focusable", "Position", "Left",
-            "Top", "Width", "Height", "Margin", "Padding", "Background", "BorderColor",
-            "Border", "Radius", "Color", "FontFamily", "FontSize", "Bold", "Align",
-            "Wrap", "ZIndex", "Fit", "Direction", "Grow", "Shrink", "Basis", "RowGap",
-            "Gap", "ColumnGap", "HorizontalScroll", "VerticalScroll", "ScrollbarWidth",
-            "OutlineColor", "OutlineWidth", "OutlineOffset", "OnClick", "OnFocus",
-            "Rows", "Columns", "AutoFlow", "Grid.Row", "Grid.Column", "Grid.RowSpan",
-            "Grid.ColumnSpan",
+            "Text", "Source", "Active", "Enabled", "Focusable", "FocusScope", "AutoFocus",
+            "TabIndex", "Navigation.Up", "Navigation.Down", "Navigation.Left", "Navigation.Right",
+            "Position", "Left", "Top", "Width", "Height", "Margin", "Padding", "Background",
+            "BorderColor", "Border", "Radius", "Color", "FontFamily", "FontSize",
+            "Bold", "Align", "Wrap", "ZIndex", "Fit", "Direction", "Grow", "Shrink",
+            "Basis", "RowGap", "Gap", "ColumnGap", "HorizontalScroll", "VerticalScroll",
+            "ScrollbarWidth", "OutlineColor", "OutlineWidth", "OutlineOffset", "OnClick",
+            "OnFocus", "Rows", "Columns", "AutoFlow", "Grid.Row", "Grid.Column",
+            "Grid.RowSpan", "Grid.ColumnSpan",
           ].contains(property.name) {
           let span = match property.value {
             Literal(_, span) | Binding(_, span) => span
@@ -616,6 +617,13 @@ fn emit_plan_specs(
         $|\{padding}  active: \{fragment => emit_typed_value(fragment, emission, property_map.get("Active"), "bool", "true")},
         $|\{padding}  enabled: \{fragment => emit_typed_value(fragment, emission, property_map.get("Enabled"), "bool", "true")},
         $|\{padding}  focusable: \{fragment => emit_typed_value(fragment, emission, property_map.get("Focusable"), "bool", focusable_fallback)},
+        $|\{padding}  tab_index: \{fragment => emit_typed_value(fragment, emission, property_map.get("TabIndex"), "int", "0")},
+        $|\{padding}  focus_scope: \{fragment => emit_typed_value(fragment, emission, property_map.get("FocusScope"), "bool", "false")},
+        $|\{padding}  auto_focus: \{fragment => emit_typed_value(fragment, emission, property_map.get("AutoFocus"), "bool", "false")},
+        $|\{padding}  navigation_up: \{fragment => emit_typed_value(fragment, emission, property_map.get("Navigation.Up"), "string", "\"\"")},
+        $|\{padding}  navigation_down: \{fragment => emit_typed_value(fragment, emission, property_map.get("Navigation.Down"), "string", "\"\"")},
+        $|\{padding}  navigation_left: \{fragment => emit_typed_value(fragment, emission, property_map.get("Navigation.Left"), "string", "\"\"")},
+        $|\{padding}  navigation_right: \{fragment => emit_typed_value(fragment, emission, property_map.get("Navigation.Right"), "string", "\"\"")},
         $|\{padding}  style: {
         $|
       let absolute = match property_map.get("Position") {

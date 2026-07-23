@@ -227,6 +227,13 @@ pub(all) struct NodeSpec {
   active : Bool
   enabled : Bool
   focusable : Bool
+  tab_index : Int
+  focus_scope : Bool
+  auto_focus : Bool
+  navigation_up : String
+  navigation_down : String
+  navigation_left : String
+  navigation_right : String
   style : NodeStyle
   visual_state_groups : Array[VisualStateGroup]
 } derive(Eq, Debug)

@@ -3,7 +3,8 @@
          xmlns:model="moonbit:Milky2018/selene-examples/inventory/model"
          x:Class="InventoryView"
          DataType="model:InventoryUiState"
-         x:Name="inventoryRoot" Width="{Binding Path=viewportWidth}" Height="540"
+         x:Name="inventoryRoot" FocusScope="true"
+         Width="{Binding Path=viewportWidth}" Height="540"
          Direction="Column" Gap="14" Padding="18 20" Background="#17100d">
     <Flex x:Name="inventoryHeader" Width="100%" Height="62" Direction="Row"
              Gap="10" Padding="7 10" Background="#2b1c16"
@@ -12,6 +13,7 @@
         <ItemsControl.ItemTemplate>
           <DataTemplate DataType="model:InventoryTab">
             <Button x:Name="tabButton" OnClick="select_tab"
+                       AutoFocus="true" TabIndex="0"
                        Width="{Binding Path=tabWidth}" Height="44"
                        Background="#3a281f"
                        BorderColor="#91653f" Border="1" Radius="2">
@@ -20,13 +22,10 @@
                        Fit="Contain" ZIndex="1" />
               <Button.VisualStates>
                 <VisualStateGroup Name="SelectionStates" Current="{Binding Path=selected}">
-                  <VisualState Name="Normal">
-                    <Setter TargetName="tabIcon" Property="Source" Value="{Binding Path=icon}" />
-                  </VisualState>
+                  <VisualState Name="Normal" />
                   <VisualState Name="Selected">
                     <Setter Property="Background" Value="#6b3d26" />
                     <Setter Property="BorderColor" Value="#e2a84b" />
-                    <Setter TargetName="tabIcon" Property="Source" Value="{Binding Path=selectedIcon}" />
                   </VisualState>
                 </VisualStateGroup>
                 <VisualStateGroup Name="InteractionStates">
@@ -81,7 +80,7 @@
               <Text Grow="1" Height="26" Text="PACK"
                        Color="#d7b47a" Bold="true" FontSize="14" />
             </Flex>
-            <ScrollView x:Name="itemScroll" Width="100%" Grow="1" Focusable="true"
+            <ScrollView x:Name="itemScroll" Width="100%" Grow="1"
                            Background="#34231a" BorderColor="#513724" Border="1"
                            VerticalScroll="true" ScrollbarWidth="6">
               <Grid x:Name="packGrid" Width="100%"
@@ -91,6 +90,7 @@
                   <ItemsControl.ItemTemplate>
                     <DataTemplate DataType="model:InventoryItem">
                       <Button x:Name="itemButtonWide" OnClick="select_item" OnFocus="focus_item"
+                                 TabIndex="10"
                                  Width="100%" Height="112" Background="{Binding Path=itemBackground}"
                                  BorderColor="#765038" Border="2" Radius="2">
                         <Grid x:Name="itemIconSlot" Width="100%" Height="100%"
@@ -120,6 +120,7 @@
               <ItemsControl.ItemTemplate>
                 <DataTemplate DataType="model:EquipmentItem">
                   <Button x:Name="equipmentButtonWide" OnClick="select_equipment"
+                             TabIndex="20"
                              Width="328" Height="72" Background="{Binding Path=equipmentBackground}"
                              BorderColor="#765038" Border="1" Radius="1">
                     <Flex x:Name="equipmentIconSlot" Position="Absolute" Left="4" Top="0"
@@ -163,6 +164,7 @@
             <ItemsControl.ItemTemplate>
               <DataTemplate DataType="model:EquipmentItem">
                 <Button x:Name="equipmentButtonNarrow" OnClick="select_equipment"
+                           TabIndex="20"
                            Width="100%" Height="56"
                            Background="{Binding Path=equipmentBackground}" BorderColor="#765038" Border="1">
                   <Image x:Name="equipmentIconNarrow" Position="Absolute" Left="6" Top="4"
@@ -183,6 +185,7 @@
                 <ItemsControl.ItemTemplate>
                   <DataTemplate DataType="model:InventoryItem">
                     <Button x:Name="itemButtonNarrow" OnClick="select_item" OnFocus="focus_item"
+                               TabIndex="10"
                                Width="100%" Height="96"
                                Background="{Binding Path=itemBackground}" BorderColor="#5f412c" Border="1">
                       <Grid Width="100%" Height="100%" Rows="66 22" Columns="1fr" Padding="3">

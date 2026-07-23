@@ -187,6 +187,7 @@ Embedded View record
 ├── committed node/tree snapshot
 ├── active branch and keyed item state
 ├── node Entity and action routes
+├── XAML focus-scope declarations and resolved navigation keys
 └── visual transition state
 ```
 
@@ -206,6 +207,11 @@ concrete batch mutation function。选择依据是 atomic validation、错误语
 
 ViewIR 已经解析 node kind、property、binding 和 action route。运行时不加载 XAML schema，不执行
 descriptor walker，也不通过字符串 registry 查找 component 或 property。
+
+`FocusScope`、`AutoFocus`、`TabIndex` 和 attached `Navigation` members 进入 generated
+`NodeSpec`。View Host 在完整 batch 验证后解析 stable-key navigation target，并将 active
+scope root 与初始焦点投影到 Selene UI runtime。XAML key 和声明 record 留在 View Host
+边界内，`selene/ui` 只观察 Entity 组成的 focus scope stack。
 
 ## Error contract
 

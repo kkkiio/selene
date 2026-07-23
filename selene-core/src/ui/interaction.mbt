@@ -34,6 +34,13 @@ pub(all) enum UiNavigationDirection {
   Down
   Left
   Right
+} derive(Eq, Debug)
+
+///|
+pub(all) enum UiNavigationAction {
+  Move(UiNavigationDirection)
+  Next
+  Previous
   Activate
   Cancel
 } derive(Eq, Debug)
@@ -41,7 +48,8 @@ pub(all) enum UiNavigationDirection {
 ///|
 pub(all) struct UiNavigationEvent {
   entity : @entity.Entity?
-  direction : UiNavigationDirection
+  action : UiNavigationAction
+  handled : Bool
 }
 
 ///|
@@ -84,6 +92,10 @@ priv struct UiInteractionRuntime {
   mut pressed_entity : @entity.Entity?
   mut pressed_pointer : @inputs.PointerId?
   mut focused_entity : @entity.Entity?
+  mut observed_focus_scopes : Array[@entity.Entity]
+  mut base_focus : @entity.Entity?
+  scope_focus_history : Map[@entity.Entity, @entity.Entity]
+  navigation_handlers : Map[@entity.Entity, (UiNavigationAction) -> Bool]
   pointer_captures : Map[@inputs.PointerId, @entity.Entity]
   consumed_pointers : Set[@inputs.PointerId]
 }
@@ -99,6 +111,10 @@ fn ui_interaction_runtime() -> UiInteractionRuntime {
     pressed_entity: None,
     pressed_pointer: None,
     focused_entity: None,
+    observed_focus_scopes: [],
+    base_focus: None,
+    scope_focus_history: Map([]),
+    navigation_handlers: Map([]),
     pointer_captures: Map([]),
     consumed_pointers: Set([]),
   })
@@ -111,7 +127,18 @@ pub fn hovered_entity() -> @entity.Entity? {
 
 ///|
 pub fn focused_entity() -> @entity.Entity? {
+  synchronize_focus_scopes()
   ui_interaction_runtime().focused_entity
+}
+
+///|
+/// Returns synchronous navigation handlers keyed by UI entity. Navigation
+/// bubbles from the focused entity through its ancestors until handled.
+pub fn navigation_handlers() -> Map[
+  @entity.Entity,
+  (UiNavigationAction) -> Bool,
+] {
+  ui_interaction_runtime().navigation_handlers
 }
 
 ///|
@@ -193,10 +220,34 @@ fn set_focus_marker(entity : @entity.Entity) -> Unit {
 }
 
 ///|
-pub fn focus(entity : @entity.Entity) -> Unit {
+fn is_descendant_or_self(
+  entity : @entity.Entity,
+  root : @entity.Entity,
+) -> Bool {
+  let mut current = Some(entity)
+  while current is Some(target) {
+    if target == root {
+      return true
+    }
+    current = target.get_parent()
+  }
+  false
+}
+
+///|
+fn active_focus_scope() -> FocusScope? {
+  focus_scopes().last()
+}
+
+///|
+fn set_focus(entity : @entity.Entity) -> Bool {
   let runtime = ui_interaction_runtime()
+  match active_focus_scope() {
+    Some(scope) if !is_descendant_or_self(entity, scope.root) => return false
+    _ => ()
+  }
   if runtime.focused_entity is Some(current) && current == entity {
-    return
+    return true
   }
   if runtime.focused_entity is Some(current) {
     clear_focus_marker(current)
@@ -205,6 +256,17 @@ pub fn focus(entity : @entity.Entity) -> Unit {
   runtime.focused_entity = Some(entity)
   set_focus_marker(entity)
   focus_in_event_bus.send({ entity, })
+  match active_focus_scope() {
+    Some(scope) => runtime.scope_focus_history[scope.root] = entity
+    None => ()
+  }
+  true
+}
+
+///|
+pub fn focus(entity : @entity.Entity) -> Unit {
+  synchronize_focus_scopes()
+  ignore(set_focus(entity))
 }
 
 ///|
@@ -272,8 +334,10 @@ fn sorted_ui_entities() -> Array[@entity.Entity] {
 ///|
 fn focusable_entities() -> Array[@entity.Entity] {
   let entities : Array[@entity.Entity] = []
+  let scope = active_focus_scope()
   for entity in sorted_ui_entities() {
-    if is_focusable(entity) {
+    if is_focusable(entity) &&
+      scope.map_or(true, value => is_descendant_or_self(entity, value.root)) {
       entities.push(entity)
     }
   }
@@ -287,6 +351,83 @@ fn focusable_entities() -> Array[@entity.Entity] {
     }
   })
   entities
+}
+
+///|
+fn synchronize_focus_scopes() -> Unit {
+  let scopes = focus_scopes()
+  let mut index = scopes.length() - 1
+  while index >= 0 {
+    if !scopes[index].root.is_alive() {
+      ignore(scopes.remove(index))
+    }
+    index = index - 1
+  }
+  let roots = scopes.map(scope => scope.root)
+  let runtime = ui_interaction_runtime()
+  let changed = roots != runtime.observed_focus_scopes
+  if changed {
+    match runtime.observed_focus_scopes.last() {
+      Some(root) =>
+        match runtime.focused_entity {
+          Some(entity) if entity.is_alive() &&
+            is_descendant_or_self(entity, root) =>
+            runtime.scope_focus_history[root] = entity
+          _ => ()
+        }
+      None =>
+        if !roots.is_empty() {
+          runtime.base_focus = runtime.focused_entity
+        }
+    }
+    runtime.observed_focus_scopes = roots
+  }
+  match scopes.last() {
+    Some(scope) => {
+      let current_is_valid = match runtime.focused_entity {
+        Some(entity) =>
+          entity.is_alive() &&
+          is_descendant_or_self(entity, scope.root) &&
+          global_ui_nodes().contains(entity) &&
+          is_focusable(entity) &&
+          @visibility.is_visible(entity)
+        None => false
+      }
+      if changed || !current_is_valid {
+        let candidates = focusable_entities()
+        let remembered = runtime.scope_focus_history.get(scope.root)
+        let desired = match remembered {
+          Some(entity) if candidates.contains(entity) => Some(entity)
+          _ =>
+            match scope.initial_focus {
+              Some(entity) if candidates.contains(entity) => Some(entity)
+              _ =>
+                if candidates.is_empty() {
+                  None
+                } else {
+                  Some(candidates[0])
+                }
+            }
+        }
+        match desired {
+          Some(entity) => ignore(set_focus(entity))
+          None => blur()
+        }
+      }
+    }
+    None =>
+      if changed {
+        let desired = runtime.base_focus
+        runtime.base_focus = None
+        match desired {
+          Some(entity) if entity.is_alive() &&
+            global_ui_nodes().contains(entity) &&
+            is_focusable(entity) &&
+            @visibility.is_visible(entity) => ignore(set_focus(entity))
+          _ => blur()
+        }
+      }
+  }
 }
 
 ///|
@@ -304,7 +445,7 @@ fn directional_score(
   direction : UiNavigationDirection,
 ) -> (Double, Double)? {
   let delta = candidate - current
-  match direction {
+  let distances = match direction {
     Left =>
       if delta[X] < 0.0 {
         Some((-delta[X], delta[Y].abs()))
@@ -319,22 +460,25 @@ fn directional_score(
       }
     Up => if delta[Y] < 0.0 { Some((-delta[Y], delta[X].abs())) } else { None }
     Down => if delta[Y] > 0.0 { Some((delta[Y], delta[X].abs())) } else { None }
-    Activate | Cancel => None
+  }
+  match distances {
+    Some((primary, secondary)) =>
+      Some((secondary / primary, primary * primary + secondary * secondary))
+    None => None
   }
 }
 
 ///|
-fn move_focus(direction : UiNavigationDirection) -> Unit {
+fn move_focus(direction : UiNavigationDirection) -> Bool {
   let entities = focusable_entities()
   if entities.is_empty() {
     blur()
-    return
+    return false
   }
   let runtime = ui_interaction_runtime()
   let current = runtime.focused_entity.unwrap_or(entities[0])
-  if !global_ui_nodes().contains(current) {
-    focus(entities[0])
-    return
+  if !global_ui_nodes().contains(current) || !entities.contains(current) {
+    return set_focus(entities[0])
   }
   match navigation_links().get(current) {
     Some(links) => {
@@ -343,18 +487,18 @@ fn move_focus(direction : UiNavigationDirection) -> Unit {
         Down => links.down
         Left => links.left
         Right => links.right
-        Activate | Cancel => Auto
       }
       match rule {
-        Stop => return
+        Stop => return true
         Explicit(target) => {
           if target.is_alive() &&
             global_ui_nodes().contains(target) &&
+            entities.contains(target) &&
             is_focusable(target) &&
             @visibility.is_visible(target) {
-            focus(target)
+            ignore(set_focus(target))
           }
-          return
+          return true
         }
         Auto => ()
       }
@@ -389,27 +533,45 @@ fn move_focus(direction : UiNavigationDirection) -> Unit {
     }
   }
   match best_entity {
-    Some(entity) => focus(entity)
-    None => if runtime.focused_entity is None { focus(entities[0]) }
+    Some(entity) => set_focus(entity)
+    None =>
+      if runtime.focused_entity is None {
+        set_focus(entities[0])
+      } else {
+        false
+      }
   }
 }
 
 ///|
-fn move_focus_by_tab(reverse : Bool) -> Unit {
-  let entities = focusable_entities()
+fn move_focus_by_tab(reverse : Bool) -> Bool {
+  let entities = focusable_entities().filter(entity => {
+    tab_indexes().get(entity).map(value => value.value >= 0).unwrap_or(true)
+  })
   if entities.is_empty() {
     blur()
-    return
+    return false
   }
   let runtime = ui_interaction_runtime()
   match runtime.focused_entity {
     Some(current) => {
       let mut index = 0
+      let mut found = false
       for i in 0..<entities.length() {
         if entities[i] == current {
           index = i
+          found = true
           break
         }
+      }
+      if !found {
+        return set_focus(
+          if reverse {
+            entities.last().unwrap()
+          } else {
+            entities[0]
+          },
+        )
       }
       let next = if reverse {
         if index == 0 {
@@ -422,10 +584,59 @@ fn move_focus_by_tab(reverse : Bool) -> Unit {
       } else {
         index + 1
       }
-      focus(entities[next])
+      set_focus(entities[next])
     }
-    None => focus(entities[0])
+    None => set_focus(entities[0])
   }
+}
+
+///|
+/// Applies one device-independent UI navigation action. Handlers run
+/// synchronously from the focused entity toward the active scope root before
+/// the default focus or activation behavior.
+pub fn navigate(action : UiNavigationAction) -> Bool {
+  synchronize_focus_scopes()
+  sanitize_focus()
+  let runtime = ui_interaction_runtime()
+  let scope_root = active_focus_scope().map(scope => scope.root)
+  let mut current = match runtime.focused_entity {
+    Some(entity) => Some(entity)
+    None => scope_root
+  }
+  while current is Some(entity) {
+    match runtime.navigation_handlers.get(entity) {
+      Some(handler) =>
+        if handler(action) {
+          navigation_event_bus.send({
+            entity: runtime.focused_entity,
+            action,
+            handled: true,
+          })
+          return true
+        }
+      None => ()
+    }
+    if scope_root is Some(root) && entity == root {
+      break
+    }
+    current = entity.get_parent()
+  }
+  let handled = match action {
+    Move(direction) => move_focus(direction)
+    Next => move_focus_by_tab(false)
+    Previous => move_focus_by_tab(true)
+    Activate =>
+      match runtime.focused_entity {
+        Some(target) if is_interactive(target) => {
+          click_event_bus.send({ entity: target, button: Left })
+          true
+        }
+        _ => false
+      }
+    Cancel => false
+  }
+  navigation_event_bus.send({ entity: runtime.focused_entity, action, handled })
+  handled
 }
 
 ///|
@@ -745,6 +956,7 @@ fn clear_touch_hover() -> Unit {
 ///|
 pub fn ui_interaction_system(_delta : Double) -> Unit {
   let runtime = ui_interaction_runtime()
+  synchronize_focus_scopes()
   sanitize_focus()
   let pointer_position = @inputs.primary_pointer_position()
   update_relative_cursor_positions(pointer_position)
@@ -806,51 +1018,29 @@ pub fn ui_interaction_system(_delta : Double) -> Unit {
   }
 
   if @inputs.is_just_pressed(Tab) {
-    move_focus_by_tab(@inputs.is_pressed(ShiftLeft))
-    navigation_event_bus.send({
-      entity: runtime.focused_entity,
-      direction: if @inputs.is_pressed(ShiftLeft) {
-        Left
-      } else {
-        Right
-      },
-    })
+    ignore(
+      navigate(if @inputs.is_pressed(ShiftLeft) { Previous } else { Next }),
+    )
   }
   if @inputs.is_just_pressed(ArrowLeft) ||
     @inputs.is_any_gamepad_button_just_pressed(DPadLeft) {
-    move_focus(Left)
-    navigation_event_bus.send({
-      entity: runtime.focused_entity,
-      direction: Left,
-    })
+    ignore(navigate(UiNavigationAction::Move(Left)))
   }
   if @inputs.is_just_pressed(ArrowRight) ||
     @inputs.is_any_gamepad_button_just_pressed(DPadRight) {
-    move_focus(Right)
-    navigation_event_bus.send({
-      entity: runtime.focused_entity,
-      direction: Right,
-    })
+    ignore(navigate(UiNavigationAction::Move(Right)))
   }
   if @inputs.is_just_pressed(ArrowUp) ||
     @inputs.is_any_gamepad_button_just_pressed(DPadUp) {
-    move_focus(Up)
-    navigation_event_bus.send({ entity: runtime.focused_entity, direction: Up })
+    ignore(navigate(UiNavigationAction::Move(Up)))
   }
   if @inputs.is_just_pressed(ArrowDown) ||
     @inputs.is_any_gamepad_button_just_pressed(DPadDown) {
-    move_focus(Down)
-    navigation_event_bus.send({
-      entity: runtime.focused_entity,
-      direction: Down,
-    })
+    ignore(navigate(UiNavigationAction::Move(Down)))
   }
   if @inputs.is_just_pressed(Escape) ||
     @inputs.is_any_gamepad_button_just_pressed(East) {
-    navigation_event_bus.send({
-      entity: runtime.focused_entity,
-      direction: Cancel,
-    })
+    ignore(navigate(Cancel))
   }
   if (
       @inputs.is_just_pressed(Enter) ||
@@ -859,8 +1049,7 @@ pub fn ui_interaction_system(_delta : Double) -> Unit {
     ) &&
     runtime.focused_entity is Some(target) &&
     is_interactive(target) {
-    click_event_bus.send({ entity: target, button: Left })
-    navigation_event_bus.send({ entity: Some(target), direction: Activate })
+    ignore(navigate(Activate))
   }
 
   for entity, _button in buttons() {
