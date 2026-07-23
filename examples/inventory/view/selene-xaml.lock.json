@@ -3,7 +3,7 @@
   "generator": "selene-xaml@0.1.0",
   "runtime": "KKKIIO/selene",
   "inputs": [
-    { "owner": "user", "path": "examples/inventory/inventory.xaml", "sha256": "e93f95d0bc6c84569b63623258d9c69b9b36fe0771568ae1f02ce1e133141253" },
+    { "owner": "user", "path": "examples/inventory/inventory.xaml", "sha256": "83d68e90f572ea131a3b655d056c16cafae34a217a5d9a825bcd1e81135a6672" },
     { "owner": "moon-info", "path": "examples/inventory/model/pkg.generated.mbti", "sha256": "7ab6afb8b7cbeabb8dc2d2e07c1eba2c7771d137e1c0460ba539d442e0d4a744" }
   ],
   "resolved_contract": { "kind": "mbti", "path": "examples/inventory/model/pkg.generated.mbti", "package": "Milky2018/selene-examples/inventory/model", "sha256": "7ab6afb8b7cbeabb8dc2d2e07c1eba2c7771d137e1c0460ba539d442e0d4a744" },
@@ -14,9 +14,9 @@
   "host_capability": { "package": "KKKIIO/selene/ui_view", "contract": "ui-view", "version": "0.1.0", "operations": ["mount", "apply"] },
   "abi_fingerprint": "sha256:11b2f439de85e7a8c92bdbc8da1bddd4c29aff6bf2687858fa458808455d1262",
   "outputs": [    { "owner": "selene-xaml", "path": "moon.pkg", "sha256": "9257940c262c9b39c7f13cec10cf4568a1327a442500bb816689f49ec1b71b27" },
-    { "owner": "selene-xaml", "path": "state.generated.mbt", "sha256": "baa148a4b9b959328da0b254dea8b6c08467f3d328b29ef664d38c7ba282109a" },
-    { "owner": "selene-xaml", "path": "view.generated.mbt", "sha256": "76c99891ddb125aacf53f628b355b511445a8459fb64dfad66736d5e78a5651a" },
-    { "owner": "selene-xaml", "path": "view.generated.mbt.map.json", "sha256": "33b7aed0a1b5eb6b6dab27df64ef0c6cf4e101bbcec1ee49c06bdbb1154b801f" }
+    { "owner": "selene-xaml", "path": "state.generated.mbt", "sha256": "47f69bf0dd6223ad0d47d67f606ad1a37ded53aea8417ea1846a9ac809ad7f76" },
+    { "owner": "selene-xaml", "path": "view.generated.mbt", "sha256": "8f18b01bce79ca12fd8e7555fd9a21fcd7b84efa16749b7a3a46072b69a7a5d1" },
+    { "owner": "selene-xaml", "path": "view.generated.mbt.map.json", "sha256": "b39915e3d0edd185ede4728a560de68fcb9d04440b6c60ead6a919639ff6ec66" }
   ],
   "lock_path": "selene-xaml.lock.json"
 }

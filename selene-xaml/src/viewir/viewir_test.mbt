@@ -264,3 +264,172 @@ test "VI-IR-04 seals template VisualState bindings, targets, overlays, and trans
     ),
   )
 }
+
+///|
+test "VI-IR-05 seals Grid tracks, flow, placement, and spans as typed constants" {
+  let xaml =
+    #|<ui:Grid xmlns:ui="urn:selene:xaml:ui"
+    #| xmlns:model="moonbit:example/grid/model"
+    #| ui:DataType="model:GridState"
+    #| Rows="Auto minmax(80, 1fr)"
+    #| Columns="repeat(2, 25% 1fr) repeat(auto-fit, minmax(40, 1fr)) fit-content(120)"
+    #| AutoFlow="ColumnDense">
+    #| <ui:Text ui:Grid.Row="1" ui:Grid.Column="2"
+    #|   ui:Grid.RowSpan="2" ui:Grid.ColumnSpan="3" Text="Cell" />
+    #|</ui:Grid>
+  let contract =
+    #|package "example/grid/model"
+    #|pub(all) struct GridState {}
+  let ir = @viewir.compile("fixtures/grid.xaml", xaml, contract)
+  guard ir.root
+    is IRNode::Element(
+      "Grid",
+      _,
+      _,
+      grid_properties,
+      [IRNode::Element("Text", _, _, cell_properties, _, _)],
+      _
+    ) else {
+    fail("expected a typed Grid with one Text child")
+  }
+  debug_inspect(
+    (
+      grid_properties.map(property => (property.name, property.value)),
+      cell_properties.map(property => (property.name, property.value)),
+    ),
+    content=(
+      #|(
+      #|  [
+      #|    (
+      #|      "Rows",
+      #|      Constant(
+      #|        GridTracks([Auto, MinMax(Px(80), Fr(1))]),
+      #|        {
+      #|          source_uri: "fixtures/grid.xaml",
+      #|          start: { offset: 113, line: 4, column: 2 },
+      #|          end: { offset: 140, line: 4, column: 29 },
+      #|        },
+      #|      ),
+      #|    ),
+      #|    (
+      #|      "Columns",
+      #|      Constant(
+      #|        GridTracks(
+      #|          [
+      #|            Repeat(Count(2), [Percent(0.25), Fr(1)]),
+      #|            Repeat(AutoFit, [MinMax(Px(40), Fr(1))]),
+      #|            FitContent(Px(120)),
+      #|          ],
+      #|        ),
+      #|        {
+      #|          source_uri: "fixtures/grid.xaml",
+      #|          start: { offset: 142, line: 5, column: 2 },
+      #|          end: { offset: 221, line: 5, column: 81 },
+      #|        },
+      #|      ),
+      #|    ),
+      #|    (
+      #|      "AutoFlow",
+      #|      Constant(
+      #|        EnumValue("ColumnDense"),
+      #|        {
+      #|          source_uri: "fixtures/grid.xaml",
+      #|          start: { offset: 223, line: 6, column: 2 },
+      #|          end: { offset: 245, line: 6, column: 24 },
+      #|        },
+      #|      ),
+      #|    ),
+      #|  ],
+      #|  [
+      #|    (
+      #|      "Grid.Row",
+      #|      Constant(
+      #|        IntValue(1),
+      #|        {
+      #|          source_uri: "fixtures/grid.xaml",
+      #|          start: { offset: 257, line: 7, column: 11 },
+      #|          end: { offset: 272, line: 7, column: 26 },
+      #|        },
+      #|      ),
+      #|    ),
+      #|    (
+      #|      "Grid.Column",
+      #|      Constant(
+      #|        IntValue(2),
+      #|        {
+      #|          source_uri: "fixtures/grid.xaml",
+      #|          start: { offset: 273, line: 7, column: 27 },
+      #|          end: { offset: 291, line: 7, column: 45 },
+      #|        },
+      #|      ),
+      #|    ),
+      #|    (
+      #|      "Grid.RowSpan",
+      #|      Constant(
+      #|        IntValue(2),
+      #|        {
+      #|          source_uri: "fixtures/grid.xaml",
+      #|          start: { offset: 295, line: 8, column: 4 },
+      #|          end: { offset: 314, line: 8, column: 23 },
+      #|        },
+      #|      ),
+      #|    ),
+      #|    (
+      #|      "Grid.ColumnSpan",
+      #|      Constant(
+      #|        IntValue(3),
+      #|        {
+      #|          source_uri: "fixtures/grid.xaml",
+      #|          start: { offset: 315, line: 8, column: 24 },
+      #|          end: { offset: 337, line: 8, column: 46 },
+      #|        },
+      #|      ),
+      #|    ),
+      #|    (
+      #|      "Text",
+      #|      Constant(
+      #|        StringValue("Cell"),
+      #|        {
+      #|          source_uri: "fixtures/grid.xaml",
+      #|          start: { offset: 338, line: 8, column: 47 },
+      #|          end: { offset: 349, line: 8, column: 58 },
+      #|        },
+      #|      ),
+      #|    ),
+      #|  ],
+      #|)
+    ),
+  )
+  let messages : Array[String] = []
+  for
+    invalid in [
+      ("Rows=\"Auto minmax(80, 1fr)\"", "Rows=\"repeat(0, 1fr)\""),
+      ("ui:Grid.Row=\"1\"", "ui:Grid.Row=\"-1\""),
+      ("ui:Grid.RowSpan=\"2\"", "ui:Grid.RowSpan=\"0\""),
+    ] {
+    try
+      ignore(
+        @viewir.compile(
+          "fixtures/grid.xaml",
+          xaml.replace(old=invalid.0, new=invalid.1),
+          contract,
+        ),
+      )
+    catch {
+      ViewIRError::Unsupported(message, _) => messages.push(message)
+      error => raise error
+    } noraise {
+      _ => fail("invalid Grid literal must fail during ViewIR sealing")
+    }
+  }
+  debug_inspect(
+    messages,
+    content=(
+      #|[
+      #|  "repeat() count must be positive",
+      #|  "grid index must be zero or greater",
+      #|  "grid span must be a positive integer",
+      #|]
+    ),
+  )
+}

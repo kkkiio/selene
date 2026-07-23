@@ -303,6 +303,13 @@ fn generated_specs(
       flex_shrink: 1.0,
       row_gap: 0.0,
       column_gap: 0.0,
+      grid_rows: [],
+      grid_columns: [],
+      grid_auto_flow: @ui_view.GridAutoFlow::Row,
+      grid_row: None,
+      grid_column: None,
+      grid_row_span: 1,
+      grid_column_span: 1,
       horizontal_scroll: false,
       vertical_scroll: false,
       scrollbar_width: 0.0,
@@ -353,6 +360,13 @@ fn generated_specs(
       flex_shrink: 1.0,
       row_gap: 0.0,
       column_gap: 0.0,
+      grid_rows: [],
+      grid_columns: [],
+      grid_auto_flow: @ui_view.GridAutoFlow::Row,
+      grid_row: None,
+      grid_column: None,
+      grid_row_span: 1,
+      grid_column_span: 1,
       horizontal_scroll: false,
       vertical_scroll: false,
       scrollbar_width: 0.0,
@@ -461,7 +475,7 @@ pub fn plugin(app : @app.App) -> @app.App {
     {
       "source": "fixtures/demo.xaml",
       "original_offset": 212,
-      "generated_offset": 7676,
+      "generated_offset": 7869,
       "length": 11
     }
   ]
@@ -485,8 +499,8 @@ pub fn plugin(app : @app.App) -> @app.App {
   "abi_fingerprint": "sha256:784dedf3d1ce8a9664dd5bc3bae0113d94ba0962287363369358e473341e8ffb",
   "outputs": [    { "owner": "selene-xaml", "path": "moon.pkg", "sha256": "65bf9d9886f14503dea848f3076b39f9eadef813b21aefd5bcf367e20f1acff6" },
     { "owner": "selene-xaml", "path": "state.generated.mbt", "sha256": "3c9ff55c322e0f9d5338ed7bc5ffad07c11d040726f1239335f616736430ebaf" },
-    { "owner": "selene-xaml", "path": "view.generated.mbt", "sha256": "90da26110deb1af825108350274cb9d9c0adb9ce3dd10e26faff88f7f92bda52" },
-    { "owner": "selene-xaml", "path": "view.generated.mbt.map.json", "sha256": "5da71b1e191c290cdc66b53961400ceb50feca9b9514b615f150b6ee14d2f200" }
+    { "owner": "selene-xaml", "path": "view.generated.mbt", "sha256": "a0a159234f5c71e37a2a6130372160253708222a7cd803e11f4d78ddaf1a298c" },
+    { "owner": "selene-xaml", "path": "view.generated.mbt.map.json", "sha256": "38b390dd0410c34ad6745dc0a9b142a925d396c794c6505b6e6beddae0679994" }
   ],
   "lock_path": "selene-xaml.lock.json"
 }

@@ -313,6 +313,13 @@ fn generated_specs(
       flex_shrink: 1.0,
       row_gap: 0.0,
       column_gap: 0.0,
+      grid_rows: [],
+      grid_columns: [],
+      grid_auto_flow: @ui_view.GridAutoFlow::Row,
+      grid_row: None,
+      grid_column: None,
+      grid_row_span: 1,
+      grid_column_span: 1,
       horizontal_scroll: false,
       vertical_scroll: false,
       scrollbar_width: 0.0,
@@ -371,6 +378,13 @@ fn generated_specs(
         flex_shrink: 1.0,
         row_gap: 0.0,
         column_gap: 0.0,
+        grid_rows: [],
+        grid_columns: [],
+        grid_auto_flow: @ui_view.GridAutoFlow::Row,
+        grid_row: None,
+        grid_column: None,
+        grid_row_span: 1,
+        grid_column_span: 1,
         horizontal_scroll: false,
         vertical_scroll: false,
         scrollbar_width: 0.0,
@@ -423,6 +437,13 @@ fn generated_specs(
         flex_shrink: 1.0,
         row_gap: 0.0,
         column_gap: 0.0,
+        grid_rows: [],
+        grid_columns: [],
+        grid_auto_flow: @ui_view.GridAutoFlow::Row,
+        grid_row: None,
+        grid_column: None,
+        grid_row_span: 1,
+        grid_column_span: 1,
         horizontal_scroll: false,
         vertical_scroll: false,
         scrollbar_width: 0.0,
@@ -611,19 +632,19 @@ pub fn plugin(app : @app.App) -> @app.App {
     {
       "source": "fixtures/formatting/acceptance-view.xaml",
       "original_offset": 349,
-      "generated_offset": 7963,
+      "generated_offset": 8156,
       "length": 11
     },
     {
       "source": "fixtures/formatting/acceptance-view.xaml",
       "original_offset": 387,
-      "generated_offset": 8008,
+      "generated_offset": 8201,
       "length": 19
     },
     {
       "source": "fixtures/formatting/acceptance-view.xaml",
       "original_offset": 671,
-      "generated_offset": 10071,
+      "generated_offset": 10471,
       "length": 22
     }
   ]
@@ -647,8 +668,8 @@ pub fn plugin(app : @app.App) -> @app.App {
   "abi_fingerprint": "sha256:c4902cab8247473c114b7362f45197905831236c1ec514c3d05ff2b24adb0618",
   "outputs": [    { "owner": "selene-xaml", "path": "moon.pkg", "sha256": "81f0c024a87c60032cd7ba7ba9a7d57ff1e8e9688a0feaee408de49178ca99f7" },
     { "owner": "selene-xaml", "path": "state.generated.mbt", "sha256": "51f9793c93aa8c2c12777050eee1c8f57be44b4cbcf42f00b48247a47fb8bba3" },
-    { "owner": "selene-xaml", "path": "view.generated.mbt", "sha256": "bbff0cb211da0b1ef9008fb36c343c4b40e7214449db43696231ae40beb2cab2" },
-    { "owner": "selene-xaml", "path": "view.generated.mbt.map.json", "sha256": "12c5faea9770ab011ea2d7fc2ab0ef181e74bba6c3f0122a7f496b1d8af7e03f" }
+    { "owner": "selene-xaml", "path": "view.generated.mbt", "sha256": "ec641591177f9e5b9a484b82691632a89e96723c5ae10d2dbe34471c14bb2d94" },
+    { "owner": "selene-xaml", "path": "view.generated.mbt.map.json", "sha256": "53dbf386d9314dcd18aa1562734575f99c7e28b59d5244e961dd75ee95a230d3" }
   ],
   "lock_path": "selene-xaml.lock.json"
 }

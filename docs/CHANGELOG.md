@@ -4,6 +4,9 @@
 
 ### Added
 
+- Added typed Selene XAML `Grid` generation with CSS-style tracks, auto-flow,
+  attached row and column placement, and spans.
+
 - Added `selene/atlas` loading for canonical Selene, Aseprite, and TexturePacker
   JSON atlases, including named `#region` resolution for UI and sprite assets.
 
@@ -11,6 +14,12 @@
   components, together with their documentation, examples, and test suites.
 
 ### Changed
+
+- Simplified Selene XAML source generation with builder-aware nested
+  interpolations while preserving generated artifacts and source mappings.
+
+- Reworked the shared Inventory example into a classic slot-based Grid backpack
+  for wide and narrow layouts.
 
 - Moved the Selene XAML Inventory example into the shared `examples` module and
   added a thin WebGPU launcher under `examples-web`.

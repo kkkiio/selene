@@ -29,6 +29,31 @@ pub(all) enum FlexDirection {
   ColumnReverse
 } derive(Eq, @debug.Debug)
 
+pub(all) enum GridAutoFlow {
+  Row
+  Column
+  RowDense
+  ColumnDense
+} derive(Eq, @debug.Debug)
+
+pub(all) enum GridTrack {
+  Auto
+  Px(Double)
+  Percent(Double)
+  Fr(Double)
+  MinContent
+  MaxContent
+  FitContent(GridTrack)
+  MinMax(GridTrack, GridTrack)
+  Repeat(GridTrackRepetition, Array[GridTrack])
+} derive(Eq, @debug.Debug)
+
+pub(all) enum GridTrackRepetition {
+  Count(Int)
+  AutoFill
+  AutoFit
+} derive(Eq, @debug.Debug)
+
 pub(all) enum ImageFit {
   Fill
   Contain
@@ -57,6 +82,7 @@ pub fn MountedView::swap(Self, Self) -> Unit raise HostError
 pub(all) enum NodeKind {
   View
   Flex
+  Grid
   Text
   Image
   Button
@@ -111,6 +137,13 @@ pub(all) struct NodeStyle {
   flex_shrink : Double
   row_gap : Double
   column_gap : Double
+  grid_rows : Array[GridTrack]
+  grid_columns : Array[GridTrack]
+  grid_auto_flow : GridAutoFlow
+  grid_row : Int?
+  grid_column : Int?
+  grid_row_span : Int
+  grid_column_span : Int
   horizontal_scroll : Bool
   vertical_scroll : Bool
   scrollbar_width : Double

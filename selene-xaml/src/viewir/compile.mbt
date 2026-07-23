@@ -149,9 +149,10 @@ pub fn compile(
           }
           match property.value {
             SyntaxValue::Binding(path, span) => {
-              if ["Position", "Align", "Wrap", "Fit", "Direction"].contains(
-                  property.name,
-                ) {
+              if [
+                  "Position", "Align", "Wrap", "Fit", "Direction", "Rows", "Columns",
+                  "AutoFlow", "Grid.Row", "Grid.Column", "Grid.RowSpan", "Grid.ColumnSpan",
+                ].contains(property.name) {
                 raise Unsupported(
                   "generated property does not support Binding: " +
                   property.name,
@@ -959,11 +960,19 @@ fn property_target_type(
     "Double"
   } else if property == "ZIndex" {
     "Int"
+  } else if ["Grid.Row", "Grid.Column", "Grid.RowSpan", "Grid.ColumnSpan"].contains(
+      property,
+    ) {
+    "GridIndex"
   } else if ["Width", "Height", "Basis"].contains(property) {
     "LayoutValue"
+  } else if ["Rows", "Columns"].contains(property) {
+    "GridTracks"
   } else if ["Margin", "Padding"].contains(property) {
     "Rect"
-  } else if ["Position", "Align", "Wrap", "Fit", "Direction"].contains(property) {
+  } else if ["Position", "Align", "Wrap", "Fit", "Direction", "AutoFlow"].contains(
+      property,
+    ) {
     property
   } else {
     raise Unsupported("unsupported generated property: " + property, span)
@@ -997,6 +1006,19 @@ fn lower_constant(
           _ => raise Unsupported("invalid Int literal: " + text, span)
         },
       )
+    "GridIndex" => {
+      let value = @string.parse_int(text) catch {
+        _ => raise Unsupported("invalid grid index literal: " + text, span)
+      }
+      if property.has_suffix("Span") {
+        if value <= 0 {
+          raise Unsupported("grid span must be a positive integer", span)
+        }
+      } else if value < 0 {
+        raise Unsupported("grid index must be zero or greater", span)
+      }
+      IRConstant::IntValue(value)
+    }
     "LayoutValue" =>
       if text == "Auto" {
         IRConstant::LayoutValue(IRLayoutValue::Auto)
@@ -1065,8 +1087,149 @@ fn lower_constant(
             span,
           )
       }
+    "AutoFlow" =>
+      match text {
+        "Row" | "Column" | "RowDense" | "ColumnDense" =>
+          IRConstant::EnumValue(text)
+        _ =>
+          raise Unsupported("invalid generated AutoFlow literal: " + text, span)
+      }
+    "GridTracks" => IRConstant::GridTracks(parse_grid_tracks(text, span))
     _ => raise Unsupported("unsupported generated property: " + property, span)
   }
+}
+
+///|
+fn parse_grid_tracks(
+  text : String,
+  span : @infoset.XamlSourceSpan,
+) -> Array[IRGridTrack] raise ViewIRError {
+  let source = text.trim().to_owned()
+  if source == "" {
+    raise Unsupported("grid track list cannot be empty", span)
+  }
+  let tokens : Array[String] = []
+  let mut buffer = StringBuilder::new()
+  let mut depth = 0
+  for index, ch in source {
+    if ch == '(' {
+      depth += 1
+      buffer.write_char(ch)
+    } else if ch == ')' {
+      depth -= 1
+      if depth < 0 {
+        raise Unsupported("invalid grid track syntax: " + text, span)
+      }
+      buffer.write_char(ch)
+    } else if depth == 0 && (ch == ' ' || ch == '\t' || ch == '\n') {
+      let token = buffer.to_string().trim().to_owned()
+      if token != "" {
+        tokens.push(token)
+        buffer = StringBuilder::new()
+      }
+    } else {
+      buffer.write_char(ch)
+    }
+    if index == source.length() - 1 {
+      let token = buffer.to_string().trim().to_owned()
+      if token != "" {
+        tokens.push(token)
+      }
+    }
+  }
+  if depth != 0 || tokens.length() == 0 {
+    raise Unsupported("invalid grid track syntax: " + text, span)
+  }
+  let tracks : Array[IRGridTrack] = []
+  for token in tokens {
+    let lower = token.to_lower()
+    if lower == "auto" {
+      tracks.push(IRGridTrack::Auto)
+    } else if lower == "min-content" {
+      tracks.push(IRGridTrack::MinContent)
+    } else if lower == "max-content" {
+      tracks.push(IRGridTrack::MaxContent)
+    } else if (
+        lower.has_prefix("minmax(") ||
+        lower.has_prefix("fit-content(") ||
+        lower.has_prefix("repeat(")
+      ) &&
+      lower.has_suffix(")") {
+      let open = token.find("(").unwrap()
+      let arguments = token[open + 1:token.length() - 1].trim().to_owned()
+      if lower.has_prefix("fit-content(") {
+        let values = parse_grid_tracks(arguments, span)
+        if values.length() != 1 {
+          raise Unsupported("fit-content() requires one grid track", span)
+        }
+        tracks.push(IRGridTrack::FitContent(values[0]))
+        continue
+      }
+      let mut comma = -1
+      let mut nested_depth = 0
+      for argument_index, argument_char in arguments {
+        if argument_char == '(' {
+          nested_depth += 1
+        } else if argument_char == ')' {
+          nested_depth -= 1
+        } else if nested_depth == 0 && argument_char == ',' {
+          comma = argument_index
+          break
+        }
+      }
+      if comma < 0 {
+        raise Unsupported("grid track function requires a comma", span)
+      }
+      let first = arguments[:comma].trim().to_owned()
+      let rest = arguments[comma + 1:].trim().to_owned()
+      if lower.has_prefix("minmax(") {
+        let minimum = parse_grid_tracks(first, span)
+        let maximum = parse_grid_tracks(rest, span)
+        if minimum.length() != 1 || maximum.length() != 1 {
+          raise Unsupported("minmax() requires exactly two grid tracks", span)
+        }
+        tracks.push(IRGridTrack::MinMax(minimum[0], maximum[0]))
+      } else {
+        let repetition = match first.to_lower() {
+          "auto-fill" => IRGridTrackRepetition::AutoFill
+          "auto-fit" => IRGridTrackRepetition::AutoFit
+          value => {
+            let count = @string.parse_int(value) catch {
+              _ => raise Unsupported("invalid repeat() count: " + first, span)
+            }
+            if count <= 0 {
+              raise Unsupported("repeat() count must be positive", span)
+            }
+            IRGridTrackRepetition::Count(count)
+          }
+        }
+        let repeated = parse_grid_tracks(rest, span)
+        tracks.push(IRGridTrack::Repeat(repetition, repeated))
+      }
+    } else {
+      let (number_text, unit) = if lower.has_suffix("fr") {
+        (lower[:lower.length() - 2], "fr")
+      } else if lower.has_suffix("%") {
+        (lower[:lower.length() - 1], "%")
+      } else {
+        (lower, "px")
+      }
+      let value = @string.parse_double(number_text) catch {
+        _ => raise Unsupported("invalid grid track literal: " + token, span)
+      }
+      if value < 0.0 {
+        raise Unsupported("grid track sizes cannot be negative", span)
+      }
+      tracks.push(
+        match unit {
+          "fr" => IRGridTrack::Fr(value)
+          "%" => IRGridTrack::Percent(value / 100.0)
+          _ => IRGridTrack::Px(value)
+        },
+      )
+    }
+  }
+  tracks
 }
 
 ///|

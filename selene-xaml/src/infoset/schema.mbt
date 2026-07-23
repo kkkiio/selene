@@ -235,8 +235,10 @@ pub fn selene_xaml_schemas() -> XamlSchemaRegistry raise XamlError {
       members.push(XamlMemberDefinition("Rows", String))
       members.push(XamlMemberDefinition("Columns", String))
       members.push(XamlMemberDefinition("AutoFlow", String))
-      members.push(XamlMemberDefinition("Row", String, is_attached=true))
-      members.push(XamlMemberDefinition("Column", String, is_attached=true))
+      members.push(XamlMemberDefinition("Row", Int, is_attached=true))
+      members.push(XamlMemberDefinition("Column", Int, is_attached=true))
+      members.push(XamlMemberDefinition("RowSpan", Int, is_attached=true))
+      members.push(XamlMemberDefinition("ColumnSpan", Int, is_attached=true))
     } else if name == "ScrollView" {
       members.push(XamlMemberDefinition("HorizontalScroll", Bool))
       members.push(XamlMemberDefinition("VerticalScroll", Bool))

@@ -84,27 +84,31 @@
             <ScrollView x:Name="itemScroll" Width="100%" Grow="1" Focusable="true"
                            Background="#34231a" BorderColor="#513724" Border="1"
                            VerticalScroll="true" ScrollbarWidth="6">
-              <ItemsControl ItemsSource="{Binding Path=items}" KeyPath="id">
-                <ItemsControl.ItemTemplate>
-                  <DataTemplate DataType="model:InventoryItem">
-                    <Button x:Name="itemButtonWide" OnClick="select_item" OnFocus="focus_item"
-                               Width="100%" Height="72" Background="{Binding Path=itemBackground}"
-                               BorderColor="#5f412c" Border="1" Radius="1">
-                      <Flex x:Name="itemIconSlot" Position="Absolute" Left="6" Top="0"
-                               Width="72" Height="72" Padding="4" ZIndex="1">
-                        <Image x:Name="itemIcon" Source="{Binding Path=image}"
-                                  Width="64" Height="64" Fit="Contain" />
-                      </Flex>
-                      <Text x:Name="itemNameWide" Position="Absolute" Left="88" Top="24"
-                               Width="340" Height="24" Text="{Binding Path=name}"
-                               Color="#f0ddbd" Bold="true" FontSize="16" ZIndex="1" />
-                      <Text x:Name="itemCount" Position="Absolute" Left="450" Top="24"
-                               Width="58" Height="24" Text="{Binding Path=countLabel}"
-                               Color="#e2a84b" Bold="true" FontSize="15" Align="Right" ZIndex="1" />
-                    </Button>
-                  </DataTemplate>
-                </ItemsControl.ItemTemplate>
-              </ItemsControl>
+              <Grid x:Name="packGrid" Width="100%"
+                      Columns="repeat(4, minmax(96, 1fr))"
+                      AutoFlow="RowDense" Gap="8" Padding="8">
+                <ItemsControl ItemsSource="{Binding Path=items}" KeyPath="id">
+                  <ItemsControl.ItemTemplate>
+                    <DataTemplate DataType="model:InventoryItem">
+                      <Button x:Name="itemButtonWide" OnClick="select_item" OnFocus="focus_item"
+                                 Width="100%" Height="112" Background="{Binding Path=itemBackground}"
+                                 BorderColor="#765038" Border="2" Radius="2">
+                        <Grid x:Name="itemIconSlot" Width="100%" Height="100%"
+                                Rows="76 28" Columns="1fr" Padding="4">
+                          <Image x:Name="itemIcon" Grid.Row="0" Source="{Binding Path=image}"
+                                    Width="64" Height="64" Fit="Contain" />
+                          <Text x:Name="itemCount" Grid.Row="0" Width="100%" Height="22"
+                                   Text="{Binding Path=countLabel}" Color="#ffd779"
+                                   Bold="true" FontSize="14" Align="Right" ZIndex="2" />
+                          <Text x:Name="itemNameWide" Grid.Row="1" Width="100%" Height="24"
+                                   Text="{Binding Path=name}" Color="#f0ddbd"
+                                   Bold="true" FontSize="12" Align="Center" />
+                        </Grid>
+                      </Button>
+                    </DataTemplate>
+                  </ItemsControl.ItemTemplate>
+                </ItemsControl>
+              </Grid>
             </ScrollView>
           </Flex>
 
@@ -172,21 +176,30 @@
           </ItemsControl>
           <ScrollView x:Name="itemScrollNarrow" Width="100%" Grow="1"
                          Background="#34231a" VerticalScroll="true">
-            <ItemsControl ItemsSource="{Binding Path=items}" KeyPath="id">
-              <ItemsControl.ItemTemplate>
-                <DataTemplate DataType="model:InventoryItem">
-                  <Button x:Name="itemButtonNarrow" OnClick="select_item" OnFocus="focus_item"
-                             Width="100%" Height="60"
-                             Background="{Binding Path=itemBackground}" BorderColor="#5f412c" Border="1">
-                    <Image x:Name="itemIconNarrow" Position="Absolute" Left="6" Top="4"
-                             Width="52" Height="52" Source="{Binding Path=image}" Fit="Contain" ZIndex="1" />
-                    <Text x:Name="itemName" Position="Absolute" Left="70" Top="17"
-                             Width="{Binding Path=narrowLabelWidth}" Height="26" Text="{Binding Path=name}"
-                             Color="#f0ddbd" FontSize="15" ZIndex="1" />
-                  </Button>
-                </DataTemplate>
-              </ItemsControl.ItemTemplate>
-            </ItemsControl>
+            <Grid x:Name="packGridNarrow" Width="100%"
+                    Columns="repeat(5, minmax(88, 1fr))"
+                    AutoFlow="RowDense" Gap="6" Padding="6">
+              <ItemsControl ItemsSource="{Binding Path=items}" KeyPath="id">
+                <ItemsControl.ItemTemplate>
+                  <DataTemplate DataType="model:InventoryItem">
+                    <Button x:Name="itemButtonNarrow" OnClick="select_item" OnFocus="focus_item"
+                               Width="100%" Height="96"
+                               Background="{Binding Path=itemBackground}" BorderColor="#5f412c" Border="1">
+                      <Grid Width="100%" Height="100%" Rows="66 22" Columns="1fr" Padding="3">
+                        <Image x:Name="itemIconNarrow" Grid.Row="0"
+                                 Width="58" Height="58" Source="{Binding Path=image}" Fit="Contain" />
+                        <Text Grid.Row="0" Width="100%" Height="20"
+                                Text="{Binding Path=countLabel}" Color="#ffd779"
+                                Bold="true" FontSize="12" Align="Right" ZIndex="2" />
+                        <Text x:Name="itemName" Grid.Row="1" Width="100%" Height="20"
+                                Text="{Binding Path=name}" Color="#f0ddbd"
+                                FontSize="11" Align="Center" />
+                      </Grid>
+                    </Button>
+                  </DataTemplate>
+                </ItemsControl.ItemTemplate>
+              </ItemsControl>
+            </Grid>
           </ScrollView>
           <Text x:Name="selectedDescriptionNarrow" Width="100%" Height="58"
                    Text="{Binding Path=selectedDescription}" Color="#c7a986"

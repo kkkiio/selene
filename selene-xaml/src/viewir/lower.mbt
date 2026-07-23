@@ -344,7 +344,7 @@ fn lower_syntax(
       child_links[path] = template_keys
       continue
     }
-    if !["View", "Flex", "ScrollView", "Text", "Image", "Button"].contains(
+    if !["View", "Flex", "Grid", "ScrollView", "Text", "Image", "Button"].contains(
         type_name,
       ) {
       raise Unsupported(

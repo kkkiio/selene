@@ -21,6 +21,7 @@ pub(all) enum IRConstant {
   EnumValue(String)
   LayoutValue(IRLayoutValue)
   RectValue(Double, Double, Double, Double)
+  GridTracks(Array[IRGridTrack])
 } derive(Eq, Debug)
 
 ///|
@@ -28,6 +29,26 @@ pub(all) enum IRLayoutValue {
   Auto
   Px(Double)
   Percent(Double)
+} derive(Eq, Debug)
+
+///|
+pub(all) enum IRGridTrackRepetition {
+  Count(Int)
+  AutoFill
+  AutoFit
+} derive(Eq, Debug)
+
+///|
+pub(all) enum IRGridTrack {
+  Auto
+  Px(Double)
+  Percent(Double)
+  Fr(Double)
+  MinContent
+  MaxContent
+  FitContent(IRGridTrack)
+  MinMax(IRGridTrack, IRGridTrack)
+  Repeat(IRGridTrackRepetition, Array[IRGridTrack])
 } derive(Eq, Debug)
 
 ///|

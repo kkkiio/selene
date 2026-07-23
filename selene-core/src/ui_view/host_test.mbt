@@ -168,6 +168,86 @@ test "VH-SEMANTICS-01 projects Update style and behavior into Selene stores" {
 }
 
 ///|
+test "VH-GRID-01 projects Grid tracks, flow, placement, and spans" {
+  with_view_host_world(fn() raise {
+    let host = @ui_view.MountedView::new()
+    let base = @ui_view.NodeStyle::default()
+    host.apply([
+      Mount({
+        key: "grid",
+        parent: None,
+        kind: Grid,
+        text: "",
+        source: "",
+        active: true,
+        enabled: true,
+        focusable: false,
+        visual_state_groups: [],
+        style: {
+          ..base,
+          width: @ui_view.LayoutValue::Px(300.0),
+          height: @ui_view.LayoutValue::Px(180.0),
+          grid_rows: [
+            @ui_view.GridTrack::Auto,
+            @ui_view.GridTrack::MinMax(
+              @ui_view.GridTrack::Px(40.0),
+              @ui_view.GridTrack::Fr(1.0),
+            ),
+          ],
+          grid_columns: [
+            @ui_view.GridTrack::Repeat(@ui_view.GridTrackRepetition::Count(3), [
+              @ui_view.GridTrack::Fr(1.0),
+            ]),
+          ],
+          grid_auto_flow: ColumnDense,
+        },
+      }),
+      Mount({
+        key: "cell",
+        parent: Some("grid"),
+        kind: View,
+        text: "",
+        source: "",
+        active: true,
+        enabled: true,
+        focusable: false,
+        visual_state_groups: [],
+        style: {
+          ..base,
+          grid_row: Some(1),
+          grid_column: Some(2),
+          grid_row_span: 2,
+          grid_column_span: 3,
+        },
+      }),
+    ])
+    let grid = @ui.nodes()[host.entity("grid").unwrap()]
+    let cell = @ui.nodes()[host.entity("cell").unwrap()]
+    debug_inspect(
+      (
+        grid.display,
+        grid.grid_template_rows,
+        grid.grid_template_columns,
+        grid.grid_auto_flow,
+        cell.grid_row,
+        cell.grid_column,
+      ),
+      content=(
+        #|(
+        #|  Grid,
+        #|  [Auto, MinMax(Px(40), Fr(1))],
+        #|  [Repeat(Count(3), [Fr(1)])],
+        #|  ColumnDense,
+        #|  { start: Line(2), end: Span(2) },
+        #|  { start: Line(3), end: Span(3) },
+        #|)
+      ),
+    )
+    host.release()
+  })
+}
+
+///|
 test "VH-ATOMIC-01 validates the full batch before retaining final identities" {
   with_view_host_world(fn() raise {
     let host = @ui_view.MountedView::new()

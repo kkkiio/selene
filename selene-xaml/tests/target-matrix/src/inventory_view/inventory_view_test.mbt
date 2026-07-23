@@ -63,7 +63,7 @@ test "INVENTORY-01 Embedded View uses Entity identity and typed transactions" {
   }
   @view.InventoryView::mount(entity, initial)
   let map_button = host
-    .entity(entity, "item-scroll/items:map/item-button-wide")
+    .entity(entity, "pack-grid/items:map/item-button-wide")
     .unwrap()
   let equip_tab = host
     .entity(entity, "inventory-header/tabs:equip/tab-button")
@@ -73,9 +73,7 @@ test "INVENTORY-01 Embedded View uses Entity identity and typed transactions" {
     .unwrap()
   debug_inspect(
     (
-      @ui.texts()[host
-      .entity(entity, "item-scroll/items:map/item-count")
-      .unwrap()].content,
+      @ui.texts()[host.entity(entity, "pack-grid/items:map/item-count").unwrap()].content,
       @ui.texts()[host.entity(entity, "selected-name").unwrap()].content,
     ),
     content=(
@@ -90,7 +88,7 @@ test "INVENTORY-01 Embedded View uses Entity identity and typed transactions" {
     items: [{ ..map_item, selected: false }, { ..key_item, selected: true }],
   })
   inspect(
-    host.entity(entity, "item-scroll/items:map/item-button-wide").unwrap() ==
+    host.entity(entity, "pack-grid/items:map/item-button-wide").unwrap() ==
     map_button,
     content="true",
   )
@@ -113,7 +111,7 @@ test "INVENTORY-01 Embedded View uses Entity identity and typed transactions" {
     @view.InventoryUiPatch::ItemMove(("map", 1U)),
   ])
   debug_inspect(
-    @ui.texts()[host.entity(entity, "item-scroll/items:map/item-count").unwrap()].content,
+    @ui.texts()[host.entity(entity, "pack-grid/items:map/item-count").unwrap()].content,
     content="\"5\"",
   )
   try @view.InventoryView::mount(entity, initial) catch {

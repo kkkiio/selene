@@ -2,6 +2,7 @@
 pub(all) enum NodeKind {
   View
   Flex
+  Grid
   Text
   Image
   Button
@@ -35,6 +36,34 @@ pub(all) enum LayoutValue {
   Auto
   Px(Double)
   Percent(Double)
+} derive(Eq, Debug)
+
+///|
+pub(all) enum GridAutoFlow {
+  Row
+  Column
+  RowDense
+  ColumnDense
+} derive(Eq, Debug)
+
+///|
+pub(all) enum GridTrackRepetition {
+  Count(Int)
+  AutoFill
+  AutoFit
+} derive(Eq, Debug)
+
+///|
+pub(all) enum GridTrack {
+  Auto
+  Px(Double)
+  Percent(Double)
+  Fr(Double)
+  MinContent
+  MaxContent
+  FitContent(GridTrack)
+  MinMax(GridTrack, GridTrack)
+  Repeat(GridTrackRepetition, Array[GridTrack])
 } derive(Eq, Debug)
 
 ///|
@@ -126,6 +155,13 @@ pub(all) struct NodeStyle {
   flex_shrink : Double
   row_gap : Double
   column_gap : Double
+  grid_rows : Array[GridTrack]
+  grid_columns : Array[GridTrack]
+  grid_auto_flow : GridAutoFlow
+  grid_row : Int?
+  grid_column : Int?
+  grid_row_span : Int
+  grid_column_span : Int
   horizontal_scroll : Bool
   vertical_scroll : Bool
   scrollbar_width : Double
@@ -168,6 +204,13 @@ pub fn NodeStyle::default() -> NodeStyle {
     flex_shrink: 1.0,
     row_gap: 0.0,
     column_gap: 0.0,
+    grid_rows: [],
+    grid_columns: [],
+    grid_auto_flow: Row,
+    grid_row: None,
+    grid_column: None,
+    grid_row_span: 1,
+    grid_column_span: 1,
     horizontal_scroll: false,
     vertical_scroll: false,
     scrollbar_width: 0.0,

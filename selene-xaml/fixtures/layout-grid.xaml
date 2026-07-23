@@ -9,7 +9,7 @@
       <Button>Signals</Button>
       <Button>Archive</Button>
     </Flex>
-    <ScrollView Grid.Column="1" Grid.Row="0" Padding="18">
+    <ScrollView Grid.Column="1" Grid.Row="0" Grid.RowSpan="2" Padding="18">
       <Text Text="A compact original layout fixture." Wrap="WordWrap" />
     </ScrollView>
   </Grid>

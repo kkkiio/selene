@@ -21,6 +21,13 @@ test "INVENTORY-LAYOUT-01 wide and narrow content stays inside symmetric insets"
       selected: true,
       layout_width: 652.0,
     }
+    let layout_item2 : @inventory_view.InventoryItem = {
+      ..layout_item,
+      id: "key",
+      name: "Brass Waystone Key",
+      image: "../assets/icons/brass-key.png",
+      selected: false,
+    }
     let wide_state : @inventory_view.InventoryUiState = {
       viewport_width: 960.0,
       capacity: 24,
@@ -47,8 +54,8 @@ test "INVENTORY-LAYOUT-01 wide and narrow content stays inside symmetric insets"
           layout_width: 60.0,
         },
       ],
-      all_items: [layout_item],
-      items: [layout_item],
+      all_items: [layout_item, layout_item2],
+      items: [layout_item, layout_item2],
       equipment: [
         {
           slot: "weapon",
@@ -86,6 +93,15 @@ test "INVENTORY-LAYOUT-01 wide and narrow content stays inside symmetric insets"
     let wide_scroll = @ui.global_ui_nodes()[host
       .entity(parent, "item-scroll")
       .unwrap()]
+    let wide_grid = @ui.global_ui_nodes()[host
+      .entity(parent, "pack-grid")
+      .unwrap()]
+    let wide_item = @ui.global_ui_nodes()[host
+      .entity(parent, "pack-grid/items:map/item-button-wide")
+      .unwrap()]
+    let wide_item2 = @ui.global_ui_nodes()[host
+      .entity(parent, "pack-grid/items:key/item-button-wide")
+      .unwrap()]
     let wide_details = @ui.global_ui_nodes()[host
       .entity(parent, "details")
       .unwrap()]
@@ -102,6 +118,9 @@ test "INVENTORY-LAYOUT-01 wide and narrow content stays inside symmetric insets"
           wide_pack_header.screen_rect.size,
         ),
         (wide_scroll.screen_rect.position, wide_scroll.screen_rect.size),
+        (wide_grid.screen_rect.position, wide_grid.screen_rect.size),
+        (wide_item.screen_rect.position, wide_item.screen_rect.size),
+        (wide_item2.screen_rect.position, wide_item2.screen_rect.size),
         (wide_details.screen_rect.position, wide_details.screen_rect.size),
         (
           wide_description.screen_rect.position,
@@ -115,6 +134,9 @@ test "INVENTORY-LAYOUT-01 wide and narrow content stays inside symmetric insets"
         #|  (Vec2(20, 94), Vec2(550, 432)),
         #|  (Vec2(34, 108), Vec2(522, 26)),
         #|  (Vec2(34, 142), Vec2(522, 370)),
+        #|  (Vec2(35, 143), Vec2(514, 128)),
+        #|  (Vec2(43, 151), Vec2(119, 112)),
+        #|  (Vec2(170, 151), Vec2(119, 112)),
         #|  (Vec2(584, 94), Vec2(356, 432)),
         #|  (Vec2(598, 434), Vec2(328, 64)),
         #|)
@@ -146,6 +168,15 @@ test "INVENTORY-LAYOUT-01 wide and narrow content stays inside symmetric insets"
     let narrow_scroll = @ui.global_ui_nodes()[host
       .entity(parent, "item-scroll-narrow")
       .unwrap()]
+    let narrow_grid = @ui.global_ui_nodes()[host
+      .entity(parent, "pack-grid-narrow")
+      .unwrap()]
+    let narrow_item = @ui.global_ui_nodes()[host
+      .entity(parent, "pack-grid-narrow/items:map/item-button-narrow")
+      .unwrap()]
+    let narrow_item2 = @ui.global_ui_nodes()[host
+      .entity(parent, "pack-grid-narrow/items:key/item-button-narrow")
+      .unwrap()]
     let narrow_description = @ui.global_ui_nodes()[host
       .entity(parent, "selected-description-narrow")
       .unwrap()]
@@ -159,6 +190,9 @@ test "INVENTORY-LAYOUT-01 wide and narrow content stays inside symmetric insets"
           narrow_equipment.screen_rect.size,
         ),
         (narrow_scroll.screen_rect.position, narrow_scroll.screen_rect.size),
+        (narrow_grid.screen_rect.position, narrow_grid.screen_rect.size),
+        (narrow_item.screen_rect.position, narrow_item.screen_rect.size),
+        (narrow_item2.screen_rect.position, narrow_item2.screen_rect.size),
         (
           narrow_description.screen_rect.position,
           narrow_description.screen_rect.size,
@@ -171,6 +205,9 @@ test "INVENTORY-LAYOUT-01 wide and narrow content stays inside symmetric insets"
         #|  (Vec2(20, 94), Vec2(680, 428)),
         #|  (Vec2(34, 108), Vec2(652, 56)),
         #|  (Vec2(34, 236), Vec2(652, 206)),
+        #|  (Vec2(34, 236), Vec2(652, 108)),
+        #|  (Vec2(40, 242), Vec2(124, 96)),
+        #|  (Vec2(170, 242), Vec2(123, 96)),
         #|  (Vec2(34, 450), Vec2(652, 58)),
         #|)
       ),

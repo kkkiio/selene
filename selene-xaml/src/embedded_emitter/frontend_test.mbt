@@ -505,6 +505,47 @@ test "CG-LAYOUT-01 emits auto, pixel, percent, and flex sizing semantics" {
 }
 
 ///|
+test "CG-GRID-01 emits typed Grid tracks, flow, placement, and spans" {
+  let xaml =
+    #|<ui:Grid xmlns:ui="urn:selene:xaml:ui"
+    #| xmlns:model="moonbit:example/grid/model"
+    #| ui:DataType="model:GridState"
+    #| Rows="Auto minmax(80, 1fr) repeat(auto-fill, 32)"
+    #| Columns="repeat(3, 1fr)" AutoFlow="RowDense">
+    #| <ui:Text ui:Grid.Row="1" ui:Grid.Column="2"
+    #|  ui:Grid.RowSpan="2" ui:Grid.ColumnSpan="3" Text="Cell" />
+    #|</ui:Grid>
+  let mbti =
+    #|package "example/grid/model"
+    #|pub(all) struct GridState {}
+  let generated = @embedded_emitter.generate_embedded_view_package(
+    "fixtures/grid.xaml", xaml, "fixtures/grid.mbti", mbti,
+  )
+  let view = generated.files[2].content
+  assert_eq(view.contains("kind: @ui_view.NodeKind::Grid"), true)
+  assert_eq(
+    view.contains(
+      "grid_rows: [@ui_view.GridTrack::Auto, @ui_view.GridTrack::MinMax(@ui_view.GridTrack::Px(80), @ui_view.GridTrack::Fr(1)), @ui_view.GridTrack::Repeat(@ui_view.GridTrackRepetition::AutoFill, [@ui_view.GridTrack::Px(32)])]",
+    ),
+    true,
+  )
+  assert_eq(
+    view.contains(
+      "grid_columns: [@ui_view.GridTrack::Repeat(@ui_view.GridTrackRepetition::Count(3), [@ui_view.GridTrack::Fr(1)])]",
+    ),
+    true,
+  )
+  assert_eq(
+    view.contains("grid_auto_flow: @ui_view.GridAutoFlow::RowDense"),
+    true,
+  )
+  assert_eq(view.contains("grid_row: Some(1)"), true)
+  assert_eq(view.contains("grid_column: Some(2)"), true)
+  assert_eq(view.contains("grid_row_span: 2"), true)
+  assert_eq(view.contains("grid_column_span: 3"), true)
+}
+
+///|
 test "CG-MBTI-01 emits the reachable alias and model surface only" {
   let xaml =
     #|<ui:View xmlns:ui="urn:selene:xaml:ui" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"

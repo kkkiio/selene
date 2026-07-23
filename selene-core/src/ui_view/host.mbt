@@ -1238,6 +1238,33 @@ fn commit_validated_mutations(
 }
 
 ///|
+fn grid_track_to_ui(track : GridTrack) -> @ui.GridTrack {
+  match track {
+    Auto => @ui.GridTrack::Auto
+    Px(value) => @ui.GridTrack::Px(value)
+    Percent(value) => @ui.GridTrack::Percent(value)
+    Fr(value) => @ui.GridTrack::Fr(value)
+    MinContent => @ui.GridTrack::MinContent
+    MaxContent => @ui.GridTrack::MaxContent
+    FitContent(value) => @ui.GridTrack::FitContent(grid_track_to_ui(value))
+    MinMax(minimum, maximum) =>
+      @ui.GridTrack::MinMax(
+        grid_track_to_ui(minimum),
+        grid_track_to_ui(maximum),
+      )
+    Repeat(repetition, tracks) =>
+      @ui.GridTrack::Repeat(
+        match repetition {
+          Count(value) => @ui.GridTrackRepetition::Count(value)
+          AutoFill => @ui.GridTrackRepetition::AutoFill
+          AutoFit => @ui.GridTrackRepetition::AutoFit
+        },
+        tracks.map(grid_track_to_ui),
+      )
+  }
+}
+
+///|
 fn write_node_components(target : @entity.Entity, spec : NodeSpec) -> Unit {
   let style = spec.style
   @ui.nodes()[target] = @ui.Node(
@@ -1266,6 +1293,11 @@ fn write_node_components(target : @entity.Entity, spec : NodeSpec) -> Unit {
       bottom=style.padding_bottom,
     ),
     border=@ui.UiRectValues::all(style.border),
+    display=if spec.kind == Grid {
+      @ui.Display::Grid
+    } else {
+      @ui.Display::Flex
+    },
     position_type=if style.absolute { @ui.Absolute } else { @ui.Relative },
     flex_direction=match style.direction {
       Row => @ui.FlexDirection::Row
@@ -1282,6 +1314,34 @@ fn write_node_components(target : @entity.Entity, spec : NodeSpec) -> Unit {
     flex_shrink=style.flex_shrink,
     row_gap=style.row_gap,
     column_gap=style.column_gap,
+    grid_template_rows=style.grid_rows.map(grid_track_to_ui),
+    grid_template_columns=style.grid_columns.map(grid_track_to_ui),
+    grid_auto_flow=match style.grid_auto_flow {
+      Row => @ui.GridAutoFlow::Row
+      Column => @ui.GridAutoFlow::Column
+      RowDense => @ui.GridAutoFlow::RowDense
+      ColumnDense => @ui.GridAutoFlow::ColumnDense
+    },
+    grid_row=@ui.GridLine(
+      start=style.grid_row.map_or(@ui.GridPlacement::Auto, row => {
+        @ui.GridPlacement::Line(row + 1)
+      }),
+      end=if style.grid_row_span == 1 {
+        @ui.GridPlacement::Auto
+      } else {
+        @ui.GridPlacement::Span(style.grid_row_span)
+      },
+    ),
+    grid_column=@ui.GridLine(
+      start=style.grid_column.map_or(@ui.GridPlacement::Auto, column => {
+        @ui.GridPlacement::Line(column + 1)
+      }),
+      end=if style.grid_column_span == 1 {
+        @ui.GridPlacement::Auto
+      } else {
+        @ui.GridPlacement::Span(style.grid_column_span)
+      },
+    ),
     overflow_x=if style.horizontal_scroll { @ui.Scroll } else { @ui.Visible },
     overflow_y=if style.vertical_scroll { @ui.Scroll } else { @ui.Visible },
     scrollbar_width=style.scrollbar_width,
@@ -1363,7 +1423,7 @@ fn write_node_components(target : @entity.Entity, spec : NodeSpec) -> Unit {
       if !@ui.scroll_positions().contains(target) {
         @ui.scroll_positions()[target] = @ui.ScrollPosition::zero()
       }
-    View | Flex => ()
+    View | Flex | Grid => ()
   }
   if spec.focusable && spec.active && (spec.kind != Button || spec.enabled) {
     @ui.focusables()[target] = @ui.Focusable()

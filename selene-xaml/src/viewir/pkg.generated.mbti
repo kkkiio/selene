@@ -98,6 +98,7 @@ pub(all) enum IRConstant {
   EnumValue(String)
   LayoutValue(IRLayoutValue)
   RectValue(Double, Double, Double, Double)
+  GridTracks(Array[IRGridTrack])
 } derive(Eq, @debug.Debug)
 
 pub(all) struct IRDataScope {
@@ -128,6 +129,24 @@ pub(all) struct IRFunction {
   name : String
   parameters : Array[String]
   return_type : String
+} derive(Eq, @debug.Debug)
+
+pub(all) enum IRGridTrack {
+  Auto
+  Px(Double)
+  Percent(Double)
+  Fr(Double)
+  MinContent
+  MaxContent
+  FitContent(IRGridTrack)
+  MinMax(IRGridTrack, IRGridTrack)
+  Repeat(IRGridTrackRepetition, Array[IRGridTrack])
+} derive(Eq, @debug.Debug)
+
+pub(all) enum IRGridTrackRepetition {
+  Count(Int)
+  AutoFill
+  AutoFit
 } derive(Eq, @debug.Debug)
 
 pub(all) enum IRLayoutValue {

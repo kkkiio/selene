@@ -63,6 +63,14 @@ priv struct EmbeddedProjection {
 }
 
 ///|
+priv struct EmbeddedValueEmission {
+  mappings : Array[EmbeddedSourceMapping]
+  schema : EmbeddedProjection
+  scope_type : String
+  receiver : String
+}
+
+///|
 fn project_embedded_ir(
   ir : @viewir.ViewIR,
 ) -> (EmbeddedNode, EmbeddedProjection) {
@@ -526,6 +534,12 @@ fn emit_plan_specs(
   serial : Array[Int],
 ) -> Unit raise @viewir.ViewIRError {
   let padding = "  ".repeat(indent)
+  let emission : EmbeddedValueEmission = {
+    mappings,
+    schema,
+    scope_type,
+    receiver,
+  }
   match node {
     Element(kind, key, _, properties, children, _) => {
       let property_map : Map[String, EmbeddedValue] = Map([])
@@ -537,6 +551,8 @@ fn emit_plan_specs(
             "Wrap", "ZIndex", "Fit", "Direction", "Grow", "Shrink", "Basis", "RowGap",
             "Gap", "ColumnGap", "HorizontalScroll", "VerticalScroll", "ScrollbarWidth",
             "OutlineColor", "OutlineWidth", "OutlineOffset", "OnClick", "OnFocus",
+            "Rows", "Columns", "AutoFlow", "Grid.Row", "Grid.Column", "Grid.RowSpan",
+            "Grid.ColumnSpan",
           ].contains(property.name) {
           let span = match property.value {
             Literal(_, span) | Binding(_, span) => span
@@ -593,66 +609,15 @@ fn emit_plan_specs(
         None => output <+ "\{padding}  parent: None,\n"
       }
       output <+ "\{padding}  kind: @ui_view.NodeKind::\{kind},\n"
-      output <+ "\{padding}  text: "
-      emit_typed_value(
-        output,
-        mappings,
-        schema,
-        scope_type,
-        receiver,
-        property_map.get("Text"),
-        "string",
-        "\"\"",
-      )
-      output <+ ",\n\{padding}  source: "
-      emit_typed_value(
-        output,
-        mappings,
-        schema,
-        scope_type,
-        receiver,
-        property_map.get("Source"),
-        "string",
-        "\"\"",
-      )
-      output <+ ",\n\{padding}  active: "
-      emit_typed_value(
-        output,
-        mappings,
-        schema,
-        scope_type,
-        receiver,
-        property_map.get("Active"),
-        "bool",
-        "true",
-      )
-      output <+ ",\n\{padding}  enabled: "
-      emit_typed_value(
-        output,
-        mappings,
-        schema,
-        scope_type,
-        receiver,
-        property_map.get("Enabled"),
-        "bool",
-        "true",
-      )
-      output <+ ",\n\{padding}  focusable: "
-      emit_typed_value(
-        output,
-        mappings,
-        schema,
-        scope_type,
-        receiver,
-        property_map.get("Focusable"),
-        "bool",
-        if kind == "Button" {
-          "true"
-        } else {
-          "false"
-        },
-      )
-      output <+ ",\n\{padding}  style: {\n"
+      let focusable_fallback = if kind == "Button" { "true" } else { "false" }
+      output <+
+        $|\{padding}  text: \{fragment => emit_typed_value(fragment, emission, property_map.get("Text"), "string", "\"\"")},
+        $|\{padding}  source: \{fragment => emit_typed_value(fragment, emission, property_map.get("Source"), "string", "\"\"")},
+        $|\{padding}  active: \{fragment => emit_typed_value(fragment, emission, property_map.get("Active"), "bool", "true")},
+        $|\{padding}  enabled: \{fragment => emit_typed_value(fragment, emission, property_map.get("Enabled"), "bool", "true")},
+        $|\{padding}  focusable: \{fragment => emit_typed_value(fragment, emission, property_map.get("Focusable"), "bool", focusable_fallback)},
+        $|\{padding}  style: {
+        $|
       let absolute = match property_map.get("Position") {
         None | Some(Literal(@viewir.IRConstant::EnumValue("Relative"), _)) =>
           false
@@ -669,31 +634,13 @@ fn emit_plan_specs(
       output <+ "\{padding}    absolute: \{absolute},\n"
       for entry in [("Left", "left"), ("Top", "top")] {
         let (property, field) = entry
-        output <+ "\{padding}    \{field}: "
-        emit_typed_value(
-          output,
-          mappings,
-          schema,
-          scope_type,
-          receiver,
-          property_map.get(property),
-          "number",
-          "0.0",
-        )
-        output <+ ",\n"
+        output <+
+          "\{padding}    \{field}: \{fragment => emit_typed_value(fragment, emission, property_map.get(property), "number", "0.0")},\n"
       }
       for entry in [("Width", "width"), ("Height", "height")] {
         let (property, field) = entry
-        output <+ "\{padding}    \{field}: "
-        emit_layout_value(
-          output,
-          mappings,
-          schema,
-          scope_type,
-          receiver,
-          property_map.get(property),
-        )
-        output <+ ",\n"
+        output <+
+          "\{padding}    \{field}: \{fragment => emit_layout_value(fragment, emission, property_map.get(property))},\n"
       }
       for
         entry in [
@@ -707,128 +654,30 @@ fn emit_plan_specs(
           ("Padding", "padding_bottom", 3),
         ] {
         let (property, field, component) = entry
-        output <+ "\{padding}    \{field}: "
-        emit_rect_value(
-          output,
-          mappings,
-          schema,
-          scope_type,
-          receiver,
-          property_map.get(property),
-          component,
-        )
-        output <+ ",\n"
+        output <+
+          "\{padding}    \{field}: \{fragment => emit_rect_value(fragment, emission, property_map.get(property), component)},\n"
       }
       for
         entry in [("Background", "background"), ("BorderColor", "border_color")] {
         let (property, field) = entry
-        output <+ "\{padding}    \{field}: "
-        emit_typed_value(
-          output,
-          mappings,
-          schema,
-          scope_type,
-          receiver,
-          property_map.get(property),
-          "string",
-          "\"\"",
-        )
-        output <+ ",\n"
+        output <+
+          "\{padding}    \{field}: \{fragment => emit_typed_value(fragment, emission, property_map.get(property), "string", "\"\"")},\n"
       }
-      output <+ "\{padding}    border: "
-      emit_typed_value(
-        output,
-        mappings,
-        schema,
-        scope_type,
-        receiver,
-        property_map.get("Border"),
-        "number",
-        "0.0",
-      )
-      output <+ ",\n\{padding}    radius: "
-      emit_typed_value(
-        output,
-        mappings,
-        schema,
-        scope_type,
-        receiver,
-        property_map.get("Radius"),
-        "number",
-        "0.0",
-      )
-      output <+ ",\n"
-      output <+ "\{padding}    outline_color: "
-      emit_typed_value(
-        output,
-        mappings,
-        schema,
-        scope_type,
-        receiver,
-        property_map.get("OutlineColor"),
-        "string",
-        "\"\"",
-      )
-      output <+ ",\n\{padding}    outline_width: "
-      emit_typed_value(
-        output,
-        mappings,
-        schema,
-        scope_type,
-        receiver,
-        property_map.get("OutlineWidth"),
-        "number",
-        "0.0",
-      )
-      output <+ ",\n\{padding}    outline_offset: "
-      emit_typed_value(
-        output,
-        mappings,
-        schema,
-        scope_type,
-        receiver,
-        property_map.get("OutlineOffset"),
-        "number",
-        "0.0",
-      )
-      output <+ ",\n"
+      output <+
+        $|\{padding}    border: \{fragment => emit_typed_value(fragment, emission, property_map.get("Border"), "number", "0.0")},
+        $|\{padding}    radius: \{fragment => emit_typed_value(fragment, emission, property_map.get("Radius"), "number", "0.0")},
+        $|\{padding}    outline_color: \{fragment => emit_typed_value(fragment, emission, property_map.get("OutlineColor"), "string", "\"\"")},
+        $|\{padding}    outline_width: \{fragment => emit_typed_value(fragment, emission, property_map.get("OutlineWidth"), "number", "0.0")},
+        $|\{padding}    outline_offset: \{fragment => emit_typed_value(fragment, emission, property_map.get("OutlineOffset"), "number", "0.0")},
+        $|
       for entry in [("Color", "color"), ("FontFamily", "font_family")] {
         let (property, field) = entry
-        output <+ "\{padding}    \{field}: "
-        emit_typed_value(
-          output,
-          mappings,
-          schema,
-          scope_type,
-          receiver,
-          property_map.get(property),
-          "string",
-          "\"\"",
-        )
-        output <+ ",\n"
+        output <+
+          "\{padding}    \{field}: \{fragment => emit_typed_value(fragment, emission, property_map.get(property), "string", "\"\"")},\n"
       }
-      output <+ "\{padding}    font_size: "
-      emit_typed_value(
-        output,
-        mappings,
-        schema,
-        scope_type,
-        receiver,
-        property_map.get("FontSize"),
-        "number",
-        "0.0",
-      )
-      output <+ ",\n\{padding}    bold: "
-      emit_typed_value(
-        output,
-        mappings,
-        schema,
-        scope_type,
-        receiver,
-        property_map.get("Bold"),
-        "bool",
-        "false",
-      )
+      output <+
+        $|\{padding}    font_size: \{fragment => emit_typed_value(fragment, emission, property_map.get("FontSize"), "number", "0.0")},
+        $|\{padding}    bold: \{fragment => emit_typed_value(fragment, emission, property_map.get("Bold"), "bool", "false")}
       let align = match property_map.get("Align") {
         None | Some(Literal(@viewir.IRConstant::EnumValue("Left"), _)) => "Left"
         Some(Literal(@viewir.IRConstant::EnumValue("Center"), _)) => "Center"
@@ -857,17 +706,8 @@ fn emit_plan_specs(
           )
       }
       output <+ "\{padding}    wrap: \{wrap.to_string()},\n"
-      output <+ "\{padding}    z_index: "
-      emit_typed_value(
-        output,
-        mappings,
-        schema,
-        scope_type,
-        receiver,
-        property_map.get("ZIndex"),
-        "int",
-        "0",
-      )
+      output <+
+        "\{padding}    z_index: \{fragment => emit_typed_value(fragment, emission, property_map.get("ZIndex"), "int", "0")}"
       let fit = match property_map.get("Fit") {
         None | Some(Literal(@viewir.IRConstant::EnumValue("Fill"), _)) => "Fill"
         Some(Literal(@viewir.IRConstant::EnumValue("Contain"), _)) => "Contain"
@@ -901,88 +741,77 @@ fn emit_plan_specs(
       }
       output <+
         "\{padding}    direction: @ui_view.FlexDirection::\{direction},\n"
-      output <+ "\{padding}    flex_basis: "
-      emit_layout_value(
-        output,
-        mappings,
-        schema,
-        scope_type,
-        receiver,
-        property_map.get("Basis"),
-      )
-      output <+ ",\n\{padding}    flex_grow: "
-      emit_typed_value(
-        output,
-        mappings,
-        schema,
-        scope_type,
-        receiver,
-        property_map.get("Grow"),
-        "number",
-        "0.0",
-      )
-      output <+ ",\n\{padding}    flex_shrink: "
-      emit_typed_value(
-        output,
-        mappings,
-        schema,
-        scope_type,
-        receiver,
-        property_map.get("Shrink"),
-        "number",
-        "1.0",
-      )
-      output <+ ",\n"
+      output <+
+        $|\{padding}    flex_basis: \{fragment => emit_layout_value(fragment, emission, property_map.get("Basis"))},
+        $|\{padding}    flex_grow: \{fragment => emit_typed_value(fragment, emission, property_map.get("Grow"), "number", "0.0")},
+        $|\{padding}    flex_shrink: \{fragment => emit_typed_value(fragment, emission, property_map.get("Shrink"), "number", "1.0")},
+        $|
       let row_gap = match property_map.get("RowGap") {
         Some(value) => Some(value)
         None => property_map.get("Gap")
       }
-      output <+ "\{padding}    row_gap: "
-      emit_typed_value(
-        output, mappings, schema, scope_type, receiver, row_gap, "number", "0.0",
-      )
       let column_gap = match property_map.get("ColumnGap") {
         Some(value) => Some(value)
         None => property_map.get("Gap")
       }
-      output <+ ",\n\{padding}    column_gap: "
-      emit_typed_value(
-        output, mappings, schema, scope_type, receiver, column_gap, "number", "0.0",
-      )
-      output <+ ",\n\{padding}    horizontal_scroll: "
-      emit_typed_value(
-        output,
-        mappings,
-        schema,
-        scope_type,
-        receiver,
-        property_map.get("HorizontalScroll"),
-        "bool",
-        "false",
-      )
-      output <+ ",\n\{padding}    vertical_scroll: "
-      emit_typed_value(
-        output,
-        mappings,
-        schema,
-        scope_type,
-        receiver,
-        property_map.get("VerticalScroll"),
-        "bool",
-        "false",
-      )
-      output <+ ",\n\{padding}    scrollbar_width: "
-      emit_typed_value(
-        output,
-        mappings,
-        schema,
-        scope_type,
-        receiver,
-        property_map.get("ScrollbarWidth"),
-        "number",
-        "0.0",
-      )
-      output <+ ",\n\{padding}  },\n"
+      output <+
+        $|\{padding}    row_gap: \{fragment => emit_typed_value(fragment, emission, row_gap, "number", "0.0")},
+        $|\{padding}    column_gap: \{fragment => emit_typed_value(fragment, emission, column_gap, "number", "0.0")},
+        $|\{padding}    grid_rows: \{fragment => emit_grid_tracks(fragment, property_map.get("Rows"))},
+        $|\{padding}    grid_columns: \{fragment => emit_grid_tracks(fragment, property_map.get("Columns"))}
+      let auto_flow = match property_map.get("AutoFlow") {
+        None | Some(Literal(@viewir.IRConstant::EnumValue("Row"), _)) => "Row"
+        Some(Literal(@viewir.IRConstant::EnumValue("Column"), _)) => "Column"
+        Some(Literal(@viewir.IRConstant::EnumValue("RowDense"), _)) =>
+          "RowDense"
+        Some(Literal(@viewir.IRConstant::EnumValue("ColumnDense"), _)) =>
+          "ColumnDense"
+        Some(Literal(_, span)) =>
+          raise @viewir.ViewIRError::Unsupported(
+            "AutoFlow requires an enum constant", span,
+          )
+        Some(Binding(_, span)) =>
+          raise @viewir.ViewIRError::Unsupported(
+            "generated property does not support Binding: AutoFlow", span,
+          )
+      }
+      output <+
+        ",\n\{padding}    grid_auto_flow: @ui_view.GridAutoFlow::\{auto_flow},\n"
+      for entry in [("Grid.Row", "grid_row"), ("Grid.Column", "grid_column")] {
+        let (property, field) = entry
+        output <+ "\{padding}    \{field}: "
+        match property_map.get(property) {
+          None => output <+ "None"
+          Some(Literal(@viewir.IRConstant::IntValue(value), _)) =>
+            output <+ "Some(\{value})"
+          Some(Literal(_, span)) =>
+            raise @viewir.ViewIRError::Unsupported(
+              property + " requires an integer constant",
+              span,
+            )
+          Some(Binding(_, span)) =>
+            raise @viewir.ViewIRError::Unsupported(
+              "generated property does not support Binding: " + property,
+              span,
+            )
+        }
+        output <+ ",\n"
+      }
+      for
+        entry in [
+          ("Grid.RowSpan", "grid_row_span"),
+          ("Grid.ColumnSpan", "grid_column_span"),
+        ] {
+        let (property, field) = entry
+        output <+
+          "\{padding}    \{field}: \{fragment => emit_typed_value(fragment, emission, property_map.get(property), "int", "1")},\n"
+      }
+      output <+
+        $|\{padding}    horizontal_scroll: \{fragment => emit_typed_value(fragment, emission, property_map.get("HorizontalScroll"), "bool", "false")},
+        $|\{padding}    vertical_scroll: \{fragment => emit_typed_value(fragment, emission, property_map.get("VerticalScroll"), "bool", "false")},
+        $|\{padding}    scrollbar_width: \{fragment => emit_typed_value(fragment, emission, property_map.get("ScrollbarWidth"), "number", "0.0")},
+        $|\{padding}  },
+        $|
       emit_embedded_visual_state_groups(
         output,
         mappings,
@@ -1013,11 +842,8 @@ fn emit_plan_specs(
       }
     }
     Conditional(path, span, then_nodes, else_nodes) => {
-      output <+ "\{padding}if "
-      emit_mapped_binding(
-        output, mappings, schema, scope_type, receiver, path, span, "bool",
-      )
-      output <+ " {\n"
+      output <+
+        "\{padding}if \{fragment => emit_mapped_binding(fragment, emission, path, span, "bool")} {\n"
       for child in then_nodes {
         emit_plan_specs(
           output,
@@ -1167,6 +993,12 @@ fn emit_embedded_visual_state_groups(
   indent : Int,
 ) -> Unit raise @viewir.ViewIRError {
   let padding = "  ".repeat(indent)
+  let emission : EmbeddedValueEmission = {
+    mappings,
+    schema: analysis,
+    scope_type,
+    receiver,
+  }
   output <+ "\{padding}visual_state_groups: [\n"
   for order, group in analysis.visual_state_groups {
     if group.owner_node != owner_node {
@@ -1183,15 +1015,10 @@ fn emit_embedded_visual_state_groups(
         output <+ "\{value.escape()}"
       Some(@viewir.IRValue::Binding(id, span)) =>
         if analysis.bindings[id].result_type == "Bool" {
-          output <+ "if "
-          emit_mapped_binding(
-            output, mappings, analysis, scope_type, receiver, id, span, "bool",
-          )
-          output <+ " { \"Selected\" } else { \"Normal\" }"
+          output <+
+            "if \{fragment => emit_mapped_binding(fragment, emission, id, span, "bool")} { \"Selected\" } else { \"Normal\" }"
         } else {
-          emit_mapped_binding(
-            output, mappings, analysis, scope_type, receiver, id, span, "string",
-          )
+          emit_mapped_binding(output, emission, id, span, "string")
         }
       Some(@viewir.IRValue::Constant(_, span)) =>
         raise @viewir.ViewIRError::Unsupported(
@@ -1233,42 +1060,21 @@ fn emit_embedded_visual_state_groups(
               }
             }
             match target_type {
-              "String" => {
-                output <+ "@ui_view.VisualStateValue::StringValue("
-                emit_mapped_binding(
-                  output, mappings, analysis, scope_type, receiver, id, span, "string",
-                )
-                output <+ ")"
-              }
-              "Bool" => {
-                output <+ "@ui_view.VisualStateValue::BoolValue("
-                emit_mapped_binding(
-                  output, mappings, analysis, scope_type, receiver, id, span, "bool",
-                )
-                output <+ ")"
-              }
-              "LayoutValue" => {
+              "String" =>
                 output <+
-                  "@ui_view.VisualStateValue::LayoutValueValue(@ui_view.LayoutValue::Px("
-                emit_mapped_binding(
-                  output, mappings, analysis, scope_type, receiver, id, span, "number",
-                )
-                output <+ "))"
-              }
-              "Int" => {
-                output <+ "@ui_view.VisualStateValue::IntValue("
-                emit_mapped_binding(
-                  output, mappings, analysis, scope_type, receiver, id, span, "int",
-                )
-                output <+ ")"
-              }
-              _ => {
-                output <+ "@ui_view.VisualStateValue::DoubleValue("
-                emit_mapped_binding(
-                  output, mappings, analysis, scope_type, receiver, id, span, "number",
-                )
-                output <+ ")"
-              }
+                  "@ui_view.VisualStateValue::StringValue(\{fragment => emit_mapped_binding(fragment, emission, id, span, "string")})"
+              "Bool" =>
+                output <+
+                  "@ui_view.VisualStateValue::BoolValue(\{fragment => emit_mapped_binding(fragment, emission, id, span, "bool")})"
+              "LayoutValue" =>
+                output <+
+                  "@ui_view.VisualStateValue::LayoutValueValue(@ui_view.LayoutValue::Px(\{fragment => emit_mapped_binding(fragment, emission, id, span, "number")}))"
+              "Int" =>
+                output <+
+                  "@ui_view.VisualStateValue::IntValue(\{fragment => emit_mapped_binding(fragment, emission, id, span, "int")})"
+              _ =>
+                output <+
+                  "@ui_view.VisualStateValue::DoubleValue(\{fragment => emit_mapped_binding(fragment, emission, id, span, "number")})"
             }
           }
           @viewir.IRValue::Constant(constant, _) =>
@@ -1300,6 +1106,11 @@ fn emit_embedded_visual_state_groups(
               @viewir.IRConstant::RectValue(_, _, _, _) =>
                 raise @viewir.ViewIRError::Unsupported(
                   "VisualState does not support Rect setter values",
+                  setter.span,
+                )
+              @viewir.IRConstant::GridTracks(_) =>
+                raise @viewir.ViewIRError::Unsupported(
+                  "VisualState does not support Grid track setter values",
                   setter.span,
                 )
             }
@@ -1337,10 +1148,7 @@ fn emit_embedded_visual_state_groups(
 ///|
 fn emit_layout_value(
   output : StringBuilder,
-  mappings : Array[EmbeddedSourceMapping],
-  schema : EmbeddedProjection,
-  scope_type : String,
-  receiver : String,
+  emission : EmbeddedValueEmission,
   value : EmbeddedValue?,
 ) -> Unit raise @viewir.ViewIRError {
   match value {
@@ -1357,12 +1165,71 @@ fn emit_layout_value(
       raise @viewir.ViewIRError::Unsupported(
         "layout property requires a typed layout constant", span,
       )
-    Some(Binding(path, span)) => {
-      output <+ "@ui_view.LayoutValue::Px("
-      emit_mapped_binding(
-        output, mappings, schema, scope_type, receiver, path, span, "number",
+    Some(Binding(path, span)) =>
+      output <+
+        "@ui_view.LayoutValue::Px(\{fragment => emit_mapped_binding(fragment, emission, path, span, "number")})"
+  }
+}
+
+///|
+fn emit_grid_tracks(
+  output : StringBuilder,
+  value : EmbeddedValue?,
+) -> Unit raise @viewir.ViewIRError {
+  match value {
+    None => output <+ "[]"
+    Some(Literal(@viewir.IRConstant::GridTracks(tracks), _)) => {
+      output <+ "["
+      for index, track in tracks {
+        if index > 0 {
+          output <+ ", "
+        }
+        emit_grid_track(output, track)
+      }
+      output <+ "]"
+    }
+    Some(Literal(_, span)) =>
+      raise @viewir.ViewIRError::Unsupported(
+        "grid tracks require a typed track-list constant", span,
       )
-      output <+ ")"
+    Some(Binding(_, span)) =>
+      raise @viewir.ViewIRError::Unsupported(
+        "generated Grid tracks do not support Binding", span,
+      )
+  }
+}
+
+///|
+fn emit_grid_track(output : StringBuilder, track : @viewir.IRGridTrack) -> Unit {
+  match track {
+    Auto => output <+ "@ui_view.GridTrack::Auto"
+    Px(value) => output <+ "@ui_view.GridTrack::Px(\{value})"
+    Percent(value) => output <+ "@ui_view.GridTrack::Percent(\{value})"
+    Fr(value) => output <+ "@ui_view.GridTrack::Fr(\{value})"
+    MinContent => output <+ "@ui_view.GridTrack::MinContent"
+    MaxContent => output <+ "@ui_view.GridTrack::MaxContent"
+    FitContent(value) =>
+      output <+
+        "@ui_view.GridTrack::FitContent(\{fragment => emit_grid_track(fragment, value)})"
+    MinMax(minimum, maximum) =>
+      output <+
+        "@ui_view.GridTrack::MinMax(\{fragment => emit_grid_track(fragment, minimum)}, \{fragment => emit_grid_track(fragment, maximum)})"
+    Repeat(repetition, tracks) => {
+      output <+ "@ui_view.GridTrack::Repeat("
+      match repetition {
+        Count(value) =>
+          output <+ "@ui_view.GridTrackRepetition::Count(\{value})"
+        AutoFill => output <+ "@ui_view.GridTrackRepetition::AutoFill"
+        AutoFit => output <+ "@ui_view.GridTrackRepetition::AutoFit"
+      }
+      output <+ ", ["
+      for index, repeated in tracks {
+        if index > 0 {
+          output <+ ", "
+        }
+        emit_grid_track(output, repeated)
+      }
+      output <+ "])"
     }
   }
 }
@@ -1370,10 +1237,7 @@ fn emit_layout_value(
 ///|
 fn emit_typed_value(
   output : StringBuilder,
-  mappings : Array[EmbeddedSourceMapping],
-  schema : EmbeddedProjection,
-  scope_type : String,
-  receiver : String,
+  emission : EmbeddedValueEmission,
   value : EmbeddedValue?,
   expected : String,
   fallback : String,
@@ -1399,43 +1263,38 @@ fn emit_typed_value(
       output <+ "\{expression}"
     }
     Some(Binding(path, span)) =>
-      emit_mapped_binding(
-        output, mappings, schema, scope_type, receiver, path, span, expected,
-      )
+      emit_mapped_binding(output, emission, path, span, expected)
   }
 }
 
 ///|
 fn emit_mapped_binding(
   output : StringBuilder,
-  mappings : Array[EmbeddedSourceMapping],
-  schema : EmbeddedProjection,
-  scope_type : String,
-  receiver : String,
+  emission : EmbeddedValueEmission,
   path : String,
   span : @infoset.XamlSourceSpan,
   expected : String,
 ) -> Unit {
   let (resolved, resolved_type) = resolved_expression(
-    schema, scope_type, path, receiver, span,
+    emission.schema,
+    emission.scope_type,
+    path,
+    emission.receiver,
+    span,
   )
   match (expected, resolved_type) {
     ("string", Some("String")) | ("string", None) | (_, None) =>
-      emit_mapped_raw(output, mappings, resolved, span)
-    ("string", _) => {
-      emit_mapped_raw(output, mappings, resolved, span)
-      output <+ ".to_string()"
-    }
-    ("number", Some("Int")) | ("number", Some("UInt")) => {
-      emit_mapped_raw(output, mappings, resolved, span)
-      output <+ ".to_double()"
-    }
-    ("number", Some("String")) => {
-      output <+ "generated_rect_component("
-      emit_mapped_raw(output, mappings, resolved, span)
-      output <+ ", 0, \{path.escape()})"
-    }
-    _ => emit_mapped_raw(output, mappings, resolved, span)
+      emit_mapped_raw(output, emission.mappings, resolved, span)
+    ("string", _) =>
+      output <+
+        "\{fragment => emit_mapped_raw(fragment, emission.mappings, resolved, span)}.to_string()"
+    ("number", Some("Int")) | ("number", Some("UInt")) =>
+      output <+
+        "\{fragment => emit_mapped_raw(fragment, emission.mappings, resolved, span)}.to_double()"
+    ("number", Some("String")) =>
+      output <+
+        "generated_rect_component(\{fragment => emit_mapped_raw(fragment, emission.mappings, resolved, span)}, 0, \{path.escape()})"
+    _ => emit_mapped_raw(output, emission.mappings, resolved, span)
   }
 }
 
@@ -1478,10 +1337,7 @@ fn kebab_case(value : String) -> String {
 ///|
 fn emit_rect_value(
   output : StringBuilder,
-  mappings : Array[EmbeddedSourceMapping],
-  schema : EmbeddedProjection,
-  scope_type : String,
-  receiver : String,
+  emission : EmbeddedValueEmission,
   value : EmbeddedValue?,
   component : Int,
 ) -> Unit raise @viewir.ViewIRError {
@@ -1496,7 +1352,11 @@ fn emit_rect_value(
       )
     Some(Binding(path, span)) => {
       let (resolved, resolved_type) = resolved_expression(
-        schema, scope_type, path, receiver, span,
+        emission.schema,
+        emission.scope_type,
+        path,
+        emission.receiver,
+        span,
       )
       let value_expression = if resolved_type == Some("String") ||
         resolved_type is None {
@@ -1504,9 +1364,8 @@ fn emit_rect_value(
       } else {
         resolved + ".to_string()"
       }
-      output <+ "generated_rect_component("
-      emit_mapped_raw(output, mappings, value_expression, span)
-      output <+ ", \{component}, \{path.escape()})"
+      output <+
+        "generated_rect_component(\{fragment => emit_mapped_raw(fragment, emission.mappings, value_expression, span)}, \{component}, \{path.escape()})"
     }
   }
 }
