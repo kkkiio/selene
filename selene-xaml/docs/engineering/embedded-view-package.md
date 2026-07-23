@@ -213,6 +213,17 @@ descriptor walker，也不通过字符串 registry 查找 component 或 property
 scope root 与初始焦点投影到 Selene UI runtime。XAML key 和声明 record 留在 View Host
 边界内，`selene/ui` 只观察 Entity 组成的 focus scope stack。
 
+`Image.Tint` 以 CSS color 字符串进入 generated `NodeStyle`，支持 literal、typed Binding
+和 VisualState Setter。View Host 在挂载、普通更新及可视状态过渡时把它解析成
+`UiImage.tint`；`Source="atlas.json#region"` 解析出的 image region 在 tint 更新期间保持不变。
+
+`Image.SourceRegion` 使用 `x y width height` 像素语法并进入现有的
+`ImageRegion2D`，支持 literal、String Binding 和 VisualState Setter；空字符串表示不裁剪。
+这个次序直接对应 spritesheet metadata 的左上角坐标与区域尺寸；它是现有
+`SourceRegion` 的几何值语法，不采用 `Margin` / `Padding` 的 CSS box shorthand。
+一个 Image node 的 base properties 与全部 VisualState Setter 必须统一选择 named
+`atlas.json#region` 或显式 `SourceRegion`，Host 在 mutation commit 前拒绝混用。
+
 ## Error contract
 
 公开错误至少区分：

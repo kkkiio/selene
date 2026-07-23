@@ -23,7 +23,17 @@ pub fn compile(
   source : String,
   contract_source : String,
 ) -> ViewIR raise ViewIRError {
-  let syntax = lower_syntax(source_uri, source)
+  compile_with_resources(source_uri, source, contract_source, [])
+}
+
+///|
+pub fn compile_with_resources(
+  source_uri : String,
+  source : String,
+  contract_source : String,
+  resource_documents : Array[ResourceDocument],
+) -> ViewIR raise ViewIRError {
+  let syntax = lower_syntax(source_uri, source, resource_documents)
   let parsed = parse_contract(contract_source)
   if syntax.data_type.package_path != parsed.package_path {
     raise InvalidContract(
@@ -853,6 +863,9 @@ fn seal_node(
         prefix + "/" + key
       })
       let sealed_properties : Array[IRProperty] = []
+      let mut literal_atlas_source = false
+      let mut literal_source_region = false
+      let mut source_region_span = span
       for property in properties {
         if property.name == "OnClick" || property.name == "OnFocus" {
           continue
@@ -869,7 +882,26 @@ fn seal_node(
               value_span,
             )
         }
+        if property.name == "Source" &&
+          value is IRValue::Constant(IRConstant::StringValue(source), _) &&
+          source.contains("#") {
+          literal_atlas_source = true
+        }
+        if property.name == "SourceRegion" &&
+          value
+          is IRValue::Constant(
+            IRConstant::ImageRegionValue(_, _, _, _),
+            value_span
+          ) {
+          literal_source_region = true
+          source_region_span = value_span
+        }
         sealed_properties.push({ name: property.name, value })
+      }
+      if literal_atlas_source && literal_source_region {
+        raise Unsupported(
+          "Image cannot combine atlas #region Source with SourceRegion", source_region_span,
+        )
       }
       IRNode::Element(
         kind,
@@ -946,8 +978,8 @@ fn property_target_type(
   span : @infoset.XamlSourceSpan,
 ) -> String raise ViewIRError {
   if [
-      "Text", "Source", "Background", "BorderColor", "OutlineColor", "Color", "FontFamily",
-      "Navigation.Up", "Navigation.Down", "Navigation.Left", "Navigation.Right",
+      "Text", "Source", "Background", "BorderColor", "OutlineColor", "Color", "Tint",
+      "FontFamily", "Navigation.Up", "Navigation.Down", "Navigation.Left", "Navigation.Right",
     ].contains(property) {
     "String"
   } else if [
@@ -972,6 +1004,8 @@ fn property_target_type(
     "GridTracks"
   } else if ["Margin", "Padding"].contains(property) {
     "Rect"
+  } else if property == "SourceRegion" {
+    "ImageRegion"
   } else if ["Position", "Align", "Wrap", "Fit", "Direction", "AutoFlow"].contains(
       property,
     ) {
@@ -1055,6 +1089,31 @@ fn lower_constant(
         2 => IRConstant::RectValue(values[1], values[0], values[1], values[0])
         _ => IRConstant::RectValue(values[3], values[0], values[1], values[2])
       }
+    }
+    "ImageRegion" => {
+      let normalized = text.trim().to_owned()
+      if normalized == "" {
+        return IRConstant::NoImageRegion
+      }
+      let parts = normalized.split(" ").filter(value => value != "").collect()
+      if parts.length() != 4 {
+        raise Unsupported("image region requires x y width height", span)
+      }
+      let values : Array[Double] = []
+      for part in parts {
+        values.push(
+          @string.parse_double(part) catch {
+            _ => raise Unsupported("invalid image region: " + text, span)
+          },
+        )
+      }
+      if values[0] < 0.0 || values[1] < 0.0 {
+        raise Unsupported("image region position must be non-negative", span)
+      }
+      if values[2] <= 0.0 || values[3] <= 0.0 {
+        raise Unsupported("image region size must be positive", span)
+      }
+      IRConstant::ImageRegionValue(values[0], values[1], values[2], values[3])
     }
     "Position" =>
       match text {
@@ -1244,6 +1303,7 @@ fn binding_assignable(source : String, target : String) -> Bool {
     "Int" => ["Int", "UInt"].contains(source)
     "LayoutValue" | "Rect" =>
       ["Float", "Int", "UInt", "Double", "String"].contains(source)
+    "ImageRegion" => source == "String"
     "String" => true
     "State" => source == "String" || source == "Bool"
     _ => false

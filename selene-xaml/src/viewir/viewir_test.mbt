@@ -158,16 +158,23 @@ test "VI-IR-04 seals template VisualState bindings, targets, overlays, and trans
     #|  <ui:ItemsControl.ItemTemplate>
     #|   <ui:DataTemplate ui:DataType="model:InventoryTab">
     #|    <ui:Button x:Name="tabButton">
-    #|     <ui:Image x:Name="tabIcon" Source="{ui:Binding Path=icon}" />
+    #|     <ui:Image x:Name="tabIcon" Source="{ui:Binding Path=icon}"
+    #|      Tint="{ui:Binding Path=iconTint}" />
+    #|     <ui:Image x:Name="sheetIcon" Source="sheet.png"
+    #|      SourceRegion="{ui:Binding Path=iconRegion}" />
     #|     <ui:Text x:Name="tabLabel" Text="{ui:Binding Path=label}" />
     #|     <ui:Button.VisualStates>
     #|      <ui:VisualStateGroup Name="SelectionStates" Current="{ui:Binding Path=selected}">
     #|       <ui:VisualState Name="Normal">
     #|        <ui:Setter TargetName="tabIcon" Property="Source" Value="{ui:Binding Path=icon}" />
+    #|        <ui:Setter TargetName="tabIcon" Property="Tint" Value="{ui:Binding Path=iconTint}" />
+    #|        <ui:Setter TargetName="sheetIcon" Property="SourceRegion" Value="{ui:Binding Path=iconRegion}" />
     #|       </ui:VisualState>
     #|       <ui:VisualState Name="Selected">
     #|        <ui:Setter Property="Background" Value="#6b3d26" />
     #|        <ui:Setter TargetName="tabIcon" Property="Source" Value="{ui:Binding Path=selectedIcon}" />
+    #|        <ui:Setter TargetName="tabIcon" Property="Tint" Value="#ffd080" />
+    #|        <ui:Setter TargetName="sheetIcon" Property="SourceRegion" Value="32 0 24 24" />
     #|        <ui:Setter TargetName="tabLabel" Property="Bold" Value="true" />
     #|       </ui:VisualState>
     #|       <ui:VisualStateGroup.Transitions>
@@ -186,6 +193,8 @@ test "VI-IR-04 seals template VisualState bindings, targets, overlays, and trans
     #|  id : String
     #|  label : String
     #|  icon : String
+    #|  icon_region : String
+    #|  icon_tint : String
     #|  selected_icon : String
     #|  selected : Bool
     #|}
@@ -205,6 +214,9 @@ test "VI-IR-04 seals template VisualState bindings, targets, overlays, and trans
           "string:" + value
         IRValue::Constant(IRConstant::BoolValue(value), _) =>
           "bool:" + value.to_string()
+        IRValue::Constant(IRConstant::ImageRegionValue(x, y, width, height), _) =>
+          "region:\{x},\{y},\{width},\{height}"
+        IRValue::Constant(IRConstant::NoImageRegion, _) => "region:none"
         _ => "other"
       }
       setters.push((state.name, setter.target_node, setter.property, value))
@@ -231,13 +243,25 @@ test "VI-IR-04 seals template VisualState bindings, targets, overlays, and trans
       #|(
       #|  "node-root-view/tabs:__SELENE_KEY__/tab-button",
       #|  "SelectionStates",
-      #|  "binding-3",
+      #|  "binding-4",
       #|  [
       #|    (
       #|      "Normal",
       #|      "node-root-view/tabs:__SELENE_KEY__/tab-icon",
       #|      "Source",
       #|      "binding:binding-1",
+      #|    ),
+      #|    (
+      #|      "Normal",
+      #|      "node-root-view/tabs:__SELENE_KEY__/tab-icon",
+      #|      "Tint",
+      #|      "binding:binding-3",
+      #|    ),
+      #|    (
+      #|      "Normal",
+      #|      "node-root-view/tabs:__SELENE_KEY__/sheet-icon",
+      #|      "SourceRegion",
+      #|      "binding:binding-5",
       #|    ),
       #|    (
       #|      "Selected",
@@ -249,7 +273,19 @@ test "VI-IR-04 seals template VisualState bindings, targets, overlays, and trans
       #|      "Selected",
       #|      "node-root-view/tabs:__SELENE_KEY__/tab-icon",
       #|      "Source",
-      #|      "binding:binding-4",
+      #|      "binding:binding-6",
+      #|    ),
+      #|    (
+      #|      "Selected",
+      #|      "node-root-view/tabs:__SELENE_KEY__/tab-icon",
+      #|      "Tint",
+      #|      "string:#ffd080",
+      #|    ),
+      #|    (
+      #|      "Selected",
+      #|      "node-root-view/tabs:__SELENE_KEY__/sheet-icon",
+      #|      "SourceRegion",
+      #|      "region:32,0,24,24",
       #|    ),
       #|    (
       #|      "Selected",
@@ -429,6 +465,181 @@ test "VI-IR-05 seals Grid tracks, flow, placement, and spans as typed constants"
       #|  "repeat() count must be positive",
       #|  "grid index must be zero or greater",
       #|  "grid span must be a positive integer",
+      #|]
+    ),
+  )
+}
+
+///|
+test "VI-RESOURCE-01 resolves external and local static resources before sealing" {
+  let xaml =
+    #|<View xmlns="urn:selene:xaml:ui"
+    #|      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    #|      xmlns:model="moonbit:example/theme/model"
+    #|      x:Class="ThemeView" DataType="model:ThemeState">
+    #|  <View.Resources>
+    #|    <ResourceDictionary Source="../theme.xaml">
+    #|      <x:Double x:Key="Radius.Panel">12</x:Double>
+    #|    </ResourceDictionary>
+    #|  </View.Resources>
+    #|  <Flex Background="{StaticResource Color.Surface}"
+    #|        Padding="{StaticResource Spacing.Small}"
+    #|        Radius="{StaticResource Radius.Panel}" />
+    #|</View>
+  let theme =
+    #|<ResourceDictionary xmlns="urn:selene:xaml:ui"
+    #|                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    #|  <Color x:Key="Color.Surface">#fff4dc</Color>
+    #|  <x:Double x:Key="Spacing.Small">8</x:Double>
+    #|</ResourceDictionary>
+  let contract =
+    #|package "example/theme/model"
+    #|pub(all) struct ThemeState {}
+  let references = @viewir.referenced_resource_documents(
+    "ui/views/theme-view.xaml", xaml,
+  )
+  debug_inspect(
+    references,
+    content=(
+      #|["ui/theme.xaml"]
+    ),
+  )
+  let ir = @viewir.compile_with_resources(
+    "ui/views/theme-view.xaml",
+    xaml,
+    contract,
+    [{ source_uri: "ui/./theme.xaml", source: theme }],
+  )
+  guard ir.root is IRNode::Element(_, _, _, _, [child], _) &&
+    child is IRNode::Element(_, _, _, properties, _, _) else {
+    fail("expected themed Flex")
+  }
+  debug_inspect(
+    properties,
+    content=(
+      #|[
+      #|  {
+      #|    name: "Background",
+      #|    value: Constant(
+      #|      StringValue("#fff4dc"),
+      #|      {
+      #|        source_uri: "ui/views/theme-view.xaml",
+      #|        start: { offset: 369, line: 10, column: 9 },
+      #|        end: { offset: 412, line: 10, column: 52 },
+      #|      },
+      #|    ),
+      #|  },
+      #|  {
+      #|    name: "Padding",
+      #|    value: Constant(
+      #|      RectValue(8, 8, 8, 8),
+      #|      {
+      #|        source_uri: "ui/views/theme-view.xaml",
+      #|        start: { offset: 421, line: 11, column: 9 },
+      #|        end: { offset: 461, line: 11, column: 49 },
+      #|      },
+      #|    ),
+      #|  },
+      #|  {
+      #|    name: "Radius",
+      #|    value: Constant(
+      #|      DoubleValue(12),
+      #|      {
+      #|        source_uri: "ui/views/theme-view.xaml",
+      #|        start: { offset: 470, line: 12, column: 9 },
+      #|        end: { offset: 508, line: 12, column: 47 },
+      #|      },
+      #|    ),
+      #|  },
+      #|]
+    ),
+  )
+}
+
+///|
+test "VI-RESOURCE-02 rejects missing, duplicate, and cyclic resources" {
+  let contract =
+    #|package "example/theme/model"
+    #|pub(all) struct ThemeState {}
+  let documents : Array[(String, String, Array[@viewir.ResourceDocument])] = [
+    (
+      "ui/missing.xaml",
+      (
+        #|<View xmlns="urn:selene:xaml:ui"
+        #|      xmlns:model="moonbit:example/theme/model"
+        #|      DataType="model:ThemeState">
+        #|  <Text Color="{StaticResource Color.Missing}" />
+        #|</View>
+      ),
+      [],
+    ),
+    (
+      "ui/duplicate.xaml",
+      (
+        #|<View xmlns="urn:selene:xaml:ui"
+        #|      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        #|      xmlns:model="moonbit:example/theme/model"
+        #|      DataType="model:ThemeState">
+        #|  <View.Resources>
+        #|    <ResourceDictionary>
+        #|      <Color x:Key="Color.Text">#111111</Color>
+        #|      <Color x:Key="Color.Text">#222222</Color>
+        #|    </ResourceDictionary>
+        #|  </View.Resources>
+        #|</View>
+      ),
+      [],
+    ),
+    (
+      "ui/view.xaml",
+      (
+        #|<View xmlns="urn:selene:xaml:ui"
+        #|      xmlns:model="moonbit:example/theme/model"
+        #|      DataType="model:ThemeState">
+        #|  <View.Resources>
+        #|    <ResourceDictionary Source="a.xaml" />
+        #|  </View.Resources>
+        #|</View>
+      ),
+      [
+        {
+          source_uri: "ui/a.xaml",
+          source: (
+            #|<ResourceDictionary xmlns="urn:selene:xaml:ui"
+            #|                    Source="b.xaml" />
+          ),
+        },
+        {
+          source_uri: "ui/b.xaml",
+          source: (
+            #|<ResourceDictionary xmlns="urn:selene:xaml:ui"
+            #|                    Source="a.xaml" />
+          ),
+        },
+      ],
+    ),
+  ]
+  let messages : Array[String] = []
+  for resource_case in documents {
+    let (source_uri, source, resources) = resource_case
+    try
+      ignore(
+        @viewir.compile_with_resources(source_uri, source, contract, resources),
+      )
+    catch {
+      @viewir.ViewIRError::Unsupported(message, _) => messages.push(message)
+      error => raise error
+    } noraise {
+      _ => fail("invalid resource graph must fail before ViewIR sealing")
+    }
+  }
+  debug_inspect(
+    messages,
+    content=(
+      #|[
+      #|  "StaticResource key does not exist: Color.Missing",
+      #|  "duplicate ResourceDictionary key: Color.Text",
+      #|  "ResourceDictionary.Source cycle includes ui/a.xaml",
       #|]
     ),
   )

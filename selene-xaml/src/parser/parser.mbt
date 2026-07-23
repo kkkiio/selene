@@ -262,6 +262,7 @@ fn parse_object_event(
       let directive = attribute.name.local_name
       if directive != "Name" &&
         directive != "Class" &&
+        directive != "Key" &&
         directive != "Items" &&
         directive != "Initialization" &&
         directive != "PositionalParameters" {

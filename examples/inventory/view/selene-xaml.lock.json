@@ -15,8 +15,8 @@
   "abi_fingerprint": "sha256:a35ceadc628c360191cd2cfc2889bebef2889666c0b9bfc72600b587bdb0fb20",
   "outputs": [    { "owner": "selene-xaml", "path": "moon.pkg", "sha256": "9257940c262c9b39c7f13cec10cf4568a1327a442500bb816689f49ec1b71b27" },
     { "owner": "selene-xaml", "path": "state.generated.mbt", "sha256": "dcca826c4c8bcc0620d3db28681ece750d0b38f206f38c3b6fb9b653f5c2260a" },
-    { "owner": "selene-xaml", "path": "view.generated.mbt", "sha256": "d11d77bb94fc8ee5c442b8e396c8e072b66e4650421e3bb64ea7844028aee846" },
-    { "owner": "selene-xaml", "path": "view.generated.mbt.map.json", "sha256": "8414f35a549f8a4986cc8ad322eac4057b5d572bf633ecb106f9e03322e88bcb" }
+    { "owner": "selene-xaml", "path": "view.generated.mbt", "sha256": "659a48c046e62e0be5f5b693fdc61a691d36a2a5cc25ab619ea2bb8c6ea35191" },
+    { "owner": "selene-xaml", "path": "view.generated.mbt.map.json", "sha256": "ef08eef17f016bb88b3749cccb55979e3d19ad86b6251702fa7942eddca2c81d" }
   ],
   "lock_path": "selene-xaml.lock.json"
 }

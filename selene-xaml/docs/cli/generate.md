@@ -80,6 +80,11 @@ committed as one package update after parsing, lowering, emission, and
 formatting succeed. Output hashes describe the generated result; editing an
 owned file does not block the next generation, which overwrites that file.
 
+External `ResourceDictionary Source` documents are discovered recursively. Their
+canonical paths and content hashes are recorded as imported sidecars, so changing
+only a design-token dictionary still invalidates the generated package
+deterministically.
+
 Commit generated `.mbt` files and the ownership lock. This repository also
 commits source maps for first-party examples as generator regression artifacts;
 downstream projects may choose their own source-map policy.

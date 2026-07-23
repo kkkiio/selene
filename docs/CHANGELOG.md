@@ -7,6 +7,10 @@
 - Added the bindable Selene XAML `Active` visual member for retaining inactive
   node identity while excluding its subtree from UI participation.
 
+- Added compile-time Selene XAML `ResourceDictionary`, `x:Key`,
+  `StaticResource`, nested lexical scopes, merged dictionaries, and recursively
+  tracked external `Source` documents.
+
 - Added typed Selene XAML `Grid` generation with CSS-style tracks, auto-flow,
   attached row and column placement, and spans.
 
@@ -20,10 +24,29 @@
 - Added `selene/atlas` loading for canonical Selene, Aseprite, and TexturePacker
   JSON atlases, including named `#region` resolution for UI and sprite assets.
 
+- Added generated and hosted Selene XAML `Image.Tint` and `Image.SourceRegion`
+  support for literals, typed bindings, and VisualState setters. Source regions
+  use `x y width height` spritesheet coordinates and are mutually exclusive
+  with named atlas `#region` sources.
+
+- Added JS release benchmarks for Embedded View replacement, typed collection
+  patches, and isolated View Host property and sibling mutations.
+
+- Added `@ui_view.reconcile_specs` and `@ui_view.retained_lis_mask` as shared
+  keyed reconciliation primitives for generated Embedded View packages.
+
+- Added concise generated API documentation for Embedded View mounting,
+  updates, action events, and plugin installation.
+
 - Added the Selene XAML compiler and runtime as in-repository workspace
   components, together with their documentation, examples, and test suites.
 
 ### Changed
+
+- Changed generated Embedded View packages to delegate reconciliation to
+  `ui_view`, which uses linear sibling indexing and LIS-based keyed move
+  planning, and added an atomic constant-time View Host fast path for
+  `SetText`-only mutation batches.
 
 - Simplified Selene XAML source generation with builder-aware nested
   interpolations while preserving generated artifacts and source mappings.

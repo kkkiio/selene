@@ -53,6 +53,10 @@ test "INVENTORY-01 Embedded View uses Entity identity and typed transactions" {
   let map_button = host
     .entity(entity, "pack-grid/items:map/item-button-wide")
     .unwrap()
+  let key_button = host
+    .entity(entity, "pack-grid/items:key/item-button-wide")
+    .unwrap()
+  let pack_grid = host.entity(entity, "pack-grid").unwrap()
   let equip_tab = host
     .entity(entity, "inventory-header/tabs:equip/tab-button")
     .unwrap()
@@ -102,6 +106,7 @@ test "INVENTORY-01 Embedded View uses Entity identity and typed transactions" {
     @ui.texts()[host.entity(entity, "pack-grid/items:map/item-count").unwrap()].content,
     content="\"5\"",
   )
+  assert_eq(pack_grid.get_children(), [key_button, map_button])
   try @view.InventoryView::mount(entity, initial) catch {
     @view.InventoryViewError::AlreadyMounted => inspect(true, content="true")
     error => raise error
@@ -136,4 +141,38 @@ test "INVENTORY-01 Embedded View uses Entity identity and typed transactions" {
   }
   host.unmount(entity)
   entity.destroy()
+}
+
+///|
+test "INVENTORY-02 Embedded View records are isolated by World" {
+  let previous_world = @ecs.current_world().unwrap_or(@ecs.bootstrap_world())
+  defer @ecs.set_current_world(previous_world)
+  let first_world = @ecs.World()
+  @ecs.set_current_world(first_world)
+  let first_root = @entity.Entity()
+  let state : @view.InventoryUiState = {
+    viewport_width: 960.0,
+    capacity: 0,
+    tabs: [],
+    all_items: [],
+    items: [],
+    equipment: [],
+    selected_tab_id: "",
+    selected_item_id: "",
+  }
+  @view.InventoryView::mount(first_root, state)
+  first_root.destroy()
+  let second_world = @ecs.World()
+  @ecs.set_current_world(second_world)
+  let second_root = @entity.Entity()
+  debug_inspect(
+    (first_world.id() != second_world.id(), first_root.id(), second_root.id()),
+    content="(true, 0, 0)",
+  )
+  @view.InventoryView::mount(second_root, state)
+  inspect(
+    @ui_view.ViewHost::new().entity(second_root, "inventory-root") is Some(_),
+    content="true",
+  )
+  second_root.destroy()
 }

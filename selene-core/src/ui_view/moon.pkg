@@ -5,6 +5,7 @@ import {
   "KKKIIO/selene/entity",
   "KKKIIO/selene/event",
   "KKKIIO/selene/math",
+  "KKKIIO/selene/render2d_types",
   "KKKIIO/selene/system",
   "KKKIIO/selene/time",
   "KKKIIO/selene/ui",

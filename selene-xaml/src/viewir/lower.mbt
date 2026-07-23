@@ -164,14 +164,11 @@ fn collect_visual_state_groups(
 fn lower_syntax(
   source_uri : String,
   source : String,
+  resource_documents : Array[ResourceDocument],
 ) -> SyntaxViewIR raise ViewIRError {
-  let document = @parser.parse_xaml(
-    source_uri,
-    source,
-    @infoset.selene_xaml_schemas(),
-  ) catch {
-    error => raise Xaml(error)
-  }
+  let document = parse_and_resolve_view_document(
+    source_uri, source, resource_documents,
+  )
   let namespaces : Map[String, String] = Map([])
   for namespace_binding in document.namespaces {
     namespaces[namespace_binding.prefix.unwrap_or("")] = namespace_binding.namespace_uri

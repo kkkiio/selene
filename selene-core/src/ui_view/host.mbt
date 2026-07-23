@@ -292,6 +292,35 @@ pub fn ViewHost::apply(
   mutations : Array[TreeMutation],
 ) -> Unit raise HostError {
   let record = require_record(self, entity)
+  let only_text = mutations.all(fn(mutation) {
+    match mutation {
+      SetText(_, _) => true
+      _ => false
+    }
+  })
+  if only_text {
+    for mutation in mutations {
+      match mutation {
+        SetText(key, _) =>
+          match record.nodes.get(key) {
+            Some(node) if node.spec.kind == Text => ()
+            Some(_) =>
+              raise HostError::InvalidMutation(
+                "SH1014",
+                "set-text target is not a Text node: " + key,
+              )
+            None =>
+              raise HostError::InvalidMutation(
+                "SH1003",
+                "mutation target does not exist: " + key,
+              )
+          }
+        _ => ()
+      }
+    }
+    commit_validated_mutations(record, mutations)
+    return
+  }
   let planned_nodes : Map[String, HostNode] = Map([])
   for key, node in record.nodes {
     planned_nodes[key] = {
@@ -540,11 +569,16 @@ pub fn ViewHost::apply(
     if spec.kind == Text && style.color != "" {
       ignore(@ui.TextColor::from_css(style.color))
     }
+    if spec.kind == Image && style.tint != "" {
+      ignore(@ui.parse_color(style.tint))
+    }
     if style.outline_color != "" {
       ignore(@ui.BackgroundColor::from_css(style.outline_color))
     }
   }
-  for _, node in planned_nodes {
+  let atlas_source_targets : Map[String, Bool] = Map([])
+  let source_region_targets : Map[String, Bool] = Map([])
+  for key, node in planned_nodes {
     for
       target in [
         node.spec.navigation_up,
@@ -562,9 +596,28 @@ pub fn ViewHost::apply(
         )
       }
     }
-    if node.spec.kind == Image && node.spec.source.contains("#") {
-      ignore(@atlas.resolve_texture_atlas_region(node.spec.source)) catch {
-        error => raise HostError::InvalidMutation("SH1022", error.to_string())
+    if node.spec.kind == Image {
+      if node.spec.source.contains("#") {
+        atlas_source_targets[key] = true
+        ignore(@atlas.resolve_texture_atlas_region(node.spec.source)) catch {
+          error => raise HostError::InvalidMutation("SH1022", error.to_string())
+        }
+      }
+      match node.spec.style.source_region {
+        Some(region) => {
+          if region.position[@math.X] < 0.0 ||
+            region.position[@math.Y] < 0.0 ||
+            region.size[@math.X] <= 0.0 ||
+            region.size[@math.Y] <= 0.0 {
+            raise HostError::InvalidMutation(
+              "SH1024",
+              "image SourceRegion requires a non-negative position and positive size: " +
+              key,
+            )
+          }
+          source_region_targets[key] = true
+        }
+        None => ()
       }
     }
     for group in node.spec.visual_state_groups {
@@ -583,17 +636,49 @@ pub fn ViewHost::apply(
               setter.property,
             )
           }
+          if setter.property == "SourceRegion" &&
+            planned_nodes[setter.target].spec.kind != Image {
+            raise HostError::InvalidMutation(
+              "SH1021",
+              "visual-state SourceRegion target is not an Image: " +
+              setter.target,
+            )
+          }
           match setter.value {
             StringValue(source) if setter.property == "Source" &&
-              source.contains("#") =>
+              source.contains("#") => {
+              atlas_source_targets[setter.target] = true
               ignore(@atlas.resolve_texture_atlas_region(source)) catch {
                 error =>
                   raise HostError::InvalidMutation("SH1022", error.to_string())
               }
+            }
+            ImageRegionValue(Some(region)) if setter.property == "SourceRegion" => {
+              if planned_nodes[setter.target].spec.kind != Image ||
+                region.position[@math.X] < 0.0 ||
+                region.position[@math.Y] < 0.0 ||
+                region.size[@math.X] <= 0.0 ||
+                region.size[@math.Y] <= 0.0 {
+                raise HostError::InvalidMutation(
+                  "SH1024",
+                  "image SourceRegion requires an Image target, non-negative position, and positive size: " +
+                  setter.target,
+                )
+              }
+              source_region_targets[setter.target] = true
+            }
             _ => ()
           }
         }
       }
+    }
+  }
+  for key, _ in atlas_source_targets {
+    if source_region_targets.contains(key) {
+      raise HostError::InvalidMutation(
+        "SH1024",
+        "Image cannot combine atlas #region Source with SourceRegion: " + key,
+      )
     }
   }
   let clear_focused_node = match @ui.focused_entity() {
@@ -628,6 +713,7 @@ fn visual_state_setter_is_valid(setter : VisualStateSetter) -> Bool {
       | "Background"
       | "BorderColor"
       | "Color"
+      | "Tint"
       | "OutlineColor",
       StringValue(_),
     ) => true
@@ -643,6 +729,7 @@ fn visual_state_setter_is_valid(setter : VisualStateSetter) -> Bool {
     ) => true
     ("Bold", BoolValue(_)) => true
     ("Width" | "Height", LayoutValueValue(_)) => true
+    ("SourceRegion", ImageRegionValue(_)) => true
     _ => false
   }
 }
@@ -660,6 +747,10 @@ fn apply_visual_state_setter(
       { ..spec, style: { ..spec.style, border_color: value } }
     ("Color", StringValue(value)) =>
       { ..spec, style: { ..spec.style, color: value } }
+    ("Tint", StringValue(value)) =>
+      { ..spec, style: { ..spec.style, tint: value } }
+    ("SourceRegion", ImageRegionValue(value)) =>
+      { ..spec, style: { ..spec.style, source_region: value } }
     ("OutlineColor", StringValue(value)) =>
       { ..spec, style: { ..spec.style, outline_color: value } }
     ("Border", DoubleValue(value)) =>
@@ -738,6 +829,8 @@ fn visual_state_value(spec : NodeSpec, property : String) -> VisualStateValue? {
     "Background" => Some(StringValue(style.background))
     "BorderColor" => Some(StringValue(style.border_color))
     "Color" => Some(StringValue(style.color))
+    "Tint" => Some(StringValue(style.tint))
+    "SourceRegion" => Some(ImageRegionValue(style.source_region))
     "OutlineColor" => Some(StringValue(style.outline_color))
     "Border" => Some(DoubleValue(style.border))
     "Radius" => Some(DoubleValue(style.radius))
@@ -787,7 +880,7 @@ fn interpolate_visual_state_value(
     (LayoutValueValue(Percent(left)), LayoutValueValue(Percent(right))) =>
       Some(LayoutValueValue(Percent(left + (right - left) * amount)))
     (StringValue(left), StringValue(right)) if [
-        "Background", "BorderColor", "Color", "OutlineColor",
+        "Background", "BorderColor", "Color", "Tint", "OutlineColor",
       ].contains(property) => {
       let left_color = @ui.BackgroundColor::from_css(left).color
       let right_color = @ui.BackgroundColor::from_css(right).color
@@ -1040,9 +1133,16 @@ fn write_visual_state_delta(
     }
   }
   if current.kind == Image &&
-    (previous.source != current.source || before.fit != after.fit) {
+    (
+      previous.source != current.source ||
+      before.tint != after.tint ||
+      before.source_region != after.source_region ||
+      before.fit != after.fit
+    ) {
     @ui.ui_images()[target] = ui_image_from_source(
       current.source,
+      after.tint,
+      after.source_region,
       match after.fit {
         Fill => @ui.ImageFit::Stretch
         Contain => @ui.ImageFit::Contain
@@ -1075,18 +1175,24 @@ fn write_visual_state_delta(
 }
 
 ///|
-fn ui_image_from_source(source : String, fit : @ui.ImageFit) -> @ui.UiImage {
+fn ui_image_from_source(
+  source : String,
+  tint : String,
+  source_region : @render2d_types.ImageRegion2D?,
+  fit : @ui.ImageFit,
+) -> @ui.UiImage {
   if source.contains("#") {
     let resolved = @atlas.resolve_texture_atlas_region(source) catch {
-      _ => return @ui.UiImage(source, fit~)
+      _ => return @ui.UiImage(source, tint=@ui.parse_color(tint), fit~)
     }
     return @ui.UiImage::from_image(
       resolved.image,
+      tint=@ui.parse_color(tint),
       fit~,
       source=Some(resolved.source),
     )
   }
-  @ui.UiImage(source, fit~)
+  @ui.UiImage(source, tint=@ui.parse_color(tint), fit~, source=source_region)
 }
 
 ///|
@@ -1226,6 +1332,8 @@ fn commit_validated_mutations(
         record.nodes[key] = { ..node, spec: { ..node.spec, source: value } }
         @ui.ui_images()[record.entities[key]] = ui_image_from_source(
           value,
+          style.tint,
+          style.source_region,
           match style.fit {
             Fill => @ui.ImageFit::Stretch
             Contain => @ui.ImageFit::Contain
@@ -1544,7 +1652,12 @@ fn write_node_components(target : @entity.Entity, spec : NodeSpec) -> Unit {
         Contain => @ui.ImageFit::Contain
         Cover => @ui.ImageFit::Cover
       }
-      @ui.ui_images()[target] = ui_image_from_source(spec.source, fit)
+      @ui.ui_images()[target] = ui_image_from_source(
+        spec.source,
+        style.tint,
+        style.source_region,
+        fit,
+      )
     }
     Button => @ui.buttons()[target] = @ui.Button(enabled=spec.enabled)
     ScrollView =>

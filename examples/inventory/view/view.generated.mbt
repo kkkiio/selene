@@ -46,167 +46,41 @@ fn generated_rect_component(
   value : String,
   index : Int,
   path : String,
+  image_region : Bool,
 ) -> Double raise InventoryViewError {
   let parts = value.split(" ").filter(part => part != "").collect()
-  let selected = match parts.length() {
-    1 => parts[0]
-    2 => if index == 0 || index == 2 { parts[1] } else { parts[0] }
-    4 =>
-      match index {
-        0 => parts[3]
-        1 => parts[0]
-        2 => parts[1]
-        _ => parts[2]
-      }
-    _ => raise InvalidPatch("invalid rect value for " + path + ": " + value)
+  let selected = if image_region {
+    if parts.length() != 4 {
+      raise InvalidPatch(
+        "image region requires x y width height for " + path + ": " + value,
+      )
+    }
+    parts[index]
+  } else {
+    match parts.length() {
+      1 => parts[0]
+      2 => if index == 0 || index == 2 { parts[1] } else { parts[0] }
+      4 =>
+        match index {
+          0 => parts[3]
+          1 => parts[0]
+          2 => parts[1]
+          _ => parts[2]
+        }
+      _ => raise InvalidPatch("invalid rect value for " + path + ": " + value)
+    }
   }
-  @string.parse_double(selected) catch {
+  let parsed = @string.parse_double(selected) catch {
     _ =>
       raise InvalidPatch(
         "invalid number for " + path + ": " + selected.to_owned(),
       )
   }
-}
-
-///|
-fn generated_contains(specs : Array[@ui_view.NodeSpec], key : String) -> Bool {
-  for spec in specs {
-    if spec.key == key {
-      return true
-    }
+  if image_region &&
+    ((index < 2 && parsed < 0.0) || (index >= 2 && parsed <= 0.0)) {
+    raise InvalidPatch("invalid image region for " + path + ": " + value)
   }
-  false
-}
-
-///|
-fn generated_parent_index(
-  specs : Array[@ui_view.NodeSpec],
-  parent : String?,
-  key : String,
-) -> Int {
-  let mut sibling_index = 0
-  for spec in specs {
-    if spec.parent == parent {
-      if spec.key == key {
-        return sibling_index
-      }
-      sibling_index += 1
-    }
-  }
-  -1
-}
-
-///|
-fn generated_diff(
-  previous : Array[@ui_view.NodeSpec],
-  desired : Array[@ui_view.NodeSpec],
-) -> Array[@ui_view.TreeMutation] {
-  if previous == desired {
-    return []
-  }
-  let previous_by_key : Map[String, @ui_view.NodeSpec] = Map([])
-  let desired_by_key : Map[String, @ui_view.NodeSpec] = Map([])
-  for spec in previous {
-    previous_by_key[spec.key] = spec
-  }
-  for spec in desired {
-    desired_by_key[spec.key] = spec
-  }
-  let mutations : Array[@ui_view.TreeMutation] = []
-  for spec in previous {
-    if !desired_by_key.contains(spec.key) {
-      let removed_root = match spec.parent {
-        Some(parent) => desired_by_key.contains(parent)
-        None => true
-      }
-      if removed_root {
-        mutations.push(@ui_view.TreeMutation::Remove(spec.key))
-      }
-    }
-  }
-  for spec in desired {
-    match previous_by_key.get(spec.key) {
-      None => {
-        mutations.push(@ui_view.TreeMutation::Mount(spec))
-        match spec.parent {
-          Some(parent) =>
-            mutations.push(
-              @ui_view.TreeMutation::Move(
-                spec.key,
-                parent,
-                generated_parent_index(desired, spec.parent, spec.key),
-              ),
-            )
-          None => ()
-        }
-      }
-      Some(old) => {
-        let moved = old.parent != spec.parent ||
-          generated_parent_index(previous, old.parent, old.key) !=
-          generated_parent_index(desired, spec.parent, spec.key)
-        match spec.parent {
-          Some(parent) if moved =>
-            mutations.push(
-              @ui_view.TreeMutation::Move(
-                spec.key,
-                parent,
-                generated_parent_index(desired, spec.parent, spec.key),
-              ),
-            )
-          _ => ()
-        }
-        let precise_old = {
-          ..old,
-          parent: spec.parent,
-          text: spec.text,
-          source: spec.source,
-          active: spec.active,
-          enabled: spec.enabled,
-          style: {
-            ..old.style,
-            background: spec.style.background,
-            top: spec.style.top,
-          },
-        }
-        if precise_old != spec {
-          mutations.push(@ui_view.TreeMutation::Update(spec))
-        } else {
-          if old.text != spec.text {
-            mutations.push(@ui_view.TreeMutation::SetText(spec.key, spec.text))
-          }
-          if old.source != spec.source {
-            mutations.push(
-              @ui_view.TreeMutation::SetSource(spec.key, spec.source),
-            )
-          }
-          if old.style.background != spec.style.background {
-            mutations.push(
-              @ui_view.TreeMutation::SetBackground(
-                spec.key,
-                spec.style.background,
-              ),
-            )
-          }
-          if old.active != spec.active {
-            mutations.push(
-              @ui_view.TreeMutation::SetActive(spec.key, spec.active),
-            )
-          }
-          if old.enabled != spec.enabled {
-            mutations.push(
-              @ui_view.TreeMutation::SetEnabled(spec.key, spec.enabled),
-            )
-          }
-          if old.style.top != spec.style.top {
-            mutations.push(
-              @ui_view.TreeMutation::SetTop(spec.key, spec.style.top),
-            )
-          }
-        }
-      }
-    }
-  }
-  mutations
+  parsed
 }
 
 ///|
@@ -214,6 +88,7 @@ fn generated_diff(
 pub struct InventoryView {}
 
 ///|
+#warnings("-unused_field")
 priv struct GeneratedViewRecord {
   mut model : InventoryUiState
   mut view_model : InventoryUiState
@@ -221,7 +96,16 @@ priv struct GeneratedViewRecord {
 }
 
 ///|
-let generated_view_records : Map[@entity.Entity, GeneratedViewRecord] = Map([])
+let generated_records_by_world : Map[
+  UInt,
+  Map[@entity.Entity, GeneratedViewRecord],
+] = Map([])
+
+///|
+fn generated_view_records() -> Map[@entity.Entity, GeneratedViewRecord] {
+  let world_id = @ecs.require_current_world().id()
+  generated_records_by_world.get_or_init(world_id, fn() { Map([]) })
+}
 
 ///|
 pub(all) struct InventoryViewActionEvent {
@@ -230,6 +114,7 @@ pub(all) struct InventoryViewActionEvent {
 }
 
 ///|
+/// World-isolated typed actions emitted by this view.
 pub let action_event_bus : @event.Events[InventoryViewActionEvent] = @event.Events()
 
 ///|
@@ -284,6 +169,8 @@ fn generated_specs(
       align: @ui_view.TextAlign::Left,
       wrap: false,
       z_index: 0,
+      tint: "",
+      source_region: None,
       fit: @ui_view.ImageFit::Fill,
       direction: @ui_view.FlexDirection::Column,
       flex_basis: @ui_view.LayoutValue::Auto,
@@ -348,6 +235,8 @@ fn generated_specs(
       align: @ui_view.TextAlign::Left,
       wrap: false,
       z_index: 0,
+      tint: "",
+      source_region: None,
       fit: @ui_view.ImageFit::Fill,
       direction: @ui_view.FlexDirection::Row,
       flex_basis: @ui_view.LayoutValue::Auto,
@@ -420,6 +309,8 @@ fn generated_specs(
         align: @ui_view.TextAlign::Left,
         wrap: false,
         z_index: 0,
+        tint: "",
+        source_region: None,
         fit: @ui_view.ImageFit::Fill,
         direction: @ui_view.FlexDirection::Column,
         flex_basis: @ui_view.LayoutValue::Auto,
@@ -584,6 +475,8 @@ fn generated_specs(
         align: @ui_view.TextAlign::Left,
         wrap: false,
         z_index: 1,
+        tint: "",
+        source_region: None,
         fit: @ui_view.ImageFit::Contain,
         direction: @ui_view.FlexDirection::Column,
         flex_basis: @ui_view.LayoutValue::Auto,
@@ -649,6 +542,8 @@ fn generated_specs(
       align: @ui_view.TextAlign::Left,
       wrap: false,
       z_index: 0,
+      tint: "",
+      source_region: None,
       fit: @ui_view.ImageFit::Fill,
       direction: @ui_view.FlexDirection::Column,
       flex_basis: @ui_view.LayoutValue::Auto,
@@ -713,6 +608,8 @@ fn generated_specs(
       align: @ui_view.TextAlign::Left,
       wrap: false,
       z_index: 0,
+      tint: "",
+      source_region: None,
       fit: @ui_view.ImageFit::Fill,
       direction: @ui_view.FlexDirection::Row,
       flex_basis: @ui_view.LayoutValue::Auto,
@@ -777,6 +674,8 @@ fn generated_specs(
       align: @ui_view.TextAlign::Left,
       wrap: false,
       z_index: 0,
+      tint: "",
+      source_region: None,
       fit: @ui_view.ImageFit::Fill,
       direction: @ui_view.FlexDirection::Column,
       flex_basis: @ui_view.LayoutValue::Auto,
@@ -841,6 +740,8 @@ fn generated_specs(
       align: @ui_view.TextAlign::Left,
       wrap: false,
       z_index: 0,
+      tint: "",
+      source_region: None,
       fit: @ui_view.ImageFit::Fill,
       direction: @ui_view.FlexDirection::Column,
       flex_basis: @ui_view.LayoutValue::Auto,
@@ -905,6 +806,8 @@ fn generated_specs(
       align: @ui_view.TextAlign::Left,
       wrap: false,
       z_index: 0,
+      tint: "",
+      source_region: None,
       fit: @ui_view.ImageFit::Fill,
       direction: @ui_view.FlexDirection::Column,
       flex_basis: @ui_view.LayoutValue::Auto,
@@ -969,6 +872,8 @@ fn generated_specs(
       align: @ui_view.TextAlign::Left,
       wrap: false,
       z_index: 0,
+      tint: "",
+      source_region: None,
       fit: @ui_view.ImageFit::Fill,
       direction: @ui_view.FlexDirection::Column,
       flex_basis: @ui_view.LayoutValue::Auto,
@@ -1033,6 +938,8 @@ fn generated_specs(
       align: @ui_view.TextAlign::Left,
       wrap: false,
       z_index: 0,
+      tint: "",
+      source_region: None,
       fit: @ui_view.ImageFit::Fill,
       direction: @ui_view.FlexDirection::Column,
       flex_basis: @ui_view.LayoutValue::Auto,
@@ -1097,6 +1004,8 @@ fn generated_specs(
       align: @ui_view.TextAlign::Center,
       wrap: false,
       z_index: 0,
+      tint: "",
+      source_region: None,
       fit: @ui_view.ImageFit::Fill,
       direction: @ui_view.FlexDirection::Column,
       flex_basis: @ui_view.LayoutValue::Auto,
@@ -1162,6 +1071,8 @@ fn generated_specs(
         align: @ui_view.TextAlign::Left,
         wrap: false,
         z_index: 0,
+        tint: "",
+        source_region: None,
         fit: @ui_view.ImageFit::Fill,
         direction: @ui_view.FlexDirection::Row,
         flex_basis: @ui_view.LayoutValue::Auto,
@@ -1226,6 +1137,8 @@ fn generated_specs(
         align: @ui_view.TextAlign::Left,
         wrap: false,
         z_index: 0,
+        tint: "",
+        source_region: None,
         fit: @ui_view.ImageFit::Fill,
         direction: @ui_view.FlexDirection::Column,
         flex_basis: @ui_view.LayoutValue::Auto,
@@ -1290,6 +1203,8 @@ fn generated_specs(
         align: @ui_view.TextAlign::Left,
         wrap: false,
         z_index: 0,
+        tint: "",
+        source_region: None,
         fit: @ui_view.ImageFit::Fill,
         direction: @ui_view.FlexDirection::Row,
         flex_basis: @ui_view.LayoutValue::Auto,
@@ -1354,6 +1269,8 @@ fn generated_specs(
         align: @ui_view.TextAlign::Left,
         wrap: false,
         z_index: 0,
+        tint: "",
+        source_region: None,
         fit: @ui_view.ImageFit::Fill,
         direction: @ui_view.FlexDirection::Column,
         flex_basis: @ui_view.LayoutValue::Auto,
@@ -1418,6 +1335,8 @@ fn generated_specs(
         align: @ui_view.TextAlign::Left,
         wrap: false,
         z_index: 0,
+        tint: "",
+        source_region: None,
         fit: @ui_view.ImageFit::Fill,
         direction: @ui_view.FlexDirection::Column,
         flex_basis: @ui_view.LayoutValue::Auto,
@@ -1482,6 +1401,8 @@ fn generated_specs(
         align: @ui_view.TextAlign::Left,
         wrap: false,
         z_index: 0,
+        tint: "",
+        source_region: None,
         fit: @ui_view.ImageFit::Fill,
         direction: @ui_view.FlexDirection::Column,
         flex_basis: @ui_view.LayoutValue::Auto,
@@ -1561,6 +1482,8 @@ fn generated_specs(
           align: @ui_view.TextAlign::Left,
           wrap: false,
           z_index: 0,
+          tint: "",
+          source_region: None,
           fit: @ui_view.ImageFit::Fill,
           direction: @ui_view.FlexDirection::Column,
           flex_basis: @ui_view.LayoutValue::Auto,
@@ -1625,6 +1548,8 @@ fn generated_specs(
           align: @ui_view.TextAlign::Left,
           wrap: false,
           z_index: 0,
+          tint: "",
+          source_region: None,
           fit: @ui_view.ImageFit::Fill,
           direction: @ui_view.FlexDirection::Column,
           flex_basis: @ui_view.LayoutValue::Auto,
@@ -1689,6 +1614,8 @@ fn generated_specs(
           align: @ui_view.TextAlign::Left,
           wrap: false,
           z_index: 0,
+          tint: "",
+          source_region: None,
           fit: @ui_view.ImageFit::Contain,
           direction: @ui_view.FlexDirection::Column,
           flex_basis: @ui_view.LayoutValue::Auto,
@@ -1753,6 +1680,8 @@ fn generated_specs(
           align: @ui_view.TextAlign::Right,
           wrap: false,
           z_index: 2,
+          tint: "",
+          source_region: None,
           fit: @ui_view.ImageFit::Fill,
           direction: @ui_view.FlexDirection::Column,
           flex_basis: @ui_view.LayoutValue::Auto,
@@ -1817,6 +1746,8 @@ fn generated_specs(
           align: @ui_view.TextAlign::Center,
           wrap: false,
           z_index: 0,
+          tint: "",
+          source_region: None,
           fit: @ui_view.ImageFit::Fill,
           direction: @ui_view.FlexDirection::Column,
           flex_basis: @ui_view.LayoutValue::Auto,
@@ -1882,6 +1813,8 @@ fn generated_specs(
         align: @ui_view.TextAlign::Left,
         wrap: false,
         z_index: 0,
+        tint: "",
+        source_region: None,
         fit: @ui_view.ImageFit::Fill,
         direction: @ui_view.FlexDirection::Column,
         flex_basis: @ui_view.LayoutValue::Auto,
@@ -1946,6 +1879,8 @@ fn generated_specs(
         align: @ui_view.TextAlign::Left,
         wrap: false,
         z_index: 0,
+        tint: "",
+        source_region: None,
         fit: @ui_view.ImageFit::Fill,
         direction: @ui_view.FlexDirection::Column,
         flex_basis: @ui_view.LayoutValue::Auto,
@@ -2018,6 +1953,8 @@ fn generated_specs(
           align: @ui_view.TextAlign::Left,
           wrap: false,
           z_index: 0,
+          tint: "",
+          source_region: None,
           fit: @ui_view.ImageFit::Fill,
           direction: @ui_view.FlexDirection::Column,
           flex_basis: @ui_view.LayoutValue::Auto,
@@ -2084,6 +2021,8 @@ fn generated_specs(
           align: @ui_view.TextAlign::Left,
           wrap: false,
           z_index: 1,
+          tint: "",
+          source_region: None,
           fit: @ui_view.ImageFit::Fill,
           direction: @ui_view.FlexDirection::Column,
           flex_basis: @ui_view.LayoutValue::Auto,
@@ -2150,6 +2089,8 @@ fn generated_specs(
           align: @ui_view.TextAlign::Left,
           wrap: false,
           z_index: 0,
+          tint: "",
+          source_region: None,
           fit: @ui_view.ImageFit::Contain,
           direction: @ui_view.FlexDirection::Column,
           flex_basis: @ui_view.LayoutValue::Auto,
@@ -2216,6 +2157,8 @@ fn generated_specs(
           align: @ui_view.TextAlign::Left,
           wrap: false,
           z_index: 1,
+          tint: "",
+          source_region: None,
           fit: @ui_view.ImageFit::Fill,
           direction: @ui_view.FlexDirection::Column,
           flex_basis: @ui_view.LayoutValue::Auto,
@@ -2281,6 +2224,8 @@ fn generated_specs(
         align: @ui_view.TextAlign::Left,
         wrap: false,
         z_index: 0,
+        tint: "",
+        source_region: None,
         fit: @ui_view.ImageFit::Fill,
         direction: @ui_view.FlexDirection::Row,
         flex_basis: @ui_view.LayoutValue::Auto,
@@ -2345,6 +2290,8 @@ fn generated_specs(
         align: @ui_view.TextAlign::Left,
         wrap: false,
         z_index: 0,
+        tint: "",
+        source_region: None,
         fit: @ui_view.ImageFit::Fill,
         direction: @ui_view.FlexDirection::Column,
         flex_basis: @ui_view.LayoutValue::Auto,
@@ -2409,6 +2356,8 @@ fn generated_specs(
         align: @ui_view.TextAlign::Left,
         wrap: false,
         z_index: 0,
+        tint: "",
+        source_region: None,
         fit: @ui_view.ImageFit::Contain,
         direction: @ui_view.FlexDirection::Column,
         flex_basis: @ui_view.LayoutValue::Auto,
@@ -2473,6 +2422,8 @@ fn generated_specs(
         align: @ui_view.TextAlign::Left,
         wrap: false,
         z_index: 0,
+        tint: "",
+        source_region: None,
         fit: @ui_view.ImageFit::Fill,
         direction: @ui_view.FlexDirection::Column,
         flex_basis: @ui_view.LayoutValue::Auto,
@@ -2537,6 +2488,8 @@ fn generated_specs(
         align: @ui_view.TextAlign::Left,
         wrap: true,
         z_index: 0,
+        tint: "",
+        source_region: None,
         fit: @ui_view.ImageFit::Fill,
         direction: @ui_view.FlexDirection::Column,
         flex_basis: @ui_view.LayoutValue::Auto,
@@ -2601,6 +2554,8 @@ fn generated_specs(
         align: @ui_view.TextAlign::Left,
         wrap: false,
         z_index: 0,
+        tint: "",
+        source_region: None,
         fit: @ui_view.ImageFit::Fill,
         direction: @ui_view.FlexDirection::Column,
         flex_basis: @ui_view.LayoutValue::Auto,
@@ -2665,6 +2620,8 @@ fn generated_specs(
         align: @ui_view.TextAlign::Left,
         wrap: true,
         z_index: 0,
+        tint: "",
+        source_region: None,
         fit: @ui_view.ImageFit::Fill,
         direction: @ui_view.FlexDirection::Column,
         flex_basis: @ui_view.LayoutValue::Auto,
@@ -2730,6 +2687,8 @@ fn generated_specs(
         align: @ui_view.TextAlign::Left,
         wrap: false,
         z_index: 0,
+        tint: "",
+        source_region: None,
         fit: @ui_view.ImageFit::Fill,
         direction: @ui_view.FlexDirection::Column,
         flex_basis: @ui_view.LayoutValue::Auto,
@@ -2802,6 +2761,8 @@ fn generated_specs(
           align: @ui_view.TextAlign::Left,
           wrap: false,
           z_index: 0,
+          tint: "",
+          source_region: None,
           fit: @ui_view.ImageFit::Fill,
           direction: @ui_view.FlexDirection::Column,
           flex_basis: @ui_view.LayoutValue::Auto,
@@ -2868,6 +2829,8 @@ fn generated_specs(
           align: @ui_view.TextAlign::Left,
           wrap: false,
           z_index: 1,
+          tint: "",
+          source_region: None,
           fit: @ui_view.ImageFit::Contain,
           direction: @ui_view.FlexDirection::Column,
           flex_basis: @ui_view.LayoutValue::Auto,
@@ -2934,6 +2897,8 @@ fn generated_specs(
           align: @ui_view.TextAlign::Left,
           wrap: false,
           z_index: 1,
+          tint: "",
+          source_region: None,
           fit: @ui_view.ImageFit::Fill,
           direction: @ui_view.FlexDirection::Column,
           flex_basis: @ui_view.LayoutValue::Auto,
@@ -2999,6 +2964,8 @@ fn generated_specs(
         align: @ui_view.TextAlign::Left,
         wrap: false,
         z_index: 0,
+        tint: "",
+        source_region: None,
         fit: @ui_view.ImageFit::Fill,
         direction: @ui_view.FlexDirection::Column,
         flex_basis: @ui_view.LayoutValue::Auto,
@@ -3063,6 +3030,8 @@ fn generated_specs(
         align: @ui_view.TextAlign::Left,
         wrap: false,
         z_index: 0,
+        tint: "",
+        source_region: None,
         fit: @ui_view.ImageFit::Fill,
         direction: @ui_view.FlexDirection::Column,
         flex_basis: @ui_view.LayoutValue::Auto,
@@ -3142,6 +3111,8 @@ fn generated_specs(
           align: @ui_view.TextAlign::Left,
           wrap: false,
           z_index: 0,
+          tint: "",
+          source_region: None,
           fit: @ui_view.ImageFit::Fill,
           direction: @ui_view.FlexDirection::Column,
           flex_basis: @ui_view.LayoutValue::Auto,
@@ -3208,6 +3179,8 @@ fn generated_specs(
           align: @ui_view.TextAlign::Left,
           wrap: false,
           z_index: 0,
+          tint: "",
+          source_region: None,
           fit: @ui_view.ImageFit::Fill,
           direction: @ui_view.FlexDirection::Column,
           flex_basis: @ui_view.LayoutValue::Auto,
@@ -3274,6 +3247,8 @@ fn generated_specs(
           align: @ui_view.TextAlign::Left,
           wrap: false,
           z_index: 0,
+          tint: "",
+          source_region: None,
           fit: @ui_view.ImageFit::Contain,
           direction: @ui_view.FlexDirection::Column,
           flex_basis: @ui_view.LayoutValue::Auto,
@@ -3340,6 +3315,8 @@ fn generated_specs(
           align: @ui_view.TextAlign::Right,
           wrap: false,
           z_index: 2,
+          tint: "",
+          source_region: None,
           fit: @ui_view.ImageFit::Fill,
           direction: @ui_view.FlexDirection::Column,
           flex_basis: @ui_view.LayoutValue::Auto,
@@ -3406,6 +3383,8 @@ fn generated_specs(
           align: @ui_view.TextAlign::Center,
           wrap: false,
           z_index: 0,
+          tint: "",
+          source_region: None,
           fit: @ui_view.ImageFit::Fill,
           direction: @ui_view.FlexDirection::Column,
           flex_basis: @ui_view.LayoutValue::Auto,
@@ -3471,6 +3450,8 @@ fn generated_specs(
         align: @ui_view.TextAlign::Left,
         wrap: true,
         z_index: 0,
+        tint: "",
+        source_region: None,
         fit: @ui_view.ImageFit::Fill,
         direction: @ui_view.FlexDirection::Column,
         flex_basis: @ui_view.LayoutValue::Auto,
@@ -3496,6 +3477,8 @@ fn generated_specs(
 }
 
 ///|
+/// Mounts this view on an alive root entity in the current world.
+/// Destroying the root ends the view lifetime.
 pub fn InventoryView::mount(
   entity : @entity.Entity,
   model : InventoryUiState,
@@ -3503,7 +3486,8 @@ pub fn InventoryView::mount(
   if !entity.is_alive() {
     raise DeadEntity
   }
-  if generated_view_records.contains(entity) {
+  let records = generated_view_records()
+  if records.contains(entity) {
     raise AlreadyMounted
   }
   let view_model = generated_compute_view_model(model)
@@ -3512,25 +3496,27 @@ pub fn InventoryView::mount(
   host.mount(entity, desired) catch {
     error => raise Host(error)
   }
-  generated_view_records[entity] = { model, view_model, specs: desired }
+  records[entity] = { model, view_model, specs: desired }
 }
 
 ///|
+/// Atomically replaces the model of a mounted view in the current world.
 pub fn InventoryView::replace(
   entity : @entity.Entity,
   model : InventoryUiState,
 ) -> Unit raise InventoryViewError {
-  let record = match generated_view_records.get(entity) {
+  let records = generated_view_records()
+  let record = match records.get(entity) {
     Some(value) => value
     None => raise NotMounted
   }
   if !entity.is_alive() {
-    generated_view_records.remove(entity)
+    records.remove(entity)
     raise DeadEntity
   }
   let view_model = generated_compute_view_model(model)
   let desired = generated_specs(view_model)
-  let mutations = generated_diff(record.specs, desired)
+  let mutations = @ui_view.reconcile_specs(record.specs, desired)
   if mutations.length() > 0 {
     let host = @ui_view.ViewHost::new()
     host.apply(entity, mutations) catch {
@@ -3543,11 +3529,12 @@ pub fn InventoryView::replace(
 }
 
 ///|
+/// Atomically applies patches in order to a mounted view in the current world.
 pub fn InventoryView::apply(
   entity : @entity.Entity,
   patches : Array[InventoryUiPatch],
 ) -> Unit raise InventoryViewError {
-  let record = match generated_view_records.get(entity) {
+  let record = match generated_view_records().get(entity) {
     Some(value) => value
     None => raise NotMounted
   }
@@ -3615,7 +3602,7 @@ fn generated_handle_event(
   record : GeneratedViewRecord,
   event : @ui_view.UiEvent,
 ) -> InventoryViewAction? {
-  if !generated_contains(record.specs, event.key) {
+  if !record.specs.any(spec => spec.key == event.key) {
     return None
   }
   if event.kind == @ui_view.UiEventKind::Click {
@@ -3686,17 +3673,18 @@ fn generated_handle_event(
 
 ///|
 fn generated_route_events(_world : @ecs.World) -> Unit {
+  let records = generated_view_records()
   let dead : Array[@entity.Entity] = []
-  for entity, _ in generated_view_records {
+  for entity, _ in records {
     if !entity.is_alive() {
       dead.push(entity)
     }
   }
   for entity in dead {
-    generated_view_records.remove(entity)
+    records.remove(entity)
   }
   for raw in generated_event_reader.read(@ui_view.view_event_bus) {
-    match generated_view_records.get(raw.entity) {
+    match records.get(raw.entity) {
       Some(record) =>
         match generated_handle_event(record, raw.event) {
           Some(action) => action_event_bus.send({ entity: raw.entity, action })
@@ -3708,6 +3696,7 @@ fn generated_route_events(_world : @ecs.World) -> Unit {
 }
 
 ///|
+/// Installs the host, action bus, event routing, and lifetime cleanup.
 pub fn plugin(app : @app.App) -> @app.App {
   app
   .add_plugin(@ui_view.plugin)

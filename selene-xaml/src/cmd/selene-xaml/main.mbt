@@ -72,8 +72,28 @@ async fn main {
     }
     let xaml = @fs.read_file(source).text()
     let mbti = @fs.read_file(mbti_path).text()
-    let generated = @embedded_emitter.generate_embedded_view_package(
-      source, xaml, mbti_path, mbti,
+    let resources : Array[@viewir.ResourceDocument] = []
+    let discovered : Map[String, Bool] = Map([])
+    let pending = @viewir.referenced_resource_documents(source, xaml)
+    while pending.length() > 0 {
+      let resource_uri = pending.pop().unwrap()
+      if discovered.contains(resource_uri) {
+        continue
+      }
+      discovered[resource_uri] = true
+      let resource_source = @fs.read_file(resource_uri).text()
+      resources.push({ source_uri: resource_uri, source: resource_source })
+      for
+        referenced in @viewir.referenced_resource_documents(
+          resource_uri, resource_source,
+        ) {
+        if !discovered.contains(referenced) {
+          pending.push(referenced)
+        }
+      }
+    }
+    let generated = @embedded_emitter.generate_embedded_view_package_with_resources(
+      source, xaml, mbti_path, mbti, resources,
     )
     let generated = @embedded_emitter.format_generated_package(generated)
     if dry_run {

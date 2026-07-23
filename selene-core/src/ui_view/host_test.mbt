@@ -442,6 +442,19 @@ test "VH-ATOMIC-01 validates the full batch before retaining final identities" {
       _ => fail("expected the invalid target kind to reject the batch")
     }
     inspect(@ui.texts()[title_entity].content, content="Ready")
+    try
+      host.apply([
+        SetText("title", "Still rejected"),
+        SetText("missing", "Invalid target"),
+      ])
+    catch {
+      @ui_view.HostError::InvalidMutation(code, _) =>
+        inspect(code, content="SH1003")
+      error => raise error
+    } noraise {
+      _ => fail("expected the invalid text target to reject the whole batch")
+    }
+    inspect(@ui.texts()[title_entity].content, content="Ready")
     host.apply([
       Mount({
         key: "transient",
@@ -975,6 +988,11 @@ test "VH-VISUAL-STATE-01 overlays selection and interaction on retained atlas no
                 "assets/tabs.atlas.json#equip.normal",
               ),
             },
+            {
+              target: "icon",
+              property: "Tint",
+              value: @ui_view.VisualStateValue::StringValue("#ffffff"),
+            },
           ],
         },
         {
@@ -991,6 +1009,11 @@ test "VH-VISUAL-STATE-01 overlays selection and interaction on retained atlas no
               value: @ui_view.VisualStateValue::StringValue(
                 "assets/tabs.atlas.json#equip.selected",
               ),
+            },
+            {
+              target: "icon",
+              property: "Tint",
+              value: @ui_view.VisualStateValue::StringValue("#d08040"),
             },
             {
               target: "label",
@@ -1105,10 +1128,18 @@ test "VH-VISUAL-STATE-01 overlays selection and interaction on retained atlas no
     debug_inspect(
       (
         selected_image.source.unwrap().position,
+        selected_image.tint,
         @ui.background_colors()[tab].color,
         @ui.text_fonts()[label].bold,
       ),
-      content="(Vec2(32, 0), { r: 107, g: 61, b: 38, a: 1 }, true)",
+      content=(
+        #|(
+        #|  Vec2(32, 0),
+        #|  { r: 208, g: 128, b: 64, a: 1 },
+        #|  { r: 107, g: 61, b: 38, a: 1 },
+        #|  true,
+        #|)
+      ),
     )
     let app = @app.App()
       .with_world(@ecs.require_current_world())
@@ -1121,10 +1152,18 @@ test "VH-VISUAL-STATE-01 overlays selection and interaction on retained atlas no
         host.entity("icon") == Some(icon),
         @ui.ui_images()[icon].image == selected_image.image,
         @ui.ui_images()[icon].source.unwrap().position,
+        @ui.ui_images()[icon].tint,
         @ui.background_colors()[tab].color,
       ),
       content=(
-        #|(true, true, true, Vec2(32, 0), { r: 77, g: 42, b: 28, a: 1 })
+        #|(
+        #|  true,
+        #|  true,
+        #|  true,
+        #|  Vec2(32, 0),
+        #|  { r: 208, g: 128, b: 64, a: 1 },
+        #|  { r: 77, g: 42, b: 28, a: 1 },
+        #|)
       ),
     )
     @ui.interactions()[tab] = @ui.Interaction::None
@@ -1146,8 +1185,187 @@ test "VH-VISUAL-STATE-01 overlays selection and interaction on retained atlas no
         host.entity("icon") == Some(icon),
         @ui.ui_images()[icon].image == selected_image.image,
         @ui.ui_images()[icon].source.unwrap().position,
+        @ui.ui_images()[icon].tint,
       ),
-      content="(true, true, true, Vec2(0, 0))",
+      content=(
+        #|(true, true, true, Vec2(0, 0), { r: 255, g: 255, b: 255, a: 1 })
+      ),
+    )
+    host.release()
+    @atlas.clear_texture_atlas_cache()
+    @asset.set_io(fn(_path) { None })
+  })
+}
+
+///|
+test "VH-IMAGE-01 projects explicit source regions and rejects atlas conflicts" {
+  with_view_host_world(fn() raise {
+    @atlas.clear_texture_atlas_cache()
+    @asset.set_io(fn(path) {
+      match path {
+        "assets/sheet.atlas.json" =>
+          Some(
+            @utf8.encode(
+              (
+                #|{"schema":"selene/atlas_asset_document","version":1,"data":{
+                #|  "source_image":"sheet.png","regions":[
+                #|    {"name":"first","index":0,"rect":{"x":0,"y":0,"width":16,"height":12}}
+                #|  ]}}
+              ),
+            ),
+          )
+        "assets/sheet.png" => {
+          let png = @buffer.Buffer()
+          png.write_bytes(b"\x89PNG\r\n\x1a\n")
+          png.write_uint_be(13U)
+          png.write_bytes(b"IHDR")
+          png.write_uint_be(128U)
+          png.write_uint_be(64U)
+          Some(png.contents())
+        }
+        _ => None
+      }
+    })
+    let base = @ui_view.NodeStyle::default()
+    let selected_region : @render2d_types.ImageRegion2D = {
+      position: @math.Vec2(40.0, 8.0),
+      size: @math.Vec2(16.0, 12.0),
+    }
+    let normal_region : @render2d_types.ImageRegion2D = {
+      position: @math.Vec2(4.0, 2.0),
+      size: @math.Vec2(20.0, 14.0),
+    }
+    let selected : @ui_view.VisualStateGroup = {
+      order: 0,
+      name: "SelectionStates",
+      current: "Selected",
+      interaction: false,
+      states: [
+        {
+          name: "Normal",
+          setters: [
+            {
+              target: "icon",
+              property: "SourceRegion",
+              value: @ui_view.VisualStateValue::ImageRegionValue(
+                Some(normal_region),
+              ),
+            },
+          ],
+        },
+        {
+          name: "Selected",
+          setters: [
+            {
+              target: "icon",
+              property: "SourceRegion",
+              value: @ui_view.VisualStateValue::ImageRegionValue(
+                Some(selected_region),
+              ),
+            },
+          ],
+        },
+        {
+          name: "Clear",
+          setters: [
+            {
+              target: "icon",
+              property: "SourceRegion",
+              value: @ui_view.VisualStateValue::ImageRegionValue(None),
+            },
+          ],
+        },
+      ],
+      transitions: [],
+    }
+    let icon_spec : @ui_view.NodeSpec = {
+      key: "icon",
+      parent: None,
+      kind: Image,
+      text: "",
+      source: "assets/sheet.png",
+      active: true,
+      enabled: true,
+      focusable: false,
+      tab_index: 0,
+      focus_scope: false,
+      auto_focus: false,
+      navigation_up: "",
+      navigation_down: "",
+      navigation_left: "",
+      navigation_right: "",
+      visual_state_groups: [selected],
+      style: { ..base, source_region: Some(normal_region) },
+    }
+    let host = @ui_view.MountedView::new()
+    host.apply([Mount(icon_spec)])
+    let icon = host.entity("icon").unwrap()
+    debug_inspect(
+      (@ui.ui_images()[icon].source, @ui.ui_images()[icon].intrinsic_size()),
+      content=(
+        #|(Some({ position: Vec2(40, 8), size: Vec2(16, 12) }), Vec2(16, 12))
+      ),
+    )
+    host.apply([
+      Update({
+        ..icon_spec,
+        visual_state_groups: [{ ..selected, current: "Normal" }],
+      }),
+    ])
+    debug_inspect(
+      (
+        host.entity("icon") == Some(icon),
+        @ui.ui_images()[icon].source,
+        @ui.ui_images()[icon].intrinsic_size(),
+      ),
+      content=(
+        #|(
+        #|  true,
+        #|  Some({ position: Vec2(4, 2), size: Vec2(20, 14) }),
+        #|  Vec2(20, 14),
+        #|)
+      ),
+    )
+    host.apply([
+      Update({
+        ..icon_spec,
+        visual_state_groups: [{ ..selected, current: "Clear" }],
+      }),
+    ])
+    debug_inspect(
+      (
+        host.entity("icon") == Some(icon),
+        @ui.ui_images()[icon].source,
+        @ui.ui_images()[icon].intrinsic_size(),
+      ),
+      content=(
+        #|(true, None, Vec2(128, 64))
+      ),
+    )
+    try
+      host.apply([
+        Update({ ..icon_spec, source: "assets/sheet.atlas.json#first" }),
+      ])
+    catch {
+      @ui_view.HostError::InvalidMutation(code, message) =>
+        debug_inspect(
+          (code, message),
+          content=(
+            #|(
+            #|  "SH1024",
+            #|  "Image cannot combine atlas #region Source with SourceRegion: icon",
+            #|)
+          ),
+        )
+      error => raise error
+    } noraise {
+      _ => fail("atlas #region and SourceRegion must be rejected atomically")
+    }
+    debug_inspect(
+      (host.entity("icon") == Some(icon), @ui.ui_images()[icon].source),
+      content=(
+        #|(true, None)
+      ),
     )
     host.release()
     @atlas.clear_texture_atlas_cache()
@@ -1173,6 +1391,11 @@ test "VH-VISUAL-STATE-02 transitions colors without replacing the target Entity"
               property: "Background",
               value: @ui_view.VisualStateValue::StringValue("#000000"),
             },
+            {
+              target: "icon",
+              property: "Tint",
+              value: @ui_view.VisualStateValue::StringValue("#000000"),
+            },
           ],
         },
         {
@@ -1181,6 +1404,11 @@ test "VH-VISUAL-STATE-02 transitions colors without replacing the target Entity"
             {
               target: "tab",
               property: "Background",
+              value: @ui_view.VisualStateValue::StringValue("#ffffff"),
+            },
+            {
+              target: "icon",
+              property: "Tint",
               value: @ui_view.VisualStateValue::StringValue("#ffffff"),
             },
           ],
@@ -1216,8 +1444,30 @@ test "VH-VISUAL-STATE-02 transitions colors without replacing the target Entity"
       style: base,
     }
     let host = @ui_view.MountedView::new()
-    host.apply([Mount(tab_spec)])
+    host.apply([
+      Mount(tab_spec),
+      Mount({
+        key: "icon",
+        parent: Some("tab"),
+        kind: Image,
+        text: "",
+        source: "assets/icon.png",
+        active: true,
+        enabled: true,
+        focusable: false,
+        tab_index: 0,
+        focus_scope: false,
+        auto_focus: false,
+        navigation_up: "",
+        navigation_down: "",
+        navigation_left: "",
+        navigation_right: "",
+        visual_state_groups: [],
+        style: base,
+      }),
+    ])
     let tab = host.entity("tab").unwrap()
+    let icon = host.entity("icon").unwrap()
     let app = @app.App()
       .with_world(@ecs.require_current_world())
       .add_plugin(@ui_view.plugin)
@@ -1228,19 +1478,59 @@ test "VH-VISUAL-STATE-02 transitions colors without replacing the target Entity"
       }),
     ])
     debug_inspect(
-      @ui.background_colors()[tab].color,
-      content="{ r: 0, g: 0, b: 0, a: 1 }",
+      (@ui.background_colors()[tab].color, @ui.ui_images()[icon].tint),
+      content=(
+        #|({ r: 0, g: 0, b: 0, a: 1 }, { r: 0, g: 0, b: 0, a: 1 })
+      ),
     )
     app.run_frames(1, raw_delta=0.5)
     debug_inspect(
-      (host.entity("tab") == Some(tab), @ui.background_colors()[tab].color),
-      content="(true, { r: 128, g: 128, b: 128, a: 1 })",
+      (
+        host.entity("tab") == Some(tab),
+        host.entity("icon") == Some(icon),
+        @ui.background_colors()[tab].color,
+        @ui.ui_images()[icon].tint,
+      ),
+      content=(
+        #|(
+        #|  true,
+        #|  true,
+        #|  { r: 128, g: 128, b: 128, a: 1 },
+        #|  { r: 128, g: 128, b: 128, a: 1 },
+        #|)
+      ),
     )
     app.run_frames(1, raw_delta=0.5)
     debug_inspect(
-      @ui.background_colors()[tab].color,
-      content="{ r: 255, g: 255, b: 255, a: 1 }",
+      (@ui.background_colors()[tab].color, @ui.ui_images()[icon].tint),
+      content=(
+        #|({ r: 255, g: 255, b: 255, a: 1 }, { r: 255, g: 255, b: 255, a: 1 })
+      ),
     )
     host.release()
   })
+}
+
+///|
+test "VH-RECONCILE-01 marks retained keyed siblings in an LIS" {
+  debug_inspect(
+    [
+      @ui_view.retained_lis_mask([0, 1, 2, 3]),
+      @ui_view.retained_lis_mask([3, 0, 1, 2]),
+      @ui_view.retained_lis_mask([1, 2, 3, 0]),
+      @ui_view.retained_lis_mask([-1, 0, 1, 2]),
+      @ui_view.retained_lis_mask([3, 2, 1, 0]),
+      @ui_view.retained_lis_mask([]),
+    ],
+    content=(
+      #|[
+      #|  [true, true, true, true],
+      #|  [false, true, true, true],
+      #|  [true, true, true, false],
+      #|  [false, true, true, true],
+      #|  [false, false, false, true],
+      #|  [],
+      #|]
+    ),
+  )
 }

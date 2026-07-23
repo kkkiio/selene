@@ -37,3 +37,9 @@ Embedded runtime 遵守 ViewIR 确定的 identity policy：
 
 Runtime 不重新解析 XAML、binding path 或 Action 名称。详细 mutation algorithm 见
 [Generated Reconciliation](generated-reconciliation.md)。
+
+VisualState 可以覆盖 `Image.Tint`。颜色 transition 与背景、边框、文本颜色使用同一
+CSS color 插值语义，并在保留 Image Entity 与 atlas region 的同时更新 `UiImage.tint`。
+`Image.SourceRegion` 作为离散 `ImageRegion2D?` 值切换；空字符串 Binding 或空状态值
+清除裁剪。任一状态声明显式 `SourceRegion` 时，该 Image node 的 base property 与全部
+状态都不能再使用 named `atlas.json#region`。

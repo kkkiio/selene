@@ -7,6 +7,12 @@ pub(all) struct IRTypeRef {
 } derive(Eq, Debug)
 
 ///|
+pub(all) struct ResourceDocument {
+  source_uri : String
+  source : String
+} derive(Eq, Debug)
+
+///|
 pub(all) enum IRValue {
   Constant(IRConstant, @infoset.XamlSourceSpan)
   Binding(String, @infoset.XamlSourceSpan)
@@ -21,6 +27,8 @@ pub(all) enum IRConstant {
   EnumValue(String)
   LayoutValue(IRLayoutValue)
   RectValue(Double, Double, Double, Double)
+  ImageRegionValue(Double, Double, Double, Double)
+  NoImageRegion
   GridTracks(Array[IRGridTrack])
 } derive(Eq, Debug)
 

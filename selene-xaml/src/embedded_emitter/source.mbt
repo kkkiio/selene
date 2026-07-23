@@ -336,154 +336,41 @@ fn emit_view_runtime(
     $|  value : String,
     $|  index : Int,
     $|  path : String,
+    $|  image_region : Bool,
     $|) -> Double raise \{plan.identity.view_name}Error {
     $|  let parts = value.split(" ").filter(part => part != "").collect()
-    $|  let selected = match parts.length() {
-    $|    1 => parts[0]
-    $|    2 => if index == 0 || index == 2 { parts[1] } else { parts[0] }
-    $|    4 =>
-    $|      match index {
-    $|        0 => parts[3]
-    $|        1 => parts[0]
-    $|        2 => parts[1]
-    $|        _ => parts[2]
-    $|      }
-    $|    _ => raise InvalidPatch("invalid rect value for " + path + ": " + value)
+    $|  let selected = if image_region {
+    $|    if parts.length() != 4 {
+    $|      raise InvalidPatch(
+    $|        "image region requires x y width height for " + path + ": " + value,
+    $|      )
+    $|    }
+    $|    parts[index]
+    $|  } else {
+    $|    match parts.length() {
+    $|      1 => parts[0]
+    $|      2 => if index == 0 || index == 2 { parts[1] } else { parts[0] }
+    $|      4 =>
+    $|        match index {
+    $|          0 => parts[3]
+    $|          1 => parts[0]
+    $|          2 => parts[1]
+    $|          _ => parts[2]
+    $|        }
+    $|      _ => raise InvalidPatch("invalid rect value for " + path + ": " + value)
+    $|    }
     $|  }
-    $|  @string.parse_double(selected) catch {
+    $|  let parsed = @string.parse_double(selected) catch {
     $|    _ =>
     $|      raise InvalidPatch(
     $|        "invalid number for " + path + ": " + selected.to_owned(),
     $|      )
     $|  }
-    $|}
-    $|
-    $|///|
-    $|fn generated_contains(specs : Array[@ui_view.NodeSpec], key : String) -> Bool {
-    $|  for spec in specs {
-    $|    if spec.key == key {
-    $|      return true
-    $|    }
+    $|  if image_region &&
+    $|    ((index < 2 && parsed < 0.0) || (index >= 2 && parsed <= 0.0)) {
+    $|    raise InvalidPatch("invalid image region for " + path + ": " + value)
     $|  }
-    $|  false
-    $|}
-    $|
-    $|///|
-    $|fn generated_parent_index(
-    $|  specs : Array[@ui_view.NodeSpec],
-    $|  parent : String?,
-    $|  key : String,
-    $|) -> Int {
-    $|  let mut sibling_index = 0
-    $|  for spec in specs {
-    $|    if spec.parent == parent {
-    $|      if spec.key == key {
-    $|        return sibling_index
-    $|      }
-    $|      sibling_index += 1
-    $|    }
-    $|  }
-    $|  -1
-    $|}
-    $|
-    $|///|
-    $|fn generated_diff(
-    $|  previous : Array[@ui_view.NodeSpec],
-    $|  desired : Array[@ui_view.NodeSpec],
-    $|) -> Array[@ui_view.TreeMutation] {
-    $|  if previous == desired {
-    $|    return []
-    $|  }
-    $|  let previous_by_key : Map[String, @ui_view.NodeSpec] = Map([])
-    $|  let desired_by_key : Map[String, @ui_view.NodeSpec] = Map([])
-    $|  for spec in previous {
-    $|    previous_by_key[spec.key] = spec
-    $|  }
-    $|  for spec in desired {
-    $|    desired_by_key[spec.key] = spec
-    $|  }
-    $|  let mutations : Array[@ui_view.TreeMutation] = []
-    $|  for spec in previous {
-    $|    if !desired_by_key.contains(spec.key) {
-    $|      let removed_root = match spec.parent {
-    $|        Some(parent) => desired_by_key.contains(parent)
-    $|        None => true
-    $|      }
-    $|      if removed_root {
-    $|        mutations.push(@ui_view.TreeMutation::Remove(spec.key))
-    $|      }
-    $|    }
-    $|  }
-    $|  for spec in desired {
-    $|    match previous_by_key.get(spec.key) {
-    $|      None => {
-    $|        mutations.push(@ui_view.TreeMutation::Mount(spec))
-    $|        match spec.parent {
-    $|          Some(parent) =>
-    $|            mutations.push(
-    $|              @ui_view.TreeMutation::Move(
-    $|                spec.key,
-    $|                parent,
-    $|                generated_parent_index(desired, spec.parent, spec.key),
-    $|              ),
-    $|            )
-    $|          None => ()
-    $|        }
-    $|      }
-    $|      Some(old) => {
-    $|        let moved = old.parent != spec.parent ||
-    $|          generated_parent_index(previous, old.parent, old.key) !=
-    $|          generated_parent_index(desired, spec.parent, spec.key)
-    $|        match spec.parent {
-    $|          Some(parent) if moved =>
-    $|            mutations.push(
-    $|              @ui_view.TreeMutation::Move(
-    $|                spec.key,
-    $|                parent,
-    $|                generated_parent_index(desired, spec.parent, spec.key),
-    $|              ),
-    $|            )
-    $|          _ => ()
-    $|        }
-    $|        let precise_old = {
-    $|          ..old,
-    $|          parent: spec.parent,
-    $|          text: spec.text,
-    $|          source: spec.source,
-    $|          active: spec.active,
-    $|          enabled: spec.enabled,
-    $|          style: {
-    $|            ..old.style,
-    $|            background: spec.style.background,
-    $|            top: spec.style.top,
-    $|          },
-    $|        }
-    $|        if precise_old != spec {
-    $|          mutations.push(@ui_view.TreeMutation::Update(spec))
-    $|        } else {
-    $|          if old.text != spec.text {
-    $|            mutations.push(@ui_view.TreeMutation::SetText(spec.key, spec.text))
-    $|          }
-    $|          if old.source != spec.source {
-    $|            mutations.push(@ui_view.TreeMutation::SetSource(spec.key, spec.source))
-    $|          }
-    $|          if old.style.background != spec.style.background {
-    $|            mutations.push(@ui_view.TreeMutation::SetBackground(spec.key, spec.style.background))
-    $|          }
-    $|          if old.active != spec.active {
-    $|            mutations.push(@ui_view.TreeMutation::SetActive(spec.key, spec.active))
-    $|          }
-    $|          if old.enabled != spec.enabled {
-    $|            mutations.push(@ui_view.TreeMutation::SetEnabled(spec.key, spec.enabled))
-    $|          }
-    $|          if old.style.top != spec.style.top {
-    $|            mutations.push(@ui_view.TreeMutation::SetTop(spec.key, spec.style.top))
-    $|          }
-    $|        }
-    $|      }
-    $|    }
-    $|  }
-    $|  mutations
+    $|  parsed
     $|}
     $|
     $|///|
@@ -491,6 +378,7 @@ fn emit_view_runtime(
     $|pub struct \{plan.identity.view_name} {}
     $|
     $|///|
+    $|#warnings("-unused_field")
     $|priv struct GeneratedViewRecord {
     $|  mut model : \{analysis.model_type.type_name}
     $|  mut view_model : \{analysis.view_model_type.type_name}
@@ -498,7 +386,16 @@ fn emit_view_runtime(
     $|}
     $|
     $|///|
-    $|let generated_view_records : Map[@entity.Entity, GeneratedViewRecord] = Map([])
+    $|let generated_records_by_world : Map[
+    $|  UInt,
+    $|  Map[@entity.Entity, GeneratedViewRecord],
+    $|] = Map([])
+    $|
+    $|///|
+    $|fn generated_view_records() -> Map[@entity.Entity, GeneratedViewRecord] {
+    $|  let world_id = @ecs.require_current_world().id()
+    $|  generated_records_by_world.get_or_init(world_id, fn() { Map([]) })
+    $|}
     $|
     $|///|
     $|pub(all) struct \{plan.identity.view_name}ActionEvent {
@@ -507,6 +404,7 @@ fn emit_view_runtime(
     $|}
     $|
     $|///|
+    $|/// World-isolated typed actions emitted by this view.
     $|pub let action_event_bus : @event.Events[\{plan.identity.view_name}ActionEvent] = @event.Events()
     $|
     $|///|
@@ -549,10 +447,10 @@ fn emit_plan_specs(
             "TabIndex", "Navigation.Up", "Navigation.Down", "Navigation.Left", "Navigation.Right",
             "Position", "Left", "Top", "Width", "Height", "Margin", "Padding", "Background",
             "BorderColor", "Border", "Radius", "Color", "FontFamily", "FontSize",
-            "Bold", "Align", "Wrap", "ZIndex", "Fit", "Direction", "Grow", "Shrink",
-            "Basis", "RowGap", "Gap", "ColumnGap", "HorizontalScroll", "VerticalScroll",
-            "ScrollbarWidth", "OutlineColor", "OutlineWidth", "OutlineOffset", "OnClick",
-            "OnFocus", "Rows", "Columns", "AutoFlow", "Grid.Row", "Grid.Column",
+            "Bold", "Align", "Wrap", "ZIndex", "Tint", "SourceRegion", "Fit", "Direction",
+            "Grow", "Shrink", "Basis", "RowGap", "Gap", "ColumnGap", "HorizontalScroll",
+            "VerticalScroll", "ScrollbarWidth", "OutlineColor", "OutlineWidth", "OutlineOffset",
+            "OnClick", "OnFocus", "Rows", "Columns", "AutoFlow", "Grid.Row", "Grid.Column",
             "Grid.RowSpan", "Grid.ColumnSpan",
           ].contains(property.name) {
           let span = match property.value {
@@ -716,6 +614,56 @@ fn emit_plan_specs(
       output <+ "\{padding}    wrap: \{wrap.to_string()},\n"
       output <+
         "\{padding}    z_index: \{fragment => emit_typed_value(fragment, emission, property_map.get("ZIndex"), "int", "0")}"
+      output <+
+        ",\n\{padding}    tint: \{fragment => emit_typed_value(fragment, emission, property_map.get("Tint"), "string", "\"\"")}"
+      output <+ ",\n\{padding}    source_region: "
+      match property_map.get("SourceRegion") {
+        None | Some(Literal(@viewir.IRConstant::NoImageRegion, _)) =>
+          output <+ "None"
+        Some(
+          Literal(@viewir.IRConstant::ImageRegionValue(x, y, width, height), _)
+        ) =>
+          output <+
+            "Some({ position: @math.Vec2(\{x}, \{y}), size: @math.Vec2(\{width}, \{height}) })"
+        Some(Literal(_, span)) =>
+          raise @viewir.ViewIRError::Unsupported(
+            "SourceRegion requires a typed image region constant", span,
+          )
+        Some(Binding(path, span)) => {
+          let (resolved, resolved_type) = resolved_expression(
+            emission.schema,
+            emission.scope_type,
+            path,
+            emission.receiver,
+            span,
+          )
+          let authored_path = emission.schema.bindings[path].path
+          let value_expression = if resolved_type == Some("String") ||
+            resolved_type is None {
+            resolved
+          } else {
+            resolved + ".to_string()"
+          }
+          output <+
+            "if \{fragment => emit_mapped_raw(fragment, emission.mappings, value_expression, span)} == \"\" { None } else { Some({ position: @math.Vec2("
+          for component in [0, 1] {
+            if component > 0 {
+              output <+ ", "
+            }
+            output <+
+              "generated_rect_component(\{fragment => emit_mapped_raw(fragment, emission.mappings, value_expression, span)}, \{component}, \{authored_path.escape()}, true)"
+          }
+          output <+ "), size: @math.Vec2("
+          for component in [2, 3] {
+            if component > 2 {
+              output <+ ", "
+            }
+            output <+
+              "generated_rect_component(\{fragment => emit_mapped_raw(fragment, emission.mappings, value_expression, span)}, \{component}, \{authored_path.escape()}, true)"
+          }
+          output <+ ") }) }"
+        }
+      }
       let fit = match property_map.get("Fit") {
         None | Some(Literal(@viewir.IRConstant::EnumValue("Fill"), _)) => "Fill"
         Some(Literal(@viewir.IRConstant::EnumValue("Contain"), _)) => "Contain"
@@ -1077,6 +1025,33 @@ fn emit_embedded_visual_state_groups(
               "LayoutValue" =>
                 output <+
                   "@ui_view.VisualStateValue::LayoutValueValue(@ui_view.LayoutValue::Px(\{fragment => emit_mapped_binding(fragment, emission, id, span, "number")}))"
+              "ImageRegion" => {
+                let (resolved, _) = resolved_expression(
+                  emission.schema,
+                  emission.scope_type,
+                  id,
+                  emission.receiver,
+                  span,
+                )
+                output <+
+                  "@ui_view.VisualStateValue::ImageRegionValue(if \{fragment => emit_mapped_raw(fragment, emission.mappings, resolved, span)} == \"\" { None } else { Some({ position: @math.Vec2("
+                for component in [0, 1] {
+                  if component > 0 {
+                    output <+ ", "
+                  }
+                  output <+
+                    "generated_rect_component(\{fragment => emit_mapped_raw(fragment, emission.mappings, resolved, span)}, \{component}, \{analysis.bindings[id].path.escape()}, true)"
+                }
+                output <+ "), size: @math.Vec2("
+                for component in [2, 3] {
+                  if component > 2 {
+                    output <+ ", "
+                  }
+                  output <+
+                    "generated_rect_component(\{fragment => emit_mapped_raw(fragment, emission.mappings, resolved, span)}, \{component}, \{analysis.bindings[id].path.escape()}, true)"
+                }
+                output <+ ") }) })"
+              }
               "Int" =>
                 output <+
                   "@ui_view.VisualStateValue::IntValue(\{fragment => emit_mapped_binding(fragment, emission, id, span, "int")})"
@@ -1116,6 +1091,11 @@ fn emit_embedded_visual_state_groups(
                   "VisualState does not support Rect setter values",
                   setter.span,
                 )
+              @viewir.IRConstant::ImageRegionValue(x, y, width, height) =>
+                output <+
+                  "@ui_view.VisualStateValue::ImageRegionValue(Some({ position: @math.Vec2(\{x}, \{y}), size: @math.Vec2(\{width}, \{height}) }))"
+              @viewir.IRConstant::NoImageRegion =>
+                output <+ "@ui_view.VisualStateValue::ImageRegionValue(None)"
               @viewir.IRConstant::GridTracks(_) =>
                 raise @viewir.ViewIRError::Unsupported(
                   "VisualState does not support Grid track setter values",
@@ -1301,7 +1281,7 @@ fn emit_mapped_binding(
         "\{fragment => emit_mapped_raw(fragment, emission.mappings, resolved, span)}.to_double()"
     ("number", Some("String")) =>
       output <+
-        "generated_rect_component(\{fragment => emit_mapped_raw(fragment, emission.mappings, resolved, span)}, 0, \{path.escape()})"
+        "generated_rect_component(\{fragment => emit_mapped_raw(fragment, emission.mappings, resolved, span)}, 0, \{path.escape()}, false)"
     _ => emit_mapped_raw(output, emission.mappings, resolved, span)
   }
 }
@@ -1373,7 +1353,7 @@ fn emit_rect_value(
         resolved + ".to_string()"
       }
       output <+
-        "generated_rect_component(\{fragment => emit_mapped_raw(fragment, emission.mappings, value_expression, span)}, \{component}, \{path.escape()})"
+        "generated_rect_component(\{fragment => emit_mapped_raw(fragment, emission.mappings, value_expression, span)}, \{component}, \{path.escape()}, false)"
     }
   }
 }
@@ -1409,10 +1389,13 @@ fn emit_view_methods(
     plan.identity.view_name +
     "Error {"
   if mount_signature.length() <= 81 {
-    output <+ "///|\n\{mount_signature}\n"
+    output <+
+      "///|\n/// Mounts this view on an alive root entity in the current world.\n/// Destroying the root ends the view lifetime.\n\{mount_signature}\n"
   } else {
     output <+
       $|///|
+      $|/// Mounts this view on an alive root entity in the current world.
+      $|/// Destroying the root ends the view lifetime.
       $|pub fn \{plan.identity.view_name}::mount(
       $|  entity : @entity.Entity,
       $|  model : \{analysis.model_type.type_name},
@@ -1423,7 +1406,8 @@ fn emit_view_methods(
     #|  if !entity.is_alive() {
     #|    raise DeadEntity
     #|  }
-    #|  if generated_view_records.contains(entity) {
+    #|  let records = generated_view_records()
+    #|  if records.contains(entity) {
     #|    raise AlreadyMounted
     #|  }
     #|  let view_model = generated_compute_view_model(model)
@@ -1432,7 +1416,7 @@ fn emit_view_methods(
     #|  host.mount(entity, desired) catch {
     #|    error => raise Host(error)
     #|  }
-    #|  generated_view_records[entity] = { model, view_model, specs: desired }
+    #|  records[entity] = { model, view_model, specs: desired }
     #|}
     #|
     #|
@@ -1444,10 +1428,12 @@ fn emit_view_methods(
     plan.identity.view_name +
     "Error {"
   if replace_signature.length() <= 81 {
-    output <+ "///|\n\{replace_signature}\n"
+    output <+
+      "///|\n/// Atomically replaces the model of a mounted view in the current world.\n\{replace_signature}\n"
   } else {
     output <+
       $|///|
+      $|/// Atomically replaces the model of a mounted view in the current world.
       $|pub fn \{plan.identity.view_name}::replace(
       $|  entity : @entity.Entity,
       $|  model : \{analysis.model_type.type_name},
@@ -1455,17 +1441,18 @@ fn emit_view_methods(
       $|
   }
   output <+
-    #|  let record = match generated_view_records.get(entity) {
+    #|  let records = generated_view_records()
+    #|  let record = match records.get(entity) {
     #|    Some(value) => value
     #|    None => raise NotMounted
     #|  }
     #|  if !entity.is_alive() {
-    #|    generated_view_records.remove(entity)
+    #|    records.remove(entity)
     #|    raise DeadEntity
     #|  }
     #|  let view_model = generated_compute_view_model(model)
     #|  let desired = generated_specs(view_model)
-    #|  let mutations = generated_diff(record.specs, desired)
+    #|  let mutations = @ui_view.reconcile_specs(record.specs, desired)
     #|  if mutations.length() > 0 {
     #|    let host = @ui_view.ViewHost::new()
     #|    host.apply(entity, mutations) catch {
@@ -1497,7 +1484,7 @@ fn emit_view_methods(
       $|
   }
   output <+
-    #|  if !generated_contains(record.specs, event.key) {
+    #|  if !record.specs.any(spec => spec.key == event.key) {
     #|    return None
     #|  }
     #|
@@ -1593,17 +1580,18 @@ fn emit_view_methods(
   output <+
     $|///|
     $|fn generated_route_events(_world : @ecs.World) -> Unit {
+    $|  let records = generated_view_records()
     $|  let dead : Array[@entity.Entity] = []
-    $|  for entity, _ in generated_view_records {
+    $|  for entity, _ in records {
     $|    if !entity.is_alive() {
     $|      dead.push(entity)
     $|    }
     $|  }
     $|  for entity in dead {
-    $|    generated_view_records.remove(entity)
+    $|    records.remove(entity)
     $|  }
     $|  for raw in generated_event_reader.read(@ui_view.view_event_bus) {
-    $|    match generated_view_records.get(raw.entity) {
+    $|    match records.get(raw.entity) {
     $|      Some(record) =>
     $|        match generated_handle_event(record, raw.event) {
     $|          Some(action) => action_event_bus.send({ entity: raw.entity, action })
@@ -1615,6 +1603,7 @@ fn emit_view_methods(
     $|}
     $|
     $|///|
+    $|/// Installs the host, action bus, event routing, and lifetime cleanup.
     $|pub fn plugin(app : @app.App) -> @app.App {
     $|  app
     $|  .add_plugin(@ui_view.plugin)
@@ -1645,7 +1634,7 @@ fn emit_apply_method(
         "],\n) -> Unit raise " +
         plan.identity.view_name +
         "Error {\n" +
-        "  let record = match generated_view_records.get(entity) {\n" +
+        "  let record = match generated_view_records().get(entity) {\n" +
         "    Some(value) => value\n" +
         "    None => raise NotMounted\n" +
         "  }\n" +
@@ -1684,10 +1673,11 @@ fn emit_apply_method(
     plan.identity.view_name +
     "Error {"
   if apply_signature.length() <= 81 {
-    output <+ "///|\n\{apply_signature}\n"
+    output <+
+      "///|\n/// Atomically applies patches in order to a mounted view in the current world.\n\{apply_signature}\n"
   } else {
     output.write_string(
-      "///|\npub fn " +
+      "///|\n/// Atomically applies patches in order to a mounted view in the current world.\npub fn " +
       plan.identity.view_name +
       "::apply(\n" +
       "  entity : @entity.Entity,\n  patches : Array[" +
@@ -1698,7 +1688,7 @@ fn emit_apply_method(
     )
   }
   output.write_string(
-    "  let record = match generated_view_records.get(entity) {\n" +
+    "  let record = match generated_view_records().get(entity) {\n" +
     "    Some(value) => value\n" +
     "    None => raise NotMounted\n" +
     "  }\n",

@@ -120,7 +120,7 @@ retained Entities; coverage is `VI-IR-04` and `VH-VISUAL-STATE-01`.
 | 6.3.1.1 | Member-node properties have specified types. | Conformant | Public fields are concrete MoonBit types. | None. | PC-INFOSET-01 |
 | 6.3.1.2 | Multiple values occur only in collection/directive contexts. | Conformant | Non-collection property elements reject more than one value; content collections accumulate. | Selene explicitly marks collection members. | PC-DUP-01 |
 | 6.3.1.3 | x:Items appears only for list/dictionary content. | Partial | `x:Items` is recognized and represented. | General list/dictionary construction is not evaluated. | PC-DIRECTIVE-01 |
-| 6.3.1.4 | Dictionary content follows key/value rules. | Not Implemented | Resource dictionaries and x:Key are excluded. | Generated keyed `ItemsControl` reconciliation uses a ViewIR-resolved `KeyPath`. | VI-IR-01, INVENTORY-01, SURVIVORS-01 |
+| 6.3.1.4 | Dictionary content follows key/value rules. | Partial | `ResourceDictionary` accepts keyed scalar entries and rejects missing or duplicate keys. | General object-valued dictionaries remain excluded. | PC-RESOURCE-01, VI-RESOURCE-01 |
 | 6.3.1.5 | XML data members follow XData rules. | Not Implemented | XData is excluded. | Profile is UI object mapping only. | - |
 | 6.3.1.6 | x:Class obeys root/class rules. | Partial | A literal `x:Class` is retained on the document root for generated View identity; nested use is rejected. | CLR namespace and runtime construction semantics are outside the MoonBit generator profile. | PC-DIRECTIVE-02, VI-IR-01 |
 | 6.3.1.7 | x:Subclass obeys class rules. | Not Implemented | x:Subclass is rejected. | Generated View types do not model CLR inheritance. | - |
@@ -134,7 +134,7 @@ retained Entities; coverage is `VI-IR-04` and `VH-VISUAL-STATE-01`.
 | 6.3.2.4 | Text for non-text member matches its text syntax. | Partial | Bool, Int, Double, box-list and supported UI enum literals become typed constants during ViewIR lowering. Emitters do not parse their authored text again. | Other abstract text-syntax shapes are outside the current generated tree contract. | VI-IR-01, CG-VIEW-01, INVENTORY-01 |
 | 6.3.2.5 | Read-only member use is restricted. | Not Applicable | Read-only schema members are absent. | Shared tree mutations expose only writable contract fields. | - |
 | 6.3.2.6 | Names are unique within a namescope. | Conformant | Duplicate `Id`/`x:Name` fails; component scopes are isolated and projected content retains caller scope. | None for Profile 1 namescopes. | PC-DUP-01 |
-| 6.3.2.7 | x:Key follows dictionary rules. | Not Implemented | x:Key/resource dictionaries are excluded. | `KeyPath` is a Selene compiler control member. | - |
+| 6.3.2.7 | x:Key follows dictionary rules. | Partial | `x:Key` identifies direct scalar entries in a `ResourceDictionary`; contextual validation rejects other placements. | General dictionary object construction remains excluded. | PC-RESOURCE-01, VI-RESOURCE-01 |
 | 6.3.2.8 | x:FieldModifier follows field rules. | Not Implemented | Generated fields are excluded. | See 6.3.1.10. | - |
 | 6.3.2.9 | XamlType values/type names resolve to valid types. | Partial | `{x:Type}` uses namespace maps and schema registry. | Compiler retains a build-time symbolic type name. | PC-ME-03 |
 | 6.3.3 | Non-normative member-node notes. | Not Applicable | Informational section. | No normative requirement. | - |
@@ -157,13 +157,13 @@ retained Entities; coverage is `VI-IR-04` and `VH-VISUAL-STATE-01`.
 | 7.2.4 | x:NullExtension. | Partial | `{x:Null}` is retained as a typed infoset value. | Nullable target checking and generated `None` emission are not in the automated View package subset. | PC-ME-03 |
 | 7.2.5 | x:ReferenceExtension. | Partial | `{x:Reference name}` is retained with its target name. | Generated node-connection resolution is not in the automated View package subset. | PC-ME-03 |
 | 7.2.6 | x:Object. | Not Implemented | General intrinsic object construction is excluded. | Published View APIs use concrete business and UI tree types. | - |
-| 7.2.7 | x:String. | Not Implemented | x:String object elements are excluded. | Text syntax maps directly to MoonBit strings. | CG-VIEW-01 |
+| 7.2.7 | x:String. | Partial | `x:String` object elements define scalar resource entries. | General intrinsic object construction remains excluded. | VI-RESOURCE-01, CG-RESOURCE-01 |
 | 7.2.8 | x:Char. | Not Implemented | Intrinsic char object is excluded. | No Selene UI member requires it. | - |
 | 7.2.9 | x:Single. | Not Implemented | Intrinsic single object is excluded. | Selene uses Double. | - |
-| 7.2.10 | x:Double. | Partial | Double text conversion is implemented for generated UI members. | x:Double object elements are excluded. | INVENTORY-01 |
+| 7.2.10 | x:Double. | Partial | Double text conversion is implemented for generated UI members and `x:Double` resource entries. | General intrinsic object construction remains excluded. | VI-RESOURCE-01, CG-RESOURCE-01, INVENTORY-01 |
 | 7.2.11 | x:Byte. | Not Implemented | Intrinsic byte object is excluded. | Not required by vocabulary. | - |
 | 7.2.12 | x:Int16. | Not Implemented | Intrinsic Int16 object is excluded. | Selene uses MoonBit Int. | - |
-| 7.2.13 | x:Int32. | Partial | Integer text conversion is implemented for generated UI members. | x:Int32 object elements are excluded. | INVENTORY-01 |
+| 7.2.13 | x:Int32. | Partial | Integer text conversion is implemented for generated UI members and `x:Int32` resource entries. | General intrinsic object construction remains excluded. | VI-RESOURCE-01, CG-RESOURCE-01, INVENTORY-01 |
 | 7.2.14 | x:Int64. | Not Implemented | Intrinsic Int64 object is excluded. | Not required by vocabulary. | - |
 | 7.2.15 | x:Decimal. | Not Implemented | Decimal is excluded. | Game UI uses Double. | - |
 | 7.2.16 | x:Uri. | Partial | Namespace/source/image paths are strings. | No intrinsic URI object or general URI validation. | PC-INFOSET-01 |
@@ -179,7 +179,7 @@ retained Entities; coverage is `VI-IR-04` and `VH-VISUAL-STATE-01`.
 | 7.3.2 | x:PositionalParameters directive. | Partial | Parsed and retained as a directive member. | Arbitrary constructors are not evaluated. | PC-DIRECTIVE-01 |
 | 7.3.3 | x:Initialization directive. | Partial | Parsed and retained as a directive member. | General initialization semantics are excluded. | PC-DIRECTIVE-01 |
 | 7.3.4 | x:Name directive. | Conformant | Creates a compiler namescope entry and stable node key; duplicate authored names and normalized-key collisions fail before source emission. | Same scope slot as Selene `Id`. | PC-DUP-01, CG-VIEW-01, CG-KEY-01 |
-| 7.3.5 | x:Key directive. | Not Implemented | Rejected. | Resource dictionaries are excluded. | - |
+| 7.3.5 | x:Key directive. | Partial | Parsed as a directive and consumed for direct scalar `ResourceDictionary` entries. | Runtime object keys and general dictionaries are excluded. | PC-RESOURCE-01, VI-RESOURCE-01 |
 | 7.3.6 | x:Uid directive. | Not Implemented | Rejected. | Localization UID metadata is excluded. | - |
 | 7.3.7 | x:Class directive. | Partial | Retained as a literal root directive and used to name the generated View identity. | CLR class construction and inheritance are excluded. | PC-DIRECTIVE-02, VI-IR-01 |
 | 7.3.8 | x:Subclass directive. | Not Implemented | Rejected. | Generated View types do not model CLR inheritance. | - |
@@ -256,7 +256,7 @@ retained Entities; coverage is `VI-IR-04` and `VH-VISUAL-STATE-01`.
 | 8.6.3.1 | Non-normative attribute notes. | Not Applicable | Informational section. | No normative requirement. | - |
 | 8.6.4-a | Convert escaped `{}` attribute text to literal text. | Conformant | Leading `{}` removes extension interpretation. | None. | PC-ME-02 |
 | 8.6.4-b | Convert `{...}` attribute text to a markup extension. | Conformant | Dedicated grammar creates `XamlMarkupExtension`. | Only registered built-in evaluators execute. | PC-ME-01 |
-| 8.6.4-c | Convert ordinary attribute text through member text syntax. | Partial | Infoset retains text; ViewIR sealing validates supported UI literals, including layout values, recursive Grid tracks, auto-flow, placement and spans, with the original span. | MoonBit compiler performs final business member and target-type checking. | CG-VIEW-01, CG-LAYOUT-01, CG-GRID-01, VI-IR-05, INVENTORY-01 |
+| 8.6.4-c | Convert ordinary attribute text through member text syntax. | Partial | Infoset retains text; ViewIR sealing validates supported UI literals, including bindable visual `Active`, image tint colors, `x y width height` image regions, layout values, recursive Grid tracks, auto-flow, placement and spans, with the original span. | MoonBit compiler performs final business member and target-type checking. | CG-VIEW-01, CG-PROPERTY-01, CG-LAYOUT-01, CG-GRID-01, VI-IR-04, VI-IR-05, VH-IMAGE-01, INVENTORY-01 |
 | 8.6.5-a | Map property elements to member nodes. | Conformant | `Owner.Member` child elements collect text/object values, including nested VisualState groups, setters and transitions. | Exact owner name is required for non-attached property elements. | PC-INFOSET-01, VI-IR-04 |
 | 8.6.5-b | Enforce property-element cardinality and duplicates. | Conformant | Singular members reject multiple values and repeated assignments. | None. | PC-DUP-01 |
 | 8.6.6-a | Map child object elements through the content member. | Conformant | Schema content member receives ordered child objects. | None. | PC-INFOSET-01 |
@@ -267,7 +267,7 @@ retained Entities; coverage is `VI-IR-04` and `VH-VISUAL-STATE-01`.
 | 8.6.7.1-a | Parse extension type, positional and named arguments. | Conformant | Quoting, nesting, commas, equals and namespace prefixes are parsed. | Custom bracket characters are excluded. | PC-ME-01 |
 | 8.6.7.1-b | Detect malformed/unbalanced extension syntax. | Conformant | Invalid grammar raises span-bearing SX120x diagnostics. | None. | PC-ME-02 |
 | 8.6.7.2-a | Convert x:Null, x:Reference and x:Type extensions. | Partial | All three built-ins evaluate in Profile 1. | x:Type result is symbolic. | PC-ME-03 |
-| 8.6.7.2-b | Convert vocabulary-specific markup extensions. | Partial | `ui:Binding` resolves to typed computed-ViewModel steps, dependencies and ordinary or VisualState setter targets in ViewIR. | `ui:TemplateBinding` is parsed, while generated component props are outside the current automated subset; arbitrary expressions and runtime path interpretation are excluded. | VI-IR-01, VI-IR-03, VI-IR-04, CG-VIEW-01 |
+| 8.6.7.2-b | Convert vocabulary-specific markup extensions. | Partial | `ui:Binding` resolves to typed computed-ViewModel steps and targets; `ui:StaticResource` resolves lexical scalar resources before ViewIR lowering. | `ui:TemplateBinding` is parsed, while generated component props are outside the current automated subset; arbitrary expressions, dynamic resources and runtime path interpretation are excluded. | VI-IR-01, VI-IR-03, VI-IR-04, VI-RESOURCE-01, CG-VIEW-01, CG-PROPERTY-01, CG-RESOURCE-01, VH-IMAGE-01, VH-VISUAL-STATE-01 |
 | 8.6.8-a | Look up ordinary members on the object type. | Conformant | Exact member-map lookup; unknown member fails. | None. | PC-INFOSET-01 |
 | 8.6.8-b | Look up attached members on their owner type. | Conformant | Exact owner/member lookup plus attached flag. | General assignability metadata is absent. | PC-INFOSET-01 |
 | 8.6.9 | Convert XML namespace mappings into Xaml namespace nodes. | Conformant | Prefix/default mappings are retained with exact source spans and used by QName resolution. | None. | PC-INFOSET-01 |

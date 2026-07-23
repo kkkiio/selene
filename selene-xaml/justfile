@@ -28,6 +28,9 @@ test:
     moon -C ../selene-core test src/ui_view --target js
     moon -C tests/target-matrix test src/inventory_view src/inventory_layout --target js
 
+bench-embedded-view:
+    moon -C tests/target-matrix bench src/inventory_view --target js --release --no-parallelize
+
 build-examples:
     moon -C ../examples-web build inventory/web --target js --release
 

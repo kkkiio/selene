@@ -79,6 +79,7 @@ pub(all) enum VisualStateValue {
   DoubleValue(Double)
   IntValue(Int)
   LayoutValueValue(LayoutValue)
+  ImageRegionValue(@render2d_types.ImageRegion2D?)
 } derive(Eq, Debug)
 
 ///|
@@ -148,6 +149,8 @@ pub(all) struct NodeStyle {
   align : TextAlign
   wrap : Bool
   z_index : Int
+  tint : String
+  source_region : @render2d_types.ImageRegion2D?
   fit : ImageFit
   direction : FlexDirection
   flex_basis : LayoutValue
@@ -197,6 +200,8 @@ pub fn NodeStyle::default() -> NodeStyle {
     align: Left,
     wrap: false,
     z_index: 0,
+    tint: "",
+    source_region: None,
     fit: Fill,
     direction: Column,
     flex_basis: Auto,

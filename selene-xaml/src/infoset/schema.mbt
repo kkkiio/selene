@@ -8,6 +8,7 @@ pub(all) enum XamlScalarType {
   Val
   Color
   Rect
+  ImageRegion
   Radius
   EntityReference
   Data
@@ -216,6 +217,7 @@ pub fn selene_xaml_schemas() -> XamlSchemaRegistry raise XamlError {
     XamlMemberDefinition("OnSpawn", String),
     XamlMemberDefinition("OnChange", String),
     XamlMemberDefinition("VisualStates", Any, is_collection=true),
+    XamlMemberDefinition("Resources", Any),
   ]
   let content = XamlMemberDefinition("Children", Any, is_collection=true)
   let visual_types = ["View", "Flex", "Grid", "ScrollView", "Button"]
@@ -296,7 +298,7 @@ pub fn selene_xaml_schemas() -> XamlSchemaRegistry raise XamlError {
           XamlMemberDefinition("Source", String, is_required=true),
           XamlMemberDefinition("Fit", String),
           XamlMemberDefinition("Tint", Color),
-          XamlMemberDefinition("SourceRegion", Rect),
+          XamlMemberDefinition("SourceRegion", ImageRegion),
         ],
     ),
   )
@@ -376,6 +378,23 @@ pub fn selene_xaml_schemas() -> XamlSchemaRegistry raise XamlError {
       XamlMemberDefinition("Easing", String),
     ]),
   )
+  builder.add_type(
+    XamlTypeDefinition(
+      "ResourceDictionary",
+      content_member=Some("Entries"),
+      members=[
+        XamlMemberDefinition("Source", String),
+        XamlMemberDefinition("Entries", Any, is_collection=true),
+        XamlMemberDefinition("MergedDictionaries", Any, is_collection=true),
+      ],
+      is_collection=true,
+    ),
+  )
+  builder.add_type(
+    XamlTypeDefinition("Color", content_member=Some("Value"), members=[
+      XamlMemberDefinition("Value", Color),
+    ]),
+  )
   let ui_schema = builder.build()
   ui_schema.types["Binding"] = XamlTypeDefinition(
     "Binding",
@@ -385,9 +404,28 @@ pub fn selene_xaml_schemas() -> XamlSchemaRegistry raise XamlError {
     "TemplateBinding",
     is_markup_extension=true,
   )
+  ui_schema.types["StaticResource"] = XamlTypeDefinition(
+    "StaticResource",
+    is_markup_extension=true,
+  )
   let x_builder = XamlSchemaBuilder(xaml_2006_namespace)
   x_builder.add_type(XamlTypeDefinition("Null", is_markup_extension=true))
   x_builder.add_type(XamlTypeDefinition("Reference", is_markup_extension=true))
   x_builder.add_type(XamlTypeDefinition("Type", is_markup_extension=true))
+  x_builder.add_type(
+    XamlTypeDefinition("String", content_member=Some("Value"), members=[
+      XamlMemberDefinition("Value", String),
+    ]),
+  )
+  x_builder.add_type(
+    XamlTypeDefinition("Double", content_member=Some("Value"), members=[
+      XamlMemberDefinition("Value", Double),
+    ]),
+  )
+  x_builder.add_type(
+    XamlTypeDefinition("Int32", content_member=Some("Value"), members=[
+      XamlMemberDefinition("Value", Int),
+    ]),
+  )
   XamlSchemaRegistry().register(x_builder.build()).register(ui_schema)
 }

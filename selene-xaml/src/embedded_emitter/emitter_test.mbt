@@ -8,10 +8,17 @@ async test "EE-01 snapshots the formatted Embedded package" (t : @test.Test) {
     #| FocusScope="true">
     #| <ui:Text Text="{ui:Binding Path=title}" Focusable="true"
     #|  AutoFocus="true" TabIndex="4" ui:Navigation.Right="Stop" />
+    #| <ui:Image Source="fixtures/icon.png"
+    #|  Tint="{ui:Binding Path=iconTint}"
+    #|  SourceRegion="{ui:Binding Path=iconRegion}" />
     #|</ui:View>
   let contract =
     #|package "example/demo/model"
-    #|pub(all) struct DemoState { title : String }
+    #|pub(all) struct DemoState {
+    #|  icon_region : String
+    #|  icon_tint : String
+    #|  title : String
+    #|}
   let ir = @viewir.compile("fixtures/demo.xaml", xaml, contract)
   let generated = @embedded_emitter.format_generated_package(
     @embedded_emitter.emit(
@@ -27,7 +34,7 @@ async test "EE-01 snapshots the formatted Embedded package" (t : @test.Test) {
   assert_eq(view.contains("pub fn DemoView::mount("), true)
   assert_eq(view.contains("entity : @entity.Entity"), true)
   assert_eq(view.contains(") -> Unit raise DemoViewError"), true)
-  assert_eq(view.contains("generated_view_records[entity]"), true)
+  assert_eq(view.contains("records[entity]"), true)
   assert_eq(view.contains("pub let action_event_bus"), true)
   assert_eq(view.contains("pub fn plugin(app : @app.App)"), true)
   assert_eq(view.contains("pub fn DemoView::handle_event"), false)

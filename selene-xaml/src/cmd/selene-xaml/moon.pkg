@@ -1,5 +1,6 @@
 import {
   "KKKIIO/selene_xaml/embedded_emitter",
+  "KKKIIO/selene_xaml/viewir",
   "moonbitlang/async",
   "moonbitlang/async/fs",
   "moonbitlang/async/io",

@@ -431,3 +431,114 @@ test "PC-NS-01 default namespace resolves unprefixed elements and attributes" {
     ),
   )
 }
+
+///|
+test "PC-RESOURCE-01 retains ResourceDictionary keys and StaticResource values" {
+  let source =
+    #|<View xmlns="urn:selene:xaml:ui"
+    #|      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    #|  <View.Resources>
+    #|    <ResourceDictionary>
+    #|      <Color x:Key="Color.Surface">#fff4dc</Color>
+    #|      <x:Double x:Key="Spacing.Small">8</x:Double>
+    #|    </ResourceDictionary>
+    #|  </View.Resources>
+    #|  <Text Color="{StaticResource Color.Surface}" />
+    #|</View>
+  let root = @parser.parse_xaml(
+      "resources.xaml",
+      source,
+      @infoset.selene_xaml_schemas(),
+    ).root
+  let resources = root.find_member("Resources").unwrap()
+  guard resources.values[0] is @infoset.XamlValueNode::Object(dictionary) else {
+    fail("expected ResourceDictionary")
+  }
+  let entries = dictionary.find_member("Entries").unwrap().values
+  guard entries[0] is @infoset.XamlValueNode::Object(color) else {
+    fail("expected Color resource")
+  }
+  debug_inspect(
+    (color.find_member("Key").unwrap(), color.find_member("Value").unwrap()),
+    content=(
+      #|(
+      #|  {
+      #|    name: {
+      #|      namespace_uri: "http://schemas.microsoft.com/winfx/2006/xaml",
+      #|      local_name: "Key",
+      #|      prefix: Some("x"),
+      #|    },
+      #|    values: [
+      #|      Text(
+      #|        {
+      #|          text: "Color.Surface",
+      #|          span: {
+      #|            source_uri: "resources.xaml",
+      #|            start: { offset: 159, line: 5, column: 21 },
+      #|            end: { offset: 172, line: 5, column: 34 },
+      #|          },
+      #|        },
+      #|      ),
+      #|    ],
+      #|    is_attached: false,
+      #|    is_directive: true,
+      #|    span: {
+      #|      source_uri: "resources.xaml",
+      #|      start: { offset: 152, line: 5, column: 14 },
+      #|      end: { offset: 173, line: 5, column: 35 },
+      #|    },
+      #|  },
+      #|  {
+      #|    name: {
+      #|      namespace_uri: "urn:selene:xaml:ui",
+      #|      local_name: "Value",
+      #|      prefix: None,
+      #|    },
+      #|    values: [
+      #|      Text(
+      #|        {
+      #|          text: "#fff4dc",
+      #|          span: {
+      #|            source_uri: "resources.xaml",
+      #|            start: { offset: 174, line: 5, column: 36 },
+      #|            end: { offset: 181, line: 5, column: 43 },
+      #|          },
+      #|        },
+      #|      ),
+      #|    ],
+      #|    is_attached: false,
+      #|    is_directive: false,
+      #|    span: {
+      #|      source_uri: "resources.xaml",
+      #|      start: { offset: 174, line: 5, column: 36 },
+      #|      end: { offset: 181, line: 5, column: 43 },
+      #|    },
+      #|  },
+      #|)
+    ),
+  )
+  let child = root.find_member("Children").unwrap().values[0]
+  guard child is @infoset.XamlValueNode::Object(text) &&
+    text.find_member("Color").unwrap().values[0]
+    is @infoset.XamlValueNode::Markup(extension) else {
+    fail("expected StaticResource value")
+  }
+  debug_inspect(
+    extension,
+    content=(
+      #|{
+      #|  type_name: {
+      #|    namespace_uri: "urn:selene:xaml:ui",
+      #|    local_name: "StaticResource",
+      #|    prefix: None,
+      #|  },
+      #|  arguments: [{ name: None, value: Literal("Color.Surface") }],
+      #|  span: {
+      #|    source_uri: "resources.xaml",
+      #|    start: { offset: 302, line: 9, column: 16 },
+      #|    end: { offset: 332, line: 9, column: 46 },
+      #|  },
+      #|}
+    ),
+  )
+}

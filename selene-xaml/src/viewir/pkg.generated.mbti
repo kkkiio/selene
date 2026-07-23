@@ -9,6 +9,10 @@ import {
 // Values
 pub fn compile(String, String, String) -> ViewIR raise ViewIRError
 
+pub fn compile_with_resources(String, String, String, Array[ResourceDocument]) -> ViewIR raise ViewIRError
+
+pub fn referenced_resource_documents(String, String) -> Array[String] raise ViewIRError
+
 // Errors
 pub(all) suberror ViewIRError {
   Xaml(@infoset.XamlError)
@@ -98,6 +102,8 @@ pub(all) enum IRConstant {
   EnumValue(String)
   LayoutValue(IRLayoutValue)
   RectValue(Double, Double, Double, Double)
+  ImageRegionValue(Double, Double, Double, Double)
+  NoImageRegion
   GridTracks(Array[IRGridTrack])
 } derive(Eq, @debug.Debug)
 
@@ -235,6 +241,11 @@ pub(all) struct IRVisualTransition {
   delay : Double
   easing : String
   span : @infoset.XamlSourceSpan
+} derive(Eq, @debug.Debug)
+
+pub(all) struct ResourceDocument {
+  source_uri : String
+  source : String
 } derive(Eq, @debug.Debug)
 
 pub(all) struct ViewIR {

@@ -11,9 +11,13 @@ pub async fn commit_generated_package(String, GeneratedPackage) -> Unit
 
 pub fn emit(@viewir.ViewIR, String, String, String, String) -> GeneratedPackage raise
 
+pub fn emit_with_resources(@viewir.ViewIR, String, String, String, String, Array[@viewir.ResourceDocument]) -> GeneratedPackage raise
+
 pub async fn format_generated_package(GeneratedPackage) -> GeneratedPackage
 
 pub fn generate_embedded_view_package(String, String, String, String) -> GeneratedPackage raise
+
+pub fn generate_embedded_view_package_with_resources(String, String, String, String, Array[@viewir.ResourceDocument]) -> GeneratedPackage raise
 
 // Errors
 pub(all) suberror EmbeddedEmitterError {

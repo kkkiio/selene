@@ -124,6 +124,7 @@ pub(all) enum XamlScalarType {
   Val
   Color
   Rect
+  ImageRegion
   Radius
   EntityReference
   Data

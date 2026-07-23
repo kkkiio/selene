@@ -1,13 +1,30 @@
 ///|
+
+///|
+priv struct ResourceLockInput {
+  owner : String
+  path : String
+  sha256 : String
+} derive(FromJson, Debug)
+
+///|
+priv struct ResourceOwnershipLock {
+  inputs : Array[ResourceLockInput]
+  imported_sidecars : Array[String]
+} derive(FromJson, Debug)
+
+///|
 test "CG-VIEW-01 emits typed Embedded view source and mappings" {
   let xaml =
     #|<ui:View xmlns:ui="urn:selene:xaml:ui" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     #| xmlns:model="moonbit:example/demo/model" x:Class="DemoView" ui:DataType="model:DemoState" x:Name="root">
-    #| <ui:ItemsControl ItemsSource="{ui:Binding Path=items}" KeyPath="id"><ui:ItemsControl.ItemTemplate>
-    #|  <ui:DataTemplate ui:DataType="model:DemoItem"><ui:Button x:Name="row" OnClick="select_item">
-    #|   <ui:Text Text="{ui:Binding Path=displayLabel}" />
-    #|  </ui:Button></ui:DataTemplate>
-    #| </ui:ItemsControl.ItemTemplate></ui:ItemsControl>
+    #| <ui:Flex Active="{ui:Binding Path=visible}">
+    #|  <ui:ItemsControl ItemsSource="{ui:Binding Path=items}" KeyPath="id"><ui:ItemsControl.ItemTemplate>
+    #|   <ui:DataTemplate ui:DataType="model:DemoItem"><ui:Button x:Name="row" OnClick="select_item">
+    #|    <ui:Text Text="{ui:Binding Path=displayLabel}" />
+    #|   </ui:Button></ui:DataTemplate>
+    #|  </ui:ItemsControl.ItemTemplate></ui:ItemsControl>
+    #| </ui:Flex>
     #|</ui:View>
   let mbti =
     #|package "example/demo/model"
@@ -17,6 +34,7 @@ test "CG-VIEW-01 emits typed Embedded view source and mappings" {
     #|}
     #|pub(all) struct DemoState {
     #|  items : Array[DemoItem]
+    #|  visible : Bool
     #|}
     #|pub fn DemoItem::display_label(Self) -> String
     #|pub(all) enum DemoPatch {
@@ -38,6 +56,13 @@ test "CG-VIEW-01 emits typed Embedded view source and mappings" {
       source_map = file.content
     }
   }
+  assert_eq(view.contains("active: state.visible"), true)
+  assert_eq(view.contains("@ui_view.reconcile_specs"), true)
+  assert_eq(view.contains("@ui_view.retained_lis_mask"), false)
+  assert_eq(view.contains("generated_contains"), false)
+  assert_eq(view.contains("generated_diff"), false)
+  assert_eq(view.contains("generated_lis_positions"), false)
+  assert_eq(view.contains("generated_parent_index"), false)
   debug_inspect(
     (
       view.contains("entity : @entity.Entity"),
@@ -47,12 +72,82 @@ test "CG-VIEW-01 emits typed Embedded view source and mappings" {
       view.contains("@ui_view.TreeMutation::Move"),
       view.contains("parent: Some(\"root\")"),
       view.contains("host.mount(entity, desired)"),
+      view.contains("@ecs.require_current_world().id()"),
       !view.contains("_worlds"),
       source_map.contains("\"original_offset\""),
       source_map.contains("\"generated_offset\""),
       source_map.split("\"source\":").length() - 1,
     ),
-    content="(true, true, true, true, true, true, true, true, true, true, 3)",
+    content=(
+      #|(true, true, true, true, false, true, true, true, true, true, true, 4)
+    ),
+  )
+}
+
+///|
+test "CG-RESOURCE-01 records external ResourceDictionary inputs in generated artifacts" {
+  let xaml =
+    #|<View xmlns="urn:selene:xaml:ui"
+    #|      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    #|      xmlns:model="moonbit:example/theme/model"
+    #|      x:Class="ThemeView" DataType="model:ThemeState">
+    #|  <View.Resources>
+    #|    <ResourceDictionary Source="../theme.xaml" />
+    #|  </View.Resources>
+    #|  <Text Color="{StaticResource Color.Text}" Text="Theme" />
+    #|</View>
+  let theme =
+    #|<ResourceDictionary xmlns="urn:selene:xaml:ui"
+    #|                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    #|  <Color x:Key="Color.Text">#3d2a22</Color>
+    #|</ResourceDictionary>
+  let mbti =
+    #|package "example/theme/model"
+    #|pub(all) struct ThemeState {}
+  let generated = @embedded_emitter.generate_embedded_view_package_with_resources(
+    "ui/views/theme-view.xaml",
+    xaml,
+    "ui/model/pkg.generated.mbti",
+    mbti,
+    [{ source_uri: "ui/theme.xaml", source: theme }],
+  )
+  let view = generated.files[2].content
+  let lock : ResourceOwnershipLock = @json.from_json(
+    @json.parse(generated.files.last().unwrap().content),
+  )
+  let resource_hash = @crypto.bytes_to_hex_string(
+    @crypto.sha256(@encoding.encode(@encoding.Encoding::UTF8, theme)),
+  )
+  assert_eq(view.contains("color: \"#3d2a22\""), true)
+  assert_eq(
+    view.contains("// input resource ui/theme.xaml sha256=\{resource_hash}\n"),
+    true,
+  )
+  assert_eq(lock.inputs[2].sha256, resource_hash)
+  debug_inspect(
+    lock,
+    content=(
+      #|{
+      #|  inputs: [
+      #|    {
+      #|      owner: "user",
+      #|      path: "ui/views/theme-view.xaml",
+      #|      sha256: "f7e1f2d0e824d67cd58a11e57d13323fc252847a82bcf5794af5ac64fb3b1e21",
+      #|    },
+      #|    {
+      #|      owner: "moon-info",
+      #|      path: "ui/model/pkg.generated.mbti",
+      #|      sha256: "2fa73a8fcd7d4d2fd307c6f1772d28a3c88f0a5c5aab1209dcd91d654c0b0d41",
+      #|    },
+      #|    {
+      #|      owner: "resource",
+      #|      path: "ui/theme.xaml",
+      #|      sha256: "6c299290b22dfa7e84975cc79c0f92f28e386e61f63bf83d82232970a6905ff8",
+      #|    },
+      #|  ],
+      #|  imported_sidecars: ["ui/theme.xaml"],
+      #|}
+    ),
   )
 }
 
@@ -72,7 +167,10 @@ test "CG-RUNTIME-01 fixes Embedded Views to the KKKIIO Selene module" {
   assert_eq(manifest.contains("\"KKKIIO/selene/app\""), true)
   assert_eq(manifest.contains("\"KKKIIO/selene/entity\""), true)
   assert_eq(manifest.contains("\"KKKIIO/selene/ui_view\""), true)
+  assert_eq(manifest.contains("\"KKKIIO/selene/math\""), false)
   assert_eq(lock.contains("\"runtime\": \"KKKIIO/selene\""), true)
+  let view = generated.files[2].content
+  assert_eq(view.contains("#warnings(\"-unused_field\")"), true)
 }
 
 ///|
@@ -101,7 +199,9 @@ test "CG-RECT-01 rect values follow CSS order and reject three components" {
       view.contains("    4 =>\n      match index {"),
       !view.contains("    3 => if index == 0 || index == 2"),
     ),
-    content="(true, true, true, true, true, true)",
+    content=(
+      #|(true, true, true, true, false, true)
+    ),
   )
   let invalid = xaml.replace(old="10 20 30 40", new="10 20 30")
   try
@@ -255,7 +355,8 @@ test "CG-PROPERTY-01 generated properties reject silent degradation" {
     #| xmlns:model="moonbit:example/demo/model" x:Class="DemoView" ui:DataType="model:DemoState" x:Name="root">
     #| <ui:Flex Direction="RowReverse">
     #|  <ui:Text Text="{ui:Binding Path=title}" Align="Center" Wrap="WordWrap" />
-    #|  <ui:Image Source="icon.png" Fit="Stretch" />
+    #|  <ui:Image Source="icon.png" Fit="Stretch" Tint="#80ff40"
+    #|   SourceRegion="128 64 32 24" />
     #| </ui:Flex>
     #|</ui:View>
   let mbti =
@@ -267,6 +368,35 @@ test "CG-PROPERTY-01 generated properties reject silent degradation" {
     "fixtures/properties.xaml", xaml, "fixtures/model.mbti", mbti,
   )
   let view = generated.files[2].content
+  assert_eq(view.contains("tint: \"#80ff40\""), true)
+  assert_eq(
+    view.contains(
+      "source_region: Some({ position: @math.Vec2(128, 64), size: @math.Vec2(32, 24) })",
+    ),
+    true,
+  )
+  try
+    @embedded_emitter.generate_embedded_view_package(
+      "fixtures/properties.xaml",
+      xaml.replace(
+        old="Source=\"icon.png\"",
+        new="Source=\"icons.atlas.json#first\"",
+      ),
+      "fixtures/model.mbti",
+      mbti,
+    )
+  catch {
+    @viewir.ViewIRError::Unsupported(message, _) =>
+      inspect(
+        message,
+        content=(
+          #|Image cannot combine atlas #region Source with SourceRegion
+        ),
+      )
+    error => raise error
+  } noraise {
+    _ => fail("atlas #region and SourceRegion must be rejected during sealing")
+  }
   debug_inspect(
     (
       view.contains("align: @ui_view.TextAlign::Center"),
@@ -286,6 +416,15 @@ test "CG-PROPERTY-01 generated properties reject silent degradation" {
     ),
     (
       "Wrap=\"WordWrap\"", "Wrap=\"Balanced\"", "invalid generated Wrap literal: Balanced",
+    ),
+    (
+      "SourceRegion=\"128 64 32 24\"", "SourceRegion=\"128 64 32\"", "image region requires x y width height",
+    ),
+    (
+      "SourceRegion=\"128 64 32 24\"", "SourceRegion=\"-1 64 32 24\"", "image region position must be non-negative",
+    ),
+    (
+      "SourceRegion=\"128 64 32 24\"", "SourceRegion=\"128 64 0 24\"", "image region size must be positive",
     ),
   ]
   let literal_messages : Array[String] = []
@@ -316,6 +455,9 @@ test "CG-PROPERTY-01 generated properties reject silent degradation" {
       #|  "invalid generated Fit literal: Tile",
       #|  "invalid generated Direction literal: Circular",
       #|  "invalid generated Wrap literal: Balanced",
+      #|  "image region requires x y width height",
+      #|  "image region position must be non-negative",
+      #|  "image region size must be positive",
       #|]
     ),
   )
@@ -917,7 +1059,7 @@ async test "CG-FORMAT-01 snapshots canonical moonfmt output" (t : @test.Test) {
   )
   assert_eq(
     view.contains(
-      "for spec in previous {\n    previous_by_key[spec.key] = spec\n  }",
+      "let mutations = @ui_view.reconcile_specs(record.specs, desired)",
     ),
     true,
   )

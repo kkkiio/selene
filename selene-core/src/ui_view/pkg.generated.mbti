@@ -5,11 +5,16 @@ import {
   "KKKIIO/selene/app",
   "KKKIIO/selene/entity",
   "KKKIIO/selene/event",
+  "KKKIIO/selene/render2d_types",
   "moonbitlang/core/debug",
 }
 
 // Values
 pub fn plugin(@app.App) -> @app.App
+
+pub fn reconcile_specs(Array[NodeSpec], Array[NodeSpec]) -> Array[TreeMutation]
+
+pub fn retained_lis_mask(Array[Int]) -> Array[Bool]
 
 pub let view_event_bus : @event.Events[UiViewEvent]
 
@@ -137,6 +142,8 @@ pub(all) struct NodeStyle {
   align : TextAlign
   wrap : Bool
   z_index : Int
+  tint : String
+  source_region : @render2d_types.ImageRegion2D?
   fit : ImageFit
   direction : FlexDirection
   flex_basis : LayoutValue
@@ -231,6 +238,7 @@ pub(all) enum VisualStateValue {
   DoubleValue(Double)
   IntValue(Int)
   LayoutValueValue(LayoutValue)
+  ImageRegionValue(@render2d_types.ImageRegion2D?)
 } derive(Eq, @debug.Debug)
 
 pub(all) struct VisualTransition {

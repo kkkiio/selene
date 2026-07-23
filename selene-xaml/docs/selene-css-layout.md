@@ -147,7 +147,9 @@ desired size。左右同时指定且 `Width="Auto"` 时由两侧 inset 决定宽
   `Span` 子元素可定义富文本片段，runtime 汇总为父 `Text` 的 span 列表。
 
 - **`Image`**：`Source` 加载图像，固有尺寸来自资源。`Fit` 取值 `Stretch`、`Contain`、
-  `Cover`、`None`（对标 CSS `object-fit`）。`Tint` 叠加颜色，`SourceRegion` 裁剪源图。
+  `Cover`、`None`（对标 CSS `object-fit`）。`Tint` 叠加颜色；`SourceRegion` 使用
+  `x y width height` 源图像素坐标裁剪 spritesheet，并以裁剪尺寸作为固有尺寸。
+  `Source="atlas.json#region"` 已经包含裁剪信息，同一 Image node 不与 `SourceRegion` 混用。
 
 ## 响应式布局
 

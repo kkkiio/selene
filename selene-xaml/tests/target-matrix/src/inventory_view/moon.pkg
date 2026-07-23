@@ -4,6 +4,7 @@ import {
   "KKKIIO/selene/ui",
   "KKKIIO/selene/ui_view",
   "Milky2018/selene-examples/inventory/view",
+  "moonbitlang/core/bench",
 } for "test"
 
 supported_targets = "native+js"
