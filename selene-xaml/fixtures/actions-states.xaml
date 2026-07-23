@@ -1,0 +1,35 @@
+<View xmlns="urn:selene:xaml:ui"
+         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+  <Flex x:Name="panel" Direction="Column" Gap="12">
+    <Button x:Name="confirm" Target="{x:Reference panel}"
+               OnClick="confirm_signal" OnEnter="preview_signal"
+               OnExit="clear_preview">
+      Confirm
+      <Button.VisualStates>
+        <VisualStateGroup Name="CommonStates">
+          <VisualState Name="Normal">
+            <Setter Property="Background" Value="#314158" />
+          </VisualState>
+          <VisualState Name="Hovered">
+            <Setter Property="Background" Value="#46749b" />
+            <Setter Property="Width" Value="180px" />
+          </VisualState>
+          <VisualState Name="Pressed">
+            <Setter Property="Background" Value="#28445d" />
+          </VisualState>
+          <VisualState Name="Disabled">
+            <Setter Property="Background" Value="#30343a" />
+          </VisualState>
+          <VisualStateGroup.Transitions>
+            <Transition From="Normal" To="Hovered" Duration="0.14"
+                           Easing="EaseOut" />
+            <Transition From="Hovered" To="Normal" Duration="0.10"
+                           Easing="EaseIn" />
+          </VisualStateGroup.Transitions>
+        </VisualStateGroup>
+      </Button.VisualStates>
+    </Button>
+    <Button x:Name="cancel" Watch="{x:Reference confirm}"
+               OnClick="cancel_signal">Cancel</Button>
+  </Flex>
+</View>

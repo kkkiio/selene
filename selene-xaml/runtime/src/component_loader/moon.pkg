@@ -1,0 +1,15 @@
+import {
+  "KKKIIO/selene_xaml_runtime/component_host",
+  "KKKIIO/selene_xaml_runtime/ui_host",
+  "KKKIIO/selene/ecs",
+  "KKKIIO/selene/entity",
+  "moonbitlang/core/encoding/utf8",
+  "moonbitlang/core/json",
+}
+
+supported_targets = "native"
+
+options(
+  "native-stub": [ "native_loader.c" ],
+  targets: { "native_loader.mbt": [ "native" ] },
+)

@@ -1,0 +1,41 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "KKKIIO/selene_xaml_runtime/component_loader"
+
+import {
+  "KKKIIO/selene/entity",
+  "moonbitlang/core/debug",
+  "moonbitlang/core/set",
+}
+
+// Values
+
+// Errors
+pub suberror NativeComponentLoaderError {
+  NativeComponentLoaderError(String)
+} derive(Eq, @debug.Debug)
+pub impl Show for NativeComponentLoaderError
+
+// Types and methods
+pub(all) enum NativeComponentKind {
+  Survivors
+} derive(Eq, @debug.Debug)
+
+pub struct NativeUiComponent {
+  handle : UInt64
+  world_id : UInt
+  entities : @set.Set[@entity.Entity]
+  mut unloaded : Bool
+}
+pub fn NativeUiComponent::apply(Self, @entity.Entity, Json) -> Unit raise NativeComponentLoaderError
+pub fn NativeUiComponent::handle_event(Self, @entity.Entity, Json) -> String raise NativeComponentLoaderError
+pub fn NativeUiComponent::load(NativeComponentKind, String) -> Self raise NativeComponentLoaderError
+pub fn NativeUiComponent::mount(Self, @entity.Entity, Json) -> Unit raise NativeComponentLoaderError
+pub fn NativeUiComponent::replace(Self, @entity.Entity, Json) -> Unit raise NativeComponentLoaderError
+pub fn NativeUiComponent::unload(Self) -> Unit raise NativeComponentLoaderError
+pub fn NativeUiComponent::unmount(Self, @entity.Entity) -> Unit raise NativeComponentLoaderError
+pub fn NativeUiComponent::update(Self) -> Unit raise NativeComponentLoaderError
+
+// Type aliases
+
+// Traits
+

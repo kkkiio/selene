@@ -1,0 +1,22 @@
+import {
+  "KKKIIO/selene/app",
+  "KKKIIO/selene/atlas",
+  "KKKIIO/selene/ecs",
+  "KKKIIO/selene/entity",
+  "KKKIIO/selene/event",
+  "KKKIIO/selene/math",
+  "KKKIIO/selene/system",
+  "KKKIIO/selene/time",
+  "KKKIIO/selene/ui",
+  "KKKIIO/selene_xaml_runtime/ui_host",
+  "moonbitlang/core/json",
+}
+
+import {
+  "KKKIIO/selene/asset",
+  "KKKIIO/selene/inputs",
+  "moonbitlang/core/buffer",
+  "moonbitlang/core/encoding/utf8",
+} for "test"
+
+supported_targets = "native+js"

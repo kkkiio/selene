@@ -1,0 +1,20 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "KKKIIO/selene_xaml/parser"
+
+import {
+  "KKKIIO/selene_xaml/infoset",
+}
+
+// Values
+pub fn parse_markup_extension(String, String, Map[String, String], span? : @infoset.XamlSourceSpan) -> @infoset.XamlMarkupExtension raise @infoset.XamlError
+
+pub fn parse_xaml(String, String, @infoset.XamlSchemaRegistry) -> @infoset.XamlDocument raise @infoset.XamlError
+
+// Errors
+
+// Types and methods
+
+// Type aliases
+
+// Traits
+

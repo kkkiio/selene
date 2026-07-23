@@ -1,0 +1,13 @@
+{
+  "name": "selene-xaml-browser-tests",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "serve": "node serve.mjs",
+    "test": "node test-examples.mjs",
+    "capture-inventory": "node capture-inventory.mjs"
+  },
+  "devDependencies": {
+    "playwright": "^1.55.0"
+  }
+}

@@ -1,0 +1,20 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "KKKIIO/selene_xaml/codegen"
+
+import {
+  "KKKIIO/selene_xaml/generator_io",
+}
+
+// Values
+pub fn generate_component_guest_package(String, String, String, String) -> @generator_io.GeneratedPackage raise
+
+pub fn generate_embedded_view_package(String, String, String, String, runtime? : String) -> @generator_io.GeneratedPackage raise
+
+// Errors
+
+// Types and methods
+
+// Type aliases
+
+// Traits
+

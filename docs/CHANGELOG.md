@@ -7,6 +7,9 @@
 - Added `selene/atlas` loading for canonical Selene, Aseprite, and TexturePacker
   JSON atlases, including named `#region` resolution for UI and sprite assets.
 
+- Added the Selene XAML compiler and runtime as in-repository workspace
+  components, together with their documentation, examples, and test suites.
+
 ### Changed
 
 ### Fixed

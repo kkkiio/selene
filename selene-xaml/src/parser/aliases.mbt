@@ -1,0 +1,20 @@
+///|
+using @infoset {
+  type XamlQualifiedName,
+  type XamlSourceSpan,
+  type XamlError,
+  type XamlNamespaceNode,
+  type XamlMarkupValue,
+  type XamlMarkupArgument,
+  type XamlMarkupExtension,
+  type XamlValueNode,
+  type XamlMemberNode,
+  type XamlObjectNode,
+  type XamlDocument,
+  type XamlMemberDefinition,
+  type XamlSchemaRegistry,
+  xaml_2006_namespace,
+  markup_compatibility_namespace,
+  xml_namespace,
+  xaml_failure,
+}

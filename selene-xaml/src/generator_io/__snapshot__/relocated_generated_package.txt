@@ -1,0 +1,30 @@
+===== view.generated.mbt =====
+///|
+fn answer(model : Model) -> Int {
+  model.value
+}
+
+===== view.generated.mbt.map.json =====
+{
+  "mappings": [
+    {
+      "source": "fixtures/view.xaml",
+      "original_offset": 42,
+      "generated_offset": 41,
+      "length": 11
+    }
+  ]
+}
+
+===== selene-xaml.lock.json =====
+{
+  "format_version": 1,
+  "generator": "selene-xaml@0.1.0",
+  "inputs": [{}],
+  "outputs": [
+    { "owner": "selene-xaml", "path": "view.generated.mbt", "sha256": "b0e25df6659c991914d016a7cd455a9f51df54ca24df312495ee42472ae42b9d" },
+    { "owner": "selene-xaml", "path": "view.generated.mbt.map.json", "sha256": "e319a7bab130c95b0091dda247401232985757eba829c550f940f48db59b796a" }
+  ],
+  "lock_path": "selene-xaml.lock.json"
+}
+

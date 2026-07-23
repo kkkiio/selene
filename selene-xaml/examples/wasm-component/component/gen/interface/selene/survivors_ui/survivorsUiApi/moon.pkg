@@ -1,0 +1,5 @@
+warnings = "-44"
+
+import {
+  "selene/survivors-ui/interface/selene/ui_host/tree",
+}

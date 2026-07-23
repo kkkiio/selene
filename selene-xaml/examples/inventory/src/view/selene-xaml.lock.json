@@ -1,0 +1,22 @@
+{
+  "format_version": 1,
+  "generator": "selene-xaml@0.1.0",
+  "runtime": "KKKIIO/selene",
+  "inputs": [
+    { "owner": "user", "path": "examples/inventory/inventory.xaml", "sha256": "ae374a99d8a0f773d8a34df21e2c2afa757466ab8bdd7d707f8ff7621e60bf11" },
+    { "owner": "moon-info", "path": "examples/inventory/src/model/pkg.generated.mbti", "sha256": "8572308d822491eb83073fceb2be462ae5964fabf7ab782366a8f0d6956ba752" }
+  ],
+  "resolved_contract": { "kind": "mbti", "path": "examples/inventory/src/model/pkg.generated.mbti", "package": "KKKIIO/selene-xaml-inventory-example/model", "sha256": "8572308d822491eb83073fceb2be462ae5964fabf7ab782366a8f0d6956ba752" },
+  "requested_outputs": ["moon.pkg", "state.generated.mbt", "view.generated.mbt", "view.generated.mbt.map.json", "selene-xaml.lock.json"],
+  "output_naming": { "package_directory": ".", "state": "state.generated.mbt", "view": "view.generated.mbt", "source_map": "view.generated.mbt.map.json", "lock": "selene-xaml.lock.json" },
+  "package_alias": { "alias": "model", "package": "KKKIIO/selene-xaml-inventory-example/model" },
+  "imported_sidecars": [],
+  "host_capability": { "package": "KKKIIO/selene_xaml_runtime/ui_host", "contract": "component-host", "version": "0.1.0", "operations": ["mount", "apply"] },
+  "abi_fingerprint": "sha256:ea9d4fc489c485f05a2bbaf9cc38626f438212b7a550e9b537be616a484caf08",
+  "outputs": [    { "owner": "selene-xaml", "path": "moon.pkg", "sha256": "1bbca7af9c07c082a96ed04daea480cce221ea75598ff414e3313329b9765a48" },
+    { "owner": "selene-xaml", "path": "state.generated.mbt", "sha256": "ad9376222e7d064f9199e044c0d9445f8c9dad37160041e682f74db82a0b2d34" },
+    { "owner": "selene-xaml", "path": "view.generated.mbt", "sha256": "cfb58c2865ee9e58dcaa8ddd6b12d23d7ea1db44ede4937bdf9058638326baa9" },
+    { "owner": "selene-xaml", "path": "view.generated.mbt.map.json", "sha256": "494c9dadf51b4b367c84c1fbca81f6787732a5177aadd50819c29b51fe6b9f54" }
+  ],
+  "lock_path": "selene-xaml.lock.json"
+}

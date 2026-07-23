@@ -1,0 +1,23 @@
+import {
+  "KKKIIO/selene/app" @selene_app,
+  "KKKIIO/selene/ecs",
+  "KKKIIO/selene/entity",
+  "KKKIIO/selene/plugins",
+  "KKKIIO/selene/ui",
+  "KKKIIO/selene_xaml_runtime/component_host",
+}
+
+supported_targets = "js"
+
+pkgtype(kind: "executable")
+
+options(
+  overrides: [
+    "KKKIIO/selene_webgpu/platform_window",
+    "KKKIIO/selene_webgpu/platform_input",
+    "KKKIIO/selene_webgpu/platform_render",
+    "KKKIIO/selene_webgpu/platform_audio",
+    "KKKIIO/selene_webgpu/platform_asset_io",
+  ],
+  targets: { "main.mbt": [ "js" ] },
+)

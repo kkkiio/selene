@@ -1,0 +1,4 @@
+interface:
+  display_name: "Write Snapshot Test"
+  short_description: "Write Selene state and generated artifact snapshots."
+  default_prompt: "Use $write-snapshot-test to add a focused black-box semantic or generated artifact snapshot test."

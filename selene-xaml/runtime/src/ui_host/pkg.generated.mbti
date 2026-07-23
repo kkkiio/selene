@@ -1,0 +1,129 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "KKKIIO/selene_xaml_runtime/ui_host"
+
+import {
+  "moonbitlang/core/debug",
+}
+
+// Values
+
+// Errors
+pub(all) suberror HostError {
+  InvalidMutation(String, String)
+  Released
+  WrongWorld(UInt, UInt)
+} derive(Eq, @debug.Debug)
+pub impl Show for HostError
+
+// Types and methods
+pub(all) enum FlexDirection {
+  Row
+  RowReverse
+  Column
+  ColumnReverse
+} derive(Eq, @debug.Debug)
+
+pub(all) enum ImageFit {
+  Fill
+  Contain
+  Cover
+} derive(Eq, @debug.Debug)
+
+pub(all) enum LayoutValue {
+  Auto
+  Px(Double)
+  Percent(Double)
+} derive(Eq, @debug.Debug)
+
+pub(all) enum NodeKind {
+  View
+  Flex
+  Text
+  Image
+  Button
+  ScrollView
+} derive(Eq, @debug.Debug)
+
+pub(all) struct NodeSpec {
+  key : String
+  parent : String?
+  kind : NodeKind
+  text : String
+  source : String
+  active : Bool
+  enabled : Bool
+  focusable : Bool
+  style : NodeStyle
+} derive(Eq, @debug.Debug)
+
+pub(all) struct NodeStyle {
+  absolute : Bool
+  left : Double
+  top : Double
+  width : LayoutValue
+  height : LayoutValue
+  margin_left : Double
+  margin_top : Double
+  margin_right : Double
+  margin_bottom : Double
+  padding_left : Double
+  padding_top : Double
+  padding_right : Double
+  padding_bottom : Double
+  background : String
+  border_color : String
+  border : Double
+  radius : Double
+  color : String
+  font_family : String
+  font_size : Double
+  bold : Bool
+  align : TextAlign
+  wrap : Bool
+  z_index : Int
+  fit : ImageFit
+  direction : FlexDirection
+  flex_basis : LayoutValue
+  flex_grow : Double
+  flex_shrink : Double
+  row_gap : Double
+  column_gap : Double
+  horizontal_scroll : Bool
+  vertical_scroll : Bool
+  scrollbar_width : Double
+} derive(Eq, @debug.Debug)
+pub fn NodeStyle::default() -> Self
+
+pub(all) enum TextAlign {
+  Left
+  Center
+  Right
+} derive(Eq, @debug.Debug)
+
+pub(all) enum TreeMutation {
+  Mount(NodeSpec)
+  Update(NodeSpec)
+  SetText(String, String)
+  SetSource(String, String)
+  SetBackground(String, String)
+  SetActive(String, Bool)
+  SetEnabled(String, Bool)
+  SetTop(String, Double)
+  Move(String, String, Int)
+  Remove(String)
+} derive(Eq, @debug.Debug)
+
+pub(all) struct UiEvent {
+  kind : UiEventKind
+  key : String
+} derive(Eq, @debug.Debug)
+
+pub(all) enum UiEventKind {
+  Click
+  Focus
+} derive(Eq, @debug.Debug)
+
+// Type aliases
+
+// Traits
+

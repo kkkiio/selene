@@ -1,0 +1,197 @@
+<Flex xmlns="urn:selene:xaml:ui"
+         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+         xmlns:model="moonbit:KKKIIO/selene-xaml-inventory-example/model"
+         x:Class="InventoryView"
+         DataType="model:InventoryUiState"
+         x:Name="inventoryRoot" Width="{Binding Path=viewportWidth}" Height="540"
+         Direction="Column" Gap="14" Padding="18 20" Background="#17100d">
+    <Flex x:Name="inventoryHeader" Width="100%" Height="62" Direction="Row"
+             Gap="10" Padding="7 10" Background="#2b1c16"
+             BorderColor="#765038" Border="2" Radius="3">
+      <ItemsControl ItemsSource="{Binding Path=tabs}" KeyPath="id">
+        <ItemsControl.ItemTemplate>
+          <DataTemplate DataType="model:InventoryTab">
+            <Button x:Name="tabButton" OnClick="select_tab"
+                       Width="{Binding Path=tabWidth}" Height="44"
+                       Background="#3a281f"
+                       BorderColor="#91653f" Border="1" Radius="2">
+              <Image x:Name="tabIcon" Position="Absolute" Left="{Binding Path=tabIconLeft}" Top="2"
+                       Width="40" Height="40" Source="{Binding Path=icon}"
+                       Fit="Contain" ZIndex="1" />
+              <Button.VisualStates>
+                <VisualStateGroup Name="SelectionStates" Current="{Binding Path=selected}">
+                  <VisualState Name="Normal">
+                    <Setter TargetName="tabIcon" Property="Source" Value="{Binding Path=icon}" />
+                  </VisualState>
+                  <VisualState Name="Selected">
+                    <Setter Property="Background" Value="#6b3d26" />
+                    <Setter Property="BorderColor" Value="#e2a84b" />
+                    <Setter TargetName="tabIcon" Property="Source" Value="{Binding Path=selectedIcon}" />
+                  </VisualState>
+                </VisualStateGroup>
+                <VisualStateGroup Name="InteractionStates">
+                  <VisualState Name="Normal" />
+                  <VisualState Name="Hovered">
+                    <Setter Property="OutlineColor" Value="#b98545" />
+                    <Setter Property="OutlineWidth" Value="1" />
+                  </VisualState>
+                  <VisualState Name="Focused">
+                    <Setter Property="OutlineColor" Value="#ffd779" />
+                    <Setter Property="OutlineWidth" Value="2" />
+                    <Setter Property="OutlineOffset" Value="1" />
+                  </VisualState>
+                  <VisualState Name="Pressed">
+                    <Setter Property="Background" Value="#4d2a1c" />
+                  </VisualState>
+                  <VisualState Name="Disabled">
+                    <Setter Property="Background" Value="#28201c" />
+                    <Setter Property="BorderColor" Value="#57483f" />
+                  </VisualState>
+                </VisualStateGroup>
+              </Button.VisualStates>
+            </Button>
+          </DataTemplate>
+        </ItemsControl.ItemTemplate>
+      </ItemsControl>
+      <Flex Grow="1" Height="44" />
+      <Flex x:Name="capacityDisplay" Width="96" Height="44" Direction="Row" Gap="8"
+               Padding="5 8" Background="#211611" BorderColor="#5f412c" Border="1" Radius="2">
+        <Flex x:Name="capacityIcon" Width="28" Height="28">
+          <Flex Position="Absolute" Left="1" Top="1" Width="11" Height="11"
+                   Background="#d89b42" BorderColor="#f0c16d" Border="1" Radius="1" />
+          <Flex Position="Absolute" Left="16" Top="1" Width="11" Height="11"
+                   Background="#805131" BorderColor="#b77b48" Border="1" Radius="1" />
+          <Flex Position="Absolute" Left="1" Top="16" Width="11" Height="11"
+                   Background="#805131" BorderColor="#b77b48" Border="1" Radius="1" />
+          <Flex Position="Absolute" Left="16" Top="16" Width="11" Height="11"
+                   Background="#805131" BorderColor="#b77b48" Border="1" Radius="1" />
+        </Flex>
+        <Text x:Name="capacityLabelText" Width="42" Height="28"
+                 Text="{Binding Path=capacityLabel}" Color="#e2a84b"
+                 Bold="true" FontSize="13" Align="Center" />
+      </Flex>
+    </Flex>
+
+    <If Condition="{Binding Path=wideLayout}">
+      <If.Then>
+        <Flex Width="100%" Grow="1" Direction="Row" Gap="14">
+          <Flex x:Name="packPanel" Grow="1" Direction="Column" Gap="8"
+                   Padding="12" Background="#241812" BorderColor="#765038" Border="2" Radius="3">
+            <Flex x:Name="packHeader" Width="100%" Height="26" Direction="Row">
+              <Text Grow="1" Height="26" Text="PACK"
+                       Color="#d7b47a" Bold="true" FontSize="14" />
+            </Flex>
+            <ScrollView x:Name="itemScroll" Width="100%" Grow="1" Focusable="true"
+                           Background="#34231a" BorderColor="#513724" Border="1"
+                           VerticalScroll="true" ScrollbarWidth="6">
+              <ItemsControl ItemsSource="{Binding Path=items}" KeyPath="id">
+                <ItemsControl.ItemTemplate>
+                  <DataTemplate DataType="model:InventoryItem">
+                    <Button x:Name="itemButtonWide" OnClick="select_item" OnFocus="focus_item"
+                               Width="100%" Height="72" Background="{Binding Path=itemBackground}"
+                               BorderColor="#5f412c" Border="1" Radius="1">
+                      <Flex x:Name="itemIconSlot" Position="Absolute" Left="6" Top="0"
+                               Width="72" Height="72" Padding="4" ZIndex="1">
+                        <Image x:Name="itemIcon" Source="{Binding Path=image}"
+                                  Width="64" Height="64" Fit="Contain" />
+                      </Flex>
+                      <Text x:Name="itemNameWide" Position="Absolute" Left="88" Top="24"
+                               Width="340" Height="24" Text="{Binding Path=name}"
+                               Color="#f0ddbd" Bold="true" FontSize="16" ZIndex="1" />
+                      <Text x:Name="itemCount" Position="Absolute" Left="450" Top="24"
+                               Width="58" Height="24" Text="{Binding Path=countLabel}"
+                               Color="#e2a84b" Bold="true" FontSize="15" Align="Right" ZIndex="1" />
+                    </Button>
+                  </DataTemplate>
+                </ItemsControl.ItemTemplate>
+              </ItemsControl>
+            </ScrollView>
+          </Flex>
+
+          <Flex x:Name="details" Width="356" Direction="Column" Gap="8"
+                   Padding="12" Background="#2b1c16" BorderColor="#8a5d36" Border="2" Radius="3">
+            <Text Width="328" Height="22" Text="EQUIPPED"
+                     Color="#d7b47a" Bold="true" FontSize="14" />
+            <ItemsControl ItemsSource="{Binding Path=equipment}" KeyPath="slot">
+              <ItemsControl.ItemTemplate>
+                <DataTemplate DataType="model:EquipmentItem">
+                  <Button x:Name="equipmentButtonWide" OnClick="select_equipment"
+                             Width="328" Height="72" Background="{Binding Path=equipmentBackground}"
+                             BorderColor="#765038" Border="1" Radius="1">
+                    <Flex x:Name="equipmentIconSlot" Position="Absolute" Left="4" Top="0"
+                             Width="72" Height="72" Padding="4" ZIndex="1">
+                      <Image x:Name="equipmentIcon" Source="{Binding Path=image}"
+                                Width="64" Height="64" Fit="Contain" />
+                    </Flex>
+                    <Text x:Name="equipmentNameWide" Position="Absolute" Left="86" Top="24"
+                             Width="242" Height="22" Text="{Binding Path=name}"
+                             Color="#f0ddbd" Bold="true" FontSize="15" ZIndex="1" />
+                  </Button>
+                </DataTemplate>
+              </ItemsControl.ItemTemplate>
+            </ItemsControl>
+            <Flex Width="328" Height="128" Direction="Row" Gap="12">
+              <Flex Width="128" Height="128" Background="#1b120e"
+                       BorderColor="#e2a84b" Border="2" Radius="2">
+                <Image x:Name="selectedImage" Position="Absolute" Left="16" Top="16"
+                          Source="{Binding Path=selectedImage}" Width="96" Height="96" Fit="Contain" />
+              </Flex>
+              <Flex Width="188" Height="128" Direction="Column" Gap="10" Padding="0 14">
+                <Text x:Name="selectedName" Width="188" Height="54"
+                         Text="{Binding Path=selectedName}" Color="#f0ddbd"
+                         Bold="true" FontSize="17" Wrap="WordWrap" />
+                <Text x:Name="selectedRarity" Width="188" Height="24"
+                         Text="{Binding Path=selectedRarity}" Color="#e2a84b"
+                         Bold="true" FontSize="13" />
+              </Flex>
+            </Flex>
+            <Text x:Name="selectedDescription" Width="328" Height="64"
+                     Text="{Binding Path=selectedDescription}" Color="#c7a986"
+                     FontSize="14" Wrap="WordWrap" />
+          </Flex>
+        </Flex>
+      </If.Then>
+
+      <If.Else>
+        <Flex x:Name="narrowPanel" Width="100%" Grow="1" Direction="Column" Gap="8"
+                 Padding="12" Background="#241812" BorderColor="#765038" Border="2">
+          <ItemsControl ItemsSource="{Binding Path=equipment}" KeyPath="slot">
+            <ItemsControl.ItemTemplate>
+              <DataTemplate DataType="model:EquipmentItem">
+                <Button x:Name="equipmentButtonNarrow" OnClick="select_equipment"
+                           Width="100%" Height="56"
+                           Background="{Binding Path=equipmentBackground}" BorderColor="#765038" Border="1">
+                  <Image x:Name="equipmentIconNarrow" Position="Absolute" Left="6" Top="4"
+                           Width="48" Height="48" Source="{Binding Path=image}" Fit="Contain" ZIndex="1" />
+                  <Text x:Name="equipmentNameNarrow" Position="Absolute" Left="66" Top="16"
+                           Width="{Binding Path=narrowLabelWidth}" Height="24" Text="{Binding Path=name}"
+                           Color="#f0ddbd" FontSize="15" ZIndex="1" />
+                </Button>
+              </DataTemplate>
+            </ItemsControl.ItemTemplate>
+          </ItemsControl>
+          <ScrollView x:Name="itemScrollNarrow" Width="100%" Grow="1"
+                         Background="#34231a" VerticalScroll="true">
+            <ItemsControl ItemsSource="{Binding Path=items}" KeyPath="id">
+              <ItemsControl.ItemTemplate>
+                <DataTemplate DataType="model:InventoryItem">
+                  <Button x:Name="itemButtonNarrow" OnClick="select_item" OnFocus="focus_item"
+                             Width="100%" Height="60"
+                             Background="{Binding Path=itemBackground}" BorderColor="#5f412c" Border="1">
+                    <Image x:Name="itemIconNarrow" Position="Absolute" Left="6" Top="4"
+                             Width="52" Height="52" Source="{Binding Path=image}" Fit="Contain" ZIndex="1" />
+                    <Text x:Name="itemName" Position="Absolute" Left="70" Top="17"
+                             Width="{Binding Path=narrowLabelWidth}" Height="26" Text="{Binding Path=name}"
+                             Color="#f0ddbd" FontSize="15" ZIndex="1" />
+                  </Button>
+                </DataTemplate>
+              </ItemsControl.ItemTemplate>
+            </ItemsControl>
+          </ScrollView>
+          <Text x:Name="selectedDescriptionNarrow" Width="100%" Height="58"
+                   Text="{Binding Path=selectedDescription}" Color="#c7a986"
+                   FontSize="14" Wrap="WordWrap" />
+        </Flex>
+      </If.Else>
+    </If>
+</Flex>

@@ -1,0 +1,41 @@
+{
+  "schema": "selene/atlas_asset_document",
+  "version": 1,
+  "data": {
+    "version": 1,
+    "name": "inventory-tabs",
+    "source_image": "inventory-tabs.png",
+    "regions": [
+      {
+        "name": "equip.normal",
+        "index": 0,
+        "rect": { "x": 0, "y": 0, "width": 32, "height": 32 }
+      },
+      {
+        "name": "equip.selected",
+        "index": 1,
+        "rect": { "x": 32, "y": 0, "width": 32, "height": 32 }
+      },
+      {
+        "name": "use.normal",
+        "index": 2,
+        "rect": { "x": 64, "y": 0, "width": 32, "height": 32 }
+      },
+      {
+        "name": "use.selected",
+        "index": 3,
+        "rect": { "x": 96, "y": 0, "width": 32, "height": 32 }
+      },
+      {
+        "name": "setup.normal",
+        "index": 4,
+        "rect": { "x": 128, "y": 0, "width": 32, "height": 32 }
+      },
+      {
+        "name": "setup.selected",
+        "index": 5,
+        "rect": { "x": 160, "y": 0, "width": 32, "height": 32 }
+      }
+    ]
+  }
+}

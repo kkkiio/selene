@@ -1,0 +1,60 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "KKKIIO/selene-xaml-inventory-example/view"
+
+import {
+  "KKKIIO/selene-xaml-inventory-example/model",
+  "KKKIIO/selene/app",
+  "KKKIIO/selene/entity",
+  "KKKIIO/selene/event",
+  "KKKIIO/selene_xaml_runtime/ui_host",
+  "moonbitlang/core/debug",
+}
+
+// Values
+pub let action_event_bus : @event.Events[InventoryViewActionEvent]
+
+pub fn plugin(@app.App) -> @app.App
+
+// Errors
+pub(all) suberror InventoryViewError {
+  AlreadyMounted
+  NotMounted
+  DeadEntity
+  DuplicateKey(String, String)
+  InvalidPatch(String)
+  Host(@ui_host.HostError)
+} derive(Eq, @debug.Debug)
+pub impl Show for InventoryViewError
+
+// Types and methods
+pub struct InventoryView {
+}
+pub fn InventoryView::apply(@entity.Entity, Array[@model.InventoryUiPatch]) -> Unit raise InventoryViewError
+pub fn InventoryView::mount(@entity.Entity, @model.InventoryUiState) -> Unit raise InventoryViewError
+pub fn InventoryView::replace(@entity.Entity, @model.InventoryUiState) -> Unit raise InventoryViewError
+
+pub(all) enum InventoryViewAction {
+  FocusItem(String)
+  SelectTab(String)
+  SelectItem(String)
+  SelectEquipment(String)
+} derive(Eq, @debug.Debug)
+
+pub(all) struct InventoryViewActionEvent {
+  entity : @entity.Entity
+  action : InventoryViewAction
+}
+
+// Type aliases
+pub using @model {type EquipmentItem}
+
+pub using @model {type InventoryItem}
+
+pub using @model {type InventoryTab}
+
+pub using @model {type InventoryUiPatch}
+
+pub using @model {type InventoryUiState}
+
+// Traits
+

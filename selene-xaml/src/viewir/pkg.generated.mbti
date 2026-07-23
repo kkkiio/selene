@@ -1,0 +1,210 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "KKKIIO/selene_xaml/viewir"
+
+import {
+  "KKKIIO/selene_xaml/infoset",
+  "moonbitlang/core/debug",
+}
+
+// Values
+pub fn compile(String, String, String) -> ViewIR raise ViewIRError
+
+pub fn compile_wit(String, String, String, String) -> (ViewIR, IRComponentTarget) raise ViewIRError
+
+// Errors
+pub(all) suberror ViewIRError {
+  Xaml(@infoset.XamlError)
+  Unsupported(String, @infoset.XamlSourceSpan)
+  InvalidContract(String)
+} derive(Eq, @debug.Debug)
+pub impl Show for ViewIRError
+
+// Types and methods
+pub(all) struct IRActionRoute {
+  id : String
+  authored_name : String
+  variant_name : String
+  event_kind : String
+  source_scope : String
+  collection_path : String?
+  node_template : String
+  span : @infoset.XamlSourceSpan
+} derive(Eq, @debug.Debug)
+
+pub(all) struct IRBinding {
+  id : String
+  path : String
+  scope_id : String
+  steps : Array[IRBindingStep]
+  result_type : String
+  dependencies : Array[String]
+  targets : Array[IRBindingTarget]
+  span : @infoset.XamlSourceSpan
+} derive(Eq, @debug.Debug)
+
+pub(all) struct IRBindingStep {
+  declaring_type : String
+  step : String
+  result_type : String
+  span : @infoset.XamlSourceSpan
+} derive(Eq, @debug.Debug)
+
+pub(all) struct IRBindingTarget {
+  node : String
+  property : String
+  target_type : String
+  span : @infoset.XamlSourceSpan
+} derive(Eq, @debug.Debug)
+
+pub(all) struct IRBusinessContract {
+  package_path : String
+  structs : Map[String, IRStruct]
+  enums : Map[String, IREnum]
+  aliases : Map[String, String]
+  functions : Map[String, IRFunction]
+  model_type : IRTypeRef
+  view_model_type : IRTypeRef
+  view_model_projection : IRViewModelProjection
+  state : IRStruct
+  patch : IREnum?
+  patch_projection : IRPatchProjection
+  action : IREnum
+  collections : Map[String, IRCollection]
+} derive(Eq, @debug.Debug)
+
+pub(all) enum IRCapability {
+  TreeMutation
+  ConditionalTree
+  KeyedCollection
+  TypedPatch
+  ActionRouting
+} derive(Eq, @debug.Debug)
+
+pub(all) struct IRCollection {
+  field_name : String
+  item_type : String
+  key_field : String
+  key_type : String
+  patch_replace : String?
+  patch_upsert : String?
+  patch_remove : String?
+  patch_move : String?
+} derive(Eq, @debug.Debug)
+
+pub(all) struct IRComponentTarget {
+  event_type : String
+  action_type : String
+  tree_package : String
+} derive(Eq, @debug.Debug)
+
+pub(all) enum IRConstant {
+  StringValue(String)
+  BoolValue(Bool)
+  DoubleValue(Double)
+  IntValue(Int)
+  EnumValue(String)
+  LayoutValue(IRLayoutValue)
+  RectValue(Double, Double, Double, Double)
+} derive(Eq, @debug.Debug)
+
+pub(all) struct IRDataScope {
+  id : String
+  parent : String?
+  value_type : IRTypeRef
+  kind : IRDataScopeKind
+  span : @infoset.XamlSourceSpan
+} derive(Eq, @debug.Debug)
+
+pub(all) enum IRDataScopeKind {
+  RootViewModel
+  TemplateItem
+  LocalState
+} derive(Eq, @debug.Debug)
+
+pub(all) struct IREnum {
+  name : String
+  variants : Array[IRVariant]
+} derive(Eq, @debug.Debug)
+
+pub(all) struct IRField {
+  name : String
+  field_type : String
+} derive(Eq, @debug.Debug)
+
+pub(all) struct IRFunction {
+  name : String
+  parameters : Array[String]
+  return_type : String
+} derive(Eq, @debug.Debug)
+
+pub(all) enum IRLayoutValue {
+  Auto
+  Px(Double)
+  Percent(Double)
+} derive(Eq, @debug.Debug)
+
+pub(all) enum IRNode {
+  Element(String, String, String?, Array[IRProperty], Array[IRNode], @infoset.XamlSourceSpan)
+  Conditional(String, @infoset.XamlSourceSpan, Array[IRNode], Array[IRNode])
+  KeyedItems(String, @infoset.XamlSourceSpan, String, @infoset.XamlSourceSpan, IRTypeRef?, Array[IRNode])
+} derive(Eq, @debug.Debug)
+
+pub(all) enum IRPatchProjection {
+  None
+  GeneratedCollections
+  Apply(String)
+} derive(Eq, @debug.Debug)
+
+pub(all) struct IRProperty {
+  name : String
+  value : IRValue
+} derive(Eq, @debug.Debug)
+
+pub(all) struct IRStruct {
+  name : String
+  fields : Array[IRField]
+} derive(Eq, @debug.Debug)
+pub fn IRStruct::field(Self, String) -> IRField?
+
+pub(all) struct IRTypeRef {
+  package_alias : String
+  package_path : String
+  type_name : String
+  span : @infoset.XamlSourceSpan
+} derive(Eq, @debug.Debug)
+
+pub(all) enum IRValue {
+  Constant(IRConstant, @infoset.XamlSourceSpan)
+  Binding(String, @infoset.XamlSourceSpan)
+} derive(Eq, @debug.Debug)
+
+pub(all) struct IRVariant {
+  name : String
+  payload : String?
+} derive(Eq, @debug.Debug)
+
+pub(all) struct IRViewIdentity {
+  view_name : String
+  source_uri : String
+  span : @infoset.XamlSourceSpan
+} derive(Eq, @debug.Debug)
+
+pub(all) enum IRViewModelProjection {
+  Identity
+  Compute(String)
+} derive(Eq, @debug.Debug)
+
+pub(all) struct ViewIR {
+  identity : IRViewIdentity
+  contract : IRBusinessContract
+  root : IRNode
+  data_scopes : Array[IRDataScope]
+  bindings : Array[IRBinding]
+  action_routes : Array[IRActionRoute]
+  required_capabilities : Array[IRCapability]
+} derive(Eq, @debug.Debug)
+
+// Type aliases
+
+// Traits
+

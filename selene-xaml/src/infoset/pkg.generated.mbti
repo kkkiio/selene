@@ -1,0 +1,189 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "KKKIIO/selene_xaml/infoset"
+
+import {
+  "moonbitlang/core/debug",
+}
+
+// Values
+pub let markup_compatibility_namespace : String
+
+pub let selene_ui_namespace : String
+
+pub fn selene_xaml_schemas() -> XamlSchemaRegistry raise XamlError
+
+pub let xaml_2006_namespace : String
+
+pub fn xaml_failure(String, String, XamlSourceSpan) -> XamlError
+
+pub let xml_namespace : String
+
+// Errors
+pub(all) suberror XamlError {
+  Diagnostic(XamlDiagnostic)
+  FileNotFound(String)
+  InvalidUtf8(String)
+} derive(Eq, @debug.Debug)
+pub impl Show for XamlError
+
+// Types and methods
+pub(all) enum XamlData {
+  Null
+  Bool(Bool)
+  Int(Int)
+  Double(Double)
+  String(String)
+  Array(Array[XamlData])
+  Object(Map[String, XamlData])
+} derive(Eq, @debug.Debug)
+pub fn XamlData::as_string(Self) -> String
+pub fn XamlData::get_path(Self, String) -> Self?
+pub fn XamlData::object(Array[(String, Self)]) -> Self
+
+pub(all) struct XamlDiagnostic {
+  code : String
+  message : String
+  severity : XamlDiagnosticSeverity
+  span : XamlSourceSpan
+} derive(Eq, @debug.Debug)
+
+pub(all) enum XamlDiagnosticSeverity {
+  Error
+  Warning
+} derive(Eq, @debug.Debug)
+
+pub(all) struct XamlDocument {
+  source_uri : String
+  root : XamlObjectNode
+  namespaces : Array[XamlNamespaceNode]
+  diagnostics : Array[XamlDiagnostic]
+} derive(Eq, @debug.Debug)
+
+pub(all) struct XamlMarkupArgument {
+  name : String?
+  value : XamlMarkupValue
+} derive(Eq, @debug.Debug)
+
+pub(all) struct XamlMarkupExtension {
+  type_name : XamlQualifiedName
+  arguments : Array[XamlMarkupArgument]
+  span : XamlSourceSpan
+} derive(Eq, @debug.Debug)
+
+pub(all) enum XamlMarkupValue {
+  Literal(String)
+  Extension(XamlMarkupExtension)
+} derive(Eq, @debug.Debug)
+
+pub(all) struct XamlMemberDefinition {
+  name : String
+  value_type : XamlScalarType
+  is_attached : Bool
+  is_collection : Bool
+  is_required : Bool
+} derive(Eq, @debug.Debug)
+pub fn XamlMemberDefinition::XamlMemberDefinition(String, XamlScalarType, is_attached? : Bool, is_collection? : Bool, is_required? : Bool) -> Self
+
+pub(all) struct XamlMemberNode {
+  name : XamlQualifiedName
+  values : Array[XamlValueNode]
+  is_attached : Bool
+  is_directive : Bool
+  span : XamlSourceSpan
+} derive(Eq, @debug.Debug)
+pub fn XamlMemberNode::binding(Self) -> (String, Bool)?
+pub fn XamlMemberNode::literal(Self) -> String?
+
+pub(all) struct XamlNamespaceNode {
+  prefix : String?
+  namespace_uri : String
+  span : XamlSourceSpan
+} derive(Eq, @debug.Debug)
+
+pub(all) struct XamlObjectNode {
+  type_name : XamlQualifiedName
+  members : Array[XamlMemberNode]
+  namespaces : Array[XamlNamespaceNode]
+  span : XamlSourceSpan
+} derive(Eq, @debug.Debug)
+pub fn XamlObjectNode::find_member(Self, String) -> XamlMemberNode?
+
+pub(all) struct XamlQualifiedName {
+  namespace_uri : String
+  local_name : String
+  prefix : String?
+} derive(Eq, @debug.Debug)
+pub fn XamlQualifiedName::XamlQualifiedName(String, String, prefix? : String?) -> Self
+
+pub(all) enum XamlScalarType {
+  Any
+  String
+  Bool
+  Int
+  Double
+  Val
+  Color
+  Rect
+  Radius
+  EntityReference
+  Data
+} derive(Eq, @debug.Debug)
+
+pub(all) struct XamlSchema {
+  namespace_uri : String
+  types : Map[String, XamlTypeDefinition]
+} derive(Eq, @debug.Debug)
+
+pub(all) struct XamlSchemaBuilder {
+  namespace_uri : String
+  types : Array[XamlTypeDefinition]
+}
+pub fn XamlSchemaBuilder::XamlSchemaBuilder(String) -> Self
+pub fn XamlSchemaBuilder::add_type(Self, XamlTypeDefinition) -> Unit raise XamlError
+pub fn XamlSchemaBuilder::build(Self) -> XamlSchema
+
+pub(all) struct XamlSchemaRegistry {
+  schemas : Map[String, XamlSchema]
+}
+pub fn XamlSchemaRegistry::XamlSchemaRegistry() -> Self
+pub fn XamlSchemaRegistry::register(Self, XamlSchema) -> Self
+pub fn XamlSchemaRegistry::schema(Self, String) -> XamlSchema?
+pub fn XamlSchemaRegistry::type_definition(Self, XamlQualifiedName) -> XamlTypeDefinition?
+
+pub(all) struct XamlSourcePosition {
+  offset : Int
+  line : Int
+  column : Int
+} derive(Eq, @debug.Debug)
+
+pub(all) struct XamlSourceSpan {
+  source_uri : String
+  start : XamlSourcePosition
+  end : XamlSourcePosition
+} derive(Eq, @debug.Debug)
+pub fn XamlSourceSpan::unknown(String) -> Self
+
+pub(all) struct XamlTextNode {
+  text : String
+  span : XamlSourceSpan
+} derive(Eq, @debug.Debug)
+
+pub(all) struct XamlTypeDefinition {
+  name : String
+  content_member : String?
+  members : Map[String, XamlMemberDefinition]
+  is_collection : Bool
+  is_markup_extension : Bool
+} derive(Eq, @debug.Debug)
+pub fn XamlTypeDefinition::XamlTypeDefinition(String, content_member? : String?, members? : Array[XamlMemberDefinition], is_collection? : Bool, is_markup_extension? : Bool) -> Self raise XamlError
+
+pub(all) enum XamlValueNode {
+  Object(XamlObjectNode)
+  Text(XamlTextNode)
+  Markup(XamlMarkupExtension)
+} derive(Eq, @debug.Debug)
+
+// Type aliases
+
+// Traits
+

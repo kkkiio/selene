@@ -1,0 +1,15 @@
+import {
+  "KKKIIO/selene_xaml/generator_io",
+  "KKKIIO/selene_xaml/infoset",
+  "KKKIIO/selene_xaml/viewir",
+  "moonbitlang/core/string",
+  "moonbitlang/x/crypto",
+  "moonbitlang/x/encoding",
+}
+
+import {
+  "moonbitlang/async",
+  "moonbitlang/core/test",
+} for "test"
+
+supported_targets = "native"

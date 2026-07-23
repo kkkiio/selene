@@ -1,0 +1,6 @@
+package selene:component-emitter-fixture@0.1.0;
+
+world demo-ui {
+  import selene:ui-host/tree@0.1.0;
+  export demo-ui-api;
+}

@@ -1,0 +1,13 @@
+_build/
+.mooncakes/
+.codex/
+node_modules/
+examples/*/component/dist/
+tests/wasm-components/*/component/dist/
+.DS_Store
+
+# Rust build artifacts
+native/wasmtime_loader/target/
+
+# Playwright test output
+test-results/

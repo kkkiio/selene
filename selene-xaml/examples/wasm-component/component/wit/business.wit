@@ -1,0 +1,47 @@
+package selene:survivors-ui@0.1.0;
+
+/// Game-owned state, patch, and action ABI for the Survivors UI package.
+interface survivors-ui-api {
+  record selection {
+    key: string,
+    label: string,
+    icon: string,
+    background: string,
+  }
+
+  record survivors-ui-state {
+    score: u32,
+    remaining-seconds: u32,
+    wave: u32,
+    level: u32,
+    experience: u32,
+    experience-goal: u32,
+    level-up-visible: bool,
+    game-over-visible: bool,
+    victory: bool,
+    selections: list<selection>,
+  }
+
+  variant survivors-ui-patch {
+    selections-replace(list<selection>),
+    selection-upsert(selection),
+    selection-remove(string),
+    selection-move(tuple<string, u32>),
+  }
+
+  variant ui-event {
+    click(string),
+  }
+
+  variant survivors-action {
+    restart,
+    select-powerup(string),
+  }
+
+  mount: func(entity: u32, state: survivors-ui-state);
+  replace: func(entity: u32, state: survivors-ui-state);
+  apply: func(entity: u32, patches: list<survivors-ui-patch>);
+  handle-event: func(entity: u32, event: ui-event) -> option<survivors-action>;
+  update: func();
+  unmount: func(entity: u32);
+}

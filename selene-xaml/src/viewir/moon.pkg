@@ -1,0 +1,5 @@
+import {
+  "KKKIIO/selene_xaml/infoset",
+  "KKKIIO/selene_xaml/parser",
+  "moonbitlang/core/string",
+}

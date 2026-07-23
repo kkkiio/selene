@@ -1,0 +1,14 @@
+import {
+  "KKKIIO/selene_xaml/codegen",
+  "KKKIIO/selene_xaml/generator_io",
+  "moonbitlang/async",
+  "moonbitlang/async/fs",
+  "moonbitlang/async/io",
+  "moonbitlang/async/stdio",
+  "moonbitlang/core/argparse",
+  "moonbitlang/x/sys",
+}
+
+supported_targets = "native"
+
+pkgtype(kind: "executable")

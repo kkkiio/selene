@@ -1,0 +1,16 @@
+<View xmlns="urn:selene:xaml:ui"
+         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+         Width="100%" Height="100%" Padding="24" Background="#101724">
+  <Grid Columns="1fr 2fr" Rows="auto 1fr" Gap="16">
+    <Text x:Name="title" Grid.Column="0" Grid.Row="0"
+             Text="Navigation Console" FontSize="28" Color="#f2f6ff" />
+    <Flex Grid.Column="0" Grid.Row="1" Direction="Column" Gap="8">
+      <Button>Overview</Button>
+      <Button>Signals</Button>
+      <Button>Archive</Button>
+    </Flex>
+    <ScrollView Grid.Column="1" Grid.Row="0" Padding="18">
+      <Text Text="A compact original layout fixture." Wrap="WordWrap" />
+    </ScrollView>
+  </Grid>
+</View>

@@ -1,0 +1,10 @@
+<Flex xmlns="urn:selene:xaml:ui"
+         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+         Direction="Row" Gap="14" Padding="12" Background="#1f2938">
+  <Image Source="fixtures/original-orbit-icon.png" Width="72" Height="72"
+            Fit="Contain" SourceRegion="0 0 64 64" />
+  <Text FontSize="18" Color="#dce8ff">
+    <Span Text="ORBIT " Bold="true" Color="#72d6ff" />
+    <Span Text="telemetry is stable" />
+  </Text>
+</Flex>

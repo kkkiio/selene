@@ -1,0 +1,12 @@
+{
+  "name": "selene-xaml-survivors-component",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "cd ../../.. && just build-wasm-component",
+    "test": "node host/behavior-test.mjs"
+  },
+  "devDependencies": {
+    "@bytecodealliance/jco": "1.17.9"
+  }
+}

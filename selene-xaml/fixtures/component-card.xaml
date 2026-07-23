@@ -1,0 +1,21 @@
+<Component xmlns="urn:selene:xaml:ui"
+              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+              Name="StatusCard" Namespace="urn:selene:fixtures">
+  <Component.Parameters>
+    <Parameter Name="Title" Type="String" Required="true" />
+    <Parameter Name="Accent" Type="Color" Default="#62d6a7" />
+    <Parameter Name="Compact" Type="Bool" Default="false" />
+  </Component.Parameters>
+  <Component.Content>
+    <Flex Direction="Column" Gap="8" Padding="12" Background="#172130"
+             Border="1" BorderColor="{TemplateBinding Accent}" Radius="8">
+      <Flex Direction="Row" Gap="8">
+        <Slot Name="icon" />
+        <Text Text="{TemplateBinding Title}" Bold="true" />
+      </Flex>
+      <Slot>
+        <Text Text="No status content supplied" Color="#8491a3" />
+      </Slot>
+    </Flex>
+  </Component.Content>
+</Component>

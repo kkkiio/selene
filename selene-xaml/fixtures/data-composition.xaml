@@ -1,0 +1,22 @@
+<Flex xmlns="urn:selene:xaml:ui"
+         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+         Direction="Column" Gap="10">
+  <If Condition="{Binding Path=connected}">
+    <If.Then>
+      <Text Text="Connected" Color="#6ee7a8" />
+    </If.Then>
+    <If.Else>
+      <Text Text="Waiting for signal" Color="#ffb36b" />
+    </If.Else>
+  </If>
+  <ItemsControl ItemsSource="{Binding Path=signals}" KeyPath="id">
+    <ItemsControl.ItemTemplate>
+      <DataTemplate>
+        <Flex Direction="Row" Gap="12" Padding="8">
+          <Text Text="{Binding Path=label}" />
+          <Text Text="{Binding Path=value}" Color="#79c7ff" />
+        </Flex>
+      </DataTemplate>
+    </ItemsControl.ItemTemplate>
+  </ItemsControl>
+</Flex>

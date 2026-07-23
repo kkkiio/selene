@@ -1,0 +1,9 @@
+<View xmlns="urn:selene:xaml:ui"
+         xmlns:fx="urn:selene:fixtures"
+         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+  <fx:StatusCard Title="Relay Seven" Accent="{Binding Path=accent}">
+    <Image Slot="icon" Source="fixtures/original-relay-icon.png"
+              Width="20" Height="20" />
+    <Text Text="{Binding Path=status}" />
+  </fx:StatusCard>
+</View>

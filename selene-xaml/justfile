@@ -1,0 +1,73 @@
+set shell := ["bash", "-eu", "-o", "pipefail", "-c"]
+
+component_dir := "examples/wasm-component/component"
+
+default:
+    @just --list
+
+fmt:
+    moon fmt
+    moon -C runtime fmt
+    moon -C examples/inventory fmt
+    moon -C examples/survivors fmt
+    moon -C examples/wasm-component/host fmt
+    moon -C tests/target-matrix fmt
+
+check:
+    moon check --target js --deny-warn
+    moon check --target native --deny-warn
+    moon -C runtime check --target js --deny-warn
+    moon -C runtime check --target native --deny-warn
+    cargo check --manifest-path native/wasmtime_loader/Cargo.toml
+    moon -C examples/inventory check src/app --target js --deny-warn
+    moon -C examples/survivors check src/app --target js --deny-warn
+    moon -C examples/wasm-component/host check src/app --target js --deny-warn
+    moon -C tests/target-matrix check src/inventory_view src/inventory_layout src/survivors_view --target js --deny-warn
+    moon -C tests/target-matrix check src/inventory_view src/inventory_layout src/survivors_view src/native_component --target native --deny-warn
+
+test:
+    moon test src/parser --target js
+    moon test src/codegen --target native
+    moon test src/generator_io --target native
+    moon cram test -- --renderer diff --no-color --prepend-test-file-paths=tests/cli/setup.t docs/cli tests/cli/process-contract.md
+    moon -C runtime test src/component_host --target js
+    moon -C tests/target-matrix test src/inventory_view src/inventory_layout src/survivors_view --target js
+
+build-examples:
+    moon -C examples/inventory build src/app --target js --release
+    moon -C examples/survivors build src/app --target js --release
+    just build-wasm-component
+    moon -C examples/wasm-component/host build src/app --target js --release
+
+build-wasm-component:
+    cd {{component_dir}} && npm ci
+    cd {{component_dir}} && moon build --target wasm --release
+    cd {{component_dir}} && mkdir -p dist
+    cd {{component_dir}} && wasm-tools component embed wit _build/wasm/release/build/gen/gen.wasm --encoding utf16 --output dist/survivors-ui.wit.wasm
+    cd {{component_dir}} && wasm-tools component new dist/survivors-ui.wit.wasm --output dist/survivors-ui.component.wasm
+    cd {{component_dir}} && wasm-tools validate dist/survivors-ui.component.wasm
+    cd {{component_dir}} && ./node_modules/.bin/jco transpile dist/survivors-ui.component.wasm --out-dir dist/jco --name survivors-ui -M 'selene:ui-host/tree=./host-runtime.js'
+    cd {{component_dir}} && cp ../../../runtime/src/component_host/js/host-runtime.js dist/jco/host-runtime.js
+
+generate-wasm-component-bindings:
+    cd {{component_dir}} && wit-bindgen moonbit wit --out-dir . --derive-eq --derive-debug --derive-error
+
+generate-examples:
+    moon -C examples/inventory info src/model --target js
+    moon run --target native src/cmd/selene-xaml -- generate examples/inventory/inventory.xaml --mbti examples/inventory/src/model/pkg.generated.mbti --out-dir examples/inventory/src/view
+    moon -C examples/survivors info src/model --target js
+    moon run --target native src/cmd/selene-xaml -- generate examples/survivors/survivors.xaml --mbti examples/survivors/src/model/pkg.generated.mbti --out-dir examples/survivors/src/view
+
+capture-example-inventory:
+    moon -C examples/inventory build src/app --target js --release
+    cd tests/browser && npm ci && npm run capture-inventory
+
+test-all: check test build-examples
+    moon test src/parser --target native
+    moon test src/codegen --target native
+    moon -C runtime test src/component_host --target native
+    moon -C tests/target-matrix test src/inventory_view src/inventory_layout src/survivors_view --target native
+    cargo build --manifest-path native/wasmtime_loader/Cargo.toml --release
+    moon -C tests/target-matrix test src/native_component --target native --no-parallelize
+    node examples/wasm-component/component/host/behavior-test.mjs
+    cd tests/browser && npm ci && npm test

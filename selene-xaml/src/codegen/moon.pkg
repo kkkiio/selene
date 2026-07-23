@@ -1,0 +1,16 @@
+import {
+  "KKKIIO/selene_xaml/component_emitter",
+  "KKKIIO/selene_xaml/embedded_emitter",
+  "KKKIIO/selene_xaml/generator_io",
+  "KKKIIO/selene_xaml/viewir",
+}
+
+import {
+  "KKKIIO/selene_xaml/viewir",
+  "moonbitlang/async",
+  "moonbitlang/core/test",
+  "moonbitlang/x/crypto",
+  "moonbitlang/x/encoding",
+} for "test"
+
+supported_targets = "native"

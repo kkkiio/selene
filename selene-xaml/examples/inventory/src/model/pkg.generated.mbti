@@ -1,0 +1,81 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "KKKIIO/selene-xaml-inventory-example/model"
+
+import {
+  "moonbitlang/core/debug",
+}
+
+// Values
+pub fn showcase_state(Double) -> InventoryUiState
+
+// Errors
+
+// Types and methods
+pub(all) struct EquipmentItem {
+  slot : String
+  name : String
+  image : String
+  selected : Bool
+  layout_width : Double
+} derive(Eq, @debug.Debug)
+pub fn EquipmentItem::equipment_background(Self) -> String
+pub fn EquipmentItem::narrow_content_width(Self) -> Double
+pub fn EquipmentItem::narrow_label_width(Self) -> Double
+
+pub(all) struct InventoryItem {
+  id : String
+  category : String
+  name : String
+  image : String
+  count : Int
+  rarity : String
+  description : String
+  selected : Bool
+  layout_width : Double
+} derive(Eq, @debug.Debug)
+pub fn InventoryItem::count_label(Self) -> String
+pub fn InventoryItem::item_background(Self) -> String
+pub fn InventoryItem::narrow_content_width(Self) -> Double
+pub fn InventoryItem::narrow_label_width(Self) -> Double
+
+pub(all) struct InventoryTab {
+  id : String
+  icon : String
+  selected_icon : String
+  selected : Bool
+  layout_width : Double
+} derive(Eq, @debug.Debug)
+pub fn InventoryTab::tab_icon_left(Self) -> Double
+pub fn InventoryTab::tab_width(Self) -> Double
+
+pub(all) enum InventoryUiPatch {
+  ItemsReplace(Array[InventoryItem])
+  ItemUpsert(InventoryItem)
+  ItemRemove(String)
+  ItemMove((String, UInt))
+} derive(Eq, @debug.Debug)
+
+pub(all) struct InventoryUiState {
+  viewport_width : Double
+  capacity : Int
+  tabs : Array[InventoryTab]
+  all_items : Array[InventoryItem]
+  items : Array[InventoryItem]
+  equipment : Array[EquipmentItem]
+  selected_tab_id : String
+  selected_item_id : String
+} derive(Eq, @debug.Debug)
+pub fn InventoryUiState::capacity_label(Self) -> String
+pub fn InventoryUiState::content_width(Self) -> Double
+pub fn InventoryUiState::narrow_content_width(Self) -> Double
+pub fn InventoryUiState::narrow_label_width(Self) -> Double
+pub fn InventoryUiState::selected_description(Self) -> String
+pub fn InventoryUiState::selected_image(Self) -> String
+pub fn InventoryUiState::selected_name(Self) -> String
+pub fn InventoryUiState::selected_rarity(Self) -> String
+pub fn InventoryUiState::wide_layout(Self) -> Bool
+
+// Type aliases
+
+// Traits
+

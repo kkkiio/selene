@@ -1,0 +1,29 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "KKKIIO/selene_xaml/component_emitter"
+
+import {
+  "KKKIIO/selene_xaml/generator_io",
+  "KKKIIO/selene_xaml/viewir",
+  "moonbitlang/core/debug",
+}
+
+// Values
+pub fn emit(@viewir.ViewIR, ComponentGuestTarget, String, String, String, String) -> @generator_io.GeneratedPackage raise
+
+// Errors
+pub(all) suberror ComponentEmitterError {
+  InvalidArtifactPath(String)
+} derive(Eq, @debug.Debug)
+pub impl Show for ComponentEmitterError
+
+// Types and methods
+pub(all) struct ComponentGuestTarget {
+  event_type : String
+  action_type : String
+  tree_package : String
+} derive(Eq, @debug.Debug)
+
+// Type aliases
+
+// Traits
+

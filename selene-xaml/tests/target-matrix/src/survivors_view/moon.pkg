@@ -1,0 +1,9 @@
+import {
+  "KKKIIO/selene/ecs",
+  "KKKIIO/selene/entity",
+  "KKKIIO/selene/ui",
+  "KKKIIO/selene-xaml-survivors-example/view",
+  "KKKIIO/selene_xaml_runtime/component_host",
+} for "test"
+
+supported_targets = "native+js"
