@@ -8,6 +8,29 @@ pub type AudioHandle = @asset_types.AudioHandle
 pub type FontHandle = @asset_types.FontHandle
 
 ///|
+pub(all) struct AssetPath {
+  path : String
+  label : String?
+} derive(Eq, Debug)
+
+///|
+pub fn AssetPath::parse(value : String) -> AssetPath {
+  match value.split_once("#") {
+    Some((path, label)) if path != "" && label != "" =>
+      { path: path.to_owned(), label: Some(label.to_owned()) }
+    _ => { path: value, label: None }
+  }
+}
+
+///|
+pub fn AssetPath::to_string(self : AssetPath) -> String {
+  match self.label {
+    Some(label) => self.path + "#" + label
+    None => self.path
+  }
+}
+
+///|
 pub(all) struct ImageMetadata {
   size : @math.Vec2
 } derive(Eq, Debug)

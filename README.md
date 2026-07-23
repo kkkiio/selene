@@ -6,7 +6,7 @@ Selene is an ECS game engine for MoonBit with a WebGPU-first web backend, a rayl
 
 | Package | Purpose |
 | --- | --- |
-| `KKKIIO/selene` | Core ECS/runtime modules (`app`, `asset`, `editor_bridge`, `animation`, `scene`, `physics2d/3d`, `render2d/3d`, `ui`) |
+| `KKKIIO/selene` | Core ECS/runtime modules (`app`, `asset`, `atlas`, `editor_bridge`, `animation`, `scene`, `physics2d/3d`, `render2d/3d`, `ui`) |
 | `KKKIIO/selene_webgpu` | Web backend implementation |
 | `KKKIIO/selene_raylib` | Native backend implementation |
 | `Milky2018/selene_editor_shared` | Shared editor protocol and bridge contracts |

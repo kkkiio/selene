@@ -1,0 +1,15 @@
+import {
+  "KKKIIO/selene/asset",
+  "KKKIIO/selene/asset_types",
+  "KKKIIO/selene/math",
+  "KKKIIO/selene/render2d_types",
+  "KKKIIO/selene/sprite",
+  "moonbitlang/core/encoding/utf8",
+  "moonbitlang/core/json",
+}
+
+import {
+  "moonbitlang/core/buffer",
+} for "wbtest"
+
+supported_targets = "all"

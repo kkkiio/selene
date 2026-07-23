@@ -1,0 +1,57 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "KKKIIO/selene/atlas"
+
+import {
+  "KKKIIO/selene/asset_types",
+  "KKKIIO/selene/math",
+  "KKKIIO/selene/render2d_types",
+  "KKKIIO/selene/sprite",
+  "moonbitlang/core/debug",
+}
+
+// Values
+pub fn clear_texture_atlas_cache() -> Unit
+
+pub fn load_texture_atlas(String) -> TextureAtlasAsset raise TextureAtlasError
+
+pub fn resolve_texture_atlas_region(String) -> AtlasImage raise TextureAtlasError
+
+// Errors
+pub(all) suberror TextureAtlasError {
+  MissingLabel(String)
+  MissingDocument(String)
+  InvalidUtf8(String)
+  InvalidJson(String, String)
+  InvalidDocument(String, String)
+  MissingRegion(String, String)
+  RotatedRegion(String, String)
+} derive(Eq, @debug.Debug)
+pub impl Show for TextureAtlasError
+
+// Types and methods
+pub(all) struct AtlasImage {
+  image : @asset_types.ImageHandle
+  source : @render2d_types.ImageRegion2D
+}
+
+pub(all) struct TextureAtlasAsset {
+  image : @asset_types.ImageHandle
+  image_path : String
+  layout : @sprite.TextureAtlasLayoutHandle
+  regions : Array[TextureAtlasRegion]
+}
+pub fn TextureAtlasAsset::region(Self, String) -> TextureAtlasRegion?
+
+pub(all) struct TextureAtlasRegion {
+  name : String
+  index : Int
+  rect : @math.Rect
+  source_size : @math.Vec2
+  trim_offset : @math.Vec2
+  rotated : Bool
+}
+
+// Type aliases
+
+// Traits
+

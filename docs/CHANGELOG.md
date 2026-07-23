@@ -4,6 +4,9 @@
 
 ### Added
 
+- Added `selene/atlas` loading for canonical Selene, Aseprite, and TexturePacker
+  JSON atlases, including named `#region` resolution for UI and sprite assets.
+
 ### Changed
 
 ### Fixed
