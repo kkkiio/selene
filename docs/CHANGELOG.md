@@ -4,6 +4,9 @@
 
 ### Added
 
+- Added the bindable Selene XAML `Active` visual member for retaining inactive
+  node identity while excluding its subtree from UI participation.
+
 - Added typed Selene XAML `Grid` generation with CSS-style tracks, auto-flow,
   attached row and column placement, and spans.
 

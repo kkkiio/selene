@@ -46,6 +46,7 @@ slot 内的实际矩形。
 | `HorizontalAlignment` | `Stretch`（默认）、`Left`、`Center`、`Right` | CSS `justify-self` / `align-self` 方向组合 | Planned |
 | `VerticalAlignment` | `Stretch`（默认）、`Top`、`Center`、`Bottom` | 同上 | Planned |
 | `ZIndex` | 同一 parent 下数值较大的节点后绘制；相同值保持 tree order | CSS `z-index` | Implemented |
+| `Active` | `false` 时节点及其 subtree 不参与布局、绘制、命中测试或 focus scope；节点 identity 与 local state 保留 | CSS `display: none` ~ | Implemented |
 
 `HorizontalAlignment`、`VerticalAlignment` 描述节点在父节点分配的 layout slot 中的位置，
 与 `Text.Align` 分属布局和排版两个命名空间。显式 `Width` 或 `Height` 覆盖对应轴的

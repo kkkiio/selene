@@ -205,6 +205,7 @@ pub fn selene_xaml_schemas() -> XamlSchemaRegistry raise XamlError {
     XamlMemberDefinition("Focusable", Bool),
     XamlMemberDefinition("FocusScope", Bool),
     XamlMemberDefinition("AutoFocus", Bool),
+    XamlMemberDefinition("Active", Bool),
     XamlMemberDefinition("Enabled", Bool),
     XamlMemberDefinition("OnClick", String),
     XamlMemberDefinition("OnPointerDown", String),
