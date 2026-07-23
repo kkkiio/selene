@@ -4,6 +4,16 @@
 
 ### Added
 
+### Changed
+
+### Fixed
+
+### Removed
+
+## [0.37.3] - 2026-07-23
+
+### Added
+
 - Added the bindable Selene XAML `Active` visual member for retaining inactive
   node identity while excluding its subtree from UI participation.
 
