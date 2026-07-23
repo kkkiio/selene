@@ -1,9 +1,9 @@
 name = "KKKIIO/selene_raylib"
 
-version = "0.37.2"
+version = "0.37.3"
 
 import {
-  "KKKIIO/selene@0.37.2",
+  "KKKIIO/selene@0.37.3",
   "tonyfettes/raylib@0.4.0",
   "Milky2018/moon_cosmic@0.3.3",
 }

@@ -3,8 +3,8 @@ name = "Milky2018/selene-examples-native"
 version = "0.21.2"
 
 import {
-  "KKKIIO/selene@0.37.2",
-  "KKKIIO/selene_raylib@0.37.2",
+  "KKKIIO/selene@0.37.3",
+  "KKKIIO/selene_raylib@0.37.3",
   "Milky2018/selene-examples@0.21.2",
   "moonbitlang/x@0.4.45",
 }
