@@ -71,6 +71,13 @@ pub(all) enum AssetEventKind {
   Failed(String)
 } derive(Eq, @debug.Debug)
 
+pub(all) struct AssetPath {
+  path : String
+  label : String?
+} derive(Eq, @debug.Debug)
+pub fn AssetPath::parse(String) -> Self
+pub fn AssetPath::to_string(Self) -> String
+
 pub(all) struct ImageMetadata {
   size : @math.Vec2
 } derive(Eq, @debug.Debug)
