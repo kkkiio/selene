@@ -1,12 +1,12 @@
 // Generated using `moon info`, DON'T EDIT IT
-package "KKKIIO/selene-xaml-inventory-example/view"
+package "Milky2018/selene-examples/inventory/view"
 
 import {
-  "KKKIIO/selene-xaml-inventory-example/model",
   "KKKIIO/selene/app",
   "KKKIIO/selene/entity",
   "KKKIIO/selene/event",
-  "KKKIIO/selene_xaml_runtime/ui_host",
+  "KKKIIO/selene/ui_view",
+  "Milky2018/selene-examples/inventory/model",
   "moonbitlang/core/debug",
 }
 
@@ -22,7 +22,7 @@ pub(all) suberror InventoryViewError {
   DeadEntity
   DuplicateKey(String, String)
   InvalidPatch(String)
-  Host(@ui_host.HostError)
+  Host(@ui_view.HostError)
 } derive(Eq, @debug.Debug)
 pub impl Show for InventoryViewError
 

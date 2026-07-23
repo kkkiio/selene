@@ -10,12 +10,10 @@ let inventory_event_reader : @event.EventReader[
 ] = @event.EventReader()
 
 ///|
-extern "js" fn browser_viewport_width() -> Double =
-  #| () => Number(globalThis.__seleneExampleViewportWidth ?? 960)
+let inventory_viewport_width : Ref[Double] = { val: 960.0 }
 
 ///|
-extern "js" fn mark_inventory_mounted() -> Unit =
-  #| () => { globalThis.__seleneInventoryExample = { mounted: true }; }
+let inventory_mounted_callback : Ref[() -> Unit] = { val: fn() { () } }
 
 ///|
 fn to_view_state(
@@ -80,7 +78,7 @@ fn to_view_state(
 ///|
 fn setup_inventory_view(_world : @ecs.World) -> Unit {
   try {
-    let viewport_width = browser_viewport_width()
+    let viewport_width = inventory_viewport_width.val
     let parent = @entity.Entity()
     @ui.nodes()[parent] = @ui.Node(
       width=@ui.Val::Px(viewport_width),
@@ -90,7 +88,7 @@ fn setup_inventory_view(_world : @ecs.World) -> Unit {
     @inventory_view.InventoryView::mount(parent, to_view_state(state))
     live_inventory_state.val = Some(state)
     live_inventory_entity.val = Some(parent)
-    mark_inventory_mounted()
+    (inventory_mounted_callback.val)()
   } catch {
     error => abort(error.to_string())
   }
@@ -184,9 +182,11 @@ fn dispatch_inventory_events(_world : @ecs.World) -> Unit {
 }
 
 ///|
-fn main {
+pub fn run(viewport_width : Double, on_mounted : () -> Unit) -> Unit {
+  inventory_viewport_width.val = viewport_width
+  inventory_mounted_callback.val = on_mounted
   @selene_app.App()
-  .with_viewport_width(browser_viewport_width())
+  .with_viewport_width(viewport_width)
   .with_viewport_height(540.0)
   .with_fps(60)
   .with_image_smooth(false)

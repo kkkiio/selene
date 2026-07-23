@@ -1,13 +1,5 @@
 import {
-  "KKKIIO/selene/app" @selene_app,
-  "KKKIIO/selene/ecs",
-  "KKKIIO/selene/entity",
-  "KKKIIO/selene/event",
-  "KKKIIO/selene/plugins",
-  "KKKIIO/selene/system",
-  "KKKIIO/selene/ui",
-  "KKKIIO/selene-xaml-inventory-example/view" @inventory_view,
-  "KKKIIO/selene-xaml-inventory-example/model",
+  "Milky2018/selene-examples/inventory",
 }
 
 supported_targets = "js"

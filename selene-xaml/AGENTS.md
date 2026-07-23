@@ -68,7 +68,6 @@
 │   └── selene-xaml-vocabulary.md     # Selene vocabulary 定义
 ├── fixtures/                         # XAML conformance 与 emitter fixtures
 ├── examples/
-│   ├── inventory/                    # Inventory Embedded View showcase
 │   └── survivors/                    # Survivors Embedded View showcase
 ├── tests/
 │   ├── browser/                      # Embedded View examples 的 Playwright readiness harness
@@ -80,6 +79,8 @@
 │   ├── viewir/                       # Infoset + `.mbti` contract → sealed typed ViewIR
 │   ├── embedded_emitter/             # package emission、格式化、原子更新与 ownership lock
 │   └── cmd/selene-xaml/              # native `generate` CLI
+├── ../examples/inventory/            # Inventory model、XAML、generated View 与共享运行逻辑
+├── ../examples-web/inventory/web/    # Inventory WebGPU launcher
 └── ../selene-core/src/ui_view/       # ViewHost、mutation values 与 VH-* tests
 ```
 
@@ -116,7 +117,7 @@ just test-all
 
 ### Generate a View Package
 
-重新生成 `examples/inventory/src/view` 和 `examples/survivors/src/view`：
+重新生成 `../examples/inventory/view` 和 `examples/survivors/src/view`：
 
 ```bash
 just generate-examples

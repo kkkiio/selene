@@ -3,7 +3,7 @@ import {
   "KKKIIO/selene/entity",
   "KKKIIO/selene/ui",
   "KKKIIO/selene/ui_view",
-  "KKKIIO/selene-xaml-inventory-example/view",
+  "Milky2018/selene-examples/inventory/view",
 } for "test"
 
 supported_targets = "native+js"

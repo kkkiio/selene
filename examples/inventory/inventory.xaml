@@ -1,6 +1,6 @@
 <Flex xmlns="urn:selene:xaml:ui"
          xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-         xmlns:model="moonbit:KKKIIO/selene-xaml-inventory-example/model"
+         xmlns:model="moonbit:Milky2018/selene-examples/inventory/model"
          x:Class="InventoryView"
          DataType="model:InventoryUiState"
          x:Name="inventoryRoot" Width="{Binding Path=viewportWidth}" Height="540"

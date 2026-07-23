@@ -7,7 +7,7 @@ import { listening, origin, server } from "./serve.mjs";
 await listening;
 const outputDirectory = resolve(
   dirname(fileURLToPath(import.meta.url)),
-  "../../examples/inventory/screenshots",
+  "../../../examples/inventory",
 );
 await mkdir(outputDirectory, { recursive: true });
 const browser = await chromium.launch({
@@ -16,8 +16,8 @@ const browser = await chromium.launch({
 });
 try {
   for (const capture of [
-    { name: "web.png", width: 960 },
-    { name: "web-narrow.png", width: 720 },
+    { name: "screenshot.png", width: 960 },
+    { name: "screenshots/web-narrow.png", width: 720 },
   ]) {
     const failures = [];
     const page = await browser.newPage();
@@ -28,7 +28,7 @@ try {
     page.on("response", (response) => {
       if (response.status() >= 400) failures.push(`${response.status()}: ${response.url()}`);
     });
-    await page.goto(`${origin}/examples/inventory/web/?width=${capture.width}`);
+    await page.goto(`${origin}/examples/inventory/?width=${capture.width}`);
     await page.waitForFunction(
       () =>
         globalThis.__seleneInventoryExample?.mounted === true &&

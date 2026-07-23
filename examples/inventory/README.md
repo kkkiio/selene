@@ -1,6 +1,6 @@
 # Inventory Web example
 
-![Warm pixel-art inventory rendered by the WebGPU app](screenshots/web.png)
+![Warm pixel-art inventory rendered by the WebGPU app](screenshot.png)
 
 ![Responsive inventory rendered at 720 × 540](screenshots/web-narrow.png)
 
@@ -21,28 +21,28 @@ repository modules.
 Regenerate the View package after changing the model or XAML:
 
 ```bash
-moon -C examples/inventory info src/model --target js
-moon run src/cmd/selene-xaml --target native -- generate \
+moon -C examples info inventory/model --target js
+moon run selene-xaml/src/cmd/selene-xaml --target native -- generate \
   examples/inventory/inventory.xaml \
-  --mbti examples/inventory/src/model/pkg.generated.mbti \
-  --out-dir examples/inventory/src/view
+  --mbti examples/inventory/model/pkg.generated.mbti \
+  --out-dir examples/inventory/view
 ```
 
 Build the JS app, serve the repository root, and open the example:
 
 ```bash
-moon -C examples/inventory build src/app --target js --release
+moon -C examples-web build inventory/web --target js --release
 python3 -m http.server 8000
 ```
 
-Open `http://localhost:8000/examples/inventory/web/`. Append `?width=720` for
-the narrow layout. Run `just capture-example-inventory` to regenerate both
-checked-in Web screenshots through Playwright and Chrome.
+Open `http://localhost:8000/examples/inventory/`. Append `?width=720` for the
+narrow layout. Run `just -f selene-xaml/justfile capture-example-inventory` to
+regenerate both checked-in Web screenshots through Playwright and Chrome.
 
-The authored files are `inventory.xaml`, `src/model`, `src/view/view_model.mbt`,
-and `src/app/main.mbt`. The other files in `src/view` are generator-owned.
-Semantic View and layout coverage lives in `tests/target-matrix`; browser and
-screenshot orchestration lives in `tests/browser`.
+The authored files are `inventory.xaml`, `model`, and `main.mbt`. The generated
+View package lives in `view`. Semantic View and layout coverage lives in
+`selene-xaml/tests/target-matrix`; browser and screenshot orchestration lives
+in `selene-xaml/tests/browser`.
 
 The artwork is a curated CC0 subset of Henrique Lazarini's 7Soul1 RPG icon
 collection. Provenance and derivative details are in

@@ -12,6 +12,9 @@
 
 ### Changed
 
+- Moved the Selene XAML Inventory example into the shared `examples` module and
+  added a thin WebGPU launcher under `examples-web`.
+
 - Moved the Embedded View host, mutation values, Visual State runtime, and
   focus/scroll preservation into `selene/ui_view`, eliminating the separate
   `selene_xaml_runtime` module.

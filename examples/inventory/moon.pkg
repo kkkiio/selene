@@ -1,9 +1,13 @@
 import {
+  "KKKIIO/selene/app" @selene_app,
   "KKKIIO/selene/ecs",
   "KKKIIO/selene/entity",
+  "KKKIIO/selene/event",
+  "KKKIIO/selene/plugins",
+  "KKKIIO/selene/system",
   "KKKIIO/selene/ui",
-  "KKKIIO/selene/ui_view",
+  "Milky2018/selene-examples/inventory/model",
   "Milky2018/selene-examples/inventory/view" @inventory_view,
-} for "test"
+}
 
 supported_targets = "native+js"

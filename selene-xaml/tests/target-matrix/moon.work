@@ -1,7 +1,7 @@
 members = [
   ".",
   "../../examples/survivors",
-  "../../examples/inventory",
+  "../../../examples",
   "../../../selene-core",
   "../../../selene-webgpu",
 ]

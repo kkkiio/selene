@@ -36,7 +36,8 @@ jobs:
         run: |
           moon update
           moon -C ../selene-core update
-          moon -C examples/inventory update
+          moon -C ../examples update
+          moon -C ../examples-web update
           moon -C examples/survivors update
           moon -C tests/target-matrix update
 

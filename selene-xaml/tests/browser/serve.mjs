@@ -4,7 +4,7 @@ import { extname, resolve, sep } from "node:path";
 import { fileURLToPath } from "node:url";
 
 const port = Number(process.env.SELENE_EXAMPLE_PORT ?? "4174");
-const root = resolve(fileURLToPath(new URL("../..", import.meta.url)));
+const root = resolve(fileURLToPath(new URL("../../..", import.meta.url)));
 const mimeTypes = new Map([
   [".html", "text/html; charset=utf-8"],
   [".js", "text/javascript; charset=utf-8"],
@@ -41,7 +41,7 @@ export const server = createServer((request, response) => {
 export const listening = new Promise((ready, reject) => {
   server.once("error", reject);
   server.listen(port, "127.0.0.1", () => {
-    console.log(`Selene XAML examples available at ${origin}/examples/`);
+    console.log(`Selene examples available at ${origin}/examples/`);
     ready();
   });
 });

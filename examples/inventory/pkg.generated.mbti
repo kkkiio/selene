@@ -1,7 +1,8 @@
 // Generated using `moon info`, DON'T EDIT IT
-package "KKKIIO/selene-xaml-inventory-example/app"
+package "Milky2018/selene-examples/inventory"
 
 // Values
+pub fn run(Double, () -> Unit) -> Unit
 
 // Errors
 

@@ -1,6 +1,6 @@
 # Selene XAML
 
-![Selene XAML pixel-art inventory example](examples/inventory/screenshots/web.png)
+![Selene XAML pixel-art inventory example](../examples/inventory/screenshot.png)
 
 `KKKIIO/selene_xaml` compiles a selected MS-XAML-2017 object-mapping profile
 and the Selene UI vocabulary into typed MoonBit View packages for Selene.
@@ -73,5 +73,5 @@ entity.destroy()
 ```
 
 The generated package exposes `mount`, `replace`, `apply`, and a typed
-`action_event_bus`. [`examples/inventory`](examples/inventory) is a complete
+`action_event_bus`. [`examples/inventory`](../examples/inventory) is a complete
 WebGPU demo with responsive layout, item lists, and equipment slots.

@@ -6,7 +6,8 @@ default:
 fmt:
     moon fmt
     moon -C ../selene-core fmt
-    moon -C examples/inventory fmt
+    moon -C ../examples fmt inventory
+    moon -C ../examples-web fmt inventory/web
     moon -C examples/survivors fmt
     moon -C tests/target-matrix fmt
 
@@ -15,7 +16,9 @@ check:
     moon check --target native --deny-warn
     moon -C ../selene-core check src/ui_view --target js --deny-warn
     moon -C ../selene-core check src/ui_view --target native --deny-warn
-    moon -C examples/inventory check src/app --target js --deny-warn
+    moon -C ../examples check inventory --target js --deny-warn
+    moon -C ../examples check inventory --target native --deny-warn
+    moon -C ../examples-web check inventory/web --target js --deny-warn
     moon -C examples/survivors check src/app --target js --deny-warn
     moon -C tests/target-matrix check src/inventory_view src/inventory_layout src/survivors_view --target js --deny-warn
     moon -C tests/target-matrix check src/inventory_view src/inventory_layout src/survivors_view --target native --deny-warn
@@ -28,17 +31,17 @@ test:
     moon -C tests/target-matrix test src/inventory_view src/inventory_layout src/survivors_view --target js
 
 build-examples:
-    moon -C examples/inventory build src/app --target js --release
+    moon -C ../examples-web build inventory/web --target js --release
     moon -C examples/survivors build src/app --target js --release
 
 generate-examples:
-    moon -C examples/inventory info src/model --target js
-    moon run --target native src/cmd/selene-xaml -- generate examples/inventory/inventory.xaml --mbti examples/inventory/src/model/pkg.generated.mbti --out-dir examples/inventory/src/view
+    moon -C ../examples info inventory/model --target js
+    cd .. && moon run selene-xaml/src/cmd/selene-xaml --target native -- generate examples/inventory/inventory.xaml --mbti examples/inventory/model/pkg.generated.mbti --out-dir examples/inventory/view
     moon -C examples/survivors info src/model --target js
     moon run --target native src/cmd/selene-xaml -- generate examples/survivors/survivors.xaml --mbti examples/survivors/src/model/pkg.generated.mbti --out-dir examples/survivors/src/view
 
 capture-example-inventory:
-    moon -C examples/inventory build src/app --target js --release
+    moon -C ../examples-web build inventory/web --target js --release
     cd tests/browser && npm ci && npm run capture-inventory
 
 test-all: check test build-examples

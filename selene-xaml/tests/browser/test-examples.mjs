@@ -10,7 +10,7 @@ try {
   const cases = [
     {
       name: "inventory-wide",
-      path: "/examples/inventory/web/?width=960",
+      path: "/examples/inventory/?width=960",
       width: 960,
       height: 540,
       marker: "__seleneInventoryExample",
@@ -18,7 +18,7 @@ try {
     },
     {
       name: "inventory-narrow",
-      path: "/examples/inventory/web/?width=720",
+      path: "/examples/inventory/?width=720",
       width: 720,
       height: 540,
       marker: "__seleneInventoryExample",
@@ -26,7 +26,7 @@ try {
     },
     {
       name: "survivors",
-      path: "/examples/survivors/web/",
+      path: "/selene-xaml/examples/survivors/web/",
       width: 960,
       height: 640,
       marker: "__seleneSurvivorsExample",
